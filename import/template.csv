@@ -1,0 +1,3 @@
+email,first_name,last_name,voorletters,phone,street,house_number,postcode,country,iban,bic,bsn,birth_date,vendor_id,internal_id
+patrick@voorbeeld.nl,Patrick,Jansen,P.J.,+31 6 12345678,Hoofdstraat,123,1234 AB,Nederland,NL91ABNA0123456789,ABNANL2A,123456789,15-03-1980,V0024001,2500001
+maria@voorbeeld.nl,Maria,de Vries,M.,+31 6 23456789,Kerkweg,45A,5678 CD,Nederland,NL45INGB0001234567,INGBNL2A,987654321,22-07-1985,V0024002,2500002

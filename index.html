@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auteursportaal | Noordhoff</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-visual login-visual-photo">
+            <div class="visual-shapes">
+                <div class="shape-line"></div>
+                <div class="shape-line"></div>
+                <div class="shape-dot"></div>
+                <div class="shape-dot"></div>
+            </div>
+            <div class="visual-content">
+                <div class="visual-brand">Auteursportaal</div>
+                <div class="visual-tagline">
+                    <p data-i18n="tagline">Krijg direct inzicht in uw royalties, afrekeningen en prognoses.</p>
+                </div>
+            </div>
+        </div>
+        <div class="login-form-section">
+            <div class="login-form-wrapper">
+                <div class="login-logo">
+                    <img src="logo.jpg" alt="Logo">
+                </div>
+                <form class="login-form" id="loginForm">
+                    <h2 data-i18n="welcome_login">Welkom bij Noordhoff</h2>
+                    <p data-i18n="login_subtitle">Log in om uw royalty-informatie te bekijken</p>
+                    <div class="login-error" id="loginError" data-i18n="login_error">Ongeldig e-mailadres of wachtwoord.</div>
+                    <div class="form-group">
+                        <label for="email" data-i18n="email_label">E-mailadres</label>
+                        <input type="email" id="email" placeholder="uw@email.nl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" data-i18n="password_label">Wachtwoord</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="login-btn" data-i18n="login_btn">Inloggen</button>
+                    <button type="button" class="forgot-password-btn" data-i18n="forgot_password" onclick="alert('Neem contact op met rights@noordhoff.nl')">Wachtwoord vergeten?</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Author Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header class="dashboard-header">
+            <div class="header-logo">
+                <img src="logo.jpg" alt="Logo">
+            </div>
+            <div class="header-user">
+                <div class="user-info">
+                    <div class="user-name" id="dashboardUserName"></div>
+                    <div class="user-role" data-i18n="author">Auteur</div>
+                </div>
+                <div class="user-avatar" id="userAvatar"></div>
+                <button class="logout-btn" id="logoutBtn" data-i18n="logout_btn">Uitloggen</button>
+            </div>
+        </header>
+        <main class="dashboard-content">
+            <div class="welcome-section">
+                <h1><span data-i18n="greeting">Welkom</span> <span id="welcomeName"></span></h1>
+                <p data-i18n="dashboard_subtitle">Hier vindt u een overzicht van uw royalty-informatie</p>
+            </div>
+            <div class="tabs-container">
+                <nav class="tabs-nav">
+                    <button class="tab-btn active" data-tab="info"><span class="tab-icon">👤</span><span data-i18n="tab_info">Gegevens</span></button>
+                    <button class="tab-btn" data-tab="contracts"><span class="tab-icon">📋</span><span data-i18n="tab_contracts">Contracten</span></button>
+                    <button class="tab-btn" data-tab="payments"><span class="tab-icon">📄</span><span data-i18n="tab_payments">Afrekeningen</span></button>
+                    <button class="tab-btn" data-tab="forecast"><span class="tab-icon">📊</span><span data-i18n="tab_forecast">Prognose</span></button>
+                    <button class="tab-btn" data-tab="faq"><span class="tab-icon">❓</span><span data-i18n="tab_faq">FAQ</span></button>
+                </nav>
+
+                <!-- Personal Info Tab -->
+                <div class="tab-content active" id="tab-info">
+                    <div class="id-numbers-section">
+                        <div class="id-numbers-grid">
+                            <div class="id-number-item"><span class="id-label" data-i18n="label_vendor">Vendor ID</span><span class="id-value" id="infoVendorNumber"></span></div>
+                            <div class="id-number-item"><span class="id-label" data-i18n="label_alliant">Alliant ID</span><span class="id-value" id="infoAlliantNumber"></span></div>
+                        </div>
+                    </div>
+                    <div class="info-header">
+                        <h3 data-i18n="info_title">Uw gegevens</h3>
+                        <button class="edit-btn" id="editInfoBtn">
+                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            <span data-i18n="edit_btn">Bewerken</span>
+                        </button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_firstname">Voornaam</div><div class="info-card-value" id="infoFirstName"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_initials">Voorletters</div><div class="info-card-value" id="infoInitialsField"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_lastname">Achternaam</div><div class="info-card-value" id="infoLastName"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bsn">BSN</div><div class="info-card-value" id="infoBSN"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_email">E-mailadres</div><div class="info-card-value" id="infoEmail"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_address">Adres</div><div class="info-card-value" id="infoAddress"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_postcode">Postcode</div><div class="info-card-value" id="infoPostcode"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_country">Land</div><div class="info-card-value" id="infoCountry"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_birthdate">Geboortedatum</div><div class="info-card-value" id="infoBirthDate"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_phone">Telefoonnummer</div><div class="info-card-value" id="infoPhone"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bank">IBAN</div><div class="info-card-value" id="infoBankAccount"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bic">BIC</div><div class="info-card-value" id="infoBIC"></div></div>
+                    </div>
+                </div>
+
+                <!-- Contracts Tab -->
+                <div class="tab-content" id="tab-contracts">
+                    <div class="info-header">
+                        <h3 data-i18n="contracts_title">Uw contracten</h3>
+                    </div>
+                    <table class="contracts-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="contract_number">Contractnummer</th>
+                                <th data-i18n="contract_name">Contractnaam</th>
+                                <th data-i18n="contract_pdf">Contract</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contractsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Payments Tab -->
+                <div class="tab-content" id="tab-payments">
+                    <div class="payments-header">
+                        <h3 data-i18n="payments_title">Royalty-afrekeningen</h3>
+                        <div class="year-filter">
+                            <button class="year-btn" data-year="all" data-i18n="filter_all">Alle</button>
+                            <button class="year-btn active" data-year="2024">2024</button>
+                            <button class="year-btn" data-year="2023">2023</button>
+                        </div>
+                    </div>
+                    <div class="payments-list" id="paymentsList"></div>
+                </div>
+
+                <!-- Forecast Tab -->
+                <div class="tab-content" id="tab-forecast">
+                    <div class="forecast-section">
+                        <h3 class="forecast-section-title"><span data-i18n="prediction_title">Verwachte royalties 2025</span><span class="badge prediction" data-i18n="badge_prediction">Prognose</span></h3>
+                        <div class="prediction-card">
+                            <div class="prediction-header">
+                                <div class="prediction-year">2025</div>
+                                <div class="prediction-badge" data-i18n="payout_date">Uitbetaling maart 2026</div>
+                            </div>
+                            <div class="prediction-footer">
+                                <div class="prediction-stat"><div class="prediction-stat-value" id="predLow"></div><div class="prediction-stat-label" data-i18n="conservative">Conservatief</div></div>
+                                <div class="prediction-stat highlight"><div class="prediction-stat-value" id="predMid"></div><div class="prediction-stat-label" data-i18n="expected">Verwacht</div></div>
+                                <div class="prediction-stat"><div class="prediction-stat-value" id="predHigh"></div><div class="prediction-stat-label" data-i18n="optimistic">Optimistisch</div></div>
+                            </div>
+                            <div class="prediction-contracts" id="predictionContracts"></div>
+                        </div>
+                        <div class="prediction-note">
+                            <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span data-i18n="prediction_disclaimer">Deze prognose is gebaseerd op de omzet van het prognosejaar. Hierbij worden de contracten, royaltypercentages en bijdragersaandelen van het jaar voor het prognosejaar gebruikt, aangezien deze waarden voor het huidige jaar nog niet definitief zijn.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Tab -->
+                <div class="tab-content" id="tab-faq">
+                    <div class="info-header">
+                        <h3 data-i18n="faq_title">Veelgestelde vragen</h3>
+                    </div>
+                    <div class="faq-list" id="faqList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <header class="dashboard-header">
+            <div class="header-logo">
+                <img src="logo.jpg" alt="Logo">
+            </div>
+            <div class="header-user">
+                <div class="user-info">
+                    <div class="user-name">Administrator</div>
+                    <div class="user-role">Admin</div>
+                </div>
+                <div class="user-avatar admin">A</div>
+                <button class="logout-btn" id="adminLogoutBtn">Uitloggen</button>
+            </div>
+        </header>
+        <main class="dashboard-content admin-content">
+            <div class="welcome-section">
+                <h1>Admin Dashboard</h1>
+                <p>Beheer auteurs, documenten en bekijk login activiteit</p>
+            </div>
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTotalAuthors">0</div>
+                    <div class="stat-label">Actieve Auteurs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statLoggedInToday">0</div>
+                    <div class="stat-label">Auteurs ingelogd <select id="statLoginPeriod" class="stat-period-select" onchange="updateAdminStats()"><option value="day">vandaag</option><option value="week">deze week</option><option value="month">deze maand</option><option value="year">dit jaar</option></select></div>
+                </div>
+                <div class="stat-card clickable" style="background:linear-gradient(135deg, #fff4d6 0%, #fff 100%);" onclick="showChangesPanel()">
+                    <div class="stat-value" id="statPendingChanges" style="color:#b8860b;">0</div>
+                    <div class="stat-label" id="statPendingLabel">Wijzigingen goed te keuren</div>
+                </div>
+                <div class="stat-card clickable" style="background:linear-gradient(135deg, #e8f5e9 0%, #fff 100%);" onclick="openImportModal()">
+                    <div class="stat-value" style="color:#2e7d32;font-size:1.5rem;">+</div>
+                    <div class="stat-label">Auteurs importeren</div>
+                </div>
+            </div>
+            <div class="admin-grid">
+                <div class="author-list">
+                    <div class="author-list-header">Auteurs</div>
+                    <div class="author-search">
+                        <input type="text" id="authorSearchInput" placeholder="Zoek op naam..." oninput="filterAuthors()">
+                    </div>
+                    <div id="authorList"></div>
+                </div>
+                <div class="right-panel" id="rightPanel">
+                    <div id="authorDetailView" class="panel-view active">
+                        <div class="author-detail" id="authorDetail">
+                            <div class="no-selection">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                <p>Selecteer een auteur om details te bekijken</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="changesView" class="panel-view">
+                        <div class="changes-panel">
+                            <div class="changes-panel-header">
+                                <h3>Wijzigingen</h3>
+                                <button class="btn-secondary" onclick="showAuthorDetailPanel()" style="padding:0.5rem 1rem;font-size:0.8rem;">← Terug naar auteurs</button>
+                            </div>
+                            <div class="changes-filter-tabs">
+                                <button class="changes-filter-btn active" data-filter="pending" onclick="filterChanges('pending')">Te beoordelen</button>
+                                <button class="changes-filter-btn" data-filter="approved" onclick="filterChanges('approved')">Goedgekeurd</button>
+                                <button class="changes-filter-btn" data-filter="rejected" onclick="filterChanges('rejected')">Afgewezen</button>
+                            </div>
+                            <div id="allChangesList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 data-i18n="edit_info_title">Gegevens bewerken</h3>
+                <button class="modal-close" id="modalClose"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group"><label data-i18n="label_firstname">Voornaam</label><input type="text" id="editFirstName"></div>
+                    <div class="form-group" style="flex:0.5"><label data-i18n="label_initials">Voorletters</label><input type="text" id="editInitials" placeholder="P.J."></div>
+                    <div class="form-group"><label data-i18n="label_lastname">Achternaam</label><input type="text" id="editLastName"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label data-i18n="label_bsn">BSN</label><input type="text" id="editBSN" placeholder="123456789"></div>
+                    <div class="form-group"><label data-i18n="label_email">E-mailadres</label><input type="email" id="editEmail" readonly></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2"><label data-i18n="label_street">Straat</label><input type="text" id="editStreet"></div>
+                    <div class="form-group" style="flex:1"><label data-i18n="label_housenumber">Huisnummer</label><input type="text" id="editHouseNumber"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label data-i18n="label_postcode">Postcode</label><input type="text" id="editPostcode"></div>
+                    <div class="form-group"><label data-i18n="label_country">Land</label><input type="text" id="editCountry"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label data-i18n="label_birthdate">Geboortedatum</label><input type="text" id="editBirthDate" placeholder="dd-mm-jjjj"></div>
+                    <div class="form-group"><label data-i18n="label_phone">Telefoonnummer</label><input type="tel" id="editPhone"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2"><label data-i18n="label_bank">IBAN</label><input type="text" id="editBankAccount" placeholder="NL00 BANK 0000 0000 00"></div>
+                    <div class="form-group" style="flex:1"><label data-i18n="label_bic">BIC</label><input type="text" id="editBIC" placeholder="ABNANL2A"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="modalCancel" data-i18n="cancel_btn">Annuleren</button>
+                <button class="btn-primary" id="modalSave" data-i18n="save_btn">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Modal -->
+    <div class="modal-overlay" id="addPaymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Document toevoegen</h3>
+                <button class="modal-close" onclick="closeAddPaymentModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Type document</label>
+                    <select id="newPaymentType">
+                        <option value="royalty">Royalty-afrekening</option>
+                        <option value="subsidiary">Nevenrechten</option>
+                        <option value="foreign">Foreign Rights</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Jaar</label><input type="number" id="newPaymentYear" value="2024" min="2020" max="2030"></div>
+                <div class="form-group"><label>Bedrag (EUR)</label><input type="number" id="newPaymentAmount" step="0.01" placeholder="0.00"></div>
+                <div class="form-group"><label>Bestandsnaam</label><input type="text" id="newPaymentFilename" placeholder="document.pdf"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeAddPaymentModal()">Annuleren</button>
+                <button class="btn-primary" onclick="saveNewPayment()">Toevoegen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Prediction Modal -->
+    <div class="modal-overlay" id="editPredictionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Prognose bewerken</h3>
+                <button class="modal-close" onclick="closeEditPredictionModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Minimum bedrag (EUR)</label><input type="number" id="editPredMin" step="0.01" placeholder="0.00"></div>
+                <div class="form-group"><label>Maximum bedrag (EUR)</label><input type="number" id="editPredMax" step="0.01" placeholder="0.00"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditPredictionModal()">Annuleren</button>
+                <button class="btn-primary" onclick="savePrediction()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Contract Modal -->
+    <div class="modal-overlay" id="editContractModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="contractModalTitle">Contract bewerken</h3>
+                <button class="modal-close" onclick="closeEditContractModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Contractnummer</label><input type="text" id="editContractNumber" placeholder="CC_00000"></div>
+                <div class="form-group"><label>Contractnaam</label><input type="text" id="editContractName" placeholder="Boektitel"></div>
+                <div class="form-group">
+                    <label>Contract PDF</label>
+                    <input type="file" id="editContractPdf" accept=".pdf">
+                    <div id="currentContractPdf" style="margin-top:0.5rem;font-size:0.85rem;color:var(--color-text-light);"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditContractModal()">Annuleren</button>
+                <button class="btn-primary" onclick="saveContract()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Reference Numbers Modal -->
+    <div class="modal-overlay" id="editRefNumbersModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Auteurs ID bewerken</h3>
+                <button class="modal-close" onclick="closeEditRefNumbersModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Vendor ID</label><input type="text" id="editVendorNumber" placeholder="V0024123"></div>
+                <div class="form-group"><label>Alliant ID</label><input type="text" id="editAlliantNumber" placeholder="2512345"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditRefNumbersModal()">Annuleren</button>
+                <button class="btn-primary" onclick="saveRefNumbers()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Statement Modal -->
+    <div class="modal-overlay" id="editStatementModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="statementModalTitle">Document bewerken</h3>
+                <button class="modal-close" onclick="closeEditStatementModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Type document</label>
+                    <select id="editStatementType">
+                        <option value="royalty">Royalty-afrekening</option>
+                        <option value="subsidiary">Nevenrechten</option>
+                        <option value="foreign">Foreign Rights</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Jaar</label><input type="number" id="editStatementYear" min="2020" max="2030"></div>
+                <div class="form-group"><label>Bedrag (EUR)</label><input type="number" id="editStatementAmount" step="0.01"></div>
+                <div class="form-group"><label>Bestandsnaam</label><input type="text" id="editStatementFilename"></div>
+                <div class="form-group"><label>Volgorde</label><input type="number" id="editStatementOrder" min="1"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditStatementModal()">Annuleren</button>
+                <button class="btn-primary" onclick="saveStatement()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3>Bevestiging</h3>
+                <button class="modal-close" onclick="closeConfirmationModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body" style="text-align:center;padding:2rem;">
+                <div style="width:60px;height:60px;background:var(--color-success);border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="width:32px;height:32px;"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <p id="confirmationMessage" style="font-size:1.1rem;color:var(--color-text);"></p>
+            </div>
+            <div class="modal-footer" style="justify-content:center;">
+                <button class="btn-primary" onclick="closeConfirmationModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Reason Modal -->
+    <div class="modal-overlay" id="rejectionModal">
+        <div class="modal" style="max-width:450px;">
+            <div class="modal-header">
+                <h3>Wijziging afwijzen</h3>
+                <button class="modal-close" onclick="closeRejectionModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:1rem;color:var(--color-text-light);">Geef een reden op voor de afwijzing (optioneel):</p>
+                <div class="form-group">
+                    <textarea id="rejectionReason" rows="3" style="width:100%;padding:0.75rem;border:1px solid var(--color-border);border-radius:var(--radius-sm);font-family:var(--font-body);resize:vertical;" placeholder="Bijv. Onjuiste gegevens, verificatie vereist..."></textarea>
+                </div>
+                <input type="hidden" id="rejectionChangeId">
+                <input type="hidden" id="rejectionAuthorEmail">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRejectionModal()">Annuleren</button>
+                <button class="btn-danger" onclick="confirmRejectChange()">Afwijzen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Auteurs Modal -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal" style="max-width:700px;">
+            <div class="modal-header">
+                <h3>Auteurs importeren</h3>
+                <button class="modal-close" onclick="closeImportModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div id="importStep1">
+                    <p style="margin-bottom:1rem;color:var(--color-text-light);">Upload een CSV bestand met auteurs uit NetSuite. Het bestand moet de volgende kolommen bevatten:</p>
+                    <div style="background:#f5f5f5;padding:1rem;border-radius:var(--radius-sm);font-family:monospace;font-size:0.85rem;margin-bottom:1rem;overflow-x:auto;">
+                        email, first_name, last_name, voorletters, phone, street, house_number, postcode, country, iban, bic, birth_date, vendor_id, internal_id
+                    </div>
+                    <div class="form-group">
+                        <label>CSV Bestand</label>
+                        <input type="file" id="importFile" accept=".csv" onchange="previewImport()">
+                    </div>
+                    <div id="importPreview" style="display:none;margin-top:1rem;">
+                        <h4 style="margin-bottom:0.5rem;">Preview (eerste 5 rijen)</h4>
+                        <div style="overflow-x:auto;max-height:200px;border:1px solid var(--color-border);border-radius:var(--radius-sm);">
+                            <table id="importPreviewTable" style="width:100%;font-size:0.8rem;border-collapse:collapse;">
+                            </table>
+                        </div>
+                        <p id="importCount" style="margin-top:0.5rem;color:var(--color-text-light);font-size:0.85rem;"></p>
+                    </div>
+                </div>
+                <div id="importStep2" style="display:none;">
+                    <div style="text-align:center;padding:2rem;">
+                        <div class="import-spinner" style="width:50px;height:50px;border:4px solid #f3f3f3;border-top:4px solid var(--color-primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
+                        <p id="importStatus">Importeren...</p>
+                        <div id="importProgress" style="margin-top:1rem;">
+                            <div style="background:#e0e0e0;border-radius:4px;height:8px;overflow:hidden;">
+                                <div id="importProgressBar" style="background:var(--color-primary);height:100%;width:0%;transition:width 0.3s;"></div>
+                            </div>
+                            <p id="importProgressText" style="font-size:0.85rem;color:var(--color-text-light);margin-top:0.5rem;">0 / 0</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="importStep3" style="display:none;">
+                    <div style="text-align:center;padding:2rem;">
+                        <div id="importResultIcon" style="font-size:3rem;margin-bottom:1rem;"></div>
+                        <h4 id="importResultTitle"></h4>
+                        <div id="importResultDetails" style="margin-top:1rem;text-align:left;background:#f5f5f5;padding:1rem;border-radius:var(--radius-sm);"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeImportModal()">Sluiten</button>
+                <button class="btn-primary" id="importStartBtn" onclick="startImport()" disabled>Importeren</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #importPreviewTable th, #importPreviewTable td { padding: 0.5rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+        #importPreviewTable th { background: #f9f9f9; font-weight: 600; position: sticky; top: 0; }
+    </style>
+
+    <!-- Password Verification Modal for Bank Changes -->
+    <div class="modal-overlay" id="passwordVerifyModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3 data-i18n="verify_password_title">Wachtwoord bevestigen</h3>
+                <button class="modal-close" onclick="closePasswordVerifyModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:1rem;color:var(--color-text-light);" data-i18n="verify_password_desc">Voor het wijzigen van uw bankgegevens is een wachtwoordbevestiging vereist.</p>
+                <div class="form-group">
+                    <label data-i18n="password_label">Wachtwoord</label>
+                    <input type="password" id="verifyPassword" placeholder="••••••••">
+                </div>
+                <div class="password-error" id="passwordError" style="color:var(--color-danger);font-size:0.85rem;margin-top:0.5rem;display:none;" data-i18n="password_incorrect">Onjuist wachtwoord</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closePasswordVerifyModal()" data-i18n="cancel_btn">Annuleren</button>
+                <button class="btn-primary" onclick="verifyPasswordAndSave()" data-i18n="confirm_btn">Bevestigen</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    <!-- Main Application -->
+    <script src="app.js"></script>
+</body>
+</html>

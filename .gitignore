@@ -1,0 +1,45 @@
+# ===========================================
+# Royaltyportaal .gitignore
+# ===========================================
+
+# Environment variables (secrets!)
+.env
+.env.local
+.env.production
+.env*.local
+
+# Supabase
+supabase/.temp/
+supabase/.branches/
+supabase/.linked/
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test data met echte gegevens
+**/test-data-real/
+**/real-authors*.csv
+**/productie*.csv
+
+# Build output
+dist/
+build/
+
+# Tijdelijke bestanden
+*.tmp
+*.temp
