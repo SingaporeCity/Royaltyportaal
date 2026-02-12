@@ -206,6 +206,716 @@ async function supabaseLogout() {
 }
 
 // ============================================
+// PUBLIC SITE NAVIGATION
+// ============================================
+
+function showPublicSite() {
+    document.getElementById('publicSite').classList.remove('hidden');
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
+    document.body.style.overflow = '';
+    window.scrollTo(0, 0);
+}
+
+function showLoginPage() {
+    document.getElementById('publicSite').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('loginPage').style.display = '';
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
+    document.body.style.overflow = '';
+    // Close mobile menu if open
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) navLinks.classList.remove('mobile-open');
+    const hamburger = document.getElementById('hamburgerBtn');
+    if (hamburger) hamburger.classList.remove('active');
+}
+
+function showDashboard(isAdmin) {
+    document.getElementById('publicSite').classList.add('hidden');
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('loginPage').style.display = 'none';
+    if (isAdmin) {
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+        document.getElementById('adminDashboard').style.display = '';
+    } else {
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('dashboard').style.display = '';
+        document.getElementById('adminDashboard').classList.add('hidden');
+    }
+}
+
+// ============================================
+// MOBILE MENU
+// ============================================
+
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburgerBtn');
+    navLinks.classList.toggle('mobile-open');
+    hamburger.classList.toggle('active');
+}
+
+// ============================================
+// SMOOTH SCROLL
+// ============================================
+
+function initSmoothScroll() {
+    document.querySelectorAll('.public-nav-links a, .hero-cta a, .footer-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    // Close mobile menu
+                    const navLinks = document.getElementById('navLinks');
+                    const hamburger = document.getElementById('hamburgerBtn');
+                    if (navLinks) navLinks.classList.remove('mobile-open');
+                    if (hamburger) hamburger.classList.remove('active');
+
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+}
+
+// ============================================
+// STICKY NAV
+// ============================================
+
+function initStickyNav() {
+    const nav = document.getElementById('publicNav');
+    if (!nav) return;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+}
+
+// ============================================
+// PUBLIC SITE CONTENT
+// ============================================
+
+async function initPublicSite() {
+    renderPublicFAQ();
+    loadPublicEvents();
+    loadPublicBlogPosts();
+    initSmoothScroll();
+    initStickyNav();
+}
+
+async function loadPublicEvents() {
+    const container = document.getElementById('publicEventsList');
+    if (!container) return;
+
+    try {
+        if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            const now = new Date().toISOString();
+            const { data, error } = await supabaseClient
+                .from('events')
+                .select('*')
+                .eq('is_active', true)
+                .gte('event_date', now)
+                .order('event_date', { ascending: true })
+                .limit(3);
+
+            if (!error && data && data.length > 0) {
+                renderPublicEvents(data);
+                return;
+            }
+        }
+    } catch (e) {
+        console.log('Public events: using fallback');
+    }
+
+    // Fallback content
+    container.innerHTML = '<p class="no-content-message" data-i18n="no_events">' + t('no_events') + '</p>';
+}
+
+async function loadPublicBlogPosts() {
+    const container = document.getElementById('publicBlogList');
+    if (!container) return;
+
+    try {
+        if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            const { data, error } = await supabaseClient
+                .from('blog_posts')
+                .select('*')
+                .eq('is_published', true)
+                .order('published_at', { ascending: false })
+                .limit(3);
+
+            if (!error && data && data.length > 0) {
+                renderPublicBlogPosts(data);
+                return;
+            }
+        }
+    } catch (e) {
+        console.log('Public blog: using fallback');
+    }
+
+    // Fallback content
+    container.innerHTML = '<p class="no-content-message" data-i18n="no_news">' + t('no_news') + '</p>';
+}
+
+function renderPublicEvents(events) {
+    const container = document.getElementById('publicEventsList');
+    if (!container) return;
+
+    container.innerHTML = events.map(event => {
+        const date = new Date(event.event_date).toLocaleDateString(currentLang === 'nl' ? 'nl-NL' : 'en-US', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+        return `
+            <div class="public-event-card">
+                <span class="event-date">${date}</span>
+                <h4>${event.title || ''}</h4>
+                <p>${event.description || ''}</p>
+                ${event.location ? `<span class="event-location">${event.location}</span>` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+function renderPublicBlogPosts(posts) {
+    const container = document.getElementById('publicBlogList');
+    if (!container) return;
+
+    container.innerHTML = posts.map(post => {
+        const date = new Date(post.published_at).toLocaleDateString(currentLang === 'nl' ? 'nl-NL' : 'en-US', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+        return `
+            <div class="public-news-card">
+                <span class="news-date">${date}</span>
+                <h4>${post.title || ''}</h4>
+                <p>${(post.content || '').substring(0, 150)}${(post.content || '').length > 150 ? '...' : ''}</p>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderPublicFAQ() {
+    const container = document.getElementById('publicFaqList');
+    if (!container) return;
+
+    const faqs = [
+        { q: t('public_faq_q1'), a: t('public_faq_a1') },
+        { q: t('public_faq_q2'), a: t('public_faq_a2') },
+        { q: t('public_faq_q3'), a: t('public_faq_a3') },
+        { q: t('public_faq_q4'), a: t('public_faq_a4') },
+        { q: t('public_faq_q5'), a: t('public_faq_a5') },
+        { q: t('public_faq_q6'), a: t('public_faq_a6') }
+    ];
+
+    container.innerHTML = faqs.map(faq => `
+        <div class="public-faq-item">
+            <div class="public-faq-question" onclick="this.parentElement.classList.toggle('open')">
+                <span>${faq.q}</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="public-faq-answer">
+                <p>${faq.a}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function handleContactForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const wrapper = form.parentElement;
+    form.style.display = 'none';
+    const successMsg = document.createElement('div');
+    successMsg.className = 'contact-success';
+    successMsg.textContent = t('contact_success');
+    wrapper.appendChild(successMsg);
+
+    // Reset after 5 seconds
+    setTimeout(() => {
+        form.reset();
+        form.style.display = '';
+        successMsg.remove();
+    }, 5000);
+}
+
+// ============================================
+// EVENTS & BLOG POSTS FUNCTIONS
+// ============================================
+
+// Load upcoming events (max 3, only future events)
+async function loadEvents() {
+    if (!supabaseClient) {
+        renderEvents([]);
+        return;
+    }
+
+    try {
+        const now = new Date().toISOString();
+        const { data: events, error } = await supabaseClient
+            .from('events')
+            .select('*')
+            .eq('is_active', true)
+            .gte('event_date', now)
+            .order('event_date', { ascending: true })
+            .limit(3);
+
+        if (error) {
+            console.error('Error fetching events:', error);
+            renderEvents([]);
+            return;
+        }
+
+        renderEvents(events || []);
+    } catch (err) {
+        console.error('Load events exception:', err);
+        renderEvents([]);
+    }
+}
+
+function renderEvents(events) {
+    const container = document.getElementById('eventsContainer');
+    if (!container) return;
+
+    if (!events || events.length === 0) {
+        container.innerHTML = '<p class="empty-state">Geen aankomende evenementen</p>';
+        return;
+    }
+
+    container.innerHTML = events.map(event => {
+        const eventDate = new Date(event.event_date);
+        const day = eventDate.getDate();
+        const month = eventDate.toLocaleDateString('nl-NL', { month: 'short' });
+        const time = eventDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+            <div class="event-card">
+                <div class="event-date-badge">
+                    <span class="event-day">${day}</span>
+                    <span class="event-month">${month}</span>
+                </div>
+                <div class="event-details">
+                    <h4 class="event-title">${event.title}</h4>
+                    ${event.description ? `<p class="event-description">${event.description}</p>` : ''}
+                    <div class="event-meta">
+                        <span class="event-time">🕐 ${time}</span>
+                        ${event.location ? `<span class="event-location">📍 ${event.location}</span>` : ''}
+                    </div>
+                </div>
+                ${event.link ? `<a href="${event.link}" target="_blank" class="event-link">Meer info →</a>` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+// Load latest blog posts (max 3, only published)
+async function loadBlogPosts() {
+    if (!supabaseClient) {
+        renderBlogPosts([]);
+        return;
+    }
+
+    try {
+        const { data: posts, error } = await supabaseClient
+            .from('blog_posts')
+            .select('*')
+            .eq('is_published', true)
+            .order('published_at', { ascending: false })
+            .limit(3);
+
+        if (error) {
+            console.error('Error fetching blog posts:', error);
+            renderBlogPosts([]);
+            return;
+        }
+
+        renderBlogPosts(posts || []);
+    } catch (err) {
+        console.error('Load blog posts exception:', err);
+        renderBlogPosts([]);
+    }
+}
+
+function renderBlogPosts(posts) {
+    const container = document.getElementById('blogPostsContainer');
+    if (!container) return;
+
+    if (!posts || posts.length === 0) {
+        container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
+        return;
+    }
+
+    container.innerHTML = posts.map(post => {
+        const pubDate = post.published_at ? new Date(post.published_at).toLocaleDateString('nl-NL', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }) : '';
+
+        return `
+            <div class="blog-card">
+                ${post.image_url ? `<div class="blog-image" style="background-image:url('${post.image_url}')"></div>` : ''}
+                <div class="blog-content">
+                    <h4 class="blog-title">${post.title}</h4>
+                    ${post.summary ? `<p class="blog-summary">${post.summary}</p>` : ''}
+                    <div class="blog-meta">
+                        <span class="blog-date">${pubDate}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ============================================
+// ADMIN: EVENTS MANAGEMENT
+// ============================================
+
+let currentEditingEvent = null;
+
+function openEventsManager() {
+    document.getElementById('eventsManagerModal').classList.add('active');
+    loadEventsForAdmin();
+}
+
+function closeEventsManager() {
+    document.getElementById('eventsManagerModal').classList.remove('active');
+}
+
+async function loadEventsForAdmin() {
+    const container = document.getElementById('eventsManagerList');
+    if (!supabaseClient) {
+        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        return;
+    }
+
+    try {
+        const { data: events, error } = await supabaseClient
+            .from('events')
+            .select('*')
+            .order('event_date', { ascending: false });
+
+        if (error) throw error;
+
+        if (!events || events.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen evenementen</p>';
+            return;
+        }
+
+        container.innerHTML = events.map(event => {
+            const eventDate = new Date(event.event_date);
+            const dateStr = eventDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+            const isPast = eventDate < new Date();
+
+            return `
+                <div class="manager-item ${!event.is_active ? 'inactive' : ''} ${isPast ? 'past' : ''}">
+                    <div class="manager-item-info">
+                        <div class="manager-item-title">${event.title}</div>
+                        <div class="manager-item-meta">${dateStr} ${event.location ? '• ' + event.location : ''}</div>
+                        <div class="manager-item-status">${event.is_active ? '✅ Actief' : '❌ Inactief'} ${isPast ? '(verlopen)' : ''}</div>
+                    </div>
+                    <div class="manager-item-actions">
+                        <button class="btn-small" onclick="openEventEditor('${event.id}')">Bewerken</button>
+                        <button class="btn-small btn-danger" onclick="deleteEvent('${event.id}')">Verwijderen</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (err) {
+        console.error('Error loading events for admin:', err);
+        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
+    }
+}
+
+async function openEventEditor(eventId = null) {
+    document.getElementById('eventEditorModal').classList.add('active');
+    document.getElementById('editEventId').value = eventId || '';
+    document.getElementById('eventEditorTitle').textContent = eventId ? 'Evenement bewerken' : 'Nieuw evenement';
+
+    // Clear form
+    document.getElementById('editEventTitle').value = '';
+    document.getElementById('editEventDescription').value = '';
+    document.getElementById('editEventDate').value = '';
+    document.getElementById('editEventTime').value = '';
+    document.getElementById('editEventLocation').value = '';
+    document.getElementById('editEventLink').value = '';
+    document.getElementById('editEventActive').checked = true;
+
+    if (eventId && supabaseClient) {
+        try {
+            const { data: event, error } = await supabaseClient
+                .from('events')
+                .select('*')
+                .eq('id', eventId)
+                .single();
+
+            if (error) throw error;
+
+            const eventDate = new Date(event.event_date);
+            document.getElementById('editEventTitle').value = event.title || '';
+            document.getElementById('editEventDescription').value = event.description || '';
+            document.getElementById('editEventDate').value = eventDate.toISOString().split('T')[0];
+            document.getElementById('editEventTime').value = eventDate.toTimeString().slice(0, 5);
+            document.getElementById('editEventLocation').value = event.location || '';
+            document.getElementById('editEventLink').value = event.link || '';
+            document.getElementById('editEventActive').checked = event.is_active;
+        } catch (err) {
+            console.error('Error loading event:', err);
+            alert('Fout bij laden evenement: ' + err.message);
+        }
+    }
+}
+
+function closeEventEditor() {
+    document.getElementById('eventEditorModal').classList.remove('active');
+}
+
+async function saveEvent() {
+    if (!supabaseClient) {
+        alert('Supabase niet beschikbaar');
+        return;
+    }
+
+    const eventId = document.getElementById('editEventId').value;
+    const title = document.getElementById('editEventTitle').value.trim();
+    const dateStr = document.getElementById('editEventDate').value;
+    const timeStr = document.getElementById('editEventTime').value || '12:00';
+
+    if (!title || !dateStr) {
+        alert('Vul minimaal een titel en datum in');
+        return;
+    }
+
+    const eventDate = new Date(`${dateStr}T${timeStr}`);
+
+    const eventData = {
+        title: title,
+        description: document.getElementById('editEventDescription').value.trim() || null,
+        event_date: eventDate.toISOString(),
+        location: document.getElementById('editEventLocation').value.trim() || null,
+        link: document.getElementById('editEventLink').value.trim() || null,
+        is_active: document.getElementById('editEventActive').checked
+    };
+
+    try {
+        if (eventId) {
+            const { error } = await supabaseClient
+                .from('events')
+                .update(eventData)
+                .eq('id', eventId);
+            if (error) throw error;
+        } else {
+            const { error } = await supabaseClient
+                .from('events')
+                .insert(eventData);
+            if (error) throw error;
+        }
+
+        closeEventEditor();
+        loadEventsForAdmin();
+    } catch (err) {
+        console.error('Error saving event:', err);
+        alert('Fout bij opslaan: ' + err.message);
+    }
+}
+
+async function deleteEvent(eventId) {
+    if (!confirm('Weet je zeker dat je dit evenement wilt verwijderen?')) return;
+    if (!supabaseClient) return;
+
+    try {
+        const { error } = await supabaseClient
+            .from('events')
+            .delete()
+            .eq('id', eventId);
+
+        if (error) throw error;
+        loadEventsForAdmin();
+    } catch (err) {
+        console.error('Error deleting event:', err);
+        alert('Fout bij verwijderen: ' + err.message);
+    }
+}
+
+// ============================================
+// ADMIN: BLOG POSTS MANAGEMENT
+// ============================================
+
+function openBlogManager() {
+    document.getElementById('blogManagerModal').classList.add('active');
+    loadBlogPostsForAdmin();
+}
+
+function closeBlogManager() {
+    document.getElementById('blogManagerModal').classList.remove('active');
+}
+
+async function loadBlogPostsForAdmin() {
+    const container = document.getElementById('blogManagerList');
+    if (!supabaseClient) {
+        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        return;
+    }
+
+    try {
+        const { data: posts, error } = await supabaseClient
+            .from('blog_posts')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
+            return;
+        }
+
+        container.innerHTML = posts.map(post => {
+            const createdDate = new Date(post.created_at).toLocaleDateString('nl-NL');
+
+            return `
+                <div class="manager-item ${!post.is_published ? 'inactive' : ''}">
+                    <div class="manager-item-info">
+                        <div class="manager-item-title">${post.title}</div>
+                        <div class="manager-item-meta">Aangemaakt: ${createdDate}</div>
+                        <div class="manager-item-status">${post.is_published ? '✅ Gepubliceerd' : '📝 Concept'}</div>
+                    </div>
+                    <div class="manager-item-actions">
+                        <button class="btn-small" onclick="openBlogEditor('${post.id}')">Bewerken</button>
+                        <button class="btn-small btn-danger" onclick="deleteBlogPost('${post.id}')">Verwijderen</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (err) {
+        console.error('Error loading blog posts for admin:', err);
+        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
+    }
+}
+
+async function openBlogEditor(postId = null) {
+    document.getElementById('blogEditorModal').classList.add('active');
+    document.getElementById('editBlogId').value = postId || '';
+    document.getElementById('blogEditorTitle').textContent = postId ? 'Bericht bewerken' : 'Nieuw nieuwsbericht';
+
+    // Clear form
+    document.getElementById('editBlogTitle').value = '';
+    document.getElementById('editBlogSummary').value = '';
+    document.getElementById('editBlogContent').value = '';
+    document.getElementById('editBlogImageUrl').value = '';
+    document.getElementById('editBlogPublished').checked = false;
+
+    if (postId && supabaseClient) {
+        try {
+            const { data: post, error } = await supabaseClient
+                .from('blog_posts')
+                .select('*')
+                .eq('id', postId)
+                .single();
+
+            if (error) throw error;
+
+            document.getElementById('editBlogTitle').value = post.title || '';
+            document.getElementById('editBlogSummary').value = post.summary || '';
+            document.getElementById('editBlogContent').value = post.content || '';
+            document.getElementById('editBlogImageUrl').value = post.image_url || '';
+            document.getElementById('editBlogPublished').checked = post.is_published;
+        } catch (err) {
+            console.error('Error loading blog post:', err);
+            alert('Fout bij laden bericht: ' + err.message);
+        }
+    }
+}
+
+function closeBlogEditor() {
+    document.getElementById('blogEditorModal').classList.remove('active');
+}
+
+async function saveBlogPost() {
+    if (!supabaseClient) {
+        alert('Supabase niet beschikbaar');
+        return;
+    }
+
+    const postId = document.getElementById('editBlogId').value;
+    const title = document.getElementById('editBlogTitle').value.trim();
+    const content = document.getElementById('editBlogContent').value.trim();
+    const isPublished = document.getElementById('editBlogPublished').checked;
+
+    if (!title || !content) {
+        alert('Vul minimaal een titel en inhoud in');
+        return;
+    }
+
+    const postData = {
+        title: title,
+        summary: document.getElementById('editBlogSummary').value.trim() || null,
+        content: content,
+        image_url: document.getElementById('editBlogImageUrl').value.trim() || null,
+        is_published: isPublished,
+        published_at: isPublished ? new Date().toISOString() : null
+    };
+
+    try {
+        if (postId) {
+            // Keep original published_at if already published
+            if (isPublished) {
+                const { data: existing } = await supabaseClient
+                    .from('blog_posts')
+                    .select('published_at')
+                    .eq('id', postId)
+                    .single();
+                if (existing?.published_at) {
+                    postData.published_at = existing.published_at;
+                }
+            }
+
+            const { error } = await supabaseClient
+                .from('blog_posts')
+                .update(postData)
+                .eq('id', postId);
+            if (error) throw error;
+        } else {
+            const { error } = await supabaseClient
+                .from('blog_posts')
+                .insert(postData);
+            if (error) throw error;
+        }
+
+        closeBlogEditor();
+        loadBlogPostsForAdmin();
+    } catch (err) {
+        console.error('Error saving blog post:', err);
+        alert('Fout bij opslaan: ' + err.message);
+    }
+}
+
+async function deleteBlogPost(postId) {
+    if (!confirm('Weet je zeker dat je dit bericht wilt verwijderen?')) return;
+    if (!supabaseClient) return;
+
+    try {
+        const { error } = await supabaseClient
+            .from('blog_posts')
+            .delete()
+            .eq('id', postId);
+
+        if (error) throw error;
+        loadBlogPostsForAdmin();
+    } catch (err) {
+        console.error('Error deleting blog post:', err);
+        alert('Fout bij verwijderen: ' + err.message);
+    }
+}
+
+// ============================================
 // SUPABASE ADMIN FUNCTIONS
 // ============================================
 
@@ -651,7 +1361,66 @@ const TRANSLATIONS = {
         faq_title: 'Veelgestelde vragen',
         verify_password_title: 'Wachtwoord bevestigen', verify_password_desc: 'Voor het wijzigen van uw bankgegevens is een wachtwoordbevestiging vereist.',
         password_incorrect: 'Onjuist wachtwoord', confirm_btn: 'Bevestigen',
-        iban_invalid: 'Ongeldig IBAN nummer', bank_change_pending: 'Uw bankgegevens wijziging is ingediend ter goedkeuring door de administrator.'
+        iban_invalid: 'Ongeldig IBAN nummer', bank_change_pending: 'Uw bankgegevens wijziging is ingediend ter goedkeuring door de administrator.',
+        // Navigation
+        nav_about: 'Over Noordhoff', nav_why: 'Waarom auteur?', nav_process: 'Het proces', nav_academy: 'Academy',
+        nav_faq: 'FAQ', nav_news: 'Nieuws', nav_contact: 'Contact', nav_login: 'Inloggen',
+        // Hero
+        hero_title: 'Word auteur bij Noordhoff',
+        hero_subtitle: 'Deel je kennis met miljoenen leerlingen en studenten in Nederland. Samen maken we het onderwijs van morgen.',
+        hero_cta_learn: 'Ontdek meer', hero_cta_login: 'Inloggen als auteur',
+        // About
+        about_title: 'Al meer dan 180 jaar partner in onderwijs',
+        about_text: 'Noordhoff is de grootste educatieve uitgeverij van Nederland. Samen met onze auteurs ontwikkelen we lesmateriaal dat miljoenen leerlingen en studenten helpt om te groeien.',
+        stat_years: 'jaar ervaring', stat_authors: 'auteurs', stat_students: 'leerlingen bereikt',
+        // Why section
+        why_title: 'Waarom auteur worden bij Noordhoff?',
+        why_impact_title: 'Maak impact',
+        why_impact_text: 'Jouw kennis bereikt miljoenen leerlingen en studenten door heel Nederland. Draag bij aan de toekomst van het onderwijs.',
+        why_support_title: 'Professionele begeleiding',
+        why_support_text: 'Ons team van ervaren redacteuren en vormgevers begeleidt je door het hele proces.',
+        why_royalties_title: 'Eerlijke royalties',
+        why_royalties_text: 'Transparante afspraken en eerlijke vergoedingen. Via ons auteursportaal heb je altijd inzicht in je royalties.',
+        // Process
+        process_title: 'Hoe word je auteur?',
+        process_step1_title: 'Kennismaking', process_step1_text: 'We bespreken je expertise, idee\u00ebn en de mogelijkheden voor samenwerking.',
+        process_step2_title: 'Contract', process_step2_text: 'We maken heldere afspraken over inhoud, planning en vergoeding.',
+        process_step3_title: 'Schrijven', process_step3_text: 'Je schrijft de content met begeleiding van onze redactie en vakspecialisten.',
+        process_step4_title: 'Publicatie', process_step4_text: 'Je werk wordt gepubliceerd en bereikt leerlingen door heel Nederland.',
+        // Academy
+        academy_title: 'Auteurs Academy',
+        academy_text: 'Bekijk onze video\'s over het schrijfproces, tips van ervaren auteurs en meer.',
+        academy_video1_title: 'Het schrijfproces bij Noordhoff', academy_video1_desc: 'Leer hoe het schrijfproces eruitziet van begin tot eind.',
+        academy_video2_title: 'Tips van ervaren auteurs', academy_video2_desc: 'Auteurs delen hun ervaringen en beste tips.',
+        academy_video3_title: 'Werken met de redactie', academy_video3_desc: 'Ontdek hoe onze redacteuren je begeleiden.',
+        // FAQ
+        faq_public_title: 'Veelgestelde vragen',
+        public_faq_q1: 'Hoe kan ik auteur worden bij Noordhoff?',
+        public_faq_a1: 'Neem contact met ons op via rights@noordhoff.nl. We bespreken graag de mogelijkheden op basis van je expertise en vakgebied.',
+        public_faq_q2: 'Welke vakgebieden zoekt Noordhoff auteurs voor?',
+        public_faq_a2: 'We zoeken auteurs voor alle onderwijsniveaus en vakgebieden, van basisonderwijs tot hoger onderwijs. Van wiskunde en taal tot maatschappijleer en beroepsonderwijs.',
+        public_faq_q3: 'Hoe worden royalties berekend?',
+        public_faq_a3: 'Royalties worden berekend op basis van het type werk, de oplage en de verkoopresultaten. De exacte voorwaarden worden vastgelegd in je auteurscontract.',
+        public_faq_q4: 'Moet ik het hele boek alleen schrijven?',
+        public_faq_a4: 'Niet noodzakelijk. Veel methodes worden ontwikkeld door auteursteams. Onze redactie begeleidt het hele proces en zorgt voor samenhang.',
+        public_faq_q5: 'Hoe lang duurt het schrijfproces?',
+        public_faq_a5: 'Dit varieert per project, maar gemiddeld duurt de ontwikkeling van een nieuwe methode 1 tot 2 jaar. Je krijgt een realistische planning van onze redactie.',
+        public_faq_q6: 'Wat biedt het auteursportaal?',
+        public_faq_a6: 'Via het auteursportaal heb je 24/7 inzicht in je contracten, royalty-afrekeningen en prognoses. Je kunt ook je persoonlijke gegevens beheren.',
+        // News
+        news_title: 'Nieuws & Evenementen', news_blog_title: 'Laatste nieuws', news_events_title: 'Komende evenementen',
+        no_events: 'Er zijn momenteel geen geplande evenementen.', no_news: 'Er zijn momenteel geen nieuwsberichten.', loading: 'Laden...',
+        // Contact
+        contact_title: 'Neem contact op', contact_info_title: 'Contactgegevens',
+        contact_address_label: 'Adres:', contact_phone_label: 'Telefoon:',
+        contact_form_title: 'Stuur een bericht', contact_name: 'Naam', contact_email: 'E-mailadres',
+        contact_message: 'Bericht', contact_send: 'Verstuur',
+        contact_success: 'Bedankt voor je bericht! We nemen zo snel mogelijk contact met je op.',
+        // Footer
+        footer_tagline: 'Samen maken we het onderwijs van morgen.',
+        footer_nav_title: 'Navigatie', footer_help_title: 'Hulp', footer_rights: 'Alle rechten voorbehouden.',
+        // Back
+        back_to_site: 'Terug naar website'
     },
     en: {
         portal_subtitle: 'Author Portal', tagline: 'Get direct insight into your royalties, statements and forecasts.',
@@ -674,7 +1443,66 @@ const TRANSLATIONS = {
         faq_title: 'Frequently Asked Questions',
         verify_password_title: 'Confirm Password', verify_password_desc: 'Password confirmation is required to change your bank details.',
         password_incorrect: 'Incorrect password', confirm_btn: 'Confirm',
-        iban_invalid: 'Invalid IBAN number', bank_change_pending: 'Your bank details change has been submitted for administrator approval.'
+        iban_invalid: 'Invalid IBAN number', bank_change_pending: 'Your bank details change has been submitted for administrator approval.',
+        // Navigation
+        nav_about: 'About Noordhoff', nav_why: 'Why become an author?', nav_process: 'The process', nav_academy: 'Academy',
+        nav_faq: 'FAQ', nav_news: 'News', nav_contact: 'Contact', nav_login: 'Log in',
+        // Hero
+        hero_title: 'Become an author at Noordhoff',
+        hero_subtitle: 'Share your knowledge with millions of students in the Netherlands. Together we shape the education of tomorrow.',
+        hero_cta_learn: 'Learn more', hero_cta_login: 'Log in as author',
+        // About
+        about_title: 'Over 180 years partner in education',
+        about_text: 'Noordhoff is the largest educational publisher in the Netherlands. Together with our authors, we develop educational materials that help millions of students grow.',
+        stat_years: 'years of experience', stat_authors: 'authors', stat_students: 'students reached',
+        // Why section
+        why_title: 'Why become an author at Noordhoff?',
+        why_impact_title: 'Make an impact',
+        why_impact_text: 'Your knowledge reaches millions of students throughout the Netherlands. Contribute to the future of education.',
+        why_support_title: 'Professional guidance',
+        why_support_text: 'Our team of experienced editors and designers guides you through the entire process.',
+        why_royalties_title: 'Fair royalties',
+        why_royalties_text: 'Transparent agreements and fair compensation. Through our author portal, you always have insight into your royalties.',
+        // Process
+        process_title: 'How to become an author?',
+        process_step1_title: 'Introduction', process_step1_text: 'We discuss your expertise, ideas, and possibilities for collaboration.',
+        process_step2_title: 'Contract', process_step2_text: 'We make clear agreements about content, planning, and compensation.',
+        process_step3_title: 'Writing', process_step3_text: 'You write the content with guidance from our editorial team and subject specialists.',
+        process_step4_title: 'Publication', process_step4_text: 'Your work is published and reaches students throughout the Netherlands.',
+        // Academy
+        academy_title: 'Authors Academy',
+        academy_text: 'Watch our videos about the writing process, tips from experienced authors, and more.',
+        academy_video1_title: 'The writing process at Noordhoff', academy_video1_desc: 'Learn what the writing process looks like from start to finish.',
+        academy_video2_title: 'Tips from experienced authors', academy_video2_desc: 'Authors share their experiences and best tips.',
+        academy_video3_title: 'Working with the editorial team', academy_video3_desc: 'Discover how our editors guide you.',
+        // FAQ
+        faq_public_title: 'Frequently asked questions',
+        public_faq_q1: 'How can I become an author at Noordhoff?',
+        public_faq_a1: 'Contact us at rights@noordhoff.nl. We would love to discuss opportunities based on your expertise and field.',
+        public_faq_q2: 'What fields does Noordhoff seek authors for?',
+        public_faq_a2: 'We seek authors for all education levels and fields, from primary to higher education. From mathematics and language to social studies and vocational education.',
+        public_faq_q3: 'How are royalties calculated?',
+        public_faq_a3: 'Royalties are calculated based on the type of work, print run, and sales results. Exact terms are specified in your author contract.',
+        public_faq_q4: 'Do I have to write the entire book alone?',
+        public_faq_a4: 'Not necessarily. Many methods are developed by author teams. Our editorial team guides the entire process and ensures coherence.',
+        public_faq_q5: 'How long does the writing process take?',
+        public_faq_a5: 'This varies per project, but on average, developing a new method takes 1 to 2 years. You will receive a realistic timeline from our editorial team.',
+        public_faq_q6: 'What does the author portal offer?',
+        public_faq_a6: 'Through the author portal, you have 24/7 access to your contracts, royalty statements, and forecasts. You can also manage your personal details.',
+        // News
+        news_title: 'News & Events', news_blog_title: 'Latest news', news_events_title: 'Upcoming events',
+        no_events: 'There are currently no scheduled events.', no_news: 'There are currently no news articles.', loading: 'Loading...',
+        // Contact
+        contact_title: 'Get in touch', contact_info_title: 'Contact details',
+        contact_address_label: 'Address:', contact_phone_label: 'Phone:',
+        contact_form_title: 'Send a message', contact_name: 'Name', contact_email: 'Email address',
+        contact_message: 'Message', contact_send: 'Send',
+        contact_success: 'Thank you for your message! We will get back to you as soon as possible.',
+        // Footer
+        footer_tagline: 'Together we shape the education of tomorrow.',
+        footer_nav_title: 'Navigation', footer_help_title: 'Help', footer_rights: 'All rights reserved.',
+        // Back
+        back_to_site: 'Back to website'
     }
 };
 
@@ -699,10 +1527,26 @@ function updateLanguage(lang) {
     currentLang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (TRANSLATIONS[lang][key]) el.textContent = TRANSLATIONS[lang][key];
+        if (TRANSLATIONS[lang][key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = TRANSLATIONS[lang][key];
+            } else {
+                el.textContent = TRANSLATIONS[lang][key];
+            }
+        }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (TRANSLATIONS[lang][key]) el.title = TRANSLATIONS[lang][key];
     });
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
     document.documentElement.lang = lang;
+    // Re-render public FAQ with new language
+    renderPublicFAQ();
     if (currentUser) {
         renderPayments(document.querySelector('.year-btn.active')?.dataset.year || 'all');
         renderFAQ();
@@ -734,6 +1578,7 @@ function initAuthorDashboard() {
         document.getElementById('dashboardUserName').textContent = fullName;
         document.getElementById('userAvatar').textContent = author.info.initials;
         document.getElementById('welcomeName').textContent = author.info.firstName;
+        document.getElementById('startWelcomeName').textContent = author.info.firstName;
         document.getElementById('infoVendorNumber').textContent = author.info.vendorNumber || '';
         document.getElementById('infoAlliantNumber').textContent = author.info.alliantNumber || '';
         document.getElementById('infoFirstName').textContent = author.info.firstName;
@@ -752,6 +1597,8 @@ function initAuthorDashboard() {
         renderPayments('2024');
         renderContracts();
         renderFAQ();
+        loadEvents();
+        loadBlogPosts();
         console.log('initAuthorDashboard completed');
     } catch (err) {
         console.error('initAuthorDashboard error:', err);
@@ -1802,12 +2649,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 currentUser = email;
 
                 if (result.data.isAdmin) {
-                    document.getElementById('loginPage').classList.add('hidden');
+                    showDashboard(true);
                     document.getElementById('adminDashboard').classList.add('active');
                     document.body.classList.add('dashboard-active');
                     await initAdminDashboard();
                 } else {
-                    document.getElementById('loginPage').classList.add('hidden');
+                    showDashboard(false);
                     document.getElementById('dashboard').classList.add('active');
                     document.body.classList.add('dashboard-active');
                     initAuthorDashboard();
@@ -1833,7 +2680,7 @@ async function tryLocalLogin(email, password, errorEl) {
     if (email === DATA.admin.email && password === DATA.admin.password) {
         console.log('Local admin login');
         isSupabaseMode = false;
-        document.getElementById('loginPage').classList.add('hidden');
+        showDashboard(true);
         document.getElementById('adminDashboard').classList.add('active');
         document.body.classList.add('dashboard-active');
         await initAdminDashboard();
@@ -1842,7 +2689,7 @@ async function tryLocalLogin(email, password, errorEl) {
         isSupabaseMode = false;
         currentUser = email;
         DATA.authors[email].loginHistory.push(new Date().toISOString());
-        document.getElementById('loginPage').classList.add('hidden');
+        showDashboard(false);
         document.getElementById('dashboard').classList.add('active');
         document.body.classList.add('dashboard-active');
         initAuthorDashboard();
@@ -1870,10 +2717,10 @@ async function logout() {
     }
     document.getElementById('dashboard').classList.remove('active');
     document.getElementById('adminDashboard').classList.remove('active');
-    document.getElementById('loginPage').classList.remove('hidden');
     document.body.classList.remove('dashboard-active');
     document.getElementById('email').value = '';
     document.getElementById('password').value = '';
+    showPublicSite();
 }
 
 document.getElementById('logoutBtn').addEventListener('click', logout);
@@ -2571,5 +3418,8 @@ async function startImport() {
 document.getElementById('importModal')?.addEventListener('click', function(e) {
     if (e.target === this) closeImportModal();
 });
+
+// Initialize public site content on load
+initPublicSite();
 
 console.log('Script loaded successfully. Available authors:', Object.keys(DATA.authors));

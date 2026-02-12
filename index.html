@@ -6,19 +6,274 @@
     <title>Auteursportaal | Noordhoff</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..125,100..1000&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Language Toggle -->
-    <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="nl">NL</button>
-        <button class="lang-btn" data-lang="en">EN</button>
+    <!-- Public Website -->
+    <div id="publicSite">
+
+        <!-- Navigation Bar -->
+        <nav class="public-nav" id="publicNav">
+            <div class="public-nav-inner">
+                <div class="public-nav-logo">
+                    <img src="logo.jpg" alt="Noordhoff" class="public-logo-img">
+                </div>
+                <div class="public-nav-links" id="navLinks">
+                    <a href="#about" data-i18n="nav_about">Over Noordhoff</a>
+                    <a href="#why" data-i18n="nav_why">Waarom auteur?</a>
+                    <a href="#process" data-i18n="nav_process">Het proces</a>
+                    <a href="#academy" data-i18n="nav_academy">Academy</a>
+                    <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
+                    <a href="#news" data-i18n="nav_news">Nieuws</a>
+                    <a href="#contact" data-i18n="nav_contact">Contact</a>
+                </div>
+                <div class="public-nav-actions">
+                    <div class="lang-toggle public-lang-toggle">
+                        <button class="lang-btn active" data-lang="nl">NL</button>
+                        <button class="lang-btn" data-lang="en">EN</button>
+                    </div>
+                    <button class="btn-login-nav" onclick="showLoginPage()" data-i18n="nav_login">Inloggen</button>
+                </div>
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-scribble hero-scribble-1"></div>
+            <div class="hero-scribble hero-scribble-2"></div>
+            <div class="hero-scribble hero-scribble-3"></div>
+            <div class="hero-content">
+                <h1 data-i18n="hero_title">Word auteur bij <span class="text-highlight text-highlight-green">Noordhoff</span></h1>
+                <p class="hero-subtitle" data-i18n="hero_subtitle">Deel je kennis met miljoenen leerlingen en studenten in Nederland. Samen maken we het onderwijs van morgen.</p>
+                <div class="hero-cta">
+                    <a href="#about" class="btn-primary-large" data-i18n="hero_cta_learn">Ontdek meer</a>
+                    <button class="btn-secondary-large" onclick="showLoginPage()" data-i18n="hero_cta_login">Inloggen als auteur</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Over Noordhoff -->
+        <section class="public-section" id="about">
+            <div class="public-container">
+                <h2 data-i18n="about_title">Al meer dan <span class="text-highlight text-highlight-orange">180 jaar</span> partner in onderwijs</h2>
+                <p class="section-intro" data-i18n="about_text">Noordhoff is de grootste educatieve uitgeverij van Nederland. Samen met onze auteurs ontwikkelen we lesmateriaal dat miljoenen leerlingen en studenten helpt om te groeien. Van basisschool tot universiteit — onze methodes vormen de basis van het Nederlandse onderwijs.</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">180+</span>
+                        <span class="stat-label" data-i18n="stat_years">jaar ervaring</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">1.000+</span>
+                        <span class="stat-label" data-i18n="stat_authors">auteurs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">5M+</span>
+                        <span class="stat-label" data-i18n="stat_students">leerlingen bereikt</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Waarom auteur worden -->
+        <section class="public-section alt-bg" id="why">
+            <div class="public-container">
+                <h2 data-i18n="why_title">Waarom auteur worden bij <span class="text-highlight text-highlight-blue">Noordhoff</span>?</h2>
+                <div class="card-grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3 data-i18n="why_impact_title">Maak impact</h3>
+                        <p data-i18n="why_impact_text">Jouw kennis bereikt miljoenen leerlingen en studenten door heel Nederland. Draag bij aan de toekomst van het onderwijs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3 data-i18n="why_support_title">Professionele begeleiding</h3>
+                        <p data-i18n="why_support_text">Ons team van ervaren redacteuren en vormgevers begeleidt je door het hele proces, van eerste idee tot publicatie.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3 data-i18n="why_royalties_title">Eerlijke royalties</h3>
+                        <p data-i18n="why_royalties_text">Transparante afspraken en eerlijke vergoedingen. Via ons auteursportaal heb je altijd inzicht in je royalties.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Het proces -->
+        <section class="public-section" id="process">
+            <div class="public-container">
+                <h2 data-i18n="process_title">Hoe word je <span class="text-highlight text-highlight-green">auteur</span>?</h2>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h4 data-i18n="process_step1_title">Kennismaking</h4>
+                        <p data-i18n="process_step1_text">We bespreken je expertise, ideeën en de mogelijkheden voor samenwerking.</p>
+                    </div>
+                    <div class="process-connector"></div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h4 data-i18n="process_step2_title">Contract</h4>
+                        <p data-i18n="process_step2_text">We maken heldere afspraken over inhoud, planning en vergoeding.</p>
+                    </div>
+                    <div class="process-connector"></div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h4 data-i18n="process_step3_title">Schrijven</h4>
+                        <p data-i18n="process_step3_text">Je schrijft de content met begeleiding van onze redactie en vakspecialisten.</p>
+                    </div>
+                    <div class="process-connector"></div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h4 data-i18n="process_step4_title">Publicatie</h4>
+                        <p data-i18n="process_step4_text">Je werk wordt gepubliceerd en bereikt leerlingen door heel Nederland.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auteurs Academy -->
+        <section class="public-section alt-bg" id="academy">
+            <div class="public-container">
+                <h2 data-i18n="academy_title">Auteurs <span class="text-highlight text-highlight-orange">Academy</span></h2>
+                <p class="section-intro" data-i18n="academy_text">Bekijk onze video's over het schrijfproces, tips van ervaren auteurs en meer over het werken bij Noordhoff.</p>
+                <div class="card-grid-3">
+                    <div class="academy-card">
+                        <div class="academy-video-placeholder">
+                            <div class="play-button">▶</div>
+                        </div>
+                        <h4 data-i18n="academy_video1_title">Het schrijfproces bij Noordhoff</h4>
+                        <p data-i18n="academy_video1_desc">Leer hoe het schrijfproces eruitziet van begin tot eind.</p>
+                    </div>
+                    <div class="academy-card">
+                        <div class="academy-video-placeholder">
+                            <div class="play-button">▶</div>
+                        </div>
+                        <h4 data-i18n="academy_video2_title">Tips van ervaren auteurs</h4>
+                        <p data-i18n="academy_video2_desc">Auteurs delen hun ervaringen en beste tips.</p>
+                    </div>
+                    <div class="academy-card">
+                        <div class="academy-video-placeholder">
+                            <div class="play-button">▶</div>
+                        </div>
+                        <h4 data-i18n="academy_video3_title">Werken met de redactie</h4>
+                        <p data-i18n="academy_video3_desc">Ontdek hoe onze redacteuren je begeleiden.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="public-section" id="faq-public">
+            <div class="public-container">
+                <h2 data-i18n="faq_public_title">Veelgestelde <span class="text-highlight text-highlight-blue">vragen</span></h2>
+                <div class="public-faq-list" id="publicFaqList">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Nieuws & Evenementen -->
+        <section class="public-section alt-bg" id="news">
+            <div class="public-container">
+                <h2 data-i18n="news_title">Nieuws & <span class="text-highlight text-highlight-green">Evenementen</span></h2>
+                <div class="news-events-grid">
+                    <div class="news-column">
+                        <h3 data-i18n="news_blog_title">Laatste nieuws</h3>
+                        <div id="publicBlogList" class="public-content-list">
+                            <p class="loading-text" data-i18n="loading">Laden...</p>
+                        </div>
+                    </div>
+                    <div class="events-column">
+                        <h3 data-i18n="news_events_title">Komende evenementen</h3>
+                        <div id="publicEventsList" class="public-content-list">
+                            <p class="loading-text" data-i18n="loading">Laden...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="public-section" id="contact">
+            <div class="public-container">
+                <h2 data-i18n="contact_title">Neem <span class="text-highlight text-highlight-orange">contact</span> op</h2>
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3 data-i18n="contact_info_title">Contactgegevens</h3>
+                        <div class="contact-item">
+                            <strong>Email:</strong>
+                            <a href="mailto:rights@noordhoff.nl">rights@noordhoff.nl</a>
+                        </div>
+                        <div class="contact-item">
+                            <strong data-i18n="contact_address_label">Adres:</strong>
+                            <span>Noordhoff Uitgevers<br>Postbus 58<br>9700 MB Groningen</span>
+                        </div>
+                        <div class="contact-item">
+                            <strong data-i18n="contact_phone_label">Telefoon:</strong>
+                            <a href="tel:+31505226292">+31 (0)50 522 62 92</a>
+                        </div>
+                    </div>
+                    <div class="contact-form-wrapper">
+                        <h3 data-i18n="contact_form_title">Stuur een bericht</h3>
+                        <form id="contactForm" onsubmit="handleContactForm(event)">
+                            <div class="form-group">
+                                <label for="contactName" data-i18n="contact_name">Naam</label>
+                                <input type="text" id="contactName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail" data-i18n="contact_email">E-mailadres</label>
+                                <input type="email" id="contactEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage" data-i18n="contact_message">Bericht</label>
+                                <textarea id="contactMessage" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary-large" data-i18n="contact_send">Verstuur</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="public-footer">
+            <div class="public-container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <img src="logo.jpg" alt="Noordhoff" class="footer-logo">
+                        <p data-i18n="footer_tagline">Samen maken we het onderwijs van morgen.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer_nav_title">Navigatie</h4>
+                        <a href="#about" data-i18n="nav_about">Over Noordhoff</a>
+                        <a href="#why" data-i18n="nav_why">Waarom auteur?</a>
+                        <a href="#process" data-i18n="nav_process">Het proces</a>
+                        <a href="#academy" data-i18n="nav_academy">Academy</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer_help_title">Hulp</h4>
+                        <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
+                        <a href="#contact" data-i18n="nav_contact">Contact</a>
+                        <a href="#" onclick="showLoginPage(); return false;" data-i18n="nav_login">Inloggen</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Noordhoff Uitgevers. <span data-i18n="footer_rights">Alle rechten voorbehouden.</span></p>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     <!-- Login Page -->
-    <div class="login-container" id="loginPage">
+    <div class="login-container hidden" id="loginPage">
+        <button class="btn-back-to-site" onclick="showPublicSite()">
+            <span>←</span> <span data-i18n="back_to_site">Terug naar website</span>
+        </button>
         <div class="login-visual login-visual-photo">
             <div class="visual-shapes">
                 <div class="shape-line"></div>
@@ -79,15 +334,48 @@
             </div>
             <div class="tabs-container">
                 <nav class="tabs-nav">
-                    <button class="tab-btn active" data-tab="info"><span class="tab-icon">👤</span><span data-i18n="tab_info">Gegevens</span></button>
+                    <button class="tab-btn active" data-tab="start"><span class="tab-icon">🏠</span><span data-i18n="tab_start">Start</span></button>
+                    <button class="tab-btn" data-tab="info"><span class="tab-icon">👤</span><span data-i18n="tab_info">Gegevens</span></button>
                     <button class="tab-btn" data-tab="contracts"><span class="tab-icon">📋</span><span data-i18n="tab_contracts">Contracten</span></button>
                     <button class="tab-btn" data-tab="payments"><span class="tab-icon">📄</span><span data-i18n="tab_payments">Afrekeningen</span></button>
                     <button class="tab-btn" data-tab="forecast"><span class="tab-icon">📊</span><span data-i18n="tab_forecast">Prognose</span></button>
                     <button class="tab-btn" data-tab="faq"><span class="tab-icon">❓</span><span data-i18n="tab_faq">FAQ</span></button>
                 </nav>
 
+                <!-- Start Tab -->
+                <div class="tab-content active" id="tab-start">
+                    <div class="start-welcome">
+                        <h2>Welkom, <span id="startWelcomeName"></span></h2>
+                    </div>
+
+                    <div class="start-section academy-section">
+                        <a href="https://noordhoffacademy.nl/" target="_blank" class="academy-link">
+                            <span class="academy-icon">🎓</span>
+                            <div class="academy-text">
+                                <span class="academy-title">Noordhoff Academy</span>
+                                <span class="academy-subtitle">Cursussen en trainingen voor auteurs</span>
+                            </div>
+                            <span class="academy-arrow">→</span>
+                        </a>
+                    </div>
+
+                    <div class="start-section">
+                        <h3>📅 Aankomende Evenementen</h3>
+                        <div id="eventsContainer" class="events-container">
+                            <p class="empty-state">Geen aankomende evenementen</p>
+                        </div>
+                    </div>
+
+                    <div class="start-section">
+                        <h3>📰 Laatste Nieuws</h3>
+                        <div id="blogPostsContainer" class="blog-posts-container">
+                            <p class="empty-state">Geen nieuwsberichten</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Personal Info Tab -->
-                <div class="tab-content active" id="tab-info">
+                <div class="tab-content" id="tab-info">
                     <div class="id-numbers-section">
                         <div class="id-numbers-grid">
                             <div class="id-number-item"><span class="id-label" data-i18n="label_vendor">Vendor ID</span><span class="id-value" id="infoVendorNumber"></span></div>
@@ -217,6 +505,19 @@
                 <div class="stat-card clickable" style="background:linear-gradient(135deg, #e8f5e9 0%, #fff 100%);" onclick="openImportModal()">
                     <div class="stat-value" style="color:#2e7d32;font-size:1.5rem;">+</div>
                     <div class="stat-label">Auteurs importeren</div>
+                </div>
+            </div>
+            <div class="admin-content-section">
+                <h3>Content beheer</h3>
+                <div class="admin-content-buttons">
+                    <button class="admin-content-btn" onclick="openEventsManager()">
+                        <span class="btn-icon">📅</span>
+                        <span>Evenementen beheren</span>
+                    </button>
+                    <button class="admin-content-btn" onclick="openBlogManager()">
+                        <span class="btn-icon">📰</span>
+                        <span>Nieuws beheren</span>
+                    </button>
                 </div>
             </div>
             <div class="admin-grid">
@@ -529,6 +830,128 @@
         </div>
     </div>
 
+
+    <!-- Events Manager Modal -->
+    <div class="modal-overlay" id="eventsManagerModal">
+        <div class="modal" style="max-width:800px;">
+            <div class="modal-header">
+                <h3>Evenementen beheren</h3>
+                <button class="modal-close" onclick="closeEventsManager()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <button class="btn-primary" onclick="openEventEditor()" style="margin-bottom:1rem;">+ Nieuw evenement</button>
+                <div id="eventsManagerList" class="manager-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEventsManager()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Editor Modal -->
+    <div class="modal-overlay" id="eventEditorModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <h3 id="eventEditorTitle">Nieuw evenement</h3>
+                <button class="modal-close" onclick="closeEventEditor()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editEventId">
+                <div class="form-group">
+                    <label>Titel *</label>
+                    <input type="text" id="editEventTitle" placeholder="Naam van het evenement">
+                </div>
+                <div class="form-group">
+                    <label>Beschrijving</label>
+                    <textarea id="editEventDescription" rows="3" placeholder="Korte beschrijving van het evenement"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum *</label>
+                        <input type="date" id="editEventDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Tijd</label>
+                        <input type="time" id="editEventTime">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Locatie</label>
+                    <input type="text" id="editEventLocation" placeholder="Bijv. Noordhoff kantoor, Groningen">
+                </div>
+                <div class="form-group">
+                    <label>Link (optioneel)</label>
+                    <input type="url" id="editEventLink" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editEventActive" checked>
+                        Actief (zichtbaar voor auteurs)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEventEditor()">Annuleren</button>
+                <button class="btn-primary" onclick="saveEvent()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Manager Modal -->
+    <div class="modal-overlay" id="blogManagerModal">
+        <div class="modal" style="max-width:800px;">
+            <div class="modal-header">
+                <h3>Nieuws beheren</h3>
+                <button class="modal-close" onclick="closeBlogManager()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <button class="btn-primary" onclick="openBlogEditor()" style="margin-bottom:1rem;">+ Nieuw bericht</button>
+                <div id="blogManagerList" class="manager-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeBlogManager()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Editor Modal -->
+    <div class="modal-overlay" id="blogEditorModal">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header">
+                <h3 id="blogEditorTitle">Nieuw nieuwsbericht</h3>
+                <button class="modal-close" onclick="closeBlogEditor()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editBlogId">
+                <div class="form-group">
+                    <label>Titel *</label>
+                    <input type="text" id="editBlogTitle" placeholder="Titel van het bericht">
+                </div>
+                <div class="form-group">
+                    <label>Samenvatting</label>
+                    <textarea id="editBlogSummary" rows="2" placeholder="Korte samenvatting (max 500 tekens)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Inhoud *</label>
+                    <textarea id="editBlogContent" rows="6" placeholder="Volledige tekst van het bericht"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Afbeelding URL (optioneel)</label>
+                    <input type="url" id="editBlogImageUrl" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editBlogPublished">
+                        Gepubliceerd (zichtbaar voor auteurs)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeBlogEditor()">Annuleren</button>
+                <button class="btn-primary" onclick="saveBlogPost()">Opslaan</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Supabase Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
