@@ -309,6 +309,246 @@ async function initPublicSite() {
     loadPublicBlogPosts();
     initSmoothScroll();
     initStickyNav();
+    initFinancialCharts();
+    initCounterAnimation();
+}
+
+// ===== FINANCIAL CHARTS =====
+
+function initFinancialCharts() {
+    if (typeof Chart === 'undefined') {
+        console.log('Chart.js not loaded, skipping charts');
+        return;
+    }
+
+    const chartColors = {
+        green: '#1B5E3B',
+        greenLight: 'rgba(27, 94, 59, 0.15)',
+        orange: '#E86F2C',
+        orangeLight: 'rgba(232, 111, 44, 0.15)',
+        blue: '#7BC8E8',
+        blueLight: 'rgba(123, 200, 232, 0.2)',
+        grey: '#6D6E71',
+        greyLight: 'rgba(109, 110, 113, 0.1)'
+    };
+
+    Chart.defaults.font.family = "'Roboto Flex', sans-serif";
+    Chart.defaults.color = '#6D6E71';
+
+    // Chart 1: Gemiddelde royalty-inkomsten per type methode (bar chart)
+    const earningsCtx = document.getElementById('earningsChart');
+    if (earningsCtx) {
+        new Chart(earningsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Basisonderwijs', 'Voortgezet onderwijs', 'Mbo', 'Hoger onderwijs'],
+                datasets: [{
+                    label: currentLang === 'nl' ? 'Minimum (€/jaar)' : 'Minimum (€/year)',
+                    data: [2400, 3800, 2800, 4500],
+                    backgroundColor: chartColors.greenLight,
+                    borderColor: chartColors.green,
+                    borderWidth: 2,
+                    borderRadius: 6
+                }, {
+                    label: currentLang === 'nl' ? 'Gemiddeld (€/jaar)' : 'Average (€/year)',
+                    data: [4800, 7200, 5100, 8500],
+                    backgroundColor: chartColors.green,
+                    borderColor: chartColors.green,
+                    borderWidth: 0,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: val => '€' + val.toLocaleString()
+                        },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // Chart 2: Royalty-ontwikkeling over tijd (line chart)
+    const growthCtx = document.getElementById('growthChart');
+    if (growthCtx) {
+        new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jaar 1', 'Jaar 2', 'Jaar 3', 'Jaar 4', 'Jaar 5', 'Jaar 6', 'Jaar 7', 'Jaar 8', 'Jaar 9', 'Jaar 10'],
+                datasets: [{
+                    label: currentLang === 'nl' ? 'Verwachte royalties (€)' : 'Expected royalties (€)',
+                    data: [1200, 3800, 5200, 6400, 7100, 7600, 7400, 7000, 6500, 6200],
+                    borderColor: chartColors.green,
+                    backgroundColor: chartColors.greenLight,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: chartColors.green,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: currentLang === 'nl' ? 'Optimistisch scenario' : 'Optimistic scenario',
+                    data: [1500, 5200, 8000, 10200, 11800, 12500, 12200, 11500, 10800, 10200],
+                    borderColor: chartColors.orange,
+                    backgroundColor: 'transparent',
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: val => '€' + val.toLocaleString()
+                        },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // Chart 3: Verdeling per onderwijssegment (doughnut)
+    const segmentsCtx = document.getElementById('segmentsChart');
+    if (segmentsCtx) {
+        new Chart(segmentsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Basisonderwijs', 'Voortgezet onderwijs', 'Mbo', 'Hoger onderwijs'],
+                datasets: [{
+                    data: [35, 30, 20, 15],
+                    backgroundColor: [chartColors.green, chartColors.orange, chartColors.blue, '#144A2E'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                cutout: '55%'
+            }
+        });
+    }
+
+    // Chart 4: Print vs Digitaal vergelijking (line chart)
+    const compareCtx = document.getElementById('compareChart');
+    if (compareCtx) {
+        new Chart(compareCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+                datasets: [{
+                    label: currentLang === 'nl' ? 'Digitale royalties' : 'Digital royalties',
+                    data: [18, 25, 35, 48, 58, 68, 78],
+                    borderColor: chartColors.green,
+                    backgroundColor: chartColors.greenLight,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: currentLang === 'nl' ? 'Print royalties' : 'Print royalties',
+                    data: [82, 75, 65, 52, 42, 32, 22],
+                    borderColor: chartColors.grey,
+                    backgroundColor: chartColors.greyLight,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: val => val + '%'
+                        },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// ===== COUNTER ANIMATION =====
+
+function initCounterAnimation() {
+    const counters = document.querySelectorAll('.stat-number[data-count]');
+
+    const observerOptions = {
+        threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.getAttribute('data-count'));
+                animateCounter(el, target);
+                observer.unobserve(el);
+            }
+        });
+    }, observerOptions);
+
+    counters.forEach(counter => observer.observe(counter));
+}
+
+function animateCounter(el, target) {
+    const duration = 2000;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+
+        const current = Math.round(eased * target);
+
+        if (target >= 1000000) {
+            el.textContent = (current / 1000000).toFixed(1).replace('.0', '') + 'M+';
+        } else if (target >= 1000) {
+            el.textContent = current.toLocaleString('nl-NL') + '+';
+        } else {
+            el.textContent = current + '+';
+        }
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
 }
 
 async function loadPublicEvents() {
@@ -1419,6 +1659,62 @@ const TRANSLATIONS = {
         // Footer
         footer_tagline: 'Samen maken we het onderwijs van morgen.',
         footer_nav_title: 'Navigatie', footer_help_title: 'Hulp', footer_rights: 'Alle rechten voorbehouden.',
+        // Segments
+        segments_title: 'Onze onderwijssegmenten',
+        segments_text: 'Van kleuter tot professional — wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.',
+        segment_bao_title: 'Basisonderwijs',
+        segment_bao_text: 'Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.',
+        segment_vo_title: 'Voortgezet onderwijs',
+        segment_vo_text: 'Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.',
+        segment_mbo_title: 'Mbo',
+        segment_mbo_text: 'Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.',
+        segment_ho_title: 'Hoger onderwijs',
+        segment_ho_text: 'Academische publicaties en studieboeken voor hbo en universiteit.',
+        // Financial
+        nav_financial: 'Verdienmodel',
+        financial_title: 'Het verdienmodel voor auteurs',
+        financial_intro: 'Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.',
+        fin_advance: 'Voorschot per project',
+        fin_royalty_pct: 'Royaltypercentage',
+        fin_payout: 'Afrekening per jaar',
+        fin_duration: 'Gemiddelde looptijd royalties',
+        chart_earnings_title: 'Gemiddelde royalty-inkomsten per jaar',
+        chart_earnings_desc: 'Indicatieve jaarlijkse royalties op basis van methode-type en marktaandeel.',
+        chart_growth_title: 'Royalty-ontwikkeling over tijd',
+        chart_growth_desc: 'Hoe royalties typisch groeien na publicatie van een nieuwe methode.',
+        chart_segments_title: 'Verdeling per onderwijssegment',
+        chart_segments_desc: 'Percentage auteurs per onderwijsniveau.',
+        chart_compare_title: 'Vergelijking: print vs. digitaal',
+        chart_compare_desc: 'Groei van digitale royalties ten opzichte van traditionele print.',
+        // Testimonials
+        nav_testimonials: 'Ervaringen',
+        testimonials_title: 'Wat onze auteurs zeggen',
+        testimonial1_text: '"Het schrijven voor Noordhoff gaf me de kans om mijn jarenlange ervaring voor de klas om te zetten in materiaal dat duizenden leerlingen bereikt. De redactie denkt echt met je mee."',
+        testimonial1_role: 'Auteur Wiskunde VO — 12 jaar bij Noordhoff',
+        testimonial2_text: '"De professionele begeleiding is uitmuntend. Van het eerste concept tot de uiteindelijke publicatie werd ik ondersteund door een team dat net zo gepassioneerd is over onderwijs als ik."',
+        testimonial2_role: 'Auteur Economie HO — 8 jaar bij Noordhoff',
+        testimonial3_text: '"Wat mij het meest aanspreekt is de transparantie over royalties. Via het portaal zie ik precies hoe mijn methode presteert."',
+        testimonial3_role: 'Auteur Nederlands BAO — 5 jaar bij Noordhoff',
+        testimonial4_text: '"Als mbo-docent wist ik precies wat studenten nodig hadden. Noordhoff gaf me de ruimte om dat te vertalen naar praktijkgericht materiaal."',
+        testimonial4_role: 'Auteur Techniek MBO — 3 jaar bij Noordhoff',
+        // Why expanded
+        why_intro: 'Als auteur bij Noordhoff sta je niet alleen. Je wordt onderdeel van een team van experts dat samen werkt aan kwalitatief hoogwaardig lesmateriaal.',
+        why_expertise_title: 'Deel je vakexpertise',
+        why_expertise_text: 'Als vakexpert vertaal je je kennis naar praktisch en didactisch verantwoord lesmateriaal.',
+        why_digital_title: 'Digitale innovatie',
+        why_digital_text: 'Werk mee aan de nieuwste digitale leermiddelen, adaptief leren en interactieve content.',
+        why_growth_title: 'Persoonlijke groei',
+        why_growth_text: 'Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching.',
+        // Process expanded
+        process_intro: 'Het schrijfproces bij Noordhoff is een samenwerking tussen jou als vakexpert en ons team van professionals.',
+        // Contact expanded
+        contact_intro: 'Interesse in het schrijven voor Noordhoff? Neem vrijblijvend contact op.',
+        contact_subject_author: 'Ik wil auteur worden',
+        contact_subject_info: 'Informatie aanvragen',
+        contact_subject_collab: 'Samenwerking bespreken',
+        contact_subject_other: 'Anders',
+        // Footer expanded
+        stat_schools: 'scholen in Nederland',
         // Back
         back_to_site: 'Terug naar website'
     },
@@ -1501,6 +1797,62 @@ const TRANSLATIONS = {
         // Footer
         footer_tagline: 'Together we shape the education of tomorrow.',
         footer_nav_title: 'Navigation', footer_help_title: 'Help', footer_rights: 'All rights reserved.',
+        // Segments
+        segments_title: 'Our education segments',
+        segments_text: 'From kindergarten to professional — we develop educational materials for all levels of Dutch education.',
+        segment_bao_title: 'Primary education',
+        segment_bao_text: 'Methods for grades 1-8 that align with core objectives and challenge children to grow.',
+        segment_vo_title: 'Secondary education',
+        segment_vo_text: 'Teaching materials for VMBO, HAVO and VWO that prepare students for their future.',
+        segment_mbo_title: 'Vocational education',
+        segment_mbo_text: 'Practice-oriented learning resources that prepare students for the job market.',
+        segment_ho_title: 'Higher education',
+        segment_ho_text: 'Academic publications and textbooks for universities of applied sciences and research universities.',
+        // Financial
+        nav_financial: 'Earnings model',
+        financial_title: 'The earnings model for authors',
+        financial_intro: 'Transparent compensation and growing royalties. See what you can expect as an author at Noordhoff.',
+        fin_advance: 'Advance per project',
+        fin_royalty_pct: 'Royalty percentage',
+        fin_payout: 'Settlements per year',
+        fin_duration: 'Average royalty duration',
+        chart_earnings_title: 'Average royalty income per year',
+        chart_earnings_desc: 'Indicative annual royalties based on method type and market share.',
+        chart_growth_title: 'Royalty development over time',
+        chart_growth_desc: 'How royalties typically grow after publication of a new method.',
+        chart_segments_title: 'Distribution by education segment',
+        chart_segments_desc: 'Percentage of authors per education level.',
+        chart_compare_title: 'Comparison: print vs. digital',
+        chart_compare_desc: 'Growth of digital royalties compared to traditional print.',
+        // Testimonials
+        nav_testimonials: 'Experiences',
+        testimonials_title: 'What our authors say',
+        testimonial1_text: '"Writing for Noordhoff gave me the chance to transform my years of classroom experience into materials that reach thousands of students."',
+        testimonial1_role: 'Mathematics Author Secondary Ed. — 12 years at Noordhoff',
+        testimonial2_text: '"The professional guidance is outstanding. From the first concept to the final publication, I was supported by a team equally passionate about education."',
+        testimonial2_role: 'Economics Author Higher Ed. — 8 years at Noordhoff',
+        testimonial3_text: '"What I appreciate most is the transparency about royalties. Through the portal, I can see exactly how my method is performing."',
+        testimonial3_role: 'Dutch Language Author Primary Ed. — 5 years at Noordhoff',
+        testimonial4_text: '"As a vocational teacher, I knew exactly what students needed. Noordhoff gave me the space to translate that into practical materials."',
+        testimonial4_role: 'Technology Author Vocational Ed. — 3 years at Noordhoff',
+        // Why expanded
+        why_intro: 'As an author at Noordhoff, you are not alone. You become part of a team of experts working together on high-quality educational materials.',
+        why_expertise_title: 'Share your expertise',
+        why_expertise_text: 'As a subject expert, you translate your knowledge into practical and educationally sound materials.',
+        why_digital_title: 'Digital innovation',
+        why_digital_text: 'Contribute to the latest digital learning tools, adaptive learning, and interactive content.',
+        why_growth_title: 'Personal growth',
+        why_growth_text: 'Develop as an author through our Authors Academy, workshops, and personal coaching.',
+        // Process expanded
+        process_intro: 'The writing process at Noordhoff is a collaboration between you as a subject expert and our team of professionals.',
+        // Contact expanded
+        contact_intro: 'Interested in writing for Noordhoff? Get in touch. We would love to tell you more.',
+        contact_subject_author: 'I want to become an author',
+        contact_subject_info: 'Request information',
+        contact_subject_collab: 'Discuss collaboration',
+        contact_subject_other: 'Other',
+        // Footer expanded
+        stat_schools: 'schools in the Netherlands',
         // Back
         back_to_site: 'Back to website'
     }
