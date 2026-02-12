@@ -21,12 +21,12 @@
         border-radius: 12px;
         padding: 2rem 1.5rem;
         text-align: center;
-        box-shadow: 0 2px 12px rgba(27,94,59,0.08);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         transition: all 0.25s ease;
     }
     .segment-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 4px 24px rgba(27,94,59,0.12);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.1);
     }
     .segment-icon {
         width: 56px;
@@ -61,11 +61,11 @@
             <div class="public-nav-inner">
                 <div class="public-nav-logo" onclick="showPublicSite()" style="cursor:pointer; display:flex; align-items:center; gap:0.5rem;">
                     <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
-                        <rect x="30" y="0" width="40" height="40" fill="#1B5E3B"/>
-                        <rect x="0" y="30" width="40" height="40" fill="#2D7A4F"/>
-                        <rect x="30" y="30" width="40" height="40" fill="#E8F5EC"/>
-                        <rect x="30" y="60" width="40" height="40" fill="#1B5E3B" opacity="0.7"/>
-                        <rect x="60" y="30" width="10" height="10" fill="#E86F2C"/>
+                        <rect x="32" y="0" width="38" height="38" fill="#1B5E3B"/>
+                        <rect x="0" y="32" width="38" height="38" fill="#1B5E3B"/>
+                        <rect x="32" y="32" width="12" height="12" fill="#E8F5EC"/>
+                        <rect x="44" y="32" width="8" height="8" fill="#D60073"/>
+                        <rect x="32" y="62" width="20" height="20" fill="#1B5E3B" opacity="0.75"/>
                     </svg>
                     <span style="font-size:1.3rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
                 </div>
@@ -98,6 +98,7 @@
             <div class="hero-scribble hero-scribble-2"></div>
             <div class="hero-scribble hero-scribble-3"></div>
             <div class="hero-content">
+                <p class="hero-motto">Zeker Vooruit</p>
                 <h1 data-i18n="hero_title">Schrijf mee aan de <span class="text-highlight text-highlight-green">toekomst</span> van het onderwijs</h1>
                 <p class="hero-subtitle" data-i18n="hero_subtitle">Word auteur bij Noordhoff en deel je kennis met miljoenen leerlingen en studenten in Nederland. Al meer dan 180 jaar de grootste educatieve uitgeverij.</p>
                 <div class="hero-cta">
@@ -137,7 +138,7 @@
         <section class="section-green-header">
             <div class="public-container">
                 <h2 data-i18n="segments_title">Onze <span class="text-highlight text-highlight-blue">onderwijssegmenten</span></h2>
-                <p class="section-intro" style="color:rgba(255,255,255,0.8)" data-i18n="segments_text">Van kleuter tot professional — wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
+                <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
             </div>
         </section>
         <section class="public-section" style="padding-top:3rem">
@@ -174,32 +175,32 @@
                 <p class="section-intro" data-i18n="why_intro">Als auteur bij Noordhoff sta je niet alleen. Je wordt onderdeel van een team van experts dat samen werkt aan kwalitatief hoogwaardig lesmateriaal.</p>
                 <div class="card-grid-3">
                     <div class="feature-card">
-                        <div class="feature-icon">📚</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
                         <h3 data-i18n="why_impact_title">Maak impact op miljoenen</h3>
                         <p data-i18n="why_impact_text">Jouw expertise bereikt jaarlijks miljoenen leerlingen en studenten in heel Nederland. Van basisschool tot universiteit — jouw kennis maakt het verschil in het klaslokaal.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🤝</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
                         <h3 data-i18n="why_support_title">Professionele begeleiding</h3>
                         <p data-i18n="why_support_text">Ons team van ervaren redacteuren, vormgevers en didactisch specialisten begeleidt je door het hele proces. Van eerste concept tot drukklare publicatie.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">💰</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
                         <h3 data-i18n="why_royalties_title">Eerlijke royaltyregeling</h3>
                         <p data-i18n="why_royalties_text">Transparante contracten met eerlijke vergoedingen. Via ons digitale auteursportaal heb je 24/7 inzicht in je royalties, afrekeningen en prognoses.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🎓</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
                         <h3 data-i18n="why_expertise_title">Deel je vakexpertise</h3>
                         <p data-i18n="why_expertise_text">Als vakexpert vertaal je je kennis naar praktisch en didactisch verantwoord lesmateriaal. Zo blijf je verbonden met het onderwijs vanuit je specialisme.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🌐</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
                         <h3 data-i18n="why_digital_title">Digitale innovatie</h3>
                         <p data-i18n="why_digital_text">Werk mee aan de nieuwste digitale leermiddelen, adaptief leren en interactieve content. Noordhoff loopt voorop in onderwijsinnovatie.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">📈</div>
+                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
                         <h3 data-i18n="why_growth_title">Persoonlijke groei</h3>
                         <p data-i18n="why_growth_text">Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching. Investeer in je schrijfvaardigheden en didactische kennis.</p>
                     </div>
@@ -211,7 +212,7 @@
         <section class="section-green-header">
             <div class="public-container">
                 <h2 data-i18n="financial_title">Het <span class="text-highlight text-highlight-orange">verdienmodel</span> voor auteurs</h2>
-                <p class="section-intro" style="color:rgba(255,255,255,0.8)" data-i18n="financial_intro">Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.</p>
+                <p class="section-intro" data-i18n="financial_intro">Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.</p>
             </div>
         </section>
         <section class="public-section" id="financial" style="padding-top:3rem">
@@ -238,22 +239,22 @@
                     <div class="chart-card">
                         <h4 data-i18n="chart_earnings_title">Gemiddelde royalty-inkomsten per jaar</h4>
                         <p style="font-size:0.85rem; color:var(--color-text-light); margin-bottom:1rem;" data-i18n="chart_earnings_desc">Indicatieve jaarlijkse royalties op basis van methode-type en marktaandeel.</p>
-                        <canvas id="earningsChart" height="260"></canvas>
+                        <canvas id="earningsChart" height="160"></canvas>
                     </div>
                     <div class="chart-card">
                         <h4 data-i18n="chart_growth_title">Royalty-ontwikkeling over tijd</h4>
                         <p style="font-size:0.85rem; color:var(--color-text-light); margin-bottom:1rem;" data-i18n="chart_growth_desc">Hoe royalties typisch groeien na publicatie van een nieuwe methode.</p>
-                        <canvas id="growthChart" height="260"></canvas>
+                        <canvas id="growthChart" height="160"></canvas>
                     </div>
                     <div class="chart-card">
                         <h4 data-i18n="chart_segments_title">Verdeling per onderwijssegment</h4>
                         <p style="font-size:0.85rem; color:var(--color-text-light); margin-bottom:1rem;" data-i18n="chart_segments_desc">Percentage auteurs per onderwijsniveau.</p>
-                        <canvas id="segmentsChart" height="260"></canvas>
+                        <canvas id="segmentsChart" height="160"></canvas>
                     </div>
                     <div class="chart-card">
                         <h4 data-i18n="chart_compare_title">Vergelijking: print vs. digitaal</h4>
                         <p style="font-size:0.85rem; color:var(--color-text-light); margin-bottom:1rem;" data-i18n="chart_compare_desc">Groei van digitale royalties ten opzichte van traditionele print.</p>
-                        <canvas id="compareChart" height="260"></canvas>
+                        <canvas id="compareChart" height="160"></canvas>
                     </div>
                 </div>
             </div>
@@ -349,21 +350,21 @@
                 <div class="card-grid-3">
                     <div class="academy-card">
                         <div class="academy-video-placeholder">
-                            <div class="play-button">▶</div>
+                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
                         </div>
                         <h4 data-i18n="academy_video1_title">Het schrijfproces bij Noordhoff</h4>
                         <p data-i18n="academy_video1_desc">Een kijkje achter de schermen: zo ontstaat een methode van concept tot publicatie.</p>
                     </div>
                     <div class="academy-card">
                         <div class="academy-video-placeholder" style="background: linear-gradient(135deg, #FEF0E8, #E8F5EC);">
-                            <div class="play-button">▶</div>
+                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
                         </div>
                         <h4 data-i18n="academy_video2_title">Tips van ervaren auteurs</h4>
                         <p data-i18n="academy_video2_desc">Ervaren Noordhoff-auteurs delen hun inzichten, valkuilen en tips voor nieuwe schrijvers.</p>
                     </div>
                     <div class="academy-card">
                         <div class="academy-video-placeholder" style="background: linear-gradient(135deg, #E8F4FA, #E8F5EC);">
-                            <div class="play-button">▶</div>
+                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
                         </div>
                         <h4 data-i18n="academy_video3_title">Digitaal lesmateriaal maken</h4>
                         <p data-i18n="academy_video3_desc">Ontdek hoe je interactieve en adaptieve content ontwikkelt voor onze digitale platforms.</p>
@@ -566,12 +567,12 @@
             </div>
             <div class="tabs-container">
                 <nav class="tabs-nav">
-                    <button class="tab-btn active" data-tab="start"><span class="tab-icon">🏠</span><span data-i18n="tab_start">Start</span></button>
-                    <button class="tab-btn" data-tab="info"><span class="tab-icon">👤</span><span data-i18n="tab_info">Gegevens</span></button>
-                    <button class="tab-btn" data-tab="contracts"><span class="tab-icon">📋</span><span data-i18n="tab_contracts">Contracten</span></button>
-                    <button class="tab-btn" data-tab="payments"><span class="tab-icon">📄</span><span data-i18n="tab_payments">Afrekeningen</span></button>
-                    <button class="tab-btn" data-tab="forecast"><span class="tab-icon">📊</span><span data-i18n="tab_forecast">Prognose</span></button>
-                    <button class="tab-btn" data-tab="faq"><span class="tab-icon">❓</span><span data-i18n="tab_faq">FAQ</span></button>
+                    <button class="tab-btn active" data-tab="start"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span data-i18n="tab_start">Start</span></button>
+                    <button class="tab-btn" data-tab="info"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span data-i18n="tab_info">Gegevens</span></button>
+                    <button class="tab-btn" data-tab="contracts"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span data-i18n="tab_contracts">Contracten</span></button>
+                    <button class="tab-btn" data-tab="payments"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span><span data-i18n="tab_payments">Afrekeningen</span></button>
+                    <button class="tab-btn" data-tab="forecast"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-i18n="tab_forecast">Prognose</span></button>
+                    <button class="tab-btn" data-tab="faq"><span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span data-i18n="tab_faq">FAQ</span></button>
                 </nav>
 
                 <!-- Start Tab -->
@@ -582,7 +583,7 @@
 
                     <div class="start-section academy-section">
                         <a href="https://noordhoffacademy.nl/" target="_blank" class="academy-link">
-                            <span class="academy-icon">🎓</span>
+                            <span class="academy-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
                             <div class="academy-text">
                                 <span class="academy-title">Noordhoff Academy</span>
                                 <span class="academy-subtitle">Cursussen en trainingen voor auteurs</span>
@@ -592,14 +593,14 @@
                     </div>
 
                     <div class="start-section">
-                        <h3>📅 Aankomende Evenementen</h3>
+                        <h3>Aankomende Evenementen</h3>
                         <div id="eventsContainer" class="events-container">
                             <p class="empty-state">Geen aankomende evenementen</p>
                         </div>
                     </div>
 
                     <div class="start-section">
-                        <h3>📰 Laatste Nieuws</h3>
+                        <h3>Laatste Nieuws</h3>
                         <div id="blogPostsContainer" class="blog-posts-container">
                             <p class="empty-state">Geen nieuwsberichten</p>
                         </div>
@@ -743,11 +744,11 @@
                 <h3>Content beheer</h3>
                 <div class="admin-content-buttons">
                     <button class="admin-content-btn" onclick="openEventsManager()">
-                        <span class="btn-icon">📅</span>
+                        <span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
                         <span>Evenementen beheren</span>
                     </button>
                     <button class="admin-content-btn" onclick="openBlogManager()">
-                        <span class="btn-icon">📰</span>
+                        <span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="16" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/></svg></span>
                         <span>Nieuws beheren</span>
                     </button>
                 </div>

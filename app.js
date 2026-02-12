@@ -360,7 +360,7 @@ function initFinancialCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: 'bottom' }
                 },
@@ -409,7 +409,7 @@ function initFinancialCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: 'bottom' }
                 },
@@ -445,7 +445,7 @@ function initFinancialCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: 'bottom' }
                 },
@@ -479,7 +479,7 @@ function initFinancialCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: 'bottom' }
                 },
@@ -745,8 +745,8 @@ function renderEvents(events) {
                     <h4 class="event-title">${event.title}</h4>
                     ${event.description ? `<p class="event-description">${event.description}</p>` : ''}
                     <div class="event-meta">
-                        <span class="event-time">🕐 ${time}</span>
-                        ${event.location ? `<span class="event-location">📍 ${event.location}</span>` : ''}
+                        <span class="event-time">${time}</span>
+                        ${event.location ? `<span class="event-location">${event.location}</span>` : ''}
                     </div>
                 </div>
                 ${event.link ? `<a href="${event.link}" target="_blank" class="event-link">Meer info →</a>` : ''}
@@ -859,7 +859,7 @@ async function loadEventsForAdmin() {
                     <div class="manager-item-info">
                         <div class="manager-item-title">${event.title}</div>
                         <div class="manager-item-meta">${dateStr} ${event.location ? '• ' + event.location : ''}</div>
-                        <div class="manager-item-status">${event.is_active ? '✅ Actief' : '❌ Inactief'} ${isPast ? '(verlopen)' : ''}</div>
+                        <div class="manager-item-status">${event.is_active ? 'Actief' : 'Inactief'} ${isPast ? '(verlopen)' : ''}</div>
                     </div>
                     <div class="manager-item-actions">
                         <button class="btn-small" onclick="openEventEditor('${event.id}')">Bewerken</button>
@@ -1025,7 +1025,7 @@ async function loadBlogPostsForAdmin() {
                     <div class="manager-item-info">
                         <div class="manager-item-title">${post.title}</div>
                         <div class="manager-item-meta">Aangemaakt: ${createdDate}</div>
-                        <div class="manager-item-status">${post.is_published ? '✅ Gepubliceerd' : '📝 Concept'}</div>
+                        <div class="manager-item-status">${post.is_published ? 'Gepubliceerd' : 'Concept'}</div>
                     </div>
                     <div class="manager-item-actions">
                         <button class="btn-small" onclick="openBlogEditor('${post.id}')">Bewerken</button>
@@ -3733,7 +3733,7 @@ async function startImport() {
     document.getElementById('importStep3').style.display = 'block';
 
     const success = created > 0 || updated > 0;
-    document.getElementById('importResultIcon').textContent = success ? '✅' : '❌';
+    document.getElementById('importResultIcon').innerHTML = success ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>' : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
     document.getElementById('importResultTitle').textContent = success ? 'Import voltooid!' : 'Import mislukt';
 
     let detailsHTML = `
