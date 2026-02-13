@@ -4088,15 +4088,7 @@ body.dashboard-active .lang-toggle {
         direction: ltr;
     }
 
-    .mega-dropdown {
-        position: static;
-        transform: none;
-        box-shadow: none;
-        opacity: 1;
-        visibility: visible;
-        min-width: auto;
-        padding: 0 0 0 1rem;
-    }
+    /* mega-dropdown: hidden at 1024px, only shown via hover or mobile-open */
 
     .public-section h2 {
         font-size: 2rem;
