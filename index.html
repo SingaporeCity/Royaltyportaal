@@ -573,28 +573,20 @@
 
     <!-- Login Page -->
     <div class="login-container hidden" id="loginPage">
-        <button class="btn-back-to-site" onclick="showPublicSite()">
-            <span>&larr;</span> <span data-i18n="back_to_site">Terug naar website</span>
-        </button>
-        <div class="login-visual login-visual-photo">
-            <div class="visual-content">
-                <div class="visual-brand">Auteursportaal</div>
-                <div class="visual-tagline">
-                    <p data-i18n="tagline">Krijg direct inzicht in uw royalties, afrekeningen en prognoses.</p>
-                </div>
-            </div>
-        </div>
-        <div class="login-form-section">
-            <div class="login-form-wrapper">
-                <div class="login-logo" style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
-                    <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+        <div class="login-page-inner">
+            <div class="login-card">
+                <button class="btn-back-to-site" onclick="showPublicSite()">
+                    <span>&larr;</span> <span data-i18n="back_to_site">Terug naar website</span>
+                </button>
+                <div class="login-logo" style="display:flex; align-items:center; gap:0.5rem; justify-content:center; margin-bottom:2.5rem;">
+                    <svg width="36" height="36" viewBox="0 0 100 100" fill="none">
                         <rect x="32" y="0" width="38" height="38" fill="#007460"/>
                         <rect x="0" y="32" width="38" height="38" fill="#007460"/>
                         <rect x="32" y="32" width="12" height="12" fill="#E0F2ED"/>
                         <rect x="44" y="32" width="8" height="8" fill="#D60073"/>
                         <rect x="32" y="62" width="20" height="20" fill="#007460" opacity="0.75"/>
                     </svg>
-                    <span style="font-size:1.4rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
+                    <span style="font-size:1.3rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
                 </div>
                 <form class="login-form" id="loginForm">
                     <h2 data-i18n="welcome_login">Welkom bij Noordhoff</h2>
@@ -611,6 +603,7 @@
                     <button type="submit" class="login-btn" data-i18n="login_btn">Inloggen</button>
                     <button type="button" class="forgot-password-btn" data-i18n="forgot_password" onclick="alert('Neem contact op met rights@noordhoff.nl')">Wachtwoord vergeten?</button>
                 </form>
+                <p class="login-footer-text">Auteursportaal &mdash; Krijg direct inzicht in uw royalties, afrekeningen en prognoses.</p>
             </div>
         </div>
     </div>

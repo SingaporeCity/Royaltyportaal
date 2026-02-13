@@ -586,7 +586,31 @@ function renderEvents(events) {
     if (!container) return;
 
     if (!events || events.length === 0) {
-        container.innerHTML = '<p class="empty-state">Geen aankomende evenementen</p>';
+        container.innerHTML = `
+            <div class="event-card">
+                <div class="event-date-badge"><span class="event-day">21</span><span class="event-month">jun</span></div>
+                <div class="event-details">
+                    <h4 class="event-title">Noordhoff 190 jaar — Jubileumfeest</h4>
+                    <p class="event-description">Alle auteurs, redacteuren en partners zijn uitgenodigd voor een feestelijke middag en avond.</p>
+                    <div class="event-meta"><span class="event-location">Martiniplaza, Groningen</span></div>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-date-badge"><span class="event-day">15</span><span class="event-month">mrt</span></div>
+                <div class="event-details">
+                    <h4 class="event-title">Auteursinspraak: Kerndoelen & Curriculum</h4>
+                    <p class="event-description">Interactieve sessie over hoe de herziene kerndoelen doorwerken in onze methodes.</p>
+                    <div class="event-meta"><span class="event-location">Noordhoff, Groningen & online</span></div>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-date-badge"><span class="event-day">12</span><span class="event-month">apr</span></div>
+                <div class="event-details">
+                    <h4 class="event-title">Workshop: Schrijven voor digitaal onderwijs</h4>
+                    <p class="event-description">Hands-on sessie over content maken voor digitale en adaptieve leeromgevingen.</p>
+                    <div class="event-meta"><span class="event-location">Noordhoff Academy, Groningen</span></div>
+                </div>
+            </div>`;
         return;
     }
 
@@ -649,7 +673,28 @@ function renderBlogPosts(posts) {
     if (!container) return;
 
     if (!posts || posts.length === 0) {
-        container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
+        container.innerHTML = `
+            <div class="blog-card">
+                <div class="blog-content">
+                    <h4 class="blog-title">Kabinet-Schoof presenteert nieuwe onderwijsagenda</h4>
+                    <p class="blog-summary">Extra investeringen in basisvaardigheden, kleinere klassen en meer ruimte voor vakdocenten.</p>
+                    <div class="blog-meta"><span class="blog-date">6 februari 2026</span></div>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-content">
+                    <h4 class="blog-title">Herziene kerndoelen: wat verandert er voor auteurs?</h4>
+                    <p class="blog-summary">Scholen krijgen tot 2028 om de overgang te maken. Voor auteurs betekent dit het actualiseren van methodes.</p>
+                    <div class="blog-meta"><span class="blog-date">23 januari 2026</span></div>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-content">
+                    <h4 class="blog-title">Noordhoff investeert in adaptief leren</h4>
+                    <p class="blog-summary">Grote stappen in gepersonaliseerd leren. Auteurs kunnen bijdragen aan interactieve content.</p>
+                    <div class="blog-meta"><span class="blog-date">10 januari 2026</span></div>
+                </div>
+            </div>`;
         return;
     }
 
