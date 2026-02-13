@@ -1526,7 +1526,7 @@ const TRANSLATIONS = {
         contact_success: 'Bedankt voor je bericht! We nemen zo snel mogelijk contact met je op.',
         // Footer
         footer_tagline: 'Samen maken we het onderwijs van morgen.',
-        footer_nav_title: 'Navigatie', footer_help_title: 'Hulp', footer_rights: 'Alle rechten voorbehouden.',
+        footer_nav_title: 'Navigatie', footer_help_title: 'Hulp', footer_rights: 'Alle rechten voorbehouden.', footer_designed_by: 'Ontworpen door Patrick Jeeninga',
         // Segments
         segments_title: 'Onze onderwijssegmenten',
         segments_text: 'Van kleuter tot professional — wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.',
@@ -1692,7 +1692,7 @@ const TRANSLATIONS = {
         contact_success: 'Thank you for your message! We will get back to you as soon as possible.',
         // Footer
         footer_tagline: 'Together we shape the education of tomorrow.',
-        footer_nav_title: 'Navigation', footer_help_title: 'Help', footer_rights: 'All rights reserved.',
+        footer_nav_title: 'Navigation', footer_help_title: 'Help', footer_rights: 'All rights reserved.', footer_designed_by: 'Designed by Patrick Jeeninga',
         // Segments
         segments_title: 'Our education segments',
         segments_text: 'From kindergarten to professional — we develop educational materials for all levels of Dutch education.',

@@ -3987,6 +3987,12 @@ body.dashboard-active .lang-toggle {
     color: white;
 }
 
+.footer-credit {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
 /* Back to site button */
 .btn-back-to-site {
     background: none;
@@ -4120,12 +4126,20 @@ body.dashboard-active .lang-toggle {
     height: 36px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     transition: all 0.2s ease;
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+.social-icon-link svg {
+    display: block;
+    width: 18px;
+    height: 18px;
 }
 
 .social-icon-link:hover {
