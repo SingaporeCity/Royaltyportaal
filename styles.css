@@ -2735,11 +2735,9 @@ body.dashboard-active .lang-toggle {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s ease;
 }
 
 .public-nav.scrolled {
