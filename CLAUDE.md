@@ -44,9 +44,17 @@ De publieke site gebruikt een multi-page router via `navigateTo(pageName)`:
 | `page-contact` | Contact | FAQ + Contactformulier |
 
 ## Navigatie
-- Mega-dropdowns bij "Auteur worden" en "Het proces" (CSS hover)
-- Mobiel: hamburger menu op 768px
+- Mega-dropdowns bij "Auteur worden" en "Het proces" (CSS hover, alleen desktop)
 - `navigateTo('pagina')` + `scrollToSection('sectie')` voor deep linking
+
+### Mobiel menu (≤768px)
+- Hamburger-knop rechtsboven, toggled via `toggleMobileMenu()` in `app.js`
+- Menu is een compact dropdown-panel onder de navbar (`position: absolute; top: 100%`), **geen** full-screen overlay
+- Mega-dropdowns en featured foto zijn volledig verborgen op mobile (`display: none !important`)
+- Dropdown-pijltjes (▾) zijn verborgen; klikken op "Auteur worden" / "Het proces" navigeert direct naar de pagina
+- Bevat een eigen "Inloggen" knop (`.mobile-login-btn`) en taalkeuze (`.mobile-lang-toggle`), omdat `.public-nav-actions` hidden is op mobile
+- Menu sluit automatisch bij navigatie
+- **Desktop is ongewijzigd** — alle mobile-specifieke CSS zit in `@media (max-width: 768px)`
 
 ## i18n
 Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elementen gebruiken `data-i18n` attributen. Taalswitch in de nav.
