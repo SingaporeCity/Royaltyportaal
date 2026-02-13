@@ -2963,7 +2963,6 @@ body.dashboard-active .lang-toggle {
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 80vh;
-    margin-top: 60px; /* nav height */
 }
 
 .hero-text-half {
@@ -4282,7 +4281,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .public-page {
-    /* page containers */
+    padding-top: 60px; /* offset for fixed navbar */
 }
 
 .public-page.hidden {
