@@ -3986,6 +3986,11 @@ body.dashboard-active .lang-toggle {
     text-decoration: underline;
 }
 
+/* Mobile Login Button (inside hamburger menu) */
+.mobile-login-btn {
+    display: none;
+}
+
 /* Mobile Language Toggle (inside hamburger menu) */
 .mobile-lang-toggle {
     display: none;
@@ -4122,17 +4127,32 @@ body.dashboard-active .lang-toggle {
     }
 
     .public-nav-links.mobile-open .mega-dropdown {
-        display: block;
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        box-shadow: none;
-        min-width: auto;
-        padding: 0.5rem 0 0.5rem 1rem;
+        display: none;
+    }
+
+    .public-nav-links .dd-arrow {
+        display: none;
+    }
+
+    .public-nav-links .nav-link {
+        font-size: 1.25rem;
+        cursor: pointer;
     }
 
     .public-nav-links a {
         font-size: 1.25rem;
+    }
+
+    .mobile-login-btn {
+        display: block;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 0.5rem;
     }
 
     .mobile-lang-toggle {
