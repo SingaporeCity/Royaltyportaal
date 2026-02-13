@@ -4126,8 +4126,12 @@ body.dashboard-active .lang-toggle {
         align-items: stretch;
     }
 
-    .public-nav-links.mobile-open .mega-dropdown {
-        display: none;
+    .mega-dropdown {
+        display: none !important;
+    }
+
+    .mega-featured {
+        display: none !important;
     }
 
     .public-nav-links .dd-arrow {
