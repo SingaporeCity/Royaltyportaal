@@ -2757,21 +2757,11 @@ body.dashboard-active .lang-toggle {
     flex-shrink: 0;
 }
 
-.public-nav-logo svg {
-    height: 32px;
+.public-nav-logo img {
+    height: 36px;
     width: auto;
-}
-
-.public-nav-logo .logo-text {
-    font-size: 1.3rem;
-    font-variation-settings: 'wght' 500;
-    color: var(--color-text);
-    margin-left: 0.5rem;
-}
-
-.public-logo-img {
-    height: 40px;
-    width: auto;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .public-nav-links {
