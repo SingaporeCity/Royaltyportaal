@@ -4285,7 +4285,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .public-page {
-    padding-top: 60px; /* offset for fixed navbar */
+    padding-top: 80px;
 }
 
 .public-page.hidden {
