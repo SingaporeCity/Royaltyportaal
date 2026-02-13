@@ -267,7 +267,9 @@ function scrollToSection(id) {
     setTimeout(() => {
         const el = document.getElementById(id);
         if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const navHeight = document.querySelector('.public-nav')?.offsetHeight || 60;
+            const top = el.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+            window.scrollTo({ top, behavior: 'smooth' });
         }
     }, 100);
 }
