@@ -209,13 +209,67 @@ async function supabaseLogout() {
 // PUBLIC SITE NAVIGATION
 // ============================================
 
-function showPublicSite() {
+function showPublicSite(page) {
     document.getElementById('publicSite').classList.remove('hidden');
     document.getElementById('loginPage').classList.add('hidden');
     document.getElementById('dashboard').classList.add('hidden');
     document.getElementById('adminDashboard').classList.add('hidden');
     document.body.style.overflow = '';
+    navigateTo(page || 'home');
+}
+
+function navigateTo(pageName) {
+    // First make sure public site is visible
+    document.getElementById('publicSite').classList.remove('hidden');
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
+    document.body.style.overflow = '';
+
+    // Hide all public pages
+    document.querySelectorAll('.public-page').forEach(p => p.classList.add('hidden'));
+
+    // Show target page
+    const target = document.getElementById('page-' + pageName);
+    if (target) {
+        target.classList.remove('hidden');
+    } else {
+        // Fallback to home
+        const home = document.getElementById('page-home');
+        if (home) home.classList.remove('hidden');
+    }
+
+    // Scroll to top
     window.scrollTo(0, 0);
+
+    // Update active nav state
+    document.querySelectorAll('.nav-item .nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-page') === pageName) {
+            link.classList.add('active');
+        }
+    });
+    // For dropdown parent items
+    document.querySelectorAll('.nav-item.has-dropdown .nav-link').forEach(link => {
+        if (link.getAttribute('data-page') === pageName) {
+            link.classList.add('active');
+        }
+    });
+
+    // Close mobile menu
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburgerBtn');
+    if (navLinks) navLinks.classList.remove('mobile-open');
+    if (hamburger) hamburger.classList.remove('active');
+}
+
+function scrollToSection(id) {
+    setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
 }
 
 function showLoginPage() {
@@ -263,19 +317,13 @@ function toggleMobileMenu() {
 // ============================================
 
 function initSmoothScroll() {
-    document.querySelectorAll('.public-nav-links a, .hero-cta a, .footer-links a, .who-cta a, .floating-cta, .academy-card-link').forEach(link => {
+    document.querySelectorAll('.hero-cta a, .footer-links a, .who-cta a, .academy-card-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href && href.startsWith('#')) {
+            if (href && href.startsWith('#') && href.length > 1) {
                 e.preventDefault();
                 const target = document.querySelector(href);
                 if (target) {
-                    // Close mobile menu
-                    const navLinks = document.getElementById('navLinks');
-                    const hamburger = document.getElementById('hamburgerBtn');
-                    if (navLinks) navLinks.classList.remove('mobile-open');
-                    if (hamburger) hamburger.classList.remove('active');
-
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             }
@@ -310,8 +358,6 @@ async function initPublicSite() {
     initSmoothScroll();
     initStickyNav();
     initCounterAnimation();
-    initFloatingCta();
-    initBackToTop();
 }
 
 // ===== COUNTER ANIMATION =====
@@ -362,45 +408,6 @@ function animateCounter(el, target) {
     }
 
     requestAnimationFrame(update);
-}
-
-// ===== FLOATING CTA =====
-
-function initFloatingCta() {
-    const cta = document.getElementById('floatingCta');
-    const hero = document.querySelector('.hero-section');
-    if (!cta || !hero) return;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                cta.classList.remove('visible');
-            } else {
-                cta.classList.add('visible');
-            }
-        });
-    }, { threshold: 0 });
-
-    observer.observe(hero);
-}
-
-// ===== BACK TO TOP =====
-
-function initBackToTop() {
-    const btn = document.getElementById('backToTop');
-    if (!btn) return;
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-            btn.classList.add('visible');
-        } else {
-            btn.classList.remove('visible');
-        }
-    });
-
-    btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 }
 
 async function loadPublicEvents() {
@@ -1457,8 +1464,17 @@ const TRANSLATIONS = {
         // Navigation
         nav_about: 'Over Noordhoff', nav_why: 'Waarom auteur?', nav_process: 'Het proces', nav_academy: 'Academy',
         nav_faq: 'FAQ', nav_news: 'Nieuws', nav_contact: 'Contact', nav_login: 'Inloggen',
+        // Navigation - new
+        nav_home: 'Home',
+        nav_auteur_main: 'Auteur worden',
+        nav_dd_why: 'Waarom Noordhoff',
+        nav_dd_segments: 'Segmenten',
+        nav_dd_cta: 'Ontdek hoe jij kunt bijdragen aan het onderwijs van morgen.',
+        hero_eyebrow: 'Auteursportaal',
+        why_title_short: 'Waarom auteur?',
+        who_title_short: 'Wie zoeken wij?',
         // Hero
-        hero_title: 'Word auteur bij Noordhoff',
+        hero_title: 'Schrijf mee aan de toekomst van het onderwijs',
         hero_subtitle: 'Deel je kennis met miljoenen leerlingen en studenten in Nederland. Samen maken we het onderwijs van morgen.',
         hero_cta_learn: 'Ontdek meer', hero_cta_login: 'Inloggen als auteur',
         // About
@@ -1614,8 +1630,17 @@ const TRANSLATIONS = {
         // Navigation
         nav_about: 'About Noordhoff', nav_why: 'Why become an author?', nav_process: 'The process', nav_academy: 'Academy',
         nav_faq: 'FAQ', nav_news: 'News', nav_contact: 'Contact', nav_login: 'Log in',
+        // Navigation - new
+        nav_home: 'Home',
+        nav_auteur_main: 'Become an author',
+        nav_dd_why: 'Why Noordhoff',
+        nav_dd_segments: 'Segments',
+        nav_dd_cta: 'Discover how you can contribute to the education of tomorrow.',
+        hero_eyebrow: 'Author Portal',
+        why_title_short: 'Why become an author?',
+        who_title_short: 'Who are we looking for?',
         // Hero
-        hero_title: 'Become an author at Noordhoff',
+        hero_title: 'Write along on the future of education',
         hero_subtitle: 'Share your knowledge with millions of students in the Netherlands. Together we shape the education of tomorrow.',
         hero_cta_learn: 'Learn more', hero_cta_login: 'Log in as author',
         // About
@@ -3623,7 +3648,7 @@ async function startImport() {
     document.getElementById('importStep3').style.display = 'block';
 
     const success = created > 0 || updated > 0;
-    document.getElementById('importResultIcon').innerHTML = success ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>' : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    document.getElementById('importResultIcon').innerHTML = success ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>' : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
     document.getElementById('importResultTitle').textContent = success ? 'Import voltooid!' : 'Import mislukt';
 
     let detailsHTML = `

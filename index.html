@@ -9,47 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..125,100..1000&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <style>
-    .card-grid-4 {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-    }
-    .segment-card {
-        background: white;
-        border-radius: 12px;
-        padding: 2rem 1.5rem;
-        text-align: center;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        transition: all 0.25s ease;
-    }
-    .segment-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-    }
-    .segment-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        font-variation-settings: 'wght' 700;
-        margin: 0 auto 1rem;
-    }
-    .segment-card p {
-        color: #6D6E71;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-    @media (max-width: 768px) {
-        .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 480px) {
-        .card-grid-4 { grid-template-columns: 1fr; }
-    }
-    </style>
 </head>
 <body>
     <!-- Public Website -->
@@ -60,23 +19,61 @@
             <div class="public-nav-inner">
                 <div class="public-nav-logo" onclick="showPublicSite()" style="cursor:pointer; display:flex; align-items:center; gap:0.5rem;">
                     <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
-                        <rect x="32" y="0" width="38" height="38" fill="#007A60"/>
-                        <rect x="0" y="32" width="38" height="38" fill="#007A60"/>
+                        <rect x="32" y="0" width="38" height="38" fill="#007460"/>
+                        <rect x="0" y="32" width="38" height="38" fill="#007460"/>
                         <rect x="32" y="32" width="12" height="12" fill="#E0F2ED"/>
                         <rect x="44" y="32" width="8" height="8" fill="#D60073"/>
-                        <rect x="32" y="62" width="20" height="20" fill="#007A60" opacity="0.75"/>
+                        <rect x="32" y="62" width="20" height="20" fill="#007460" opacity="0.75"/>
                     </svg>
                     <span style="font-size:1.3rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
                 </div>
                 <div class="public-nav-links" id="navLinks">
-                    <a href="#about" data-i18n="nav_about">Over Noordhoff</a>
-                    <a href="#why" data-i18n="nav_why">Waarom auteur?</a>
-                    <a href="#financial" data-i18n="nav_financial">Verdienmodel</a>
-                    <a href="#process" data-i18n="nav_process">Het proces</a>
-                    <a href="#testimonials" data-i18n="nav_testimonials">Ervaringen</a>
-                    <a href="#academy" data-i18n="nav_academy">Academy</a>
-                    <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
-                    <a href="#contact" data-i18n="nav_contact">Contact</a>
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" onclick="navigateTo('home'); return false;" data-page="home" data-i18n="nav_home">Home</a>
+                    </div>
+                    <div class="nav-item has-dropdown">
+                        <span class="nav-link" data-page="auteur"><span data-i18n="nav_auteur_main">Auteur worden</span> <span class="dd-arrow">&#9662;</span></span>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-grid">
+                                <div class="mega-col">
+                                    <h5 data-i18n="nav_dd_why">Waarom Noordhoff</h5>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('why'); return false;" data-i18n="why_title_short">Waarom auteur?</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('who'); return false;" data-i18n="who_title_short">Wie zoeken wij?</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('financial'); return false;" data-i18n="nav_financial">Verdienmodel</a>
+                                </div>
+                                <div class="mega-col">
+                                    <h5 data-i18n="nav_dd_segments">Segmenten</h5>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('segments'); return false;" data-i18n="segment_bao_title">Basisonderwijs</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('segments'); return false;" data-i18n="segment_vo_title">Voortgezet onderwijs</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('segments'); return false;" data-i18n="segment_mbo_title">Mbo</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('segments'); return false;" data-i18n="segment_ho_title">Hoger onderwijs</a>
+                                </div>
+                                <div class="mega-col">
+                                    <div class="mega-featured">
+                                        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&h=200&fit=crop" alt="">
+                                        <div class="mega-featured-text" data-i18n="nav_dd_cta">Ontdek hoe jij kunt bijdragen aan het onderwijs van morgen.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item has-dropdown">
+                        <span class="nav-link" data-page="proces"><span data-i18n="nav_process">Het proces</span> <span class="dd-arrow">&#9662;</span></span>
+                        <div class="mega-dropdown mega-dropdown-sm">
+                            <div class="mega-dropdown-grid cols-1">
+                                <div class="mega-col">
+                                    <a href="#" onclick="navigateTo('proces'); scrollToSection('process'); return false;" data-i18n="nav_process">Het proces</a>
+                                    <a href="#" onclick="navigateTo('proces'); scrollToSection('testimonials'); return false;" data-i18n="nav_testimonials">Ervaringen</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" onclick="navigateTo('academy'); return false;" data-page="academy" data-i18n="nav_academy">Academy</a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" onclick="navigateTo('contact'); return false;" data-page="contact" data-i18n="nav_contact">Contact</a>
+                    </div>
                     <div class="mobile-lang-toggle">
                         <button class="lang-btn active" data-lang="nl">NL</button>
                         <button class="lang-btn" data-lang="en">EN</button>
@@ -95,403 +92,410 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <!-- Scribble decorations -->
-            <svg class="hero-scribble hero-scribble-star" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M40 5L47 30L72 25L52 42L72 58L47 52L40 75L33 52L8 58L28 42L8 25L33 30Z" stroke="#007A60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <svg class="hero-scribble hero-scribble-check" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 38L30 53L58 18" stroke="#FF7143" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <svg class="hero-scribble hero-scribble-wave" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 20C15 5 25 35 35 20C45 5 55 35 65 20C75 5 85 35 95 20C105 5 115 35 115 20" stroke="#6DB5C5" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-            <svg class="hero-scribble hero-scribble-circle" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="24" stroke="#D60073" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 8"/>
-            </svg>
-            <div class="hero-content">
-                <p class="hero-motto">Zeker Vooruit</p>
-                <h1 class="hero-heading-marker" data-i18n="hero_title">Schrijf mee aan de <span class="text-highlight text-highlight-green">toekomst</span> van het onderwijs</h1>
-                <p class="hero-subtitle" data-i18n="hero_subtitle">Word auteur bij Noordhoff en deel je kennis met miljoenen leerlingen en studenten in Nederland. Al meer dan 180 jaar de grootste educatieve uitgeverij.</p>
-                <div class="hero-cta">
-                    <a href="#about" class="btn-primary-large" data-i18n="hero_cta_learn">Ontdek de mogelijkheden</a>
-                    <button class="btn-secondary-large" onclick="showLoginPage()" data-i18n="hero_cta_login">Inloggen als auteur</button>
-                </div>
-            </div>
-        </section>
+        <!-- Page: Home -->
+        <div id="page-home" class="public-page">
 
-        <!-- Over Noordhoff — Expanded -->
-        <section class="public-section" id="about">
-            <div class="public-container">
-                <h2 data-i18n="about_title">Al meer dan <span class="text-highlight text-highlight-orange">180 jaar</span> partner in onderwijs</h2>
-                <p class="section-intro" data-i18n="about_text">Noordhoff is de grootste educatieve uitgeverij van Nederland. Samen met meer dan duizend auteurs ontwikkelen we lesmateriaal voor het basisonderwijs, voortgezet onderwijs, mbo en hoger onderwijs. Onze methodes bereiken jaarlijks miljoenen leerlingen en vormen de basis van het Nederlandse onderwijs.</p>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-number" data-count="180">0</span>
-                        <span class="stat-label" data-i18n="stat_years">jaar ervaring</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-count="1200">0</span>
-                        <span class="stat-label" data-i18n="stat_authors">actieve auteurs</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-count="5000000">0</span>
-                        <span class="stat-label" data-i18n="stat_students">leerlingen bereikt per jaar</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-count="10000">0</span>
-                        <span class="stat-label" data-i18n="stat_schools">scholen in Nederland</span>
+            <!-- Hero Section — 50/50 -->
+            <section class="hero-section-new">
+                <div class="hero-text-half">
+                    <p class="hero-eyebrow" data-i18n="hero_eyebrow">Auteursportaal</p>
+                    <h1 data-i18n="hero_title">Schrijf mee aan de toekomst van het onderwijs</h1>
+                    <p data-i18n="hero_subtitle">Word auteur bij Noordhoff en deel je kennis met miljoenen leerlingen en studenten in Nederland. Al meer dan 180 jaar de grootste educatieve uitgeverij.</p>
+                    <div class="hero-cta">
+                        <a class="btn-primary-nh" href="#" onclick="navigateTo('auteur'); return false;" data-i18n="hero_cta_learn">Ontdek de mogelijkheden</a>
+                        <button class="btn-outline-nh" onclick="showLoginPage()" data-i18n="hero_cta_login">Inloggen als auteur</button>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Segmenten -->
-        <section class="section-green-header">
-            <div class="public-container">
-                <h2 data-i18n="segments_title">Onze <span class="text-highlight text-highlight-blue">onderwijssegmenten</span></h2>
-                <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
-            </div>
-        </section>
-        <section class="public-section" style="padding-top:3rem">
-            <div class="public-container">
-                <div class="card-grid-4">
-                    <div class="segment-card">
-                        <div class="segment-icon" style="background:#E0F2ED; color:#007A60;">BAO</div>
-                        <h4 data-i18n="segment_bao_title">Basisonderwijs</h4>
-                        <p data-i18n="segment_bao_text">Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.</p>
-                    </div>
-                    <div class="segment-card">
-                        <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">VO</div>
-                        <h4 data-i18n="segment_vo_title">Voortgezet onderwijs</h4>
-                        <p data-i18n="segment_vo_text">Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.</p>
-                    </div>
-                    <div class="segment-card">
-                        <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">MBO</div>
-                        <h4 data-i18n="segment_mbo_title">Mbo</h4>
-                        <p data-i18n="segment_mbo_text">Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.</p>
-                    </div>
-                    <div class="segment-card">
-                        <div class="segment-icon" style="background:#E0F2ED; color:#007A60;">HO</div>
-                        <h4 data-i18n="segment_ho_title">Hoger onderwijs</h4>
-                        <p data-i18n="segment_ho_text">Academische publicaties en studieboeken voor hbo en universiteit.</p>
-                    </div>
+                <div class="hero-image-half">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=900&fit=crop" alt="Docent voor de klas">
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Waarom auteur worden — Expanded -->
-        <section class="public-section alt-bg" id="why">
-            <div class="public-container">
-                <h2 data-i18n="why_title">Waarom auteur worden bij <span class="text-highlight text-highlight-green">Noordhoff</span>?</h2>
-                <p class="section-intro" data-i18n="why_intro">Als auteur bij Noordhoff sta je niet alleen. Je wordt onderdeel van een team van experts dat samen werkt aan kwalitatief hoogwaardig lesmateriaal.</p>
-                <div class="card-grid-3">
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
-                        <h3 data-i18n="why_impact_title">Maak impact op miljoenen</h3>
-                        <p data-i18n="why_impact_text">Jouw expertise bereikt jaarlijks miljoenen leerlingen en studenten in heel Nederland. Van basisschool tot universiteit — jouw kennis maakt het verschil in het klaslokaal.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-                        <h3 data-i18n="why_support_title">Professionele begeleiding</h3>
-                        <p data-i18n="why_support_text">Ons team van ervaren redacteuren, vormgevers en didactisch specialisten begeleidt je door het hele proces. Van eerste concept tot drukklare publicatie.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-                        <h3 data-i18n="why_royalties_title">Eerlijke royaltyregeling</h3>
-                        <p data-i18n="why_royalties_text">Transparante contracten met eerlijke vergoedingen. Via ons digitale auteursportaal heb je 24/7 inzicht in je royalties, afrekeningen en prognoses.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-                        <h3 data-i18n="why_expertise_title">Deel je vakexpertise</h3>
-                        <p data-i18n="why_expertise_text">Als vakexpert vertaal je je kennis naar praktisch en didactisch verantwoord lesmateriaal. Zo blijf je verbonden met het onderwijs vanuit je specialisme.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-                        <h3 data-i18n="why_digital_title">Digitale innovatie</h3>
-                        <p data-i18n="why_digital_text">Werk mee aan de nieuwste digitale leermiddelen, adaptief leren en interactieve content. Noordhoff loopt voorop in onderwijsinnovatie.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-                        <h3 data-i18n="why_growth_title">Persoonlijke groei</h3>
-                        <p data-i18n="why_growth_text">Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching. Investeer in je schrijfvaardigheden en didactische kennis.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Wie zoeken wij? -->
-        <section class="public-section" id="who">
-            <div class="public-container">
-                <h2 data-i18n="who_title">Wie <span class="text-highlight text-highlight-blue">zoeken</span> wij?</h2>
-                <p class="section-intro" data-i18n="who_intro">Noordhoff werkt samen met experts uit het hele onderwijsveld. Herken jij jezelf in een van deze profielen?</p>
-                <div class="card-grid-4">
-                    <div class="profile-card">
-                        <div class="profile-icon profile-icon-green">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
+            <!-- Over Noordhoff — Expanded -->
+            <section class="public-section" id="about">
+                <div class="public-container">
+                    <h2 data-i18n="about_title">Al meer dan 180 jaar partner in onderwijs</h2>
+                    <p class="section-intro" data-i18n="about_text">Noordhoff is de grootste educatieve uitgeverij van Nederland. Samen met meer dan duizend auteurs ontwikkelen we lesmateriaal voor het basisonderwijs, voortgezet onderwijs, mbo en hoger onderwijs. Onze methodes bereiken jaarlijks miljoenen leerlingen en vormen de basis van het Nederlandse onderwijs.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" data-count="180">0</span>
+                            <span class="stat-label" data-i18n="stat_years">jaar ervaring</span>
                         </div>
-                        <h4 data-i18n="who_expert_title">Vakexpert</h4>
-                        <p data-i18n="who_expert_text">Docent of specialist met diepgaande vakkennis die lesmateriaal wil verrijken vanuit de praktijk.</p>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-icon profile-icon-orange">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 8l3 3 4-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <div class="stat-card">
+                            <span class="stat-number" data-count="1200">0</span>
+                            <span class="stat-label" data-i18n="stat_authors">actieve auteurs</span>
                         </div>
-                        <h4 data-i18n="who_innovator_title">Onderwijsvernieuwer</h4>
-                        <p data-i18n="who_innovator_text">Ervaring met digitaal en adaptief leren, die de toekomst van onderwijs mee wil vormgeven.</p>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-icon profile-icon-blue">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                        <div class="stat-card">
+                            <span class="stat-number" data-count="5000000">0</span>
+                            <span class="stat-label" data-i18n="stat_students">leerlingen bereikt per jaar</span>
                         </div>
-                        <h4 data-i18n="who_professional_title">Praktijkprofessional</h4>
-                        <p data-i18n="who_professional_text">Beroepspraktijk-ervaring die studenten voorbereidt op de arbeidsmarkt, ideaal voor mbo-materiaal.</p>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-icon profile-icon-magenta">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        <div class="stat-card">
+                            <span class="stat-number" data-count="10000">0</span>
+                            <span class="stat-label" data-i18n="stat_schools">scholen in Nederland</span>
                         </div>
-                        <h4 data-i18n="who_academic_title">Academicus</h4>
-                        <p data-i18n="who_academic_text">Onderzoeker of professor die wetenschappelijke kennis toegankelijk maakt voor ho-publicaties.</p>
                     </div>
                 </div>
-                <p class="who-cta"><span data-i18n="who_cta_text">Herken je jezelf?</span> <a href="#contact" data-i18n="who_cta_link">Neem contact op</a></p>
-            </div>
-        </section>
+            </section>
 
-        <!-- FINANCIEEL VOORDEEL — NEW SECTION -->
-        <section class="section-green-header">
-            <div class="public-container">
-                <h2 data-i18n="financial_title">Het <span class="text-highlight text-highlight-orange">verdienmodel</span> voor auteurs</h2>
-                <p class="section-intro" data-i18n="financial_intro">Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.</p>
-            </div>
-        </section>
-        <section class="public-section" id="financial" style="padding-top:3rem">
-            <div class="public-container">
-                <div class="financial-highlight">
-                    <div class="financial-stat">
-                        <span class="stat-value">€3.000 - €8.000</span>
-                        <span class="stat-desc" data-i18n="fin_advance">Voorschot per project</span>
-                    </div>
-                    <div class="financial-stat">
-                        <span class="stat-value">8% - 15%</span>
-                        <span class="stat-desc" data-i18n="fin_royalty_pct">Royaltypercentage</span>
-                    </div>
-                    <div class="financial-stat">
-                        <span class="stat-value">2x</span>
-                        <span class="stat-desc" data-i18n="fin_payout">Afrekening per jaar</span>
-                    </div>
-                    <div class="financial-stat">
-                        <span class="stat-value">10+ jaar</span>
-                        <span class="stat-desc" data-i18n="fin_duration">Gemiddelde looptijd royalties</span>
+        </div>
+
+        <!-- Page: Auteur -->
+        <div id="page-auteur" class="public-page hidden">
+
+            <!-- Segmenten -->
+            <section class="public-section" id="segments">
+                <div class="public-container">
+                    <h2 data-i18n="segments_title">Onze onderwijssegmenten</h2>
+                    <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
+                    <div class="card-grid-4">
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">BAO</div>
+                            <h4 data-i18n="segment_bao_title">Basisonderwijs</h4>
+                            <p data-i18n="segment_bao_text">Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">VO</div>
+                            <h4 data-i18n="segment_vo_title">Voortgezet onderwijs</h4>
+                            <p data-i18n="segment_vo_text">Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">MBO</div>
+                            <h4 data-i18n="segment_mbo_title">Mbo</h4>
+                            <p data-i18n="segment_mbo_text">Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">HO</div>
+                            <h4 data-i18n="segment_ho_title">Hoger onderwijs</h4>
+                            <p data-i18n="segment_ho_text">Academische publicaties en studieboeken voor hbo en universiteit.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Het Proces — Expanded -->
-        <section class="public-section alt-bg" id="process">
-            <div class="public-container">
-                <h2 data-i18n="process_title">Van eerste idee tot <span class="text-highlight text-highlight-blue">publicatie</span></h2>
-                <p class="section-intro" data-i18n="process_intro">Het schrijfproces bij Noordhoff is een samenwerking tussen jou als vakexpert en ons team van professionals. Hier zie je hoe dat eruitziet.</p>
-                <div class="process-steps">
-                    <div class="process-step">
-                        <div class="step-number">1</div>
-                        <h4 data-i18n="process_step1_title">Kennismaking & verkenning</h4>
-                        <p data-i18n="process_step1_text">We bespreken je expertise, ideeën en de mogelijkheden. Samen verkennen we welk project het beste past bij jouw kennis en onze onderwijsvisie.</p>
-                    </div>
-                    <div class="process-connector"></div>
-                    <div class="process-step">
-                        <div class="step-number">2</div>
-                        <h4 data-i18n="process_step2_title">Contract & planning</h4>
-                        <p data-i18n="process_step2_text">We leggen heldere afspraken vast over inhoud, planning, royalties en je rol in het auteursteam. Je ontvangt een voorschot bij ondertekening.</p>
-                    </div>
-                    <div class="process-connector"></div>
-                    <div class="process-step">
-                        <div class="step-number">3</div>
-                        <h4 data-i18n="process_step3_title">Schrijven & ontwikkelen</h4>
-                        <p data-i18n="process_step3_text">Je schrijft de content met intensieve begeleiding van onze redactie. Reviews, feedback en didactische toetsing zorgen voor topkwaliteit.</p>
-                    </div>
-                    <div class="process-connector"></div>
-                    <div class="process-step">
-                        <div class="step-number">4</div>
-                        <h4 data-i18n="process_step4_title">Publicatie & royalties</h4>
-                        <p data-i18n="process_step4_text">Na publicatie bereikt je werk scholen in heel Nederland. Tweemaal per jaar ontvang je een royalty-afrekening via het auteursportaal.</p>
+            <!-- Waarom auteur worden — Expanded -->
+            <section class="public-section alt-bg" id="why">
+                <div class="public-container">
+                    <h2 data-i18n="why_title">Waarom auteur worden bij Noordhoff?</h2>
+                    <p class="section-intro" data-i18n="why_intro">Als auteur bij Noordhoff sta je niet alleen. Je wordt onderdeel van een team van experts dat samen werkt aan kwalitatief hoogwaardig lesmateriaal.</p>
+                    <div class="card-grid-3">
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                            <h3 data-i18n="why_impact_title">Maak impact op miljoenen</h3>
+                            <p data-i18n="why_impact_text">Jouw expertise bereikt jaarlijks miljoenen leerlingen en studenten in heel Nederland. Van basisschool tot universiteit — jouw kennis maakt het verschil in het klaslokaal.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+                            <h3 data-i18n="why_support_title">Professionele begeleiding</h3>
+                            <p data-i18n="why_support_text">Ons team van ervaren redacteuren, vormgevers en didactisch specialisten begeleidt je door het hele proces. Van eerste concept tot drukklare publicatie.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                            <h3 data-i18n="why_royalties_title">Eerlijke royaltyregeling</h3>
+                            <p data-i18n="why_royalties_text">Transparante contracten met eerlijke vergoedingen. Via ons digitale auteursportaal heb je 24/7 inzicht in je royalties, afrekeningen en prognoses.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+                            <h3 data-i18n="why_expertise_title">Deel je vakexpertise</h3>
+                            <p data-i18n="why_expertise_text">Als vakexpert vertaal je je kennis naar praktisch en didactisch verantwoord lesmateriaal. Zo blijf je verbonden met het onderwijs vanuit je specialisme.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                            <h3 data-i18n="why_digital_title">Digitale innovatie</h3>
+                            <p data-i18n="why_digital_text">Werk mee aan de nieuwste digitale leermiddelen, adaptief leren en interactieve content. Noordhoff loopt voorop in onderwijsinnovatie.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                            <h3 data-i18n="why_growth_title">Persoonlijke groei</h3>
+                            <p data-i18n="why_growth_text">Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching. Investeer in je schrijfvaardigheden en didactische kennis.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Testimonials — NEW SECTION -->
-        <section class="public-section" id="testimonials">
-            <div class="public-container">
-                <h2 data-i18n="testimonials_title">Wat onze <span class="text-highlight text-highlight-green">auteurs</span> zeggen</h2>
-                <div class="testimonial-grid">
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-i18n="testimonial1_text">"Het schrijven voor Noordhoff gaf me de kans om mijn jarenlange ervaring voor de klas om te zetten in materiaal dat duizenden leerlingen bereikt. De redactie denkt echt met je mee."</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar">MV</div>
-                            <div class="testimonial-info">
-                                <strong>Dr. Maria van den Berg</strong>
-                                <span data-i18n="testimonial1_role">Auteur Wiskunde VO — 12 jaar bij Noordhoff</span>
+            <!-- Wie zoeken wij? -->
+            <section class="public-section" id="who">
+                <div class="public-container">
+                    <h2 data-i18n="who_title">Wie zoeken wij?</h2>
+                    <p class="section-intro" data-i18n="who_intro">Noordhoff werkt samen met experts uit het hele onderwijsveld. Herken jij jezelf in een van deze profielen?</p>
+                    <div class="card-grid-4">
+                        <div class="profile-card">
+                            <div class="profile-icon profile-icon-green">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
+                            </div>
+                            <h4 data-i18n="who_expert_title">Vakexpert</h4>
+                            <p data-i18n="who_expert_text">Docent of specialist met diepgaande vakkennis die lesmateriaal wil verrijken vanuit de praktijk.</p>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-icon profile-icon-orange">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 8l3 3 4-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <h4 data-i18n="who_innovator_title">Onderwijsvernieuwer</h4>
+                            <p data-i18n="who_innovator_text">Ervaring met digitaal en adaptief leren, die de toekomst van onderwijs mee wil vormgeven.</p>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-icon profile-icon-blue">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                            </div>
+                            <h4 data-i18n="who_professional_title">Praktijkprofessional</h4>
+                            <p data-i18n="who_professional_text">Beroepspraktijk-ervaring die studenten voorbereidt op de arbeidsmarkt, ideaal voor mbo-materiaal.</p>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-icon profile-icon-magenta">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            </div>
+                            <h4 data-i18n="who_academic_title">Academicus</h4>
+                            <p data-i18n="who_academic_text">Onderzoeker of professor die wetenschappelijke kennis toegankelijk maakt voor ho-publicaties.</p>
+                        </div>
+                    </div>
+                    <p class="who-cta"><span data-i18n="who_cta_text">Herken je jezelf?</span> <a href="#" onclick="navigateTo('contact'); return false;" data-i18n="who_cta_link">Neem contact op</a></p>
+                </div>
+            </section>
+
+            <!-- FINANCIEEL VOORDEEL -->
+            <section class="public-section" id="financial">
+                <div class="public-container">
+                    <h2 data-i18n="financial_title">Het verdienmodel voor auteurs</h2>
+                    <p class="section-intro" data-i18n="financial_intro">Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.</p>
+                    <div class="financial-highlight">
+                        <div class="financial-stat">
+                            <span class="stat-value">&euro;3.000 - &euro;8.000</span>
+                            <span class="stat-desc" data-i18n="fin_advance">Voorschot per project</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value">8% - 15%</span>
+                            <span class="stat-desc" data-i18n="fin_royalty_pct">Royaltypercentage</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value">2x</span>
+                            <span class="stat-desc" data-i18n="fin_payout">Afrekening per jaar</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value">10+ jaar</span>
+                            <span class="stat-desc" data-i18n="fin_duration">Gemiddelde looptijd royalties</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Page: Proces -->
+        <div id="page-proces" class="public-page hidden">
+
+            <!-- Het Proces — Expanded -->
+            <section class="public-section alt-bg" id="process">
+                <div class="public-container">
+                    <h2 data-i18n="process_title">Van eerste idee tot publicatie</h2>
+                    <p class="section-intro" data-i18n="process_intro">Het schrijfproces bij Noordhoff is een samenwerking tussen jou als vakexpert en ons team van professionals. Hier zie je hoe dat eruitziet.</p>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <h4 data-i18n="process_step1_title">Kennismaking & verkenning</h4>
+                            <p data-i18n="process_step1_text">We bespreken je expertise, idee&#235;n en de mogelijkheden. Samen verkennen we welk project het beste past bij jouw kennis en onze onderwijsvisie.</p>
+                        </div>
+                        <div class="process-connector"></div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <h4 data-i18n="process_step2_title">Contract & planning</h4>
+                            <p data-i18n="process_step2_text">We leggen heldere afspraken vast over inhoud, planning, royalties en je rol in het auteursteam. Je ontvangt een voorschot bij ondertekening.</p>
+                        </div>
+                        <div class="process-connector"></div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <h4 data-i18n="process_step3_title">Schrijven & ontwikkelen</h4>
+                            <p data-i18n="process_step3_text">Je schrijft de content met intensieve begeleiding van onze redactie. Reviews, feedback en didactische toetsing zorgen voor topkwaliteit.</p>
+                        </div>
+                        <div class="process-connector"></div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <h4 data-i18n="process_step4_title">Publicatie & royalties</h4>
+                            <p data-i18n="process_step4_text">Na publicatie bereikt je werk scholen in heel Nederland. Tweemaal per jaar ontvang je een royalty-afrekening via het auteursportaal.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="public-section" id="testimonials">
+                <div class="public-container">
+                    <h2 data-i18n="testimonials_title">Wat onze auteurs zeggen</h2>
+                    <div class="testimonial-grid">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-i18n="testimonial1_text">"Het schrijven voor Noordhoff gaf me de kans om mijn jarenlange ervaring voor de klas om te zetten in materiaal dat duizenden leerlingen bereikt. De redactie denkt echt met je mee."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">MV</div>
+                                <div class="testimonial-info">
+                                    <strong>Dr. Maria van den Berg</strong>
+                                    <span data-i18n="testimonial1_role">Auteur Wiskunde VO — 12 jaar bij Noordhoff</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-i18n="testimonial2_text">"De professionele begeleiding is uitmuntend. Van het eerste concept tot de uiteindelijke publicatie werd ik ondersteund door een team dat net zo gepassioneerd is over onderwijs als ik."</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar">JK</div>
-                            <div class="testimonial-info">
-                                <strong>Prof. dr. Jan Klaassen</strong>
-                                <span data-i18n="testimonial2_role">Auteur Economie HO — 8 jaar bij Noordhoff</span>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-i18n="testimonial2_text">"De professionele begeleiding is uitmuntend. Van het eerste concept tot de uiteindelijke publicatie werd ik ondersteund door een team dat net zo gepassioneerd is over onderwijs als ik."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">JK</div>
+                                <div class="testimonial-info">
+                                    <strong>Prof. dr. Jan Klaassen</strong>
+                                    <span data-i18n="testimonial2_role">Auteur Economie HO — 8 jaar bij Noordhoff</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-i18n="testimonial3_text">"Wat mij het meest aanspreekt is de transparantie over royalties. Via het portaal zie ik precies hoe mijn methode presteert. En de halfjaarlijkse afrekening komt altijd netjes op tijd."</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar">SB</div>
-                            <div class="testimonial-info">
-                                <strong>Sandra Bakker MSc</strong>
-                                <span data-i18n="testimonial3_role">Auteur Nederlands BAO — 5 jaar bij Noordhoff</span>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-i18n="testimonial3_text">"Wat mij het meest aanspreekt is de transparantie over royalties. Via het portaal zie ik precies hoe mijn methode presteert. En de halfjaarlijkse afrekening komt altijd netjes op tijd."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">SB</div>
+                                <div class="testimonial-info">
+                                    <strong>Sandra Bakker MSc</strong>
+                                    <span data-i18n="testimonial3_role">Auteur Nederlands BAO — 5 jaar bij Noordhoff</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-i18n="testimonial4_text">"Als mbo-docent wist ik precies wat studenten nodig hadden. Noordhoff gaf me de ruimte om dat te vertalen naar praktijkgericht materiaal. De samenwerking met het auteursteam was inspirerend."</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar">PH</div>
-                            <div class="testimonial-info">
-                                <strong>Peter de Haan</strong>
-                                <span data-i18n="testimonial4_role">Auteur Techniek MBO — 3 jaar bij Noordhoff</span>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-i18n="testimonial4_text">"Als mbo-docent wist ik precies wat studenten nodig hadden. Noordhoff gaf me de ruimte om dat te vertalen naar praktijkgericht materiaal. De samenwerking met het auteursteam was inspirerend."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">PH</div>
+                                <div class="testimonial-info">
+                                    <strong>Peter de Haan</strong>
+                                    <span data-i18n="testimonial4_role">Auteur Techniek MBO — 3 jaar bij Noordhoff</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Auteurs Academy — Expanded -->
-        <section class="public-section alt-bg" id="academy">
-            <div class="public-container">
-                <h2 data-i18n="academy_title">Auteurs <span class="text-highlight text-highlight-orange">Academy</span></h2>
-                <p class="section-intro" data-i18n="academy_text">Investeer in je ontwikkeling als auteur. Onze Academy biedt workshops, masterclasses en online trainingen om je schrijf- en didactische vaardigheden te versterken.</p>
-                <div class="card-grid-3">
-                    <div class="academy-card academy-content-card">
-                        <div class="academy-card-icon academy-card-icon-green">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                        </div>
-                        <h4 data-i18n="academy_card1_title">Schrijfworkshops</h4>
-                        <p data-i18n="academy_card1_desc">Leer de kunst van helder en didactisch schrijven in onze praktische workshops onder begeleiding van ervaren redacteuren.</p>
-                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
-                    </div>
-                    <div class="academy-card academy-content-card">
-                        <div class="academy-card-icon academy-card-icon-orange">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-                        </div>
-                        <h4 data-i18n="academy_card2_title">Didactische begeleiding</h4>
-                        <p data-i18n="academy_card2_desc">Onze didactisch specialisten helpen je om je vakkennis te vertalen naar effectief en toegankelijk lesmateriaal.</p>
-                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
-                    </div>
-                    <div class="academy-card academy-content-card">
-                        <div class="academy-card-icon academy-card-icon-blue">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                        </div>
-                        <h4 data-i18n="academy_card3_title">Digitale tools training</h4>
-                        <p data-i18n="academy_card3_desc">Maak kennis met onze digitale platformen en leer hoe je interactieve en adaptieve content ontwikkelt.</p>
-                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- FAQ -->
-        <section class="public-section" id="faq-public">
-            <div class="public-container">
-                <h2 data-i18n="faq_public_title">Veelgestelde <span class="text-highlight text-highlight-blue">vragen</span></h2>
-                <div class="public-faq-list" id="publicFaqList">
-                    <!-- Rendered by JS -->
-                </div>
-            </div>
-        </section>
+        <!-- Page: Academy -->
+        <div id="page-academy" class="public-page hidden">
 
-        <!-- Nieuws & Evenementen -->
-        <section class="public-section alt-bg" id="news">
-            <div class="public-container">
-                <h2 data-i18n="news_title">Nieuws & <span class="text-highlight text-highlight-green">Evenementen</span></h2>
-                <div class="news-events-grid">
-                    <div class="news-column">
-                        <h3 data-i18n="news_blog_title">Laatste nieuws</h3>
-                        <div id="publicBlogList" class="public-content-list">
-                            <p class="loading-text" data-i18n="loading">Laden...</p>
+            <!-- Auteurs Academy — Expanded -->
+            <section class="public-section alt-bg" id="academy">
+                <div class="public-container">
+                    <h2 data-i18n="academy_title">Auteurs Academy</h2>
+                    <p class="section-intro" data-i18n="academy_text">Investeer in je ontwikkeling als auteur. Onze Academy biedt workshops, masterclasses en online trainingen om je schrijf- en didactische vaardigheden te versterken.</p>
+                    <div class="card-grid-3">
+                        <div class="academy-card academy-content-card">
+                            <div class="academy-card-icon academy-card-icon-green">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                            </div>
+                            <h4 data-i18n="academy_card1_title">Schrijfworkshops</h4>
+                            <p data-i18n="academy_card1_desc">Leer de kunst van helder en didactisch schrijven in onze praktische workshops onder begeleiding van ervaren redacteuren.</p>
+                            <a href="#" onclick="navigateTo('contact'); return false;" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
                         </div>
-                    </div>
-                    <div class="events-column">
-                        <h3 data-i18n="news_events_title">Komende evenementen</h3>
-                        <div id="publicEventsList" class="public-content-list">
-                            <p class="loading-text" data-i18n="loading">Laden...</p>
+                        <div class="academy-card academy-content-card">
+                            <div class="academy-card-icon academy-card-icon-orange">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                            </div>
+                            <h4 data-i18n="academy_card2_title">Didactische begeleiding</h4>
+                            <p data-i18n="academy_card2_desc">Onze didactisch specialisten helpen je om je vakkennis te vertalen naar effectief en toegankelijk lesmateriaal.</p>
+                            <a href="#" onclick="navigateTo('contact'); return false;" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
+                        </div>
+                        <div class="academy-card academy-content-card">
+                            <div class="academy-card-icon academy-card-icon-blue">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </div>
+                            <h4 data-i18n="academy_card3_title">Digitale tools training</h4>
+                            <p data-i18n="academy_card3_desc">Maak kennis met onze digitale platformen en leer hoe je interactieve en adaptieve content ontwikkelt.</p>
+                            <a href="#" onclick="navigateTo('contact'); return false;" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Contact -->
-        <section class="public-section" id="contact">
-            <div class="public-container">
-                <h2 data-i18n="contact_title">Neem <span class="text-highlight text-highlight-orange">contact</span> op</h2>
-                <p class="section-intro" data-i18n="contact_intro">Interesse in het schrijven voor Noordhoff? Neem vrijblijvend contact op. We vertellen je graag meer over de mogelijkheden.</p>
-                <div class="contact-grid">
-                    <div class="contact-info">
-                        <h3 data-i18n="contact_info_title">Contactgegevens</h3>
-                        <div class="contact-item">
-                            <strong>Email:</strong>
-                            <a href="mailto:auteurs@noordhoff.nl">auteurs@noordhoff.nl</a>
-                        </div>
-                        <div class="contact-item">
-                            <strong data-i18n="contact_address_label">Adres:</strong>
-                            <span>Noordhoff Uitgevers B.V.<br>Mercuriusplein 36<br>9742 AS Groningen</span>
-                        </div>
-                        <div class="contact-item">
-                            <strong data-i18n="contact_phone_label">Telefoon:</strong>
-                            <a href="tel:+31505226292">+31 (0)50 522 62 92</a>
-                        </div>
-                        <div class="contact-item">
-                            <strong>KvK:</strong>
-                            <span>58883983</span>
-                        </div>
-                    </div>
-                    <div class="contact-form-wrapper">
-                        <h3 data-i18n="contact_form_title">Stuur een bericht</h3>
-                        <form id="contactForm" onsubmit="handleContactForm(event)">
-                            <div class="form-group">
-                                <label for="contactName" data-i18n="contact_name">Naam</label>
-                                <input type="text" id="contactName" required>
+            <!-- Nieuws & Evenementen -->
+            <section class="public-section alt-bg" id="news">
+                <div class="public-container">
+                    <h2 data-i18n="news_title">Nieuws & Evenementen</h2>
+                    <div class="news-events-grid">
+                        <div class="news-column">
+                            <h3 data-i18n="news_blog_title">Laatste nieuws</h3>
+                            <div id="publicBlogList" class="public-content-list">
+                                <p class="loading-text" data-i18n="loading">Laden...</p>
                             </div>
-                            <div class="form-group">
-                                <label for="contactEmail" data-i18n="contact_email">E-mailadres</label>
-                                <input type="email" id="contactEmail" required>
+                        </div>
+                        <div class="events-column">
+                            <h3 data-i18n="news_events_title">Komende evenementen</h3>
+                            <div id="publicEventsList" class="public-content-list">
+                                <p class="loading-text" data-i18n="loading">Laden...</p>
                             </div>
-                            <div class="form-group">
-                                <label for="contactSubject">Onderwerp</label>
-                                <select id="contactSubject">
-                                    <option value="auteur" data-i18n="contact_subject_author">Ik wil auteur worden</option>
-                                    <option value="info" data-i18n="contact_subject_info">Informatie aanvragen</option>
-                                    <option value="samenwerking" data-i18n="contact_subject_collab">Samenwerking bespreken</option>
-                                    <option value="anders" data-i18n="contact_subject_other">Anders</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="contactMessage" data-i18n="contact_message">Bericht</label>
-                                <textarea id="contactMessage" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn-primary-large" data-i18n="contact_send">Verstuur bericht</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+        </div>
+
+        <!-- Page: Contact -->
+        <div id="page-contact" class="public-page hidden">
+
+            <!-- FAQ -->
+            <section class="public-section" id="faq-public">
+                <div class="public-container">
+                    <h2 data-i18n="faq_public_title">Veelgestelde vragen</h2>
+                    <div class="public-faq-list" id="publicFaqList">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section class="public-section" id="contact">
+                <div class="public-container">
+                    <h2 data-i18n="contact_title">Neem contact op</h2>
+                    <p class="section-intro" data-i18n="contact_intro">Interesse in het schrijven voor Noordhoff? Neem vrijblijvend contact op. We vertellen je graag meer over de mogelijkheden.</p>
+                    <div class="contact-grid">
+                        <div class="contact-info">
+                            <h3 data-i18n="contact_info_title">Contactgegevens</h3>
+                            <div class="contact-item">
+                                <strong>Email:</strong>
+                                <a href="mailto:auteurs@noordhoff.nl">auteurs@noordhoff.nl</a>
+                            </div>
+                            <div class="contact-item">
+                                <strong data-i18n="contact_address_label">Adres:</strong>
+                                <span>Noordhoff Uitgevers B.V.<br>Mercuriusplein 36<br>9742 AS Groningen</span>
+                            </div>
+                            <div class="contact-item">
+                                <strong data-i18n="contact_phone_label">Telefoon:</strong>
+                                <a href="tel:+31505226292">+31 (0)50 522 62 92</a>
+                            </div>
+                            <div class="contact-item">
+                                <strong>KvK:</strong>
+                                <span>58883983</span>
+                            </div>
+                        </div>
+                        <div class="contact-form-wrapper">
+                            <h3 data-i18n="contact_form_title">Stuur een bericht</h3>
+                            <form id="contactForm" onsubmit="handleContactForm(event)">
+                                <div class="form-group">
+                                    <label for="contactName" data-i18n="contact_name">Naam</label>
+                                    <input type="text" id="contactName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail" data-i18n="contact_email">E-mailadres</label>
+                                    <input type="email" id="contactEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactSubject">Onderwerp</label>
+                                    <select id="contactSubject">
+                                        <option value="auteur" data-i18n="contact_subject_author">Ik wil auteur worden</option>
+                                        <option value="info" data-i18n="contact_subject_info">Informatie aanvragen</option>
+                                        <option value="samenwerking" data-i18n="contact_subject_collab">Samenwerking bespreken</option>
+                                        <option value="anders" data-i18n="contact_subject_other">Anders</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactMessage" data-i18n="contact_message">Bericht</label>
+                                    <textarea id="contactMessage" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary-large" data-i18n="contact_send">Verstuur bericht</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
 
         <!-- Footer -->
         <footer class="public-footer">
@@ -512,19 +516,19 @@
                     </div>
                     <div class="footer-links">
                         <h4 data-i18n="footer_nav_title">Voor auteurs</h4>
-                        <a href="#why" data-i18n="nav_why">Waarom auteur?</a>
-                        <a href="#financial" data-i18n="nav_financial">Verdienmodel</a>
-                        <a href="#process" data-i18n="nav_process">Het proces</a>
-                        <a href="#academy" data-i18n="nav_academy">Academy</a>
+                        <a href="#" onclick="navigateTo('auteur'); scrollToSection('why'); return false;" data-i18n="nav_why">Waarom auteur?</a>
+                        <a href="#" onclick="navigateTo('auteur'); scrollToSection('financial'); return false;" data-i18n="nav_financial">Verdienmodel</a>
+                        <a href="#" onclick="navigateTo('proces'); return false;" data-i18n="nav_process">Het proces</a>
+                        <a href="#" onclick="navigateTo('academy'); return false;" data-i18n="nav_academy">Academy</a>
                         <a href="#" onclick="showLoginPage(); return false;" data-i18n="nav_login">Inloggen</a>
                     </div>
                     <div class="footer-links">
                         <h4 data-i18n="footer_help_title">Informatie</h4>
-                        <a href="#about" data-i18n="nav_about">Over Noordhoff</a>
-                        <a href="#testimonials" data-i18n="nav_testimonials">Ervaringen</a>
-                        <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
-                        <a href="#contact" data-i18n="nav_contact">Contact</a>
-                        <a href="#news" data-i18n="nav_news">Nieuws</a>
+                        <a href="#" onclick="navigateTo('home'); scrollToSection('about'); return false;" data-i18n="nav_about">Over Noordhoff</a>
+                        <a href="#" onclick="navigateTo('proces'); scrollToSection('testimonials'); return false;" data-i18n="nav_testimonials">Ervaringen</a>
+                        <a href="#" onclick="navigateTo('contact'); scrollToSection('faq-public'); return false;" data-i18n="nav_faq">FAQ</a>
+                        <a href="#" onclick="navigateTo('contact'); return false;" data-i18n="nav_contact">Contact</a>
+                        <a href="#" onclick="navigateTo('academy'); scrollToSection('news'); return false;" data-i18n="nav_news">Nieuws</a>
                         <a href="#" data-i18n="footer_privacy">Privacybeleid</a>
                         <a href="#" data-i18n="footer_terms">Algemene voorwaarden</a>
                     </div>
@@ -545,32 +549,23 @@
                 </div>
                 <div class="footer-bottom">
                     <p>&copy; 2026 Noordhoff Uitgevers B.V. <span data-i18n="footer_rights">Alle rechten voorbehouden.</span></p>
+                    <div class="footer-legal">
+                        <a href="#" data-i18n="footer_privacy">Privacybeleid</a>
+                        <a href="#" data-i18n="footer_terms">Algemene voorwaarden</a>
+                        <a href="#">Cookies</a>
+                    </div>
                 </div>
             </div>
         </footer>
-
-        <!-- Floating CTA -->
-        <a href="#contact" class="floating-cta" id="floatingCta" data-i18n="floating_cta">Word auteur</a>
-
-        <!-- Back to top -->
-        <button class="back-to-top" id="backToTop" aria-label="Terug naar boven">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-        </button>
 
     </div>
 
     <!-- Login Page -->
     <div class="login-container hidden" id="loginPage">
         <button class="btn-back-to-site" onclick="showPublicSite()">
-            <span>←</span> <span data-i18n="back_to_site">Terug naar website</span>
+            <span>&larr;</span> <span data-i18n="back_to_site">Terug naar website</span>
         </button>
         <div class="login-visual login-visual-photo">
-            <div class="visual-shapes">
-                <div class="shape-line"></div>
-                <div class="shape-line"></div>
-                <div class="shape-dot"></div>
-                <div class="shape-dot"></div>
-            </div>
             <div class="visual-content">
                 <div class="visual-brand">Auteursportaal</div>
                 <div class="visual-tagline">
@@ -605,8 +600,15 @@
     <!-- Author Dashboard -->
     <div class="dashboard" id="dashboard">
         <header class="dashboard-header">
-            <div class="header-logo">
-                <img src="logo.jpg" alt="Logo">
+            <div class="header-logo" onclick="showPublicSite()" style="cursor:pointer; display:flex; align-items:center; gap:0.5rem;">
+                <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+                    <rect x="32" y="0" width="38" height="38" fill="#007460"/>
+                    <rect x="0" y="32" width="38" height="38" fill="#007460"/>
+                    <rect x="32" y="32" width="12" height="12" fill="#E0F2ED"/>
+                    <rect x="44" y="32" width="8" height="8" fill="#D60073"/>
+                    <rect x="32" y="62" width="20" height="20" fill="#007460" opacity="0.75"/>
+                </svg>
+                <span style="font-size:1.1rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
             </div>
             <div class="header-user">
                 <div class="user-info">
@@ -645,7 +647,7 @@
                                 <span class="academy-title">Noordhoff Academy</span>
                                 <span class="academy-subtitle">Cursussen en trainingen voor auteurs</span>
                             </div>
-                            <span class="academy-arrow">→</span>
+                            <span class="academy-arrow">&rarr;</span>
                         </a>
                     </div>
 
@@ -762,8 +764,15 @@
     <!-- Admin Dashboard -->
     <div class="admin-dashboard" id="adminDashboard">
         <header class="dashboard-header">
-            <div class="header-logo">
-                <img src="logo.jpg" alt="Logo">
+            <div class="header-logo" onclick="showPublicSite()" style="cursor:pointer; display:flex; align-items:center; gap:0.5rem;">
+                <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+                    <rect x="32" y="0" width="38" height="38" fill="#007460"/>
+                    <rect x="0" y="32" width="38" height="38" fill="#007460"/>
+                    <rect x="32" y="32" width="12" height="12" fill="#E0F2ED"/>
+                    <rect x="44" y="32" width="8" height="8" fill="#D60073"/>
+                    <rect x="32" y="62" width="20" height="20" fill="#007460" opacity="0.75"/>
+                </svg>
+                <span style="font-size:1.1rem; font-variation-settings:'wght' 500; color:#1F2022;">Noordhoff</span>
             </div>
             <div class="header-user">
                 <div class="user-info">
@@ -831,7 +840,7 @@
                         <div class="changes-panel">
                             <div class="changes-panel-header">
                                 <h3>Wijzigingen</h3>
-                                <button class="btn-secondary" onclick="showAuthorDetailPanel()" style="padding:0.5rem 1rem;font-size:0.8rem;">← Terug naar auteurs</button>
+                                <button class="btn-secondary" onclick="showAuthorDetailPanel()" style="padding:0.5rem 1rem;font-size:0.8rem;">&larr; Terug naar auteurs</button>
                             </div>
                             <div class="changes-filter-tabs">
                                 <button class="changes-filter-btn active" data-filter="pending" onclick="filterChanges('pending')">Te beoordelen</button>
