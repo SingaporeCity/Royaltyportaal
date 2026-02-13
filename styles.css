@@ -3867,6 +3867,14 @@ body.dashboard-active .lang-toggle {
     font-variation-settings: 'wght' 700;
 }
 
+.testimonial-avatar-img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
 .testimonial-info strong {
     display: block;
     color: var(--color-text);

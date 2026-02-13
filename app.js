@@ -434,7 +434,8 @@ async function loadPublicEvents() {
         console.log('Public events: using fallback');
     }
 
-    // Fallback content
+    // Keep static HTML content if present
+    if (container.querySelector('.public-event-card')) return;
     container.innerHTML = '<p class="no-content-message" data-i18n="no_events">' + t('no_events') + '</p>';
 }
 
@@ -460,7 +461,8 @@ async function loadPublicBlogPosts() {
         console.log('Public blog: using fallback');
     }
 
-    // Fallback content
+    // Keep static HTML content if present
+    if (container.querySelector('.public-news-card')) return;
     container.innerHTML = '<p class="no-content-message" data-i18n="no_news">' + t('no_news') + '</p>';
 }
 
