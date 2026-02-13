@@ -263,7 +263,7 @@ function toggleMobileMenu() {
 // ============================================
 
 function initSmoothScroll() {
-    document.querySelectorAll('.public-nav-links a, .hero-cta a, .footer-links a').forEach(link => {
+    document.querySelectorAll('.public-nav-links a, .hero-cta a, .footer-links a, .who-cta a, .floating-cta, .academy-card-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
@@ -310,6 +310,8 @@ async function initPublicSite() {
     initSmoothScroll();
     initStickyNav();
     initCounterAnimation();
+    initFloatingCta();
+    initBackToTop();
 }
 
 // ===== COUNTER ANIMATION =====
@@ -360,6 +362,45 @@ function animateCounter(el, target) {
     }
 
     requestAnimationFrame(update);
+}
+
+// ===== FLOATING CTA =====
+
+function initFloatingCta() {
+    const cta = document.getElementById('floatingCta');
+    const hero = document.querySelector('.hero-section');
+    if (!cta || !hero) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                cta.classList.remove('visible');
+            } else {
+                cta.classList.add('visible');
+            }
+        });
+    }, { threshold: 0 });
+
+    observer.observe(hero);
+}
+
+// ===== BACK TO TOP =====
+
+function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
 async function loadPublicEvents() {
@@ -1518,6 +1559,33 @@ const TRANSLATIONS = {
         contact_subject_other: 'Anders',
         // Footer expanded
         stat_schools: 'scholen in Nederland',
+        // Who section
+        who_title: 'Wie zoeken wij?',
+        who_intro: 'Noordhoff werkt samen met experts uit het hele onderwijsveld. Herken jij jezelf in een van deze profielen?',
+        who_expert_title: 'Vakexpert',
+        who_expert_text: 'Docent of specialist met diepgaande vakkennis die lesmateriaal wil verrijken vanuit de praktijk.',
+        who_innovator_title: 'Onderwijsvernieuwer',
+        who_innovator_text: 'Ervaring met digitaal en adaptief leren, die de toekomst van onderwijs mee wil vormgeven.',
+        who_professional_title: 'Praktijkprofessional',
+        who_professional_text: 'Beroepspraktijk-ervaring die studenten voorbereidt op de arbeidsmarkt, ideaal voor mbo-materiaal.',
+        who_academic_title: 'Academicus',
+        who_academic_text: 'Onderzoeker of professor die wetenschappelijke kennis toegankelijk maakt voor ho-publicaties.',
+        who_cta_text: 'Herken je jezelf?',
+        who_cta_link: 'Neem contact op',
+        // Academy content cards
+        academy_card1_title: 'Schrijfworkshops',
+        academy_card1_desc: 'Leer de kunst van helder en didactisch schrijven in onze praktische workshops onder begeleiding van ervaren redacteuren.',
+        academy_card2_title: 'Didactische begeleiding',
+        academy_card2_desc: 'Onze didactisch specialisten helpen je om je vakkennis te vertalen naar effectief en toegankelijk lesmateriaal.',
+        academy_card3_title: 'Digitale tools training',
+        academy_card3_desc: 'Maak kennis met onze digitale platformen en leer hoe je interactieve en adaptieve content ontwikkelt.',
+        academy_learn_more: 'Meer weten \u2192',
+        // Floating CTA
+        floating_cta: 'Word auteur',
+        // Footer expanded
+        footer_privacy: 'Privacybeleid',
+        footer_terms: 'Algemene voorwaarden',
+        footer_social_title: 'Volg ons',
         // Back
         back_to_site: 'Terug naar website'
     },
@@ -1648,6 +1716,33 @@ const TRANSLATIONS = {
         contact_subject_other: 'Other',
         // Footer expanded
         stat_schools: 'schools in the Netherlands',
+        // Who section
+        who_title: 'Who are we looking for?',
+        who_intro: 'Noordhoff collaborates with experts from across the education field. Do you recognize yourself in one of these profiles?',
+        who_expert_title: 'Subject Expert',
+        who_expert_text: 'Teacher or specialist with deep subject knowledge who wants to enrich educational materials from practice.',
+        who_innovator_title: 'Education Innovator',
+        who_innovator_text: 'Experience with digital and adaptive learning, shaping the future of education.',
+        who_professional_title: 'Industry Professional',
+        who_professional_text: 'Professional experience preparing students for the job market, ideal for vocational education materials.',
+        who_academic_title: 'Academic',
+        who_academic_text: 'Researcher or professor making scientific knowledge accessible for higher education publications.',
+        who_cta_text: 'Recognize yourself?',
+        who_cta_link: 'Get in touch',
+        // Academy content cards
+        academy_card1_title: 'Writing Workshops',
+        academy_card1_desc: 'Learn the art of clear and didactic writing in our practical workshops guided by experienced editors.',
+        academy_card2_title: 'Didactic Guidance',
+        academy_card2_desc: 'Our didactic specialists help you translate your expertise into effective and accessible learning materials.',
+        academy_card3_title: 'Digital Tools Training',
+        academy_card3_desc: 'Get familiar with our digital platforms and learn how to develop interactive and adaptive content.',
+        academy_learn_more: 'Learn more \u2192',
+        // Floating CTA
+        floating_cta: 'Become an author',
+        // Footer expanded
+        footer_privacy: 'Privacy Policy',
+        footer_terms: 'Terms & Conditions',
+        footer_social_title: 'Follow us',
         // Back
         back_to_site: 'Back to website'
     }

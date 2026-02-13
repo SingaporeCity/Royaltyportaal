@@ -77,6 +77,10 @@
                     <a href="#academy" data-i18n="nav_academy">Academy</a>
                     <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
                     <a href="#contact" data-i18n="nav_contact">Contact</a>
+                    <div class="mobile-lang-toggle">
+                        <button class="lang-btn active" data-lang="nl">NL</button>
+                        <button class="lang-btn" data-lang="en">EN</button>
+                    </div>
                 </div>
                 <div class="public-nav-actions">
                     <div class="lang-toggle public-lang-toggle">
@@ -93,12 +97,22 @@
 
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-scribble hero-scribble-1"></div>
-            <div class="hero-scribble hero-scribble-2"></div>
-            <div class="hero-scribble hero-scribble-3"></div>
+            <!-- Scribble decorations -->
+            <svg class="hero-scribble hero-scribble-star" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M40 5L47 30L72 25L52 42L72 58L47 52L40 75L33 52L8 58L28 42L8 25L33 30Z" stroke="#007A60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg class="hero-scribble hero-scribble-check" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 38L30 53L58 18" stroke="#FF7143" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg class="hero-scribble hero-scribble-wave" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 20C15 5 25 35 35 20C45 5 55 35 65 20C75 5 85 35 95 20C105 5 115 35 115 20" stroke="#6DB5C5" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <svg class="hero-scribble hero-scribble-circle" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="24" stroke="#D60073" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 8"/>
+            </svg>
             <div class="hero-content">
                 <p class="hero-motto">Zeker Vooruit</p>
-                <h1 data-i18n="hero_title">Schrijf mee aan de <span class="text-highlight text-highlight-green">toekomst</span> van het onderwijs</h1>
+                <h1 class="hero-heading-marker" data-i18n="hero_title">Schrijf mee aan de <span class="text-highlight text-highlight-green">toekomst</span> van het onderwijs</h1>
                 <p class="hero-subtitle" data-i18n="hero_subtitle">Word auteur bij Noordhoff en deel je kennis met miljoenen leerlingen en studenten in Nederland. Al meer dan 180 jaar de grootste educatieve uitgeverij.</p>
                 <div class="hero-cta">
                     <a href="#about" class="btn-primary-large" data-i18n="hero_cta_learn">Ontdek de mogelijkheden</a>
@@ -204,6 +218,45 @@
                         <p data-i18n="why_growth_text">Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching. Investeer in je schrijfvaardigheden en didactische kennis.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Wie zoeken wij? -->
+        <section class="public-section" id="who">
+            <div class="public-container">
+                <h2 data-i18n="who_title">Wie <span class="text-highlight text-highlight-blue">zoeken</span> wij?</h2>
+                <p class="section-intro" data-i18n="who_intro">Noordhoff werkt samen met experts uit het hele onderwijsveld. Herken jij jezelf in een van deze profielen?</p>
+                <div class="card-grid-4">
+                    <div class="profile-card">
+                        <div class="profile-icon profile-icon-green">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
+                        </div>
+                        <h4 data-i18n="who_expert_title">Vakexpert</h4>
+                        <p data-i18n="who_expert_text">Docent of specialist met diepgaande vakkennis die lesmateriaal wil verrijken vanuit de praktijk.</p>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-icon profile-icon-orange">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 8l3 3 4-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <h4 data-i18n="who_innovator_title">Onderwijsvernieuwer</h4>
+                        <p data-i18n="who_innovator_text">Ervaring met digitaal en adaptief leren, die de toekomst van onderwijs mee wil vormgeven.</p>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-icon profile-icon-blue">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <h4 data-i18n="who_professional_title">Praktijkprofessional</h4>
+                        <p data-i18n="who_professional_text">Beroepspraktijk-ervaring die studenten voorbereidt op de arbeidsmarkt, ideaal voor mbo-materiaal.</p>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-icon profile-icon-magenta">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        </div>
+                        <h4 data-i18n="who_academic_title">Academicus</h4>
+                        <p data-i18n="who_academic_text">Onderzoeker of professor die wetenschappelijke kennis toegankelijk maakt voor ho-publicaties.</p>
+                    </div>
+                </div>
+                <p class="who-cta"><span data-i18n="who_cta_text">Herken je jezelf?</span> <a href="#contact" data-i18n="who_cta_link">Neem contact op</a></p>
             </div>
         </section>
 
@@ -325,26 +378,29 @@
                 <h2 data-i18n="academy_title">Auteurs <span class="text-highlight text-highlight-orange">Academy</span></h2>
                 <p class="section-intro" data-i18n="academy_text">Investeer in je ontwikkeling als auteur. Onze Academy biedt workshops, masterclasses en online trainingen om je schrijf- en didactische vaardigheden te versterken.</p>
                 <div class="card-grid-3">
-                    <div class="academy-card">
-                        <div class="academy-video-placeholder">
-                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
+                    <div class="academy-card academy-content-card">
+                        <div class="academy-card-icon academy-card-icon-green">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
                         </div>
-                        <h4 data-i18n="academy_video1_title">Het schrijfproces bij Noordhoff</h4>
-                        <p data-i18n="academy_video1_desc">Een kijkje achter de schermen: zo ontstaat een methode van concept tot publicatie.</p>
+                        <h4 data-i18n="academy_card1_title">Schrijfworkshops</h4>
+                        <p data-i18n="academy_card1_desc">Leer de kunst van helder en didactisch schrijven in onze praktische workshops onder begeleiding van ervaren redacteuren.</p>
+                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
                     </div>
-                    <div class="academy-card">
-                        <div class="academy-video-placeholder" style="background: linear-gradient(135deg, #FFF0E8, #E0F2ED);">
-                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
+                    <div class="academy-card academy-content-card">
+                        <div class="academy-card-icon academy-card-icon-orange">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
                         </div>
-                        <h4 data-i18n="academy_video2_title">Tips van ervaren auteurs</h4>
-                        <p data-i18n="academy_video2_desc">Ervaren Noordhoff-auteurs delen hun inzichten, valkuilen en tips voor nieuwe schrijvers.</p>
+                        <h4 data-i18n="academy_card2_title">Didactische begeleiding</h4>
+                        <p data-i18n="academy_card2_desc">Onze didactisch specialisten helpen je om je vakkennis te vertalen naar effectief en toegankelijk lesmateriaal.</p>
+                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
                     </div>
-                    <div class="academy-card">
-                        <div class="academy-video-placeholder" style="background: linear-gradient(135deg, #C0E0E7, #E0F2ED);">
-                            <div class="play-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div>
+                    <div class="academy-card academy-content-card">
+                        <div class="academy-card-icon academy-card-icon-blue">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                         </div>
-                        <h4 data-i18n="academy_video3_title">Digitaal lesmateriaal maken</h4>
-                        <p data-i18n="academy_video3_desc">Ontdek hoe je interactieve en adaptieve content ontwikkelt voor onze digitale platforms.</p>
+                        <h4 data-i18n="academy_card3_title">Digitale tools training</h4>
+                        <p data-i18n="academy_card3_desc">Maak kennis met onze digitale platformen en leer hoe je interactieve en adaptieve content ontwikkelt.</p>
+                        <a href="#contact" class="academy-card-link" data-i18n="academy_learn_more">Meer weten &rarr;</a>
                     </div>
                 </div>
             </div>
@@ -469,6 +525,22 @@
                         <a href="#faq-public" data-i18n="nav_faq">FAQ</a>
                         <a href="#contact" data-i18n="nav_contact">Contact</a>
                         <a href="#news" data-i18n="nav_news">Nieuws</a>
+                        <a href="#" data-i18n="footer_privacy">Privacybeleid</a>
+                        <a href="#" data-i18n="footer_terms">Algemene voorwaarden</a>
+                    </div>
+                    <div class="footer-links footer-social">
+                        <h4 data-i18n="footer_social_title">Volg ons</h4>
+                        <div class="footer-social-icons">
+                            <a href="#" aria-label="LinkedIn" class="social-icon-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.47 2H3.53A1.45 1.45 0 002 3.47v17.06A1.45 1.45 0 003.47 22h17.06A1.45 1.45 0 0022 20.53V3.47A1.45 1.45 0 0020.47 2zM8.09 18.74h-3v-9h3v9zM6.59 8.48a1.56 1.56 0 110-3.12 1.56 1.56 0 010 3.12zM18.91 18.74h-3v-4.26c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.18-1.73 2.39v4.34h-3v-9h2.89v1.23h.04a3.16 3.16 0 012.85-1.56c3.05 0 3.61 2.01 3.61 4.61v4.72z"/></svg>
+                            </a>
+                            <a href="#" aria-label="Instagram" class="social-icon-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.44.41a4.08 4.08 0 011.52.99c.47.47.77.93.99 1.52.17.47.36 1.27.41 2.44.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.41 2.44a4.08 4.08 0 01-.99 1.52c-.47.47-.93.77-1.52.99-.47.17-1.27.36-2.44.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.44-.41a4.08 4.08 0 01-1.52-.99 4.08 4.08 0 01-.99-1.52c-.17-.47-.36-1.27-.41-2.44C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.24-1.97.41-2.44a4.08 4.08 0 01.99-1.52 4.08 4.08 0 011.52-.99c.47-.17 1.27-.36 2.44-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.83 5.83 0 00-2.13 1.38A5.83 5.83 0 00.63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91a5.83 5.83 0 001.38 2.13 5.83 5.83 0 002.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.83 5.83 0 002.13-1.38 5.83 5.83 0 001.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.83 5.83 0 00-1.38-2.13A5.83 5.83 0 0019.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1018.16 12 6.16 6.16 0 0012 5.84zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-10.85a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+                            </a>
+                            <a href="#" aria-label="X" class="social-icon-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
@@ -476,6 +548,14 @@
                 </div>
             </div>
         </footer>
+
+        <!-- Floating CTA -->
+        <a href="#contact" class="floating-cta" id="floatingCta" data-i18n="floating_cta">Word auteur</a>
+
+        <!-- Back to top -->
+        <button class="back-to-top" id="backToTop" aria-label="Terug naar boven">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
 
     </div>
 
