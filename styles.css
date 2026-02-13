@@ -1,18 +1,20 @@
 :root {
-    --color-primary: #1B5E3B;
-    --color-primary-dark: #144A2E;
-    --color-primary-light: #E8F5EC;
-    --color-accent: #E86F2C;
-    --color-accent-light: #FEF0E8;
-    --color-teal: #7BC8E8;
+    --color-primary: #007A60;
+    --color-primary-dark: #005140;
+    --color-primary-light: #E0F2ED;
+    --color-accent: #FF7143;
+    --color-accent-light: #FFF0E8;
+    --color-teal: #6DB5C5;
 
     /* Named color variables */
-    --color-green: #1B5E3B;
-    --color-green-light: #E8F5EC;
-    --color-orange: #E86F2C;
-    --color-orange-light: #FEF0E8;
-    --color-blue: #7BC8E8;
-    --color-blue-light: #E8F4FA;
+    --color-green: #007A60;
+    --color-green-light: #E0F2ED;
+    --color-orange: #FF7143;
+    --color-orange-light: #FFF0E8;
+    --color-blue: #6DB5C5;
+    --color-blue-light: #C0E0E7;
+    --color-blue-xlight: #E8F2F5;
+    --color-salmon: #FFAF96;
 
     --color-magenta: #D60073;
     --color-bg: #F7F7F7;
@@ -37,16 +39,22 @@
 
 body {
     font-family: var(--font-body);
+    font-variation-settings: 'wght' 300, 'wdth' 110;
     background: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
-    line-height: 1.6;
+    line-height: 1.4;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
 }
 
+h1 {
+    font-variation-settings: 'wght' 360, 'wdth' 110;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+}
 h2 {
     font-variation-settings: 'wght' 800, 'wdth' 110;
     letter-spacing: -0.02em;
@@ -3628,31 +3636,6 @@ body.dashboard-active .lang-toggle {
     background: white;
 }
 
-.chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    margin-top: 3rem;
-}
-
-.chart-card {
-    background: white;
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--color-border);
-}
-
-.chart-card h4 {
-    margin-bottom: 1rem;
-    color: var(--color-text);
-}
-
-.chart-card canvas {
-    width: 100% !important;
-    max-height: 160px !important;
-}
-
 .financial-highlight {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -4008,10 +3991,6 @@ body.dashboard-active .lang-toggle {
 
     .process-step {
         flex-basis: 100%;
-    }
-
-    .chart-grid {
-        grid-template-columns: 1fr;
     }
 
     .financial-highlight {

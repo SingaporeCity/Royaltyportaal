@@ -309,196 +309,7 @@ async function initPublicSite() {
     loadPublicBlogPosts();
     initSmoothScroll();
     initStickyNav();
-    initFinancialCharts();
     initCounterAnimation();
-}
-
-// ===== FINANCIAL CHARTS =====
-
-function initFinancialCharts() {
-    if (typeof Chart === 'undefined') {
-        console.log('Chart.js not loaded, skipping charts');
-        return;
-    }
-
-    const chartColors = {
-        green: '#1B5E3B',
-        greenLight: 'rgba(27, 94, 59, 0.15)',
-        orange: '#E86F2C',
-        orangeLight: 'rgba(232, 111, 44, 0.15)',
-        blue: '#7BC8E8',
-        blueLight: 'rgba(123, 200, 232, 0.2)',
-        grey: '#6D6E71',
-        greyLight: 'rgba(109, 110, 113, 0.1)'
-    };
-
-    Chart.defaults.font.family = "'Roboto Flex', sans-serif";
-    Chart.defaults.color = '#6D6E71';
-
-    // Chart 1: Gemiddelde royalty-inkomsten per type methode (bar chart)
-    const earningsCtx = document.getElementById('earningsChart');
-    if (earningsCtx) {
-        new Chart(earningsCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Basisonderwijs', 'Voortgezet onderwijs', 'Mbo', 'Hoger onderwijs'],
-                datasets: [{
-                    label: currentLang === 'nl' ? 'Minimum (€/jaar)' : 'Minimum (€/year)',
-                    data: [2400, 3800, 2800, 4500],
-                    backgroundColor: chartColors.greenLight,
-                    borderColor: chartColors.green,
-                    borderWidth: 2,
-                    borderRadius: 6
-                }, {
-                    label: currentLang === 'nl' ? 'Gemiddeld (€/jaar)' : 'Average (€/year)',
-                    data: [4800, 7200, 5100, 8500],
-                    backgroundColor: chartColors.green,
-                    borderColor: chartColors.green,
-                    borderWidth: 0,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: val => '€' + val.toLocaleString()
-                        },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
-
-    // Chart 2: Royalty-ontwikkeling over tijd (line chart)
-    const growthCtx = document.getElementById('growthChart');
-    if (growthCtx) {
-        new Chart(growthCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jaar 1', 'Jaar 2', 'Jaar 3', 'Jaar 4', 'Jaar 5', 'Jaar 6', 'Jaar 7', 'Jaar 8', 'Jaar 9', 'Jaar 10'],
-                datasets: [{
-                    label: currentLang === 'nl' ? 'Verwachte royalties (€)' : 'Expected royalties (€)',
-                    data: [1200, 3800, 5200, 6400, 7100, 7600, 7400, 7000, 6500, 6200],
-                    borderColor: chartColors.green,
-                    backgroundColor: chartColors.greenLight,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: chartColors.green,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }, {
-                    label: currentLang === 'nl' ? 'Optimistisch scenario' : 'Optimistic scenario',
-                    data: [1500, 5200, 8000, 10200, 11800, 12500, 12200, 11500, 10800, 10200],
-                    borderColor: chartColors.orange,
-                    backgroundColor: 'transparent',
-                    borderDash: [5, 5],
-                    tension: 0.4,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: val => '€' + val.toLocaleString()
-                        },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
-
-    // Chart 3: Verdeling per onderwijssegment (doughnut)
-    const segmentsCtx = document.getElementById('segmentsChart');
-    if (segmentsCtx) {
-        new Chart(segmentsCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Basisonderwijs', 'Voortgezet onderwijs', 'Mbo', 'Hoger onderwijs'],
-                datasets: [{
-                    data: [35, 30, 20, 15],
-                    backgroundColor: [chartColors.green, chartColors.orange, chartColors.blue, '#144A2E'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                },
-                cutout: '55%'
-            }
-        });
-    }
-
-    // Chart 4: Print vs Digitaal vergelijking (line chart)
-    const compareCtx = document.getElementById('compareChart');
-    if (compareCtx) {
-        new Chart(compareCtx, {
-            type: 'line',
-            data: {
-                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026'],
-                datasets: [{
-                    label: currentLang === 'nl' ? 'Digitale royalties' : 'Digital royalties',
-                    data: [18, 25, 35, 48, 58, 68, 78],
-                    borderColor: chartColors.green,
-                    backgroundColor: chartColors.greenLight,
-                    fill: true,
-                    tension: 0.4
-                }, {
-                    label: currentLang === 'nl' ? 'Print royalties' : 'Print royalties',
-                    data: [82, 75, 65, 52, 42, 32, 22],
-                    borderColor: chartColors.grey,
-                    backgroundColor: chartColors.greyLight,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: val => val + '%'
-                        },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
 }
 
 // ===== COUNTER ANIMATION =====
@@ -1678,14 +1489,6 @@ const TRANSLATIONS = {
         fin_royalty_pct: 'Royaltypercentage',
         fin_payout: 'Afrekening per jaar',
         fin_duration: 'Gemiddelde looptijd royalties',
-        chart_earnings_title: 'Gemiddelde royalty-inkomsten per jaar',
-        chart_earnings_desc: 'Indicatieve jaarlijkse royalties op basis van methode-type en marktaandeel.',
-        chart_growth_title: 'Royalty-ontwikkeling over tijd',
-        chart_growth_desc: 'Hoe royalties typisch groeien na publicatie van een nieuwe methode.',
-        chart_segments_title: 'Verdeling per onderwijssegment',
-        chart_segments_desc: 'Percentage auteurs per onderwijsniveau.',
-        chart_compare_title: 'Vergelijking: print vs. digitaal',
-        chart_compare_desc: 'Groei van digitale royalties ten opzichte van traditionele print.',
         // Testimonials
         nav_testimonials: 'Ervaringen',
         testimonials_title: 'Wat onze auteurs zeggen',
@@ -1816,14 +1619,6 @@ const TRANSLATIONS = {
         fin_royalty_pct: 'Royalty percentage',
         fin_payout: 'Settlements per year',
         fin_duration: 'Average royalty duration',
-        chart_earnings_title: 'Average royalty income per year',
-        chart_earnings_desc: 'Indicative annual royalties based on method type and market share.',
-        chart_growth_title: 'Royalty development over time',
-        chart_growth_desc: 'How royalties typically grow after publication of a new method.',
-        chart_segments_title: 'Distribution by education segment',
-        chart_segments_desc: 'Percentage of authors per education level.',
-        chart_compare_title: 'Comparison: print vs. digital',
-        chart_compare_desc: 'Growth of digital royalties compared to traditional print.',
         // Testimonials
         nav_testimonials: 'Experiences',
         testimonials_title: 'What our authors say',
@@ -3733,7 +3528,7 @@ async function startImport() {
     document.getElementById('importStep3').style.display = 'block';
 
     const success = created > 0 || updated > 0;
-    document.getElementById('importResultIcon').innerHTML = success ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1B5E3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>' : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    document.getElementById('importResultIcon').innerHTML = success ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#007A60" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>' : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
     document.getElementById('importResultTitle').textContent = success ? 'Import voltooid!' : 'Import mislukt';
 
     let detailsHTML = `
