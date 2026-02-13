@@ -56,6 +56,11 @@ De publieke site gebruikt een multi-page router via `navigateTo(pageName)`:
 - Menu sluit automatisch bij navigatie
 - **Desktop is ongewijzigd** — alle mobile-specifieke CSS zit in `@media (max-width: 768px)`
 
+### Navbar offset
+- Alle `.public-page` containers hebben `padding-top: 80px` zodat content onder de vaste navbar begint
+- `html` heeft `scroll-padding-top: 80px` voor correcte scroll-positionering
+- `scrollToSection()` in `app.js` berekent de navbar hoogte dynamisch en scrollt met offset
+
 ## i18n
 Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elementen gebruiken `data-i18n` attributen. Taalswitch in de nav.
 
