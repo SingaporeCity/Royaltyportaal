@@ -2974,8 +2974,6 @@ body.dashboard-active .lang-toggle {
     flex-direction: column;
     justify-content: center;
     padding: 4rem 4rem 4rem 6rem;
-    max-width: 700px;
-    margin-left: auto;
 }
 
 .hero-eyebrow {
