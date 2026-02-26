@@ -37,15 +37,15 @@
                         <div class="mega-dropdown">
                             <div class="mega-dropdown-grid">
                                 <div class="mega-col">
-                                    <h5 data-i18n="nav_dd_why">Waarom Noordhoff</h5>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('vacancies'); return false;" data-i18n="nav_dd_vacancies">Vacatures</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('segments'); return false;" data-i18n="nav_dd_segments_link">Segmenten</a>
                                     <a href="#" onclick="navigateTo('auteur'); scrollToSection('why'); return false;" data-i18n="why_title_short">Waarom auteur?</a>
-                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('who'); return false;" data-i18n="who_title_short">Wie zoeken wij?</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('practical-info'); return false;" data-i18n="nav_dd_practical">Praktische informatie</a>
                                 </div>
                                 <div class="mega-col">
-                                    <div class="mega-featured">
-                                        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&h=200&fit=crop" alt="">
-                                        <div class="mega-featured-text" data-i18n="nav_dd_cta">Ontdek hoe jij kunt bijdragen aan het onderwijs van morgen.</div>
-                                    </div>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('financial'); return false;" data-i18n="nav_dd_financial">Verdienmodel</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('who'); return false;" data-i18n="who_title_short">Wie zoeken wij?</a>
+                                    <a href="#" onclick="navigateTo('auteur'); scrollToSection('quiz'); return false;" data-i18n="nav_dd_quiz">Past auteurschap bij mij?</a>
                                 </div>
                             </div>
                         </div>
@@ -262,44 +262,6 @@
                 </div>
             </section>
 
-            <!-- Segmenten -->
-            <section class="public-section" id="segments">
-                <div class="public-container">
-                    <h2 data-i18n="segments_title">Onze onderwijssegmenten</h2>
-                    <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
-                    <div class="card-grid-4">
-                        <div class="segment-card">
-                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M12 3L1 9l11 6 9-4.91V17M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-                            </div>
-                            <h4 data-i18n="segment_bao_title">Basisonderwijs</h4>
-                            <p data-i18n="segment_bao_text">Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.</p>
-                        </div>
-                        <div class="segment-card">
-                            <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
-                            </div>
-                            <h4 data-i18n="segment_vo_title">Voortgezet onderwijs</h4>
-                            <p data-i18n="segment_vo_text">Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.</p>
-                        </div>
-                        <div class="segment-card">
-                            <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-                            </div>
-                            <h4 data-i18n="segment_mbo_title">Mbo</h4>
-                            <p data-i18n="segment_mbo_text">Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.</p>
-                        </div>
-                        <div class="segment-card">
-                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-                            </div>
-                            <h4 data-i18n="segment_ho_title">Hoger onderwijs</h4>
-                            <p data-i18n="segment_ho_text">Academische publicaties en studieboeken voor hbo en universiteit.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Informatiesessie Banner -->
             <section class="info-session-banner" id="info-session">
                 <div class="public-container">
@@ -362,6 +324,44 @@
                             <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
                             <h3 data-i18n="why_growth_title">Persoonlijke groei</h3>
                             <p data-i18n="why_growth_text">Ontwikkel je als auteur via onze Auteurs Academy, workshops en persoonlijke coaching. Investeer in je schrijfvaardigheden en didactische kennis.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Segmenten -->
+            <section class="public-section" id="segments">
+                <div class="public-container">
+                    <h2 data-i18n="segments_title">Onze onderwijssegmenten</h2>
+                    <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
+                    <div class="card-grid-4">
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M12 3L1 9l11 6 9-4.91V17M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+                            </div>
+                            <h4 data-i18n="segment_bao_title">Basisonderwijs</h4>
+                            <p data-i18n="segment_bao_text">Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
+                            </div>
+                            <h4 data-i18n="segment_vo_title">Voortgezet onderwijs</h4>
+                            <p data-i18n="segment_vo_text">Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                            </div>
+                            <h4 data-i18n="segment_mbo_title">Mbo</h4>
+                            <p data-i18n="segment_mbo_text">Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.</p>
+                        </div>
+                        <div class="segment-card">
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                            </div>
+                            <h4 data-i18n="segment_ho_title">Hoger onderwijs</h4>
+                            <p data-i18n="segment_ho_text">Academische publicaties en studieboeken voor hbo en universiteit.</p>
                         </div>
                     </div>
                 </div>
