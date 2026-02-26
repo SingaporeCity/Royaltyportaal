@@ -10,10 +10,11 @@ Single-page application (vanilla HTML/CSS/JS) voor het Noordhoff Auteursportaal.
 | Bestand | Inhoud |
 |---------|--------|
 | `index.html` | Alle HTML: publieke pagina's, login, auteur dashboard, admin dashboard, modals |
-| `styles.css` | Alle CSS (~4300 regels) |
-| `app.js` | Routing, i18n (NL/EN), Supabase integratie, dashboard logica |
+| `styles.css` | Alle CSS (~5200 regels) |
+| `app.js` | Routing, i18n (NL/EN), Supabase integratie, dashboard logica, quiz, vacatures |
 | `config.js` | Supabase configuratie |
 | `noordhoff-logo.png` | Officieel Noordhoff logo (teal, 602x128px) — gebruik ALTIJD dit bestand |
+| `database/add-vacancies.sql` | Supabase migratie voor vacatures-tabel + seed data |
 
 ## Design — Noordhoff Huisstijl
 - **Primary color**: `#007460` (teal)
@@ -37,11 +38,11 @@ De publieke site gebruikt een multi-page router via `navigateTo(pageName)`:
 
 | Page ID | Route | Inhoud |
 |---------|-------|--------|
-| `page-home` | Home | Hero (50/50 met foto) + Stats + Nieuws & Evenementen |
-| `page-auteur` | Auteur worden | Segmenten + Waarom auteur + Wie zoeken wij |
-| `page-proces` | Het proces | Processtappen + Testimonials (met Unsplash foto's) |
+| `page-home` | Home | Hero + Info-sessie banner + Stats + Methode-logos + Nieuws & Evenementen |
+| `page-auteur` | Auteur worden | Vacatures + Segmenten + Info-sessie banner + Waarom auteur + Praktische info + Wie zoeken wij + Verdienmodel |
+| `page-proces` | Het proces | Processtappen (met accordion) + Een week als auteur + Testimonials (incl. beginners) |
 | `page-academy` | Academy | Academy cards (workshops, didactiek, digitaal) |
-| `page-contact` | Contact | FAQ + Contactformulier |
+| `page-contact` | Contact | FAQ (16 items) + Zelftest quiz + Contactformulier (progressief) + Deelfunctie |
 
 ## Navigatie
 - Mega-dropdowns bij "Auteur worden" en "Het proces" (CSS hover, alleen desktop)
@@ -65,9 +66,32 @@ De publieke site gebruikt een multi-page router via `navigateTo(pageName)`:
 Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elementen gebruiken `data-i18n` attributen. Taalswitch in de nav.
 
 ## Supabase Backend
-- Events, blog posts, FAQ, contracten, afrekeningen
-- Als Supabase niet bereikbaar is: statische fallback content wordt getoond (nieuws, evenementen)
-- Admin kan events/nieuws/FAQ beheren via modals
+- Events, blog posts, FAQ, contracten, afrekeningen, **vacatures**
+- Als Supabase niet bereikbaar is: statische fallback content wordt getoond (nieuws, evenementen, vacatures)
+- Admin kan events/nieuws/FAQ/vacatures beheren via modals
+
+## Vacatures
+- Supabase-tabel `vacancies` met velden: title, segment, subject, type, hours, description, is_active
+- Frontend toont vacatures op `page-auteur` met segment-filter (alle/bao/vo/mbo/ho)
+- Fallback: 8 hardcoded vacatures als Supabase niet beschikbaar is
+- Admin CRUD via `openVacancyManager()` / `openVacancyEditor()` / `saveVacancy()` / `deleteVacancy()`
+- Migratie: `database/add-vacancies.sql`
+
+## Nieuwe features (verbeterplan)
+- **Informatiesessie-banner**: Op home + auteur pagina, groen gradient met aanmeldknop
+- **Praktische info sectie**: Freelance basis, uren, locatie, projectduur op page-auteur
+- **Verdienmodel sectie**: Royaltymodel, voorschot, afrekening, portaal-inzicht op page-auteur (#financial)
+- **Processtappen uitgebreid**: Elk van 4 stappen heeft `<details>` accordion met extra info
+- **Contactpersoon**: Lisa de Vries met foto in contactsectie
+- **FAQ uitgebreid**: 16 vragen (was 6), inclusief beginnersvragen
+- **Zelftest quiz**: "Past auteurschap bij mij?" — 5 vragen met score op page-contact
+- **Progressief contactformulier**: Extra velden (segment, vak, functie, beschikbaarheid) bij "Ik wil auteur worden"
+- **Floating CTA**: "Word auteur" knop verschijnt bij scrollen voorbij 600px
+- **Een week als auteur**: Weekoverzicht op page-proces
+- **Verbeterde testimonials**: 2 nieuwe beginner-testimonials bovenaan + "Recent gestart" badge
+- **Methode-logos**: Getal & Ruimte, Kern, Nectar etc. als social proof op home
+- **Deelfunctie**: WhatsApp/LinkedIn/Email/Kopieer knoppen op page-contact
+- **SEO meta tags**: Description, keywords, Open Graph, canonical URL
 
 ## Nieuws & Evenementen (statische fallback)
 Als Supabase niet beschikbaar is, worden deze items getoond:

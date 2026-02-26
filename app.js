@@ -355,6 +355,10 @@ function initStickyNav() {
 
 async function initPublicSite() {
     renderPublicFAQ();
+    initQuiz();
+    initFloatingCta();
+    toggleAuthorFields();
+    loadVacancies();
     loadPublicEvents();
     loadPublicBlogPosts();
     initSmoothScroll();
@@ -515,7 +519,17 @@ function renderPublicFAQ() {
         { q: t('public_faq_q3'), a: t('public_faq_a3') },
         { q: t('public_faq_q4'), a: t('public_faq_a4') },
         { q: t('public_faq_q5'), a: t('public_faq_a5') },
-        { q: t('public_faq_q6'), a: t('public_faq_a6') }
+        { q: t('public_faq_q6'), a: t('public_faq_a6') },
+        { q: t('public_faq_q7'), a: t('public_faq_a7') },
+        { q: t('public_faq_q8'), a: t('public_faq_a8') },
+        { q: t('public_faq_q9'), a: t('public_faq_a9') },
+        { q: t('public_faq_q10'), a: t('public_faq_a10') },
+        { q: t('public_faq_q11'), a: t('public_faq_a11') },
+        { q: t('public_faq_q12'), a: t('public_faq_a12') },
+        { q: t('public_faq_q13'), a: t('public_faq_a13') },
+        { q: t('public_faq_q14'), a: t('public_faq_a14') },
+        { q: t('public_faq_q15'), a: t('public_faq_a15') },
+        { q: t('public_faq_q16'), a: t('public_faq_a16') }
     ];
 
     container.innerHTML = faqs.map(faq => `
@@ -547,6 +561,435 @@ function handleContactForm(e) {
         form.style.display = '';
         successMsg.remove();
     }, 5000);
+}
+
+// ============================================
+// QUIZ: Past auteurschap bij mij?
+// ============================================
+let quizStep = 0;
+let quizAnswers = [];
+
+const QUIZ_QUESTIONS = [
+    { key: 'quiz_q1', options: ['quiz_q1_a1', 'quiz_q1_a2', 'quiz_q1_a3', 'quiz_q1_a4'], scores: [1, 2, 3, 4] },
+    { key: 'quiz_q2', options: ['quiz_q2_a1', 'quiz_q2_a2', 'quiz_q2_a3', 'quiz_q2_a4'], scores: [3, 3, 3, 3] },
+    { key: 'quiz_q3', options: ['quiz_q3_a1', 'quiz_q3_a2', 'quiz_q3_a3', 'quiz_q3_a4'], scores: [1, 2, 3, 4] },
+    { key: 'quiz_q4', options: ['quiz_q4_a1', 'quiz_q4_a2', 'quiz_q4_a3', 'quiz_q4_a4'], scores: [1, 2, 3, 4] },
+    { key: 'quiz_q5', options: ['quiz_q5_a1', 'quiz_q5_a2', 'quiz_q5_a3', 'quiz_q5_a4'], scores: [3, 3, 3, 3] }
+];
+
+function initQuiz() {
+    quizStep = 0;
+    quizAnswers = new Array(QUIZ_QUESTIONS.length).fill(-1);
+    renderQuizStep();
+}
+
+function renderQuizStep() {
+    const q = QUIZ_QUESTIONS[quizStep];
+    const questionEl = document.getElementById('quizQuestion');
+    const optionsEl = document.getElementById('quizOptions');
+    const prevBtn = document.getElementById('quizPrev');
+    const nextBtn = document.getElementById('quizNext');
+    const progressBar = document.getElementById('quizProgressBar');
+    const resultEl = document.getElementById('quizResult');
+    const restartBtn = document.getElementById('quizRestart');
+
+    if (!questionEl) return;
+
+    // Show quiz elements, hide result
+    questionEl.style.display = '';
+    optionsEl.style.display = '';
+    document.querySelector('.quiz-nav').style.display = '';
+    resultEl.classList.add('hidden');
+    restartBtn.classList.add('hidden');
+
+    // Progress
+    progressBar.style.width = ((quizStep + 1) / QUIZ_QUESTIONS.length * 100) + '%';
+
+    // Question
+    questionEl.textContent = t(q.key);
+
+    // Options
+    optionsEl.innerHTML = q.options.map((opt, i) =>
+        `<button class="quiz-option${quizAnswers[quizStep] === i ? ' selected' : ''}" onclick="selectQuizOption(${i})">${t(opt)}</button>`
+    ).join('');
+
+    // Nav buttons
+    prevBtn.style.display = quizStep > 0 ? '' : 'none';
+    nextBtn.style.display = quizAnswers[quizStep] >= 0 ? '' : 'none';
+    nextBtn.textContent = quizStep === QUIZ_QUESTIONS.length - 1 ? t('quiz_result_cta') : t('quiz_next');
+}
+
+function selectQuizOption(index) {
+    quizAnswers[quizStep] = index;
+    renderQuizStep();
+}
+
+function quizNext() {
+    if (quizAnswers[quizStep] < 0) return;
+    if (quizStep < QUIZ_QUESTIONS.length - 1) {
+        quizStep++;
+        renderQuizStep();
+    } else {
+        showQuizResult();
+    }
+}
+
+function quizPrevious() {
+    if (quizStep > 0) {
+        quizStep--;
+        renderQuizStep();
+    }
+}
+
+function showQuizResult() {
+    const total = quizAnswers.reduce((sum, ans, i) => sum + QUIZ_QUESTIONS[i].scores[ans], 0);
+    const maxScore = QUIZ_QUESTIONS.reduce((sum, q) => sum + Math.max(...q.scores), 0);
+    const pct = Math.round(total / maxScore * 100);
+
+    const questionEl = document.getElementById('quizQuestion');
+    const optionsEl = document.getElementById('quizOptions');
+    const navEl = document.querySelector('.quiz-nav');
+    const resultEl = document.getElementById('quizResult');
+    const restartBtn = document.getElementById('quizRestart');
+
+    questionEl.style.display = 'none';
+    optionsEl.style.display = 'none';
+    navEl.style.display = 'none';
+    resultEl.classList.remove('hidden');
+    restartBtn.classList.remove('hidden');
+
+    document.getElementById('quizProgressBar').style.width = '100%';
+
+    let title, text;
+    if (pct >= 75) {
+        title = t('quiz_result_great');
+        text = t('quiz_result_great_text');
+    } else if (pct >= 50) {
+        title = t('quiz_result_good');
+        text = t('quiz_result_good_text');
+    } else {
+        title = t('quiz_result_potential');
+        text = t('quiz_result_potential_text');
+    }
+
+    resultEl.innerHTML = `
+        <div class="quiz-score">${pct}%</div>
+        <h3>${title}</h3>
+        <p>${text}</p>
+        <a href="#" onclick="navigateTo('contact'); return false;" class="btn-primary-large">${t('quiz_result_cta')}</a>
+    `;
+}
+
+function quizRestart() {
+    initQuiz();
+}
+
+// ============================================
+// PROGRESSIVE CONTACT FORM
+// ============================================
+function toggleAuthorFields() {
+    const subject = document.getElementById('contactSubject');
+    const fields = document.getElementById('authorFields');
+    if (!subject || !fields) return;
+    if (subject.value === 'auteur') {
+        fields.classList.remove('hidden-fields');
+    } else {
+        fields.classList.add('hidden-fields');
+    }
+}
+
+// ============================================
+// FLOATING CTA
+// ============================================
+function initFloatingCta() {
+    const cta = document.getElementById('floatingCta');
+    if (!cta) return;
+    window.addEventListener('scroll', function() {
+        // Show after scrolling past 600px, hide when near top
+        if (window.scrollY > 600) {
+            cta.classList.add('visible');
+            cta.classList.remove('hidden');
+        } else {
+            cta.classList.remove('visible');
+        }
+    });
+}
+
+// ============================================
+// SHARE FUNCTIONALITY
+// ============================================
+function shareVia(platform) {
+    const url = 'https://singaporecity.github.io/Royaltyportaal/';
+    const text = t('hero_title') + ' — Noordhoff Auteursportaal';
+
+    switch (platform) {
+        case 'whatsapp':
+            window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank');
+            break;
+        case 'linkedin':
+            window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url), '_blank');
+            break;
+        case 'email':
+            window.location.href = 'mailto:?subject=' + encodeURIComponent(text) + '&body=' + encodeURIComponent(text + '\n\n' + url);
+            break;
+        case 'copy':
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.currentTarget;
+                const span = btn.querySelector('span');
+                if (span) {
+                    const original = span.textContent;
+                    span.textContent = t('share_copied');
+                    setTimeout(() => { span.textContent = original; }, 2000);
+                }
+            });
+            break;
+    }
+}
+
+// ============================================
+// VACANCIES — Frontend rendering
+// ============================================
+
+// Fallback vacancy data (used when Supabase is not available)
+const FALLBACK_VACANCIES = [
+    { id: '1', title: 'Auteur Natuurkunde VO', segment: 'vo', subject: 'Natuurkunde', type: 'auteur', hours: '8-16 uur/week', description: 'We zoeken een ervaren natuurkundedocent die mee wil schrijven aan de nieuwe editie van onze VO-methode.', is_active: true },
+    { id: '2', title: 'Medeauteur Nederlands BAO', segment: 'bao', subject: 'Nederlands', type: 'medeauteur', hours: '8-12 uur/week', description: 'Voor onze taalmethode zoeken we een leerkracht met ervaring in taalonderwijs voor groep 5-8.', is_active: true },
+    { id: '3', title: 'Auteur Bedrijfseconomie MBO', segment: 'mbo', subject: 'Bedrijfseconomie', type: 'auteur', hours: '10-16 uur/week', description: 'Schrijf mee aan praktijkgerichte leermiddelen voor mbo-studenten economie en administratie.', is_active: true },
+    { id: '4', title: 'Reviewer Wiskunde VO', segment: 'vo', subject: 'Wiskunde', type: 'reviewer', hours: '4-8 uur/week', description: 'Beoordeel en verbeter nieuwe hoofdstukken van Getal & Ruimte. Ideaal als eerste stap richting auteurschap.', is_active: true },
+    { id: '5', title: 'Auteur Psychologie HO', segment: 'ho', subject: 'Psychologie', type: 'auteur', hours: '8-16 uur/week', description: 'We zoeken een academicus die mee wil werken aan een nieuw studieboek psychologie voor het hoger onderwijs.', is_active: true },
+    { id: '6', title: 'Digitale content Biologie VO', segment: 'vo', subject: 'Biologie', type: 'digitaal', hours: '8-12 uur/week', description: 'Ontwikkel interactieve opdrachten en animaties voor onze digitale biologie-omgeving.', is_active: true },
+    { id: '7', title: 'Auteur Rekenen BAO', segment: 'bao', subject: 'Rekenen', type: 'auteur', hours: '10-16 uur/week', description: 'Schrijf mee aan de vernieuwing van Pluspunt. We zoeken een leerkracht met passie voor rekenonderwijs.', is_active: true },
+    { id: '8', title: 'Medeauteur Logistiek MBO', segment: 'mbo', subject: 'Logistiek', type: 'medeauteur', hours: '8-12 uur/week', description: 'Help mee bij het ontwikkelen van up-to-date lesmateriaal voor logistiek en transport in het mbo.', is_active: true }
+];
+
+let currentVacancyFilter = 'all';
+
+async function loadVacancies() {
+    let vacancies = FALLBACK_VACANCIES;
+
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('vacancies')
+                .select('*')
+                .eq('is_active', true)
+                .order('created_at', { ascending: false });
+
+            if (!error && data && data.length > 0) {
+                vacancies = data;
+            }
+        } catch (err) {
+            console.log('Using fallback vacancies:', err.message);
+        }
+    }
+
+    renderVacancies(vacancies);
+}
+
+function renderVacancies(vacancies) {
+    const container = document.getElementById('vacancyList');
+    if (!container) return;
+
+    const filtered = currentVacancyFilter === 'all'
+        ? vacancies
+        : vacancies.filter(v => v.segment === currentVacancyFilter);
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<div class="vacancy-empty">${t('vacancy_empty')}</div>`;
+        return;
+    }
+
+    container.innerHTML = filtered.map(v => {
+        const typeKey = 'vacancy_type_' + v.type;
+        const typeLabel = t(typeKey) !== typeKey ? t(typeKey) : v.type;
+
+        return `
+            <div class="vacancy-card" data-segment="${v.segment}">
+                <div class="vacancy-card-header">
+                    <h4>${v.title}</h4>
+                    <span class="vacancy-segment-badge ${v.segment}">${t('segment_' + v.segment + '_title')}</span>
+                </div>
+                <div class="vacancy-meta">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg> ${typeLabel}</span>
+                    ${v.hours ? `<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${v.hours}</span>` : ''}
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> ${v.subject}</span>
+                </div>
+                ${v.description ? `<p class="vacancy-description">${v.description}</p>` : ''}
+                <div class="vacancy-cta">
+                    <a href="#" onclick="navigateTo('contact'); return false;">${t('vacancy_apply')}</a>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function filterVacancies(segment) {
+    currentVacancyFilter = segment;
+    // Update active filter button
+    document.querySelectorAll('.vacancy-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+    loadVacancies();
+}
+
+// ============================================
+// VACANCIES — Admin CRUD
+// ============================================
+
+function openVacancyManager() {
+    document.getElementById('vacancyManagerModal').classList.add('active');
+    loadVacanciesForAdmin();
+}
+
+function closeVacancyManager() {
+    document.getElementById('vacancyManagerModal').classList.remove('active');
+}
+
+async function loadVacanciesForAdmin() {
+    const container = document.getElementById('vacancyManagerList');
+    if (!supabaseClient) {
+        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        return;
+    }
+
+    try {
+        const { data: vacancies, error } = await supabaseClient
+            .from('vacancies')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!vacancies || vacancies.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen vacatures</p>';
+            return;
+        }
+
+        container.innerHTML = vacancies.map(v => `
+            <div class="manager-item ${!v.is_active ? 'inactive' : ''}">
+                <div class="manager-item-info">
+                    <div class="manager-item-title">${v.title}</div>
+                    <div class="manager-item-meta">${v.subject} • ${v.segment.toUpperCase()} • ${v.type}</div>
+                    <div class="manager-item-status">${v.is_active ? 'Actief' : 'Inactief'}</div>
+                </div>
+                <div class="manager-item-actions">
+                    <button class="btn-small" onclick="openVacancyEditor('${v.id}')">Bewerken</button>
+                    <button class="btn-small btn-danger" onclick="deleteVacancy('${v.id}')">Verwijderen</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.error('Error loading vacancies for admin:', err);
+        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
+    }
+}
+
+async function openVacancyEditor(vacancyId = null) {
+    document.getElementById('vacancyEditorModal').classList.add('active');
+    document.getElementById('editVacancyId').value = vacancyId || '';
+    document.getElementById('vacancyEditorTitle').textContent = vacancyId ? 'Vacature bewerken' : 'Nieuwe vacature';
+
+    // Clear form
+    document.getElementById('editVacancyTitle').value = '';
+    document.getElementById('editVacancySegment').value = 'vo';
+    document.getElementById('editVacancySubject').value = '';
+    document.getElementById('editVacancyType').value = 'auteur';
+    document.getElementById('editVacancyHours').value = '';
+    document.getElementById('editVacancyDescription').value = '';
+    document.getElementById('editVacancyActive').checked = true;
+
+    if (vacancyId && supabaseClient) {
+        try {
+            const { data: vacancy, error } = await supabaseClient
+                .from('vacancies')
+                .select('*')
+                .eq('id', vacancyId)
+                .single();
+
+            if (error) throw error;
+
+            document.getElementById('editVacancyTitle').value = vacancy.title || '';
+            document.getElementById('editVacancySegment').value = vacancy.segment || 'vo';
+            document.getElementById('editVacancySubject').value = vacancy.subject || '';
+            document.getElementById('editVacancyType').value = vacancy.type || 'auteur';
+            document.getElementById('editVacancyHours').value = vacancy.hours || '';
+            document.getElementById('editVacancyDescription').value = vacancy.description || '';
+            document.getElementById('editVacancyActive').checked = vacancy.is_active;
+        } catch (err) {
+            console.error('Error loading vacancy:', err);
+            alert('Fout bij laden vacature: ' + err.message);
+        }
+    }
+}
+
+function closeVacancyEditor() {
+    document.getElementById('vacancyEditorModal').classList.remove('active');
+}
+
+async function saveVacancy() {
+    if (!supabaseClient) {
+        alert('Supabase niet beschikbaar');
+        return;
+    }
+
+    const vacancyId = document.getElementById('editVacancyId').value;
+    const title = document.getElementById('editVacancyTitle').value.trim();
+    const segment = document.getElementById('editVacancySegment').value;
+    const subject = document.getElementById('editVacancySubject').value.trim();
+
+    if (!title || !subject) {
+        alert('Vul minimaal een titel en vakgebied in');
+        return;
+    }
+
+    const vacancyData = {
+        title: title,
+        segment: segment,
+        subject: subject,
+        type: document.getElementById('editVacancyType').value,
+        hours: document.getElementById('editVacancyHours').value.trim() || null,
+        description: document.getElementById('editVacancyDescription').value.trim() || null,
+        is_active: document.getElementById('editVacancyActive').checked
+    };
+
+    try {
+        if (vacancyId) {
+            const { error } = await supabaseClient
+                .from('vacancies')
+                .update(vacancyData)
+                .eq('id', vacancyId);
+            if (error) throw error;
+        } else {
+            const { error } = await supabaseClient
+                .from('vacancies')
+                .insert(vacancyData);
+            if (error) throw error;
+        }
+
+        closeVacancyEditor();
+        loadVacanciesForAdmin();
+    } catch (err) {
+        console.error('Error saving vacancy:', err);
+        alert('Fout bij opslaan: ' + err.message);
+    }
+}
+
+async function deleteVacancy(id) {
+    if (!confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) return;
+    if (!supabaseClient) return;
+
+    try {
+        const { error } = await supabaseClient
+            .from('vacancies')
+            .delete()
+            .eq('id', id);
+        if (error) throw error;
+        loadVacanciesForAdmin();
+    } catch (err) {
+        console.error('Error deleting vacancy:', err);
+        alert('Fout bij verwijderen: ' + err.message);
+    }
 }
 
 // ============================================
@@ -1652,7 +2095,172 @@ const TRANSLATIONS = {
         footer_terms: 'Algemene voorwaarden',
         footer_social_title: 'Volg ons',
         // Back
-        back_to_site: 'Terug naar website'
+        back_to_site: 'Terug naar website',
+        // Praktische info
+        practical_title: 'Werken als auteur: de praktijk',
+        practical_intro: 'De #1 vraag die we krijgen: "Kan ik dit naast mijn baan doen?" Het antwoord is ja. Hier lees je hoe het werkt.',
+        practical_freelance_title: 'Freelance basis',
+        practical_freelance_text: 'Je werkt als zelfstandige (ZZP) op freelancebasis. Geen dienstverband, geen vaste uren — je houdt volledige vrijheid.',
+        practical_hours_title: '8–16 uur per week',
+        practical_hours_text: 'De meeste auteurs besteden 8 tot 16 uur per week aan hun project, flexibel in te delen naast je reguliere baan.',
+        practical_remote_title: 'Op afstand werken',
+        practical_remote_text: 'Je werkt grotendeels vanuit huis. Af en toe is er overleg op ons kantoor in Groningen of via een online meeting.',
+        practical_duration_title: '1–2 jaar per project',
+        practical_duration_text: 'Een gemiddeld project duurt 1 tot 2 jaar. Je krijgt een heldere planning en duidelijke deadlines van de redactie.',
+        // Financial details
+        fin_advance_desc: 'Bij ondertekening van je contract ontvang je een voorschot op je toekomstige royalties.',
+        fin_royalty_pct_desc: 'Je ontvangt een percentage op de verkoop van je methode. Het exacte percentage wordt vastgelegd in je contract.',
+        fin_payout_desc: 'Tweemaal per jaar ontvang je een royalty-afrekening, gebaseerd op de daadwerkelijke verkoopcijfers.',
+        fin_duration_desc: 'Via het auteursportaal heb je altijd realtime inzicht in je royalties, afrekeningen en prognoses.',
+        fin_royalty_model_title: 'Het royaltymodel',
+        fin_royalty_model_text: 'Auteurs ontvangen royalties als percentage op de netto-omzet van hun methode. Het percentage is afhankelijk van het type werk (boek, digitaal, gecombineerd) en het onderwijssegment. Bij methodes met meerdere auteurs wordt het royaltypercentage verdeeld op basis van ieders bijdrage.',
+        fin_advance_title: 'Voorschot bij contractondertekening',
+        fin_advance_text: 'Bij het tekenen van je auteurscontract ontvang je een voorschot. Dit voorschot wordt later verrekend met je royalty-inkomsten. Zo heb je vanaf dag één een vergoeding voor je werk.',
+        fin_payout_title: 'Halfjaarlijkse afrekening',
+        fin_payout_text: 'Tweemaal per jaar (maart en september) ontvang je een gedetailleerde royalty-afrekening. Deze bevat de verkoopcijfers per titel, het berekende royaltybedrag en de uitbetaling.',
+        fin_portal_title: 'Inzicht via het auteursportaal',
+        fin_portal_text: 'Via het digitale auteursportaal heb je 24 uur per dag, 7 dagen per week inzicht in je contracten, afrekeningen, prognoses en persoonlijke gegevens. Geen verrassingen, volledige transparantie.',
+        // Process step details
+        process_details_more: 'Meer details',
+        process_step1_detail1: 'Het eerste gesprek is online of op ons kantoor in Groningen — wat jou het beste uitkomt.',
+        process_step1_detail2: 'We bespreken je vakgebied, je ervaring en het type project dat bij je past.',
+        process_step1_detail3: 'Je ontmoet de redacteur die jouw project begeleidt.',
+        process_step1_detail4: 'Er is geen verplichting — het is een vrijblijvende kennismaking.',
+        process_step2_detail1: 'Je ontvangt een helder auteurscontract met afspraken over royalties, deadlines en rechten.',
+        process_step2_detail2: 'Bij ondertekening ontvang je een voorschot op je royalties.',
+        process_step2_detail3: 'Wil je tussentijds stoppen? Dat kan — we bespreken altijd een eerlijke oplossing.',
+        process_step2_detail4: 'Je behoudt altijd het morele auteursrecht op je werk.',
+        process_step3_detail1: 'Je werkt in ons auteursplatform — geen ingewikkelde software nodig.',
+        process_step3_detail2: 'Regelmatige feedbacksessies met je redacteur (online of op locatie).',
+        process_step3_detail3: 'Didactisch specialisten toetsen je materiaal op effectiviteit.',
+        process_step3_detail4: 'Ondersteuning bij het schrijven: "Hoe schrijf ik een goede les?", "Hoe maak ik een goede toets?"',
+        process_step4_detail1: 'Royalties lopen door zolang je methode verkocht wordt — vaak 5 tot 10+ jaar.',
+        process_step4_detail2: 'Bij herdrukken en nieuwe edities worden royalties opnieuw berekend.',
+        process_step4_detail3: 'Via het auteursportaal heb je 24/7 inzicht in verkoopcijfers en royalties.',
+        process_step4_detail4: 'Je wordt betrokken bij actualisaties en nieuwe drukken van je methode.',
+        // Contact person
+        contact_person_name: 'Lisa de Vries',
+        contact_person_role: 'Coördinator Auteurszaken',
+        contact_person_note: 'Lisa is je eerste aanspreekpunt voor vragen over auteurschap bij Noordhoff. Ze helpt je graag verder!',
+        // Extended FAQ (items 7-16)
+        public_faq_q7: 'Heb ik schrijfervaring nodig?',
+        public_faq_a7: 'Schrijfervaring is een plus, maar geen vereiste. Onze redacteuren begeleiden je intensief bij het schrijfproces. Jouw vakkennis en praktijkervaring zijn het belangrijkst.',
+        public_faq_q8: 'Kan ik dit combineren met mijn baan als docent?',
+        public_faq_a8: 'Absoluut! De meeste van onze auteurs zijn werkzame docenten. Je werkt op freelancebasis, 8-16 uur per week, flexibel in te delen naast je lesrooster.',
+        public_faq_q9: 'Wat als ik halverwege wil stoppen?',
+        public_faq_a9: 'Dat kan. We bespreken samen een eerlijke oplossing. Je werk tot dat moment wordt gewaardeerd en vergoed volgens de contractafspraken.',
+        public_faq_q10: 'Heb ik toestemming nodig van mijn werkgever?',
+        public_faq_a10: 'Dat hangt af van je arbeidscontract. Veel scholen staan het toe of moedigen het zelfs aan. We adviseren je om dit vooraf te bespreken met je werkgever.',
+        public_faq_q11: 'Ik ben geen doctor of professor — kan ik toch meedoen?',
+        public_faq_a11: 'Zeker! Een academische titel is geen vereiste. Wij zoeken vakexperts met praktijkervaring. Veel van onze beste auteurs zijn docenten zonder promotie.',
+        public_faq_q12: 'In welke software of tool schrijf ik?',
+        public_faq_a12: 'Je werkt in ons eigen auteursplatform — een gebruiksvriendelijke online omgeving. Geen ingewikkelde software nodig. We geven je een introductie en ondersteuning.',
+        public_faq_q13: 'Hoe ziet de begeleiding er concreet uit?',
+        public_faq_a13: 'Je krijgt een vaste redacteur als aanspreekpunt. Daarnaast zijn er regelmatige feedbackmomenten, didactische reviews en workshops via de Auteurs Academy.',
+        public_faq_q14: 'Word ik betaald tijdens het schrijven of alleen na publicatie?',
+        public_faq_a14: 'Je ontvangt een voorschot bij contractondertekening. Na publicatie ontvang je halfjaarlijks royalties op basis van de verkoopcijfers.',
+        public_faq_q15: 'Kan ik ook bijdragen aan digitale content?',
+        public_faq_a15: 'Ja! Naast traditionele methodes zoeken we auteurs voor digitale en adaptieve leermiddelen. Ervaring met digitaal onderwijs is een plus.',
+        public_faq_q16: 'Hoe lang lopen royalties door na publicatie?',
+        public_faq_a16: 'Royalties lopen door zolang je methode verkocht wordt. Bij succesvolle methodes kan dit 5 tot 10+ jaar zijn. Bij herdrukken en nieuwe edities worden de royalties opnieuw berekend.',
+        // Info session
+        info_session_badge: 'Gratis',
+        info_session_title: 'Online informatiesessie: Auteur worden bij Noordhoff',
+        info_session_text: 'Ontdek in 45 minuten wat het betekent om auteur te zijn. Stel je vragen aan ervaren auteurs en redacteuren. Vrijblijvend en zonder verplichtingen.',
+        info_session_date: 'Donderdag 20 maart 2026, 16:00 – 16:45',
+        info_session_location: 'Online (Microsoft Teams)',
+        info_session_cta: 'Meld je aan',
+        info_session_spots: 'Nog 12 plekken beschikbaar',
+        // Quiz
+        quiz_title: 'Past auteurschap bij mij?',
+        quiz_intro: 'Beantwoord 5 korte vragen en ontdek of jij geschikt bent als auteur bij Noordhoff.',
+        quiz_prev: 'Vorige',
+        quiz_next: 'Volgende',
+        quiz_restart: 'Opnieuw beginnen',
+        quiz_q1: 'Hoeveel jaar ervaring heb je in het onderwijs?',
+        quiz_q1_a1: 'Minder dan 2 jaar',
+        quiz_q1_a2: '2–5 jaar',
+        quiz_q1_a3: '5–10 jaar',
+        quiz_q1_a4: 'Meer dan 10 jaar',
+        quiz_q2: 'In welk segment ben je werkzaam?',
+        quiz_q2_a1: 'Basisonderwijs',
+        quiz_q2_a2: 'Voortgezet onderwijs',
+        quiz_q2_a3: 'Mbo',
+        quiz_q2_a4: 'Hoger onderwijs',
+        quiz_q3: 'Hoeveel uur per week zou je beschikbaar zijn?',
+        quiz_q3_a1: 'Minder dan 4 uur',
+        quiz_q3_a2: '4–8 uur',
+        quiz_q3_a3: '8–16 uur',
+        quiz_q3_a4: 'Meer dan 16 uur',
+        quiz_q4: 'Heb je ervaring met schrijven of publiceren?',
+        quiz_q4_a1: 'Nee, geen ervaring',
+        quiz_q4_a2: 'Ja, blogposts of artikelen',
+        quiz_q4_a3: 'Ja, lesmateriaal of toetsen',
+        quiz_q4_a4: 'Ja, boeken of wetenschappelijke publicaties',
+        quiz_q5: 'Wat trekt je het meest aan in auteurschap?',
+        quiz_q5_a1: 'Mijn kennis delen met leerlingen',
+        quiz_q5_a2: 'Bijdragen aan onderwijsinnovatie',
+        quiz_q5_a3: 'Persoonlijke en professionele groei',
+        quiz_q5_a4: 'Extra inkomen naast mijn baan',
+        quiz_result_great: 'Uitstekende match!',
+        quiz_result_great_text: 'Op basis van je antwoorden ben je een uitstekende kandidaat om auteur te worden bij Noordhoff. Met jouw ervaring en motivatie kun je een waardevolle bijdrage leveren.',
+        quiz_result_good: 'Goede match!',
+        quiz_result_good_text: 'Je profiel past goed bij wat we zoeken. Neem contact op en we bespreken samen de mogelijkheden die bij jouw situatie passen.',
+        quiz_result_potential: 'Zeker potentie!',
+        quiz_result_potential_text: 'Er zijn zeker mogelijkheden! Misschien past een kleinere rol (meelezer, reviewer) als eerste stap. Neem contact op om de opties te verkennen.',
+        quiz_result_cta: 'Neem contact op',
+        // Contact form progressive
+        contact_subject_label: 'Onderwerp',
+        contact_segment: 'Onderwijssegment',
+        contact_select_placeholder: '— Selecteer —',
+        contact_subject_field: 'Vakgebied',
+        contact_subject_field_placeholder: 'bijv. Wiskunde, Nederlands, Economie...',
+        contact_current_role: 'Huidige functie',
+        contact_current_role_placeholder: 'bijv. Docent VO, Trainer, Onderzoeker...',
+        contact_availability: 'Beschikbaarheid',
+        contact_avail_4_8: '4–8 uur per week',
+        contact_avail_8_16: '8–16 uur per week',
+        contact_avail_16_plus: 'Meer dan 16 uur per week',
+        // Methods social proof
+        methods_title: 'Onze auteurs schrijven voor bekende methodes als:',
+        // Day as author
+        day_title: 'Een week als auteur',
+        day_intro: 'Hoe ziet een typische week eruit voor een auteur die dit naast het lesgeven doet? Een realistisch voorbeeld.',
+        day_monday: 'Maandag',
+        day_monday_text: 'Schrijfsessie: twee uur werken aan een nieuw hoofdstuk vanuit je thuiswerkplek.',
+        day_tuesday: 'Dinsdag',
+        day_tuesday_text: 'Online feedbacksessie met je redacteur: vorige teksten bespreken en volgend blok plannen.',
+        day_wednesday: 'Woensdag',
+        day_wednesday_text: 'Lesgeven — geen auteurswerkzaamheden.',
+        day_thursday: 'Donderdag',
+        day_thursday_text: 'Lesgeven — geen auteurswerkzaamheden.',
+        day_friday: 'Vrijdag',
+        day_friday_text: 'Digitale content uitwerken: interactieve opdrachten en toetsvragen formuleren.',
+        day_weekend: 'Weekend',
+        day_weekend_text: 'Optioneel: bronmateriaal lezen of aantekeningen maken. Geheel op eigen tempo.',
+        day_total: 'Totaal: ~8 uur per week — flexibel in te delen naast je reguliere baan.',
+        // New testimonials
+        testimonial_badge_new: 'Recent gestart',
+        testimonial5_text: '"Ik was bang dat ik niet goed genoeg kon schrijven, maar de redactie begeleidde me stap voor stap. Na drie maanden had ik mijn eerste hoofdstuk af. Elke twee weken had ik een feedbacksessie van een uur — heel laagdrempelig."',
+        testimonial5_role: 'Docent Biologie VO — 8 maanden bij Noordhoff',
+        testimonial6_text: '"Als mbo-trainer zonder academische achtergrond twijfelde ik of ik welkom was. Dat was ik absoluut. Noordhoff zoekt praktijkervaring, niet titels. Ik werk nu 10 uur per week aan lesmateriaal naast mijn baan."',
+        testimonial6_role: 'Trainer Logistiek MBO — 6 maanden bij Noordhoff',
+        // Share
+        share_title: 'Ken je iemand die auteur wil worden?',
+        share_intro: 'Deel deze pagina met een collega die wellicht interesse heeft. Mond-tot-mond is de beste manier om nieuwe auteurs te vinden.',
+        share_copy: 'Link kopiëren',
+        share_copied: 'Gekopieerd!',
+        // Vacancies
+        vacancies_title: 'Openstaande vacatures',
+        vacancies_intro: 'Bekijk welke auteurs we momenteel zoeken. Staat jouw vakgebied erbij? Meld je direct aan.',
+        vacancies_not_listed: 'Staat jouw vak er niet bij? Neem toch contact op — we zoeken regelmatig nieuwe auteurs.',
+        vacancies_contact_link: 'contact',
+        vacancy_apply: 'Meld je aan',
+        vacancy_type_auteur: 'Auteur',
+        vacancy_type_medeauteur: 'Medeauteur',
+        vacancy_type_reviewer: 'Reviewer',
+        vacancy_type_digitaal: 'Digitale content',
+        vacancy_empty: 'Er zijn momenteel geen openstaande vacatures in dit segment.'
     },
     en: {
         portal_subtitle: 'Author Portal', tagline: 'Get direct insight into your royalties, statements and forecasts.',
@@ -1818,7 +2426,172 @@ const TRANSLATIONS = {
         footer_terms: 'Terms & Conditions',
         footer_social_title: 'Follow us',
         // Back
-        back_to_site: 'Back to website'
+        back_to_site: 'Back to website',
+        // Practical info
+        practical_title: 'Working as an author: the practicalities',
+        practical_intro: 'The #1 question we get: "Can I do this alongside my job?" The answer is yes. Here\'s how it works.',
+        practical_freelance_title: 'Freelance basis',
+        practical_freelance_text: 'You work as a self-employed freelancer. No employment contract, no fixed hours — you retain complete freedom.',
+        practical_hours_title: '8–16 hours per week',
+        practical_hours_text: 'Most authors spend 8 to 16 hours per week on their project, flexibly scheduled alongside their regular job.',
+        practical_remote_title: 'Work remotely',
+        practical_remote_text: 'You work mostly from home. Occasionally there are meetings at our office in Groningen or via online conference.',
+        practical_duration_title: '1–2 years per project',
+        practical_duration_text: 'An average project takes 1 to 2 years. You receive a clear schedule and deadlines from the editorial team.',
+        // Financial details
+        fin_advance_desc: 'Upon signing your contract, you receive an advance on your future royalties.',
+        fin_royalty_pct_desc: 'You receive a percentage of your method\'s sales. The exact percentage is specified in your contract.',
+        fin_payout_desc: 'Twice a year you receive a royalty statement based on actual sales figures.',
+        fin_duration_desc: 'Through the author portal, you always have real-time insight into your royalties, statements and forecasts.',
+        fin_royalty_model_title: 'The royalty model',
+        fin_royalty_model_text: 'Authors receive royalties as a percentage of their method\'s net revenue. The percentage depends on the type of work (book, digital, combined) and the education segment. For methods with multiple authors, the royalty percentage is divided based on each author\'s contribution.',
+        fin_advance_title: 'Advance upon contract signing',
+        fin_advance_text: 'When signing your author contract, you receive an advance. This advance is later offset against your royalty income. This way, you have compensation from day one.',
+        fin_payout_title: 'Semi-annual settlement',
+        fin_payout_text: 'Twice a year (March and September) you receive a detailed royalty statement. This includes sales figures per title, the calculated royalty amount, and the payment.',
+        fin_portal_title: 'Insight through the author portal',
+        fin_portal_text: 'Through the digital author portal, you have 24/7 access to your contracts, statements, forecasts and personal details. No surprises, full transparency.',
+        // Process step details
+        process_details_more: 'More details',
+        process_step1_detail1: 'The first meeting is online or at our office in Groningen — whatever suits you best.',
+        process_step1_detail2: 'We discuss your field of expertise, experience, and the type of project that suits you.',
+        process_step1_detail3: 'You meet the editor who will guide your project.',
+        process_step1_detail4: 'There is no obligation — it\'s a no-commitment introduction.',
+        process_step2_detail1: 'You receive a clear author contract with agreements on royalties, deadlines, and rights.',
+        process_step2_detail2: 'Upon signing, you receive an advance on your royalties.',
+        process_step2_detail3: 'Want to stop midway? That\'s possible — we always discuss a fair solution.',
+        process_step2_detail4: 'You always retain the moral copyright to your work.',
+        process_step3_detail1: 'You work in our author platform — no complicated software needed.',
+        process_step3_detail2: 'Regular feedback sessions with your editor (online or on-site).',
+        process_step3_detail3: 'Didactic specialists test your material for effectiveness.',
+        process_step3_detail4: 'Writing support: "How do I write a good lesson?", "How do I create a good test?"',
+        process_step4_detail1: 'Royalties continue as long as your method is sold — often 5 to 10+ years.',
+        process_step4_detail2: 'With reprints and new editions, royalties are recalculated.',
+        process_step4_detail3: 'Through the author portal, you have 24/7 insight into sales figures and royalties.',
+        process_step4_detail4: 'You are involved in updates and new editions of your method.',
+        // Contact person
+        contact_person_name: 'Lisa de Vries',
+        contact_person_role: 'Author Relations Coordinator',
+        contact_person_note: 'Lisa is your first point of contact for questions about authorship at Noordhoff. She\'s happy to help!',
+        // Extended FAQ (items 7-16)
+        public_faq_q7: 'Do I need writing experience?',
+        public_faq_a7: 'Writing experience is a plus but not a requirement. Our editors guide you intensively through the writing process. Your subject knowledge and practical experience are most important.',
+        public_faq_q8: 'Can I combine this with my teaching job?',
+        public_faq_a8: 'Absolutely! Most of our authors are working teachers. You work on a freelance basis, 8-16 hours per week, flexibly scheduled around your teaching.',
+        public_faq_q9: 'What if I want to stop midway?',
+        public_faq_a9: 'That\'s possible. We discuss a fair solution together. Your work up to that point is valued and compensated according to the contract terms.',
+        public_faq_q10: 'Do I need permission from my employer?',
+        public_faq_a10: 'That depends on your employment contract. Many schools allow or even encourage it. We advise you to discuss this with your employer beforehand.',
+        public_faq_q11: 'I don\'t have a doctorate — can I still participate?',
+        public_faq_a11: 'Absolutely! An academic title is not required. We look for subject experts with practical experience. Many of our best authors are teachers without a PhD.',
+        public_faq_q12: 'What software or tool do I write in?',
+        public_faq_a12: 'You work in our own author platform — a user-friendly online environment. No complicated software needed. We provide an introduction and ongoing support.',
+        public_faq_q13: 'What does the guidance look like in practice?',
+        public_faq_a13: 'You get a dedicated editor as your point of contact. Additionally, there are regular feedback moments, didactic reviews, and workshops through the Authors Academy.',
+        public_faq_q14: 'Am I paid during writing or only after publication?',
+        public_faq_a14: 'You receive an advance upon contract signing. After publication, you receive semi-annual royalties based on sales figures.',
+        public_faq_q15: 'Can I also contribute to digital content?',
+        public_faq_a15: 'Yes! Besides traditional methods, we look for authors for digital and adaptive learning materials. Experience with digital education is a plus.',
+        public_faq_q16: 'How long do royalties continue after publication?',
+        public_faq_a16: 'Royalties continue as long as your method is sold. For successful methods, this can be 5 to 10+ years. With reprints and new editions, royalties are recalculated.',
+        // Info session
+        info_session_badge: 'Free',
+        info_session_title: 'Online info session: Become an author at Noordhoff',
+        info_session_text: 'Discover in 45 minutes what it means to be an author. Ask your questions to experienced authors and editors. No strings attached.',
+        info_session_date: 'Thursday March 20, 2026, 4:00 – 4:45 PM',
+        info_session_location: 'Online (Microsoft Teams)',
+        info_session_cta: 'Sign up',
+        info_session_spots: '12 spots remaining',
+        // Quiz
+        quiz_title: 'Is authorship right for me?',
+        quiz_intro: 'Answer 5 short questions and discover if you\'re suited to be an author at Noordhoff.',
+        quiz_prev: 'Previous',
+        quiz_next: 'Next',
+        quiz_restart: 'Start over',
+        quiz_q1: 'How many years of experience do you have in education?',
+        quiz_q1_a1: 'Less than 2 years',
+        quiz_q1_a2: '2–5 years',
+        quiz_q1_a3: '5–10 years',
+        quiz_q1_a4: 'More than 10 years',
+        quiz_q2: 'Which education segment are you in?',
+        quiz_q2_a1: 'Primary education',
+        quiz_q2_a2: 'Secondary education',
+        quiz_q2_a3: 'Vocational education',
+        quiz_q2_a4: 'Higher education',
+        quiz_q3: 'How many hours per week could you be available?',
+        quiz_q3_a1: 'Less than 4 hours',
+        quiz_q3_a2: '4–8 hours',
+        quiz_q3_a3: '8–16 hours',
+        quiz_q3_a4: 'More than 16 hours',
+        quiz_q4: 'Do you have experience with writing or publishing?',
+        quiz_q4_a1: 'No experience',
+        quiz_q4_a2: 'Yes, blog posts or articles',
+        quiz_q4_a3: 'Yes, teaching materials or tests',
+        quiz_q4_a4: 'Yes, books or scientific publications',
+        quiz_q5: 'What attracts you most about authorship?',
+        quiz_q5_a1: 'Sharing my knowledge with students',
+        quiz_q5_a2: 'Contributing to educational innovation',
+        quiz_q5_a3: 'Personal and professional growth',
+        quiz_q5_a4: 'Additional income alongside my job',
+        quiz_result_great: 'Excellent match!',
+        quiz_result_great_text: 'Based on your answers, you are an excellent candidate to become an author at Noordhoff. With your experience and motivation, you can make a valuable contribution.',
+        quiz_result_good: 'Good match!',
+        quiz_result_good_text: 'Your profile fits well with what we\'re looking for. Get in touch and we\'ll discuss the possibilities that suit your situation.',
+        quiz_result_potential: 'Definite potential!',
+        quiz_result_potential_text: 'There are certainly possibilities! Perhaps a smaller role (reviewer, reader) as a first step. Get in touch to explore the options.',
+        quiz_result_cta: 'Get in touch',
+        // Contact form progressive
+        contact_subject_label: 'Subject',
+        contact_segment: 'Education segment',
+        contact_select_placeholder: '— Select —',
+        contact_subject_field: 'Subject field',
+        contact_subject_field_placeholder: 'e.g. Mathematics, Dutch, Economics...',
+        contact_current_role: 'Current position',
+        contact_current_role_placeholder: 'e.g. Secondary teacher, Trainer, Researcher...',
+        contact_availability: 'Availability',
+        contact_avail_4_8: '4–8 hours per week',
+        contact_avail_8_16: '8–16 hours per week',
+        contact_avail_16_plus: 'More than 16 hours per week',
+        // Methods social proof
+        methods_title: 'Our authors write for well-known methods such as:',
+        // Day as author
+        day_title: 'A week as an author',
+        day_intro: 'What does a typical week look like for an author who does this alongside teaching? A realistic example.',
+        day_monday: 'Monday',
+        day_monday_text: 'Writing session: two hours working on a new chapter from your home office.',
+        day_tuesday: 'Tuesday',
+        day_tuesday_text: 'Online feedback session with your editor: discussing previous texts and planning the next block.',
+        day_wednesday: 'Wednesday',
+        day_wednesday_text: 'Teaching — no author work.',
+        day_thursday: 'Thursday',
+        day_thursday_text: 'Teaching — no author work.',
+        day_friday: 'Friday',
+        day_friday_text: 'Working on digital content: creating interactive assignments and test questions.',
+        day_weekend: 'Weekend',
+        day_weekend_text: 'Optional: reading source material or making notes. Entirely at your own pace.',
+        day_total: 'Total: ~8 hours per week — flexibly scheduled alongside your regular job.',
+        // New testimonials
+        testimonial_badge_new: 'Recently started',
+        testimonial5_text: '"I was afraid I couldn\'t write well enough, but the editorial team guided me step by step. After three months I finished my first chapter. Every two weeks I had a one-hour feedback session — very accessible."',
+        testimonial5_role: 'Biology Teacher Secondary Ed. — 8 months at Noordhoff',
+        testimonial6_text: '"As a vocational trainer without an academic background, I wondered if I was welcome. I absolutely was. Noordhoff looks for practical experience, not titles. I now work 10 hours a week on educational materials alongside my job."',
+        testimonial6_role: 'Logistics Trainer Vocational Ed. — 6 months at Noordhoff',
+        // Share
+        share_title: 'Know someone who wants to become an author?',
+        share_intro: 'Share this page with a colleague who might be interested. Word of mouth is the best way to find new authors.',
+        share_copy: 'Copy link',
+        share_copied: 'Copied!',
+        // Vacancies
+        vacancies_title: 'Open vacancies',
+        vacancies_intro: 'See which authors we are currently looking for. Is your subject listed? Apply directly.',
+        vacancies_not_listed: 'Your subject not listed? Get in touch anyway — we regularly look for new authors.',
+        vacancies_contact_link: 'contact',
+        vacancy_apply: 'Apply now',
+        vacancy_type_auteur: 'Author',
+        vacancy_type_medeauteur: 'Co-author',
+        vacancy_type_reviewer: 'Reviewer',
+        vacancy_type_digitaal: 'Digital content',
+        vacancy_empty: 'There are currently no open vacancies in this segment.'
     }
 };
 

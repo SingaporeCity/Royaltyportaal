@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auteursportaal | Noordhoff</title>
+    <meta name="description" content="Word auteur bij Noordhoff — de grootste educatieve uitgeverij van Nederland. Schrijf mee aan lesmateriaal voor miljoenen leerlingen. Bekijk vacatures, het proces en vergoedingen.">
+    <meta name="keywords" content="auteur worden, educatieve uitgeverij, Noordhoff, lesmateriaal schrijven, royalties, vakexpert, docent auteur">
+    <meta property="og:title" content="Word auteur bij Noordhoff | Auteursportaal">
+    <meta property="og:description" content="Deel je kennis met miljoenen leerlingen. Word auteur bij Noordhoff en schrijf mee aan de toekomst van het onderwijs.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://singaporecity.github.io/Royaltyportaal/">
+    <meta property="og:image" content="https://singaporecity.github.io/Royaltyportaal/brooke-cagle--uHVRvDr7pg-unsplash.jpg">
+    <link rel="canonical" href="https://singaporecity.github.io/Royaltyportaal/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..125,100..1000&display=swap" rel="stylesheet">
@@ -109,6 +117,33 @@
                 </div>
             </section>
 
+            <!-- Informatiesessie Banner -->
+            <section class="info-session-banner" id="info-session">
+                <div class="public-container">
+                    <div class="info-session-card">
+                        <div class="info-session-content">
+                            <div class="info-session-badge" data-i18n="info_session_badge">Gratis</div>
+                            <h3 data-i18n="info_session_title">Online informatiesessie: Auteur worden bij Noordhoff</h3>
+                            <p data-i18n="info_session_text">Ontdek in 45 minuten wat het betekent om auteur te zijn. Stel je vragen aan ervaren auteurs en redacteuren. Vrijblijvend en zonder verplichtingen.</p>
+                            <div class="info-session-details">
+                                <span class="info-session-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span data-i18n="info_session_date">Donderdag 20 maart 2026, 16:00 – 16:45</span>
+                                </span>
+                                <span class="info-session-location">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                    <span data-i18n="info_session_location">Online (Microsoft Teams)</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-session-action">
+                            <a href="#" onclick="navigateTo('contact'); return false;" class="btn-primary-large" data-i18n="info_session_cta">Meld je aan</a>
+                            <span class="info-session-spots" data-i18n="info_session_spots">Nog 12 plekken beschikbaar</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Over Noordhoff — Expanded -->
             <section class="public-section" id="about">
                 <div class="public-container">
@@ -131,6 +166,23 @@
                             <span class="stat-number" data-count="10000">0</span>
                             <span class="stat-label" data-i18n="stat_schools">scholen in Nederland</span>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bekende methodes — Social proof -->
+            <section class="public-section methods-strip" id="methods">
+                <div class="public-container">
+                    <p class="methods-title" data-i18n="methods_title">Onze auteurs schrijven voor bekende methodes als:</p>
+                    <div class="methods-logos">
+                        <span class="method-name">Getal & Ruimte</span>
+                        <span class="method-name">Kern</span>
+                        <span class="method-name">Nectar</span>
+                        <span class="method-name">Noordhoff Atlas</span>
+                        <span class="method-name">Nova</span>
+                        <span class="method-name">Pluspunt</span>
+                        <span class="method-name">Stepping Stones</span>
+                        <span class="method-name">Taalactief</span>
                     </div>
                 </div>
             </section>
@@ -198,6 +250,25 @@
         <!-- Page: Auteur -->
         <div id="page-auteur" class="public-page hidden">
 
+            <!-- Vacatures -->
+            <section class="public-section alt-bg" id="vacancies">
+                <div class="public-container">
+                    <h2 data-i18n="vacancies_title">Openstaande vacatures</h2>
+                    <p class="section-intro" data-i18n="vacancies_intro">Bekijk welke auteurs we momenteel zoeken. Staat jouw vakgebied erbij? Meld je direct aan.</p>
+                    <div class="vacancy-filters">
+                        <button class="vacancy-filter-btn active" onclick="filterVacancies('all')" data-i18n="filter_all">Alle</button>
+                        <button class="vacancy-filter-btn" onclick="filterVacancies('bao')" data-i18n="segment_bao_title">Basisonderwijs</button>
+                        <button class="vacancy-filter-btn" onclick="filterVacancies('vo')" data-i18n="segment_vo_title">Voortgezet onderwijs</button>
+                        <button class="vacancy-filter-btn" onclick="filterVacancies('mbo')" data-i18n="segment_mbo_title">Mbo</button>
+                        <button class="vacancy-filter-btn" onclick="filterVacancies('ho')" data-i18n="segment_ho_title">Hoger onderwijs</button>
+                    </div>
+                    <div class="vacancy-list" id="vacancyList">
+                        <!-- Rendered by JS from Supabase or fallback -->
+                    </div>
+                    <p class="vacancy-fallback-note" data-i18n="vacancies_not_listed">Staat jouw vak er niet bij? Neem toch <a href="#" onclick="navigateTo('contact'); return false;" data-i18n="vacancies_contact_link">contact</a> op — we zoeken regelmatig nieuwe auteurs.</p>
+                </div>
+            </section>
+
             <!-- Segmenten -->
             <section class="public-section" id="segments">
                 <div class="public-container">
@@ -205,24 +276,59 @@
                     <p class="section-intro" data-i18n="segments_text">Van kleuter tot professional &mdash; wij ontwikkelen lesmateriaal voor alle niveaus van het Nederlandse onderwijs.</p>
                     <div class="card-grid-4">
                         <div class="segment-card">
-                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">BAO</div>
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M12 3L1 9l11 6 9-4.91V17M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+                            </div>
                             <h4 data-i18n="segment_bao_title">Basisonderwijs</h4>
                             <p data-i18n="segment_bao_text">Methodes voor groep 1 t/m 8 die aansluiten bij de kerndoelen en kinderen uitdagen om te groeien.</p>
                         </div>
                         <div class="segment-card">
-                            <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">VO</div>
+                            <div class="segment-icon" style="background:#FFF0E8; color:#FF7143;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h5"/></svg>
+                            </div>
                             <h4 data-i18n="segment_vo_title">Voortgezet onderwijs</h4>
                             <p data-i18n="segment_vo_text">Lesmateriaal voor vmbo, havo en vwo dat leerlingen voorbereidt op hun toekomst.</p>
                         </div>
                         <div class="segment-card">
-                            <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">MBO</div>
+                            <div class="segment-icon" style="background:#C0E0E7; color:#6DB5C5;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                            </div>
                             <h4 data-i18n="segment_mbo_title">Mbo</h4>
                             <p data-i18n="segment_mbo_text">Praktijkgerichte leermiddelen die studenten klaarstomen voor de arbeidsmarkt.</p>
                         </div>
                         <div class="segment-card">
-                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">HO</div>
+                            <div class="segment-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                            </div>
                             <h4 data-i18n="segment_ho_title">Hoger onderwijs</h4>
                             <p data-i18n="segment_ho_text">Academische publicaties en studieboeken voor hbo en universiteit.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Informatiesessie Banner -->
+            <section class="info-session-banner" id="info-session">
+                <div class="public-container">
+                    <div class="info-session-card">
+                        <div class="info-session-content">
+                            <div class="info-session-badge" data-i18n="info_session_badge">Gratis</div>
+                            <h3 data-i18n="info_session_title">Online informatiesessie: Auteur worden bij Noordhoff</h3>
+                            <p data-i18n="info_session_text">Ontdek in 45 minuten wat het betekent om auteur te zijn. Stel je vragen aan ervaren auteurs en redacteuren. Vrijblijvend en zonder verplichtingen.</p>
+                            <div class="info-session-details">
+                                <span class="info-session-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span data-i18n="info_session_date">Donderdag 20 maart 2026, 16:00 – 16:45</span>
+                                </span>
+                                <span class="info-session-location">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                    <span data-i18n="info_session_location">Online (Microsoft Teams)</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-session-action">
+                            <a href="#" onclick="navigateTo('contact'); return false;" class="btn-primary-large" data-i18n="info_session_cta">Meld je aan</a>
+                            <span class="info-session-spots" data-i18n="info_session_spots">Nog 12 plekken beschikbaar</span>
                         </div>
                     </div>
                 </div>
@@ -268,6 +374,44 @@
                 </div>
             </section>
 
+            <!-- Praktische informatie -->
+            <section class="public-section" id="practical-info">
+                <div class="public-container">
+                    <h2 data-i18n="practical_title">Werken als auteur: de praktijk</h2>
+                    <p class="section-intro" data-i18n="practical_intro">De #1 vraag die we krijgen: "Kan ik dit naast mijn baan doen?" Het antwoord is ja. Hier lees je hoe het werkt.</p>
+                    <div class="practical-grid">
+                        <div class="practical-card">
+                            <div class="practical-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <h4 data-i18n="practical_freelance_title">Freelance basis</h4>
+                            <p data-i18n="practical_freelance_text">Je werkt als zelfstandige (ZZP) op freelancebasis. Geen dienstverband, geen vaste uren — je houdt volledige vrijheid.</p>
+                        </div>
+                        <div class="practical-card">
+                            <div class="practical-icon" style="background:#FFF0E8; color:#FF7143;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <h4 data-i18n="practical_hours_title">8–16 uur per week</h4>
+                            <p data-i18n="practical_hours_text">De meeste auteurs besteden 8 tot 16 uur per week aan hun project, flexibel in te delen naast je reguliere baan.</p>
+                        </div>
+                        <div class="practical-card">
+                            <div class="practical-icon" style="background:#C0E0E7; color:#6DB5C5;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </div>
+                            <h4 data-i18n="practical_remote_title">Op afstand werken</h4>
+                            <p data-i18n="practical_remote_text">Je werkt grotendeels vanuit huis. Af en toe is er overleg op ons kantoor in Groningen of via een online meeting.</p>
+                        </div>
+                        <div class="practical-card">
+                            <div class="practical-icon" style="background:#E0F2ED; color:#007460;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            </div>
+                            <h4 data-i18n="practical_duration_title">1–2 jaar per project</h4>
+                            <p data-i18n="practical_duration_text">Een gemiddeld project duurt 1 tot 2 jaar. Je krijgt een heldere planning en duidelijke deadlines van de redactie.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Wie zoeken wij? -->
             <section class="public-section" id="who">
                 <div class="public-container">
@@ -307,6 +451,50 @@
                 </div>
             </section>
 
+            <!-- Verdienmodel -->
+            <section class="public-section alt-bg" id="financial">
+                <div class="public-container">
+                    <h2 data-i18n="financial_title">Het verdienmodel voor auteurs</h2>
+                    <p class="section-intro" data-i18n="financial_intro">Transparante vergoedingen en groeiende royalties. Bekijk wat je als auteur bij Noordhoff kunt verwachten.</p>
+                    <div class="financial-highlight">
+                        <div class="financial-stat">
+                            <span class="stat-value" data-i18n="fin_advance">Voorschot</span>
+                            <span class="stat-desc" data-i18n="fin_advance_desc">Bij ondertekening van je contract ontvang je een voorschot op je toekomstige royalties.</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value" data-i18n="fin_royalty_pct">Royalties</span>
+                            <span class="stat-desc" data-i18n="fin_royalty_pct_desc">Je ontvangt een percentage op de verkoop van je methode. Het exacte percentage wordt vastgelegd in je contract.</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value" data-i18n="fin_payout">2× per jaar</span>
+                            <span class="stat-desc" data-i18n="fin_payout_desc">Tweemaal per jaar ontvang je een royalty-afrekening, gebaseerd op de daadwerkelijke verkoopcijfers.</span>
+                        </div>
+                        <div class="financial-stat">
+                            <span class="stat-value" data-i18n="fin_duration">24/7 inzicht</span>
+                            <span class="stat-desc" data-i18n="fin_duration_desc">Via het auteursportaal heb je altijd realtime inzicht in je royalties, afrekeningen en prognoses.</span>
+                        </div>
+                    </div>
+                    <div class="financial-details">
+                        <div class="financial-detail-item">
+                            <h4 data-i18n="fin_royalty_model_title">Het royaltymodel</h4>
+                            <p data-i18n="fin_royalty_model_text">Auteurs ontvangen royalties als percentage op de netto-omzet van hun methode. Het percentage is afhankelijk van het type werk (boek, digitaal, gecombineerd) en het onderwijssegment. Bij methodes met meerdere auteurs wordt het royaltypercentage verdeeld op basis van ieders bijdrage.</p>
+                        </div>
+                        <div class="financial-detail-item">
+                            <h4 data-i18n="fin_advance_title">Voorschot bij contractondertekening</h4>
+                            <p data-i18n="fin_advance_text">Bij het tekenen van je auteurscontract ontvang je een voorschot. Dit voorschot wordt later verrekend met je royalty-inkomsten. Zo heb je vanaf dag één een vergoeding voor je werk.</p>
+                        </div>
+                        <div class="financial-detail-item">
+                            <h4 data-i18n="fin_payout_title">Halfjaarlijkse afrekening</h4>
+                            <p data-i18n="fin_payout_text">Tweemaal per jaar (maart en september) ontvang je een gedetailleerde royalty-afrekening. Deze bevat de verkoopcijfers per titel, het berekende royaltybedrag en de uitbetaling.</p>
+                        </div>
+                        <div class="financial-detail-item">
+                            <h4 data-i18n="fin_portal_title">Inzicht via het auteursportaal</h4>
+                            <p data-i18n="fin_portal_text">Via het digitale auteursportaal heb je 24 uur per dag, 7 dagen per week inzicht in je contracten, afrekeningen, prognoses en persoonlijke gegevens. Geen verrassingen, volledige transparantie.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
 
         <!-- Page: Proces -->
@@ -321,27 +509,122 @@
                         <div class="process-step">
                             <div class="step-number">1</div>
                             <h4 data-i18n="process_step1_title">Kennismaking & verkenning</h4>
-                            <p data-i18n="process_step1_text">We bespreken je expertise, idee&#235;n en de mogelijkheden. Samen verkennen we welk project het beste past bij jouw kennis en onze onderwijsvisie.</p>
+                            <p data-i18n="process_step1_text">We bespreken je expertise, ideeën en de mogelijkheden. Samen verkennen we welk project het beste past bij jouw kennis en onze onderwijsvisie.</p>
+                            <details class="step-details">
+                                <summary data-i18n="process_details_more">Meer details</summary>
+                                <div class="step-details-content">
+                                    <ul>
+                                        <li data-i18n="process_step1_detail1">Het eerste gesprek is online of op ons kantoor in Groningen — wat jou het beste uitkomt.</li>
+                                        <li data-i18n="process_step1_detail2">We bespreken je vakgebied, je ervaring en het type project dat bij je past.</li>
+                                        <li data-i18n="process_step1_detail3">Je ontmoet de redacteur die jouw project begeleidt.</li>
+                                        <li data-i18n="process_step1_detail4">Er is geen verplichting — het is een vrijblijvende kennismaking.</li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
                         <div class="process-connector"></div>
                         <div class="process-step">
                             <div class="step-number">2</div>
                             <h4 data-i18n="process_step2_title">Contract & planning</h4>
                             <p data-i18n="process_step2_text">We leggen heldere afspraken vast over inhoud, planning, royalties en je rol in het auteursteam. Je ontvangt een voorschot bij ondertekening.</p>
+                            <details class="step-details">
+                                <summary data-i18n="process_details_more">Meer details</summary>
+                                <div class="step-details-content">
+                                    <ul>
+                                        <li data-i18n="process_step2_detail1">Je ontvangt een helder auteurscontract met afspraken over royalties, deadlines en rechten.</li>
+                                        <li data-i18n="process_step2_detail2">Bij ondertekening ontvang je een voorschot op je royalties.</li>
+                                        <li data-i18n="process_step2_detail3">Wil je tussentijds stoppen? Dat kan — we bespreken altijd een eerlijke oplossing.</li>
+                                        <li data-i18n="process_step2_detail4">Je behoudt altijd het morele auteursrecht op je werk.</li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
                         <div class="process-connector"></div>
                         <div class="process-step">
                             <div class="step-number">3</div>
                             <h4 data-i18n="process_step3_title">Schrijven & ontwikkelen</h4>
                             <p data-i18n="process_step3_text">Je schrijft de content met intensieve begeleiding van onze redactie. Reviews, feedback en didactische toetsing zorgen voor topkwaliteit.</p>
+                            <details class="step-details">
+                                <summary data-i18n="process_details_more">Meer details</summary>
+                                <div class="step-details-content">
+                                    <ul>
+                                        <li data-i18n="process_step3_detail1">Je werkt in ons auteursplatform — geen ingewikkelde software nodig.</li>
+                                        <li data-i18n="process_step3_detail2">Regelmatige feedbacksessies met je redacteur (online of op locatie).</li>
+                                        <li data-i18n="process_step3_detail3">Didactisch specialisten toetsen je materiaal op effectiviteit.</li>
+                                        <li data-i18n="process_step3_detail4">Ondersteuning bij het schrijven: "Hoe schrijf ik een goede les?", "Hoe maak ik een goede toets?"</li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
                         <div class="process-connector"></div>
                         <div class="process-step">
                             <div class="step-number">4</div>
                             <h4 data-i18n="process_step4_title">Publicatie & royalties</h4>
                             <p data-i18n="process_step4_text">Na publicatie bereikt je werk scholen in heel Nederland. Tweemaal per jaar ontvang je een royalty-afrekening via het auteursportaal.</p>
+                            <details class="step-details">
+                                <summary data-i18n="process_details_more">Meer details</summary>
+                                <div class="step-details-content">
+                                    <ul>
+                                        <li data-i18n="process_step4_detail1">Royalties lopen door zolang je methode verkocht wordt — vaak 5 tot 10+ jaar.</li>
+                                        <li data-i18n="process_step4_detail2">Bij herdrukken en nieuwe edities worden royalties opnieuw berekend.</li>
+                                        <li data-i18n="process_step4_detail3">Via het auteursportaal heb je 24/7 inzicht in verkoopcijfers en royalties.</li>
+                                        <li data-i18n="process_step4_detail4">Je wordt betrokken bij actualisaties en nieuwe drukken van je methode.</li>
+                                    </ul>
+                                </div>
+                            </details>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Een dag als auteur — Weekoverzicht -->
+            <section class="public-section" id="day-as-author">
+                <div class="public-container">
+                    <h2 data-i18n="day_title">Een week als auteur</h2>
+                    <p class="section-intro" data-i18n="day_intro">Hoe ziet een typische week eruit voor een auteur die dit naast het lesgeven doet? Een realistisch voorbeeld.</p>
+                    <div class="week-overview">
+                        <div class="week-day">
+                            <div class="week-day-label" data-i18n="day_monday">Maandag</div>
+                            <div class="week-day-content">
+                                <span class="week-day-hours">2u</span>
+                                <p data-i18n="day_monday_text">Schrijfsessie: twee uur werken aan een nieuw hoofdstuk vanuit je thuiswerkplek.</p>
+                            </div>
+                        </div>
+                        <div class="week-day">
+                            <div class="week-day-label" data-i18n="day_tuesday">Dinsdag</div>
+                            <div class="week-day-content">
+                                <span class="week-day-hours">1u</span>
+                                <p data-i18n="day_tuesday_text">Online feedbacksessie met je redacteur: vorige teksten bespreken en volgend blok plannen.</p>
+                            </div>
+                        </div>
+                        <div class="week-day week-day-off">
+                            <div class="week-day-label" data-i18n="day_wednesday">Woensdag</div>
+                            <div class="week-day-content">
+                                <p data-i18n="day_wednesday_text">Lesgeven — geen auteurswerkzaamheden.</p>
+                            </div>
+                        </div>
+                        <div class="week-day week-day-off">
+                            <div class="week-day-label" data-i18n="day_thursday">Donderdag</div>
+                            <div class="week-day-content">
+                                <p data-i18n="day_thursday_text">Lesgeven — geen auteurswerkzaamheden.</p>
+                            </div>
+                        </div>
+                        <div class="week-day">
+                            <div class="week-day-label" data-i18n="day_friday">Vrijdag</div>
+                            <div class="week-day-content">
+                                <span class="week-day-hours">3u</span>
+                                <p data-i18n="day_friday_text">Digitale content uitwerken: interactieve opdrachten en toetsvragen formuleren.</p>
+                            </div>
+                        </div>
+                        <div class="week-day">
+                            <div class="week-day-label" data-i18n="day_weekend">Weekend</div>
+                            <div class="week-day-content">
+                                <span class="week-day-hours">2u</span>
+                                <p data-i18n="day_weekend_text">Optioneel: bronmateriaal lezen of aantekeningen maken. Geheel op eigen tempo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="week-total" data-i18n="day_total">Totaal: ~8 uur per week — flexibel in te delen naast je reguliere baan.</p>
                 </div>
             </section>
 
@@ -350,6 +633,30 @@
                 <div class="public-container">
                     <h2 data-i18n="testimonials_title">Wat onze auteurs zeggen</h2>
                     <div class="testimonial-grid">
+                        <!-- Beginner testimonials first -->
+                        <div class="testimonial-card testimonial-beginner">
+                            <div class="testimonial-badge" data-i18n="testimonial_badge_new">Recent gestart</div>
+                            <p class="testimonial-text" data-i18n="testimonial5_text">"Ik was bang dat ik niet goed genoeg kon schrijven, maar de redactie begeleidde me stap voor stap. Na drie maanden had ik mijn eerste hoofdstuk af. Elke twee weken had ik een feedbacksessie van een uur — heel laagdrempelig."</p>
+                            <div class="testimonial-author">
+                                <img class="testimonial-avatar-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=face" alt="Femke Jansen">
+                                <div class="testimonial-info">
+                                    <strong>Femke Jansen</strong>
+                                    <span data-i18n="testimonial5_role">Docent Biologie VO — 8 maanden bij Noordhoff</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card testimonial-beginner">
+                            <div class="testimonial-badge" data-i18n="testimonial_badge_new">Recent gestart</div>
+                            <p class="testimonial-text" data-i18n="testimonial6_text">"Als mbo-trainer zonder academische achtergrond twijfelde ik of ik welkom was. Dat was ik absoluut. Noordhoff zoekt praktijkervaring, niet titels. Ik werk nu 10 uur per week aan lesmateriaal naast mijn baan."</p>
+                            <div class="testimonial-author">
+                                <img class="testimonial-avatar-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face" alt="Mark Visser">
+                                <div class="testimonial-info">
+                                    <strong>Mark Visser</strong>
+                                    <span data-i18n="testimonial6_role">Trainer Logistiek MBO — 6 maanden bij Noordhoff</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Existing testimonials -->
                         <div class="testimonial-card">
                             <p class="testimonial-text" data-i18n="testimonial1_text">"Het schrijven voor Noordhoff gaf me de kans om mijn jarenlange ervaring voor de klas om te zetten in materiaal dat duizenden leerlingen bereikt. De redactie denkt echt met je mee."</p>
                             <div class="testimonial-author">
@@ -448,6 +755,28 @@
                 </div>
             </section>
 
+            <!-- Zelftest: Past auteurschap bij mij? -->
+            <section class="public-section alt-bg" id="quiz">
+                <div class="public-container">
+                    <h2 data-i18n="quiz_title">Past auteurschap bij mij?</h2>
+                    <p class="section-intro" data-i18n="quiz_intro">Beantwoord 5 korte vragen en ontdek of jij geschikt bent als auteur bij Noordhoff.</p>
+                    <div class="quiz-container" id="quizContainer">
+                        <div class="quiz-progress">
+                            <div class="quiz-progress-bar" id="quizProgressBar"></div>
+                        </div>
+                        <div class="quiz-question" id="quizQuestion"></div>
+                        <div class="quiz-options" id="quizOptions"></div>
+                        <div class="quiz-nav">
+                            <button class="btn-outline-nh quiz-prev" id="quizPrev" onclick="quizPrevious()" data-i18n="quiz_prev" style="display:none;">Vorige</button>
+                            <span></span>
+                            <button class="btn-primary-large quiz-next" id="quizNext" onclick="quizNext()" data-i18n="quiz_next" style="display:none;">Volgende</button>
+                        </div>
+                        <div class="quiz-result hidden" id="quizResult"></div>
+                        <button class="btn-outline-nh quiz-restart hidden" id="quizRestart" onclick="quizRestart()" data-i18n="quiz_restart">Opnieuw beginnen</button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Contact -->
             <section class="public-section" id="contact">
                 <div class="public-container">
@@ -472,6 +801,15 @@
                                 <strong>KvK:</strong>
                                 <span>58883983</span>
                             </div>
+                            <div class="contact-person">
+                                <img class="contact-person-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Lisa de Vries">
+                                <div class="contact-person-info">
+                                    <strong data-i18n="contact_person_name">Lisa de Vries</strong>
+                                    <span data-i18n="contact_person_role">Coördinator Auteurszaken</span>
+                                    <a href="mailto:l.devries@noordhoff.nl">l.devries@noordhoff.nl</a>
+                                    <p class="contact-person-note" data-i18n="contact_person_note">Lisa is je eerste aanspreekpunt voor vragen over auteurschap bij Noordhoff. Ze helpt je graag verder!</p>
+                                </div>
+                            </div>
                         </div>
                         <div class="contact-form-wrapper">
                             <h3 data-i18n="contact_form_title">Stuur een bericht</h3>
@@ -485,13 +823,43 @@
                                     <input type="email" id="contactEmail" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="contactSubject">Onderwerp</label>
-                                    <select id="contactSubject">
+                                    <label for="contactSubject" data-i18n="contact_subject_label">Onderwerp</label>
+                                    <select id="contactSubject" onchange="toggleAuthorFields()">
                                         <option value="auteur" data-i18n="contact_subject_author">Ik wil auteur worden</option>
                                         <option value="info" data-i18n="contact_subject_info">Informatie aanvragen</option>
                                         <option value="samenwerking" data-i18n="contact_subject_collab">Samenwerking bespreken</option>
                                         <option value="anders" data-i18n="contact_subject_other">Anders</option>
                                     </select>
+                                </div>
+                                <!-- Progressive fields — shown when "Ik wil auteur worden" is selected -->
+                                <div class="author-fields" id="authorFields">
+                                    <div class="form-group">
+                                        <label for="contactSegment" data-i18n="contact_segment">Onderwijssegment</label>
+                                        <select id="contactSegment">
+                                            <option value="" data-i18n="contact_select_placeholder">— Selecteer —</option>
+                                            <option value="bao" data-i18n="segment_bao_title">Basisonderwijs</option>
+                                            <option value="vo" data-i18n="segment_vo_title">Voortgezet onderwijs</option>
+                                            <option value="mbo" data-i18n="segment_mbo_title">Mbo</option>
+                                            <option value="ho" data-i18n="segment_ho_title">Hoger onderwijs</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactVakgebied" data-i18n="contact_subject_field">Vakgebied</label>
+                                        <input type="text" id="contactVakgebied" data-i18n-placeholder="contact_subject_field_placeholder" placeholder="bijv. Wiskunde, Nederlands, Economie...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactRole" data-i18n="contact_current_role">Huidige functie</label>
+                                        <input type="text" id="contactRole" data-i18n-placeholder="contact_current_role_placeholder" placeholder="bijv. Docent VO, Trainer, Onderzoeker...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactAvailability" data-i18n="contact_availability">Beschikbaarheid</label>
+                                        <select id="contactAvailability">
+                                            <option value="" data-i18n="contact_select_placeholder">— Selecteer —</option>
+                                            <option value="4-8" data-i18n="contact_avail_4_8">4–8 uur per week</option>
+                                            <option value="8-16" data-i18n="contact_avail_8_16">8–16 uur per week</option>
+                                            <option value="16+" data-i18n="contact_avail_16_plus">Meer dan 16 uur per week</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="contactMessage" data-i18n="contact_message">Bericht</label>
@@ -500,6 +868,32 @@
                                 <button type="submit" class="btn-primary-large" data-i18n="contact_send">Verstuur bericht</button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deel-functie -->
+            <section class="public-section alt-bg" id="share">
+                <div class="public-container share-section">
+                    <h2 data-i18n="share_title">Ken je iemand die auteur wil worden?</h2>
+                    <p class="section-intro" data-i18n="share_intro">Deel deze pagina met een collega die wellicht interesse heeft. Mond-tot-mond is de beste manier om nieuwe auteurs te vinden.</p>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn share-whatsapp" onclick="shareVia('whatsapp'); return false;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp
+                        </a>
+                        <a href="#" class="share-btn share-linkedin" onclick="shareVia('linkedin'); return false;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.47 2H3.53A1.45 1.45 0 002 3.47v17.06A1.45 1.45 0 003.47 22h17.06A1.45 1.45 0 0022 20.53V3.47A1.45 1.45 0 0020.47 2zM8.09 18.74h-3v-9h3v9zM6.59 8.48a1.56 1.56 0 110-3.12 1.56 1.56 0 010 3.12zM18.91 18.74h-3v-4.26c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.18-1.73 2.39v4.34h-3v-9h2.89v1.23h.04a3.16 3.16 0 012.85-1.56c3.05 0 3.61 2.01 3.61 4.61v4.72z"/></svg>
+                            LinkedIn
+                        </a>
+                        <a href="#" class="share-btn share-email" onclick="shareVia('email'); return false;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Email
+                        </a>
+                        <button class="share-btn share-copy" onclick="shareVia('copy');">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            <span data-i18n="share_copy">Link kopiëren</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -560,6 +954,9 @@
                 </div>
             </div>
         </footer>
+
+        <!-- Floating CTA -->
+        <button class="floating-cta hidden" id="floatingCta" onclick="navigateTo('contact');" data-i18n="floating_cta">Word auteur</button>
 
     </div>
 
@@ -798,6 +1195,10 @@
                     <button class="admin-content-btn" onclick="openBlogManager()">
                         <span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="16" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/></svg></span>
                         <span>Nieuws beheren</span>
+                    </button>
+                    <button class="admin-content-btn" onclick="openVacancyManager()">
+                        <span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span>
+                        <span>Vacatures beheren</span>
                     </button>
                 </div>
             </div>
@@ -1230,6 +1631,80 @@
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeBlogEditor()">Annuleren</button>
                 <button class="btn-primary" onclick="saveBlogPost()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vacancy Manager Modal -->
+    <div class="modal-overlay" id="vacancyManagerModal">
+        <div class="modal" style="max-width:900px;">
+            <div class="modal-header">
+                <h3>Vacatures beheren</h3>
+                <button class="modal-close" onclick="closeVacancyManager()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <button class="btn-primary" onclick="openVacancyEditor()" style="margin-bottom:1rem;">+ Nieuwe vacature</button>
+                <div id="vacancyManagerList" class="manager-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeVacancyManager()">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vacancy Editor Modal -->
+    <div class="modal-overlay" id="vacancyEditorModal">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header">
+                <h3 id="vacancyEditorTitle">Nieuwe vacature</h3>
+                <button class="modal-close" onclick="closeVacancyEditor()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editVacancyId">
+                <div class="form-group">
+                    <label>Titel *</label>
+                    <input type="text" id="editVacancyTitle" placeholder="bijv. Auteur Natuurkunde VO">
+                </div>
+                <div class="form-group">
+                    <label>Segment *</label>
+                    <select id="editVacancySegment">
+                        <option value="bao">Basisonderwijs</option>
+                        <option value="vo">Voortgezet onderwijs</option>
+                        <option value="mbo">Mbo</option>
+                        <option value="ho">Hoger onderwijs</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Vakgebied *</label>
+                    <input type="text" id="editVacancySubject" placeholder="bijv. Natuurkunde, Wiskunde, Nederlands...">
+                </div>
+                <div class="form-group">
+                    <label>Type werk</label>
+                    <select id="editVacancyType">
+                        <option value="auteur">Auteur</option>
+                        <option value="medeauteur">Medeauteur</option>
+                        <option value="reviewer">Reviewer</option>
+                        <option value="digitaal">Digitale content</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tijdsinvestering</label>
+                    <input type="text" id="editVacancyHours" placeholder="bijv. 8-16 uur per week">
+                </div>
+                <div class="form-group">
+                    <label>Beschrijving</label>
+                    <textarea id="editVacancyDescription" rows="3" placeholder="Korte beschrijving van de vacature"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editVacancyActive" checked>
+                        Actief (zichtbaar op de website)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeVacancyEditor()">Annuleren</button>
+                <button class="btn-primary" onclick="saveVacancy()">Opslaan</button>
             </div>
         </div>
     </div>
