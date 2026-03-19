@@ -29,13 +29,21 @@ Single-page application (vanilla HTML/CSS/JS) voor het Noordhoff Auteursportaal.
 | `supabase/functions/create-accounts/index.ts` | Edge Function: bulk aanmaken auth accounts |
 | `supabase/functions/sync-netsuite/` | Edge Function: NetSuite sync |
 
-## Design — Noordhoff Huisstijl
-- **Primary color**: `#007460` (teal)
+## Design — Noordhoff Modern
+- **Primary color**: `#007460` (teal) — niet wijzigen
+- **Primary dark**: `#005a49`
+- **Primary subtle**: `#f0faf7` (achtergrond-tint voor kaarten/badges)
 - **Background**: `#ffffff` (wit)
-- **Alt background**: `#F5F5F5` (lichtgrijs secties)
-- **Border-radius**: `4px` overal (geen pill-shapes)
-- **Font**: variabele font, h2 weight 360 (licht), body 300
-- **Topbar**: puur wit (`#ffffff`), geen blur/transparantie
+- **Alt background**: `#F7F8FA` (lichtgrijs secties)
+- **Text**: `#111827` (donker), `#6b7280` (light)
+- **Border**: `#e5e7eb`
+- **Border-radius**: `10px` (sm), `14px` (md), `18px` (lg), `100px` (pill) — moderne afgeronde hoeken
+- **Kaarten**: 12-16px radius, subtiele schaduwen, witte achtergrond
+- **Knoppen**: 10-12px radius, primaire knoppen met groene schaduw
+- **Modals**: 20px radius, blur overlay
+- **Font**: Roboto Flex variabel; headings weight 500-650 (bold), body 380
+- **Topbar**: puur wit, geen border-top meer, subtiele border-bottom
+- **Schaduwen**: kleur-getint, meerdere lagen (soft/medium/lg)
 
 ## Logo
 Het logo is `noordhoff-logo.png` — een PNG met het icoon + "Noordhoff" tekst in teal. Dit wordt als `<img>` tag gebruikt op alle pagina's:
