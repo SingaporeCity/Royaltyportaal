@@ -906,8 +906,8 @@
                         <a href="#" onclick="navigateTo('contact'); scrollToSection('faq-public'); return false;" data-i18n="nav_faq">FAQ</a>
                         <a href="#" onclick="navigateTo('contact'); return false;" data-i18n="nav_contact">Contact</a>
                         <a href="#" onclick="navigateTo('academy'); scrollToSection('news'); return false;" data-i18n="nav_news">Nieuws</a>
-                        <a href="#" data-i18n="footer_privacy">Privacybeleid</a>
-                        <a href="#" data-i18n="footer_terms">Algemene voorwaarden</a>
+                        <a href="#" onclick="openLegalModal('privacy'); return false;" data-i18n="footer_privacy">Privacybeleid</a>
+                        <a href="#" onclick="openLegalModal('terms'); return false;" data-i18n="footer_terms">Algemene voorwaarden</a>
                     </div>
                     <div class="footer-links footer-social">
                         <h4 data-i18n="footer_social_title">Volg ons</h4>
@@ -927,9 +927,9 @@
                 <div class="footer-bottom">
                     <p>&copy; 2026 Noordhoff Uitgevers B.V. <span data-i18n="footer_rights">Alle rechten voorbehouden.</span></p>
                     <div class="footer-legal">
-                        <a href="#" data-i18n="footer_privacy">Privacybeleid</a>
-                        <a href="#" data-i18n="footer_terms">Algemene voorwaarden</a>
-                        <a href="#">Cookies</a>
+                        <a href="#" onclick="openLegalModal('privacy'); return false;" data-i18n="footer_privacy">Privacybeleid</a>
+                        <a href="#" onclick="openLegalModal('terms'); return false;" data-i18n="footer_terms">Algemene voorwaarden</a>
+                        <a href="#" onclick="openLegalModal('cookies'); return false;">Cookies</a>
                     </div>
                     <p class="footer-credit" data-i18n="footer_designed_by">Ontworpen door Patrick Jeeninga</p>
                 </div>
@@ -1036,28 +1036,81 @@
                         <h2>Welkom, <span id="startWelcomeName"></span></h2>
                     </div>
 
+                    <!-- KPI Cards -->
+                    <div class="kpi-grid" id="kpiGrid">
+                        <div class="kpi-card kpi-primary">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                            </div>
+                            <div class="kpi-content">
+                                <div class="kpi-label" data-i18n="kpi_total_paid">Totaal uitgekeerd</div>
+                                <div class="kpi-value" id="kpiTotalPaid">&euro;0</div>
+                                <div class="kpi-sub" id="kpiTotalYears"></div>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon kpi-icon-blue">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            </div>
+                            <div class="kpi-content">
+                                <div class="kpi-label" data-i18n="kpi_last_payment">Laatste afrekening</div>
+                                <div class="kpi-value" id="kpiLastPayment">&mdash;</div>
+                                <div class="kpi-sub" id="kpiLastPaymentDate"></div>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon kpi-icon-teal">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <div class="kpi-content">
+                                <div class="kpi-label" data-i18n="kpi_contracts">Actieve contracten</div>
+                                <div class="kpi-value" id="kpiContracts">0</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon kpi-icon-purple">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            </div>
+                            <div class="kpi-content">
+                                <div class="kpi-label" data-i18n="kpi_forecast">Prognose 2025</div>
+                                <div class="kpi-value" id="kpiForecast">&mdash;</div>
+                                <div class="kpi-sub" data-i18n="kpi_forecast_sub">verwacht</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Royalty Chart -->
+                    <div class="start-section">
+                        <div class="chart-header">
+                            <h3 data-i18n="kpi_chart_title">Royalties per jaar</h3>
+                            <div class="kpi-updated" id="kpiUpdated"></div>
+                        </div>
+                        <div class="royalty-chart" id="royaltyChart"></div>
+                    </div>
+
                     <div class="start-section academy-section">
                         <a href="https://noordhoffacademy.nl/" target="_blank" class="academy-link">
                             <span class="academy-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
                             <div class="academy-text">
                                 <span class="academy-title">Noordhoff Academy</span>
-                                <span class="academy-subtitle">Cursussen en trainingen voor auteurs</span>
+                                <span class="academy-subtitle" data-i18n="kpi_academy_sub">Cursussen en trainingen voor auteurs</span>
                             </div>
                             <span class="academy-arrow">&rarr;</span>
                         </a>
                     </div>
 
-                    <div class="start-section">
-                        <h3>Aankomende Evenementen</h3>
-                        <div id="eventsContainer" class="events-container">
-                            <p class="empty-state">Geen aankomende evenementen</p>
+                    <div class="start-section-grid">
+                        <div class="start-section">
+                            <h3 data-i18n="kpi_events_title">Aankomende Evenementen</h3>
+                            <div id="eventsContainer" class="events-container">
+                                <p class="empty-state">Geen aankomende evenementen</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="start-section">
-                        <h3>Laatste Nieuws</h3>
-                        <div id="blogPostsContainer" class="blog-posts-container">
-                            <p class="empty-state">Geen nieuwsberichten</p>
+                        <div class="start-section">
+                            <h3 data-i18n="kpi_news_title">Laatste Nieuws</h3>
+                            <div id="blogPostsContainer" class="blog-posts-container">
+                                <p class="empty-state">Geen nieuwsberichten</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1867,6 +1920,21 @@
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeVacancyEditor()">Annuleren</button>
                 <button class="btn-primary" onclick="saveVacancy()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Modal -->
+    <div class="modal-overlay" id="legalModal">
+        <div class="modal" style="max-width:680px;">
+            <div class="modal-header">
+                <h3 id="legalModalTitle">Privacybeleid</h3>
+                <button class="modal-close" onclick="closeLegalModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body" id="legalModalBody" style="max-height:60vh;overflow-y:auto;line-height:1.7;color:var(--color-text-light);font-size:0.9rem;">
+            </div>
+            <div class="modal-footer" style="justify-content:center;">
+                <button class="btn-primary" onclick="closeLegalModal()">Sluiten</button>
             </div>
         </div>
     </div>

@@ -208,6 +208,174 @@ async function supabaseLogout() {
 }
 
 // ============================================
+// LEGAL MODALS
+// ============================================
+
+const LEGAL_CONTENT = {
+    privacy: {
+        title: { nl: 'Privacybeleid', en: 'Privacy Policy' },
+        body: {
+            nl: `<h4>1. Inleiding</h4>
+<p>Noordhoff Uitgevers B.V. ("Noordhoff", "wij") respecteert uw privacy en verwerkt persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG). Dit privacybeleid is van toepassing op het Auteursportaal.</p>
+
+<h4>2. Welke gegevens verwerken wij?</h4>
+<p>Via het Auteursportaal verwerken wij de volgende categorieën persoonsgegevens:</p>
+<ul>
+<li><strong>Identificatiegegevens:</strong> naam, voorletters, geboortedatum, BSN (voor fiscale verplichtingen)</li>
+<li><strong>Contactgegevens:</strong> e-mailadres, telefoonnummer, adres</li>
+<li><strong>Financiële gegevens:</strong> IBAN, BIC, royalty-afrekeningen, prognoses</li>
+<li><strong>Contractgegevens:</strong> contractnummers, contractnamen</li>
+<li><strong>Gebruiksgegevens:</strong> inloggeschiedenis, taalvoorkeur</li>
+</ul>
+
+<h4>3. Doeleinden</h4>
+<p>Wij verwerken uw gegevens voor:</p>
+<ul>
+<li>Het uitvoeren van auteursovereenkomsten</li>
+<li>Het berekenen en uitbetalen van royalties</li>
+<li>Het beheren van uw account en inloggegevens</li>
+<li>Communicatie over uw contracten en afrekeningen</li>
+<li>Wettelijke verplichtingen (fiscale rapportage)</li>
+</ul>
+
+<h4>4. Bewaartermijn</h4>
+<p>Wij bewaren uw persoonsgegevens niet langer dan noodzakelijk. Financiële gegevens worden bewaard conform de wettelijke bewaarplicht van 7 jaar. Na beëindiging van alle contracten worden overige gegevens binnen 2 jaar verwijderd.</p>
+
+<h4>5. Uw rechten</h4>
+<p>U heeft het recht op inzage, correctie, verwijdering en overdraagbaarheid van uw gegevens. Wijzigingsverzoeken kunt u indienen via het portaal. Voor overige verzoeken kunt u contact opnemen via <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a>.</p>
+
+<h4>6. Contact</h4>
+<p>Noordhoff Uitgevers B.V.<br>Postbus 58, 9700 MB Groningen<br>E-mail: <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a><br>Telefoon: (050) 522 69 22</p>`,
+            en: `<h4>1. Introduction</h4>
+<p>Noordhoff Uitgevers B.V. ("Noordhoff", "we") respects your privacy and processes personal data in accordance with the General Data Protection Regulation (GDPR). This privacy policy applies to the Author Portal.</p>
+
+<h4>2. What data do we process?</h4>
+<p>Through the Author Portal, we process the following categories of personal data:</p>
+<ul>
+<li><strong>Identification data:</strong> name, initials, date of birth, BSN (for tax obligations)</li>
+<li><strong>Contact details:</strong> email address, phone number, address</li>
+<li><strong>Financial data:</strong> IBAN, BIC, royalty statements, forecasts</li>
+<li><strong>Contract data:</strong> contract numbers, contract names</li>
+<li><strong>Usage data:</strong> login history, language preference</li>
+</ul>
+
+<h4>3. Purposes</h4>
+<p>We process your data for:</p>
+<ul>
+<li>Executing author agreements</li>
+<li>Calculating and paying royalties</li>
+<li>Managing your account and login credentials</li>
+<li>Communication about your contracts and statements</li>
+<li>Legal obligations (tax reporting)</li>
+</ul>
+
+<h4>4. Retention period</h4>
+<p>We do not retain your personal data longer than necessary. Financial data is retained in accordance with the legal retention period of 7 years. After termination of all contracts, other data will be deleted within 2 years.</p>
+
+<h4>5. Your rights</h4>
+<p>You have the right to access, correction, deletion and portability of your data. Change requests can be submitted via the portal. For other requests, please contact <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a>.</p>
+
+<h4>6. Contact</h4>
+<p>Noordhoff Uitgevers B.V.<br>P.O. Box 58, 9700 MB Groningen, Netherlands<br>Email: <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a><br>Phone: +31 (0)50 522 69 22</p>`
+        }
+    },
+    terms: {
+        title: { nl: 'Algemene voorwaarden', en: 'Terms & Conditions' },
+        body: {
+            nl: `<h4>1. Toepasselijkheid</h4>
+<p>Deze voorwaarden zijn van toepassing op het gebruik van het Noordhoff Auteursportaal. Door in te loggen op het portaal gaat u akkoord met deze voorwaarden.</p>
+
+<h4>2. Toegang en account</h4>
+<p>Toegang tot het portaal is uitsluitend bestemd voor auteurs met een actief contract bij Noordhoff. U bent verantwoordelijk voor het vertrouwelijk houden van uw inloggegevens. Bij vermoeden van ongeautoriseerd gebruik dient u onmiddellijk contact op te nemen met Noordhoff.</p>
+
+<h4>3. Gebruik van het portaal</h4>
+<p>Het portaal biedt inzicht in uw royalty-afrekeningen, contracten, prognoses en persoonlijke gegevens. De getoonde informatie is indicatief; de definitieve afrekening geschiedt conform uw auteurscontract.</p>
+
+<h4>4. Wijziging persoonsgegevens</h4>
+<p>Wijzigingen in uw persoonsgegevens kunt u aanvragen via het portaal. Wijzigingen in bankgegevens vereisen aanvullende verificatie en worden na goedkeuring door de administratie verwerkt.</p>
+
+<h4>5. Intellectueel eigendom</h4>
+<p>Het portaal en alle bijbehorende content zijn eigendom van Noordhoff Uitgevers B.V. Het is niet toegestaan om content, afbeeldingen of software van het portaal te kopiëren, verspreiden of anderszins te gebruiken zonder schriftelijke toestemming.</p>
+
+<h4>6. Aansprakelijkheid</h4>
+<p>Noordhoff streeft naar een correcte en actuele weergave van gegevens. Aan de informatie op het portaal kunnen geen rechten worden ontleend. De auteursovereenkomst is leidend bij eventuele discrepanties.</p>
+
+<h4>7. Toepasselijk recht</h4>
+<p>Op deze voorwaarden is Nederlands recht van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in Groningen.</p>`,
+            en: `<h4>1. Applicability</h4>
+<p>These terms apply to the use of the Noordhoff Author Portal. By logging in to the portal, you agree to these terms.</p>
+
+<h4>2. Access and account</h4>
+<p>Access to the portal is exclusively intended for authors with an active contract at Noordhoff. You are responsible for keeping your login credentials confidential. If you suspect unauthorized use, you must immediately contact Noordhoff.</p>
+
+<h4>3. Use of the portal</h4>
+<p>The portal provides insight into your royalty statements, contracts, forecasts and personal data. The information displayed is indicative; the final settlement is in accordance with your author contract.</p>
+
+<h4>4. Changes to personal data</h4>
+<p>Changes to your personal data can be requested through the portal. Changes to bank details require additional verification and are processed after approval by the administration.</p>
+
+<h4>5. Intellectual property</h4>
+<p>The portal and all associated content are the property of Noordhoff Uitgevers B.V. It is not permitted to copy, distribute or otherwise use content, images or software from the portal without written permission.</p>
+
+<h4>6. Liability</h4>
+<p>Noordhoff strives for a correct and up-to-date display of data. No rights can be derived from the information on the portal. The author agreement is leading in case of discrepancies.</p>
+
+<h4>7. Applicable law</h4>
+<p>Dutch law applies to these terms. Disputes will be submitted to the competent court in Groningen.</p>`
+        }
+    },
+    cookies: {
+        title: { nl: 'Cookiebeleid', en: 'Cookie Policy' },
+        body: {
+            nl: `<h4>Cookies op het Auteursportaal</h4>
+<p>Het Noordhoff Auteursportaal maakt uitsluitend gebruik van <strong>functionele cookies</strong> die noodzakelijk zijn voor de werking van het portaal.</p>
+
+<h4>Welke cookies gebruiken wij?</h4>
+<ul>
+<li><strong>Sessie-cookie:</strong> houdt uw inlogsessie actief zodat u niet bij elke pagina opnieuw hoeft in te loggen</li>
+<li><strong>Taalvoorkeur:</strong> onthoudt uw taalkeuze (Nederlands/Engels)</li>
+</ul>
+
+<h4>Geen tracking cookies</h4>
+<p>Wij gebruiken <strong>geen</strong> analytische cookies, advertentiecookies of cookies van derden. Uw gebruik van het portaal wordt niet gevolgd voor marketingdoeleinden.</p>
+
+<h4>Meer informatie</h4>
+<p>Voor vragen over ons cookiebeleid kunt u contact opnemen via <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a>.</p>`,
+            en: `<h4>Cookies on the Author Portal</h4>
+<p>The Noordhoff Author Portal exclusively uses <strong>functional cookies</strong> that are necessary for the operation of the portal.</p>
+
+<h4>Which cookies do we use?</h4>
+<ul>
+<li><strong>Session cookie:</strong> keeps your login session active so you don't have to log in again on every page</li>
+<li><strong>Language preference:</strong> remembers your language choice (Dutch/English)</li>
+</ul>
+
+<h4>No tracking cookies</h4>
+<p>We do <strong>not</strong> use analytical cookies, advertising cookies or third-party cookies. Your use of the portal is not tracked for marketing purposes.</p>
+
+<h4>More information</h4>
+<p>For questions about our cookie policy, please contact <a href="mailto:privacy@noordhoff.nl" style="color:var(--color-primary)">privacy@noordhoff.nl</a>.</p>`
+        }
+    }
+};
+
+function openLegalModal(type) {
+    const content = LEGAL_CONTENT[type];
+    if (!content) return;
+    document.getElementById('legalModalTitle').textContent = content.title[currentLang];
+    document.getElementById('legalModalBody').innerHTML = content.body[currentLang];
+    document.getElementById('legalModal').classList.add('active');
+}
+
+function closeLegalModal() {
+    document.getElementById('legalModal').classList.remove('active');
+}
+
+document.getElementById('legalModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeLegalModal();
+});
+
+// ============================================
 // PASSWORD RESET FUNCTIONS
 // ============================================
 
@@ -2384,7 +2552,17 @@ const TRANSLATIONS = {
         accounts_created: 'Aangemaakt',
         // Upload Status
         pdf_uploaded: 'PDF geüpload',
-        no_pdf: 'Geen PDF'
+        no_pdf: 'Geen PDF',
+        // Dashboard KPIs
+        kpi_total_paid: 'Totaal uitgekeerd',
+        kpi_last_payment: 'Laatste afrekening',
+        kpi_contracts: 'Actieve contracten',
+        kpi_forecast: 'Prognose 2025',
+        kpi_forecast_sub: 'verwacht',
+        kpi_chart_title: 'Royalties per jaar',
+        kpi_academy_sub: 'Cursussen en trainingen voor auteurs',
+        kpi_events_title: 'Aankomende Evenementen',
+        kpi_news_title: 'Laatste Nieuws'
     },
     en: {
         portal_subtitle: 'Author Portal', tagline: 'Get direct insight into your royalties, statements and forecasts.',
@@ -2749,7 +2927,17 @@ const TRANSLATIONS = {
         accounts_created: 'Created',
         // Upload Status
         pdf_uploaded: 'PDF uploaded',
-        no_pdf: 'No PDF'
+        no_pdf: 'No PDF',
+        // Dashboard KPIs
+        kpi_total_paid: 'Total paid',
+        kpi_last_payment: 'Last statement',
+        kpi_contracts: 'Active contracts',
+        kpi_forecast: 'Forecast 2025',
+        kpi_forecast_sub: 'expected',
+        kpi_chart_title: 'Royalties per year',
+        kpi_academy_sub: 'Courses and training for authors',
+        kpi_events_title: 'Upcoming Events',
+        kpi_news_title: 'Latest News'
     }
 };
 
@@ -2841,6 +3029,7 @@ function initAuthorDashboard() {
         document.getElementById('infoBankAccount').textContent = author.info.bankAccount || '';
         document.getElementById('infoBIC').textContent = author.info.bic || '';
         initPredictions();
+        initDashboardKPIs();
         renderPayments('2024');
         renderContracts();
         renderFAQ();
@@ -2851,6 +3040,113 @@ function initAuthorDashboard() {
         console.error('initAuthorDashboard error:', err);
         alert('Fout bij laden dashboard: ' + err.message);
     }
+}
+
+// Dashboard KPI Overview
+function initDashboardKPIs() {
+    const author = getCurrentAuthor();
+    if (!author) return;
+
+    const payments = author.payments || [];
+    const contracts = author.contracts || [];
+    const prediction = author.prediction || { min: 0, max: 0 };
+
+    // 1. Total paid across all years
+    const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
+    const years = [...new Set(payments.map(p => p.year))].sort();
+    document.getElementById('kpiTotalPaid').textContent = formatCurrency(totalPaid);
+    document.getElementById('kpiTotalYears').textContent = years.length > 0
+        ? `${years[0]}–${years[years.length - 1]}`
+        : '';
+
+    // 2. Last payment
+    if (payments.length > 0) {
+        const sorted = [...payments].sort((a, b) => {
+            const da = a.sortDate || `${a.year}-01-01`;
+            const db = b.sortDate || `${b.year}-01-01`;
+            return new Date(db) - new Date(da);
+        });
+        const last = sorted[0];
+        document.getElementById('kpiLastPayment').textContent = formatCurrency(last.amount);
+        document.getElementById('kpiLastPaymentDate').textContent = last.date?.[currentLang] || last.year;
+    }
+
+    // 3. Active contracts
+    document.getElementById('kpiContracts').textContent = contracts.length;
+
+    // 4. Forecast
+    const mid = Math.round((prediction.min + prediction.max) / 2);
+    if (mid > 0) {
+        document.getElementById('kpiForecast').textContent = formatCurrency(mid);
+    }
+
+    // 5. Royalty chart per year
+    renderRoyaltyChart(payments);
+
+    // 6. Last updated indicator
+    const now = new Date();
+    const timeStr = now.toLocaleString(currentLang === 'nl' ? 'nl-NL' : 'en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+    const updatedEl = document.getElementById('kpiUpdated');
+    if (updatedEl) updatedEl.textContent = timeStr;
+}
+
+function renderRoyaltyChart(payments) {
+    const chartEl = document.getElementById('royaltyChart');
+    if (!chartEl) return;
+
+    // Group by year and type
+    const yearData = {};
+    payments.forEach(p => {
+        if (!yearData[p.year]) yearData[p.year] = { royalty: 0, subsidiary: 0, foreign: 0, total: 0 };
+        yearData[p.year][p.type] = (yearData[p.year][p.type] || 0) + p.amount;
+        yearData[p.year].total += p.amount;
+    });
+
+    const years = Object.keys(yearData).sort();
+    if (years.length === 0) {
+        chartEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-text-light);font-size:0.9rem;">' +
+            (currentLang === 'nl' ? 'Nog geen afrekeningen beschikbaar' : 'No statements available yet') + '</div>';
+        return;
+    }
+
+    const maxTotal = Math.max(...years.map(y => yearData[y].total));
+    const maxHeight = 130; // px
+
+    let barsHTML = '<div class="chart-bars">';
+    years.forEach(year => {
+        const d = yearData[year];
+        const royaltyH = maxTotal > 0 ? (d.royalty / maxTotal) * maxHeight : 0;
+        const subsidH = maxTotal > 0 ? (d.subsidiary / maxTotal) * maxHeight : 0;
+        const foreignH = maxTotal > 0 ? (d.foreign / maxTotal) * maxHeight : 0;
+
+        barsHTML += `
+            <div class="chart-bar-group">
+                <div class="chart-bar-amount">${formatCurrency(d.total)}</div>
+                <div class="chart-bar-stack">
+                    ${d.foreign > 0 ? `<div class="chart-bar-segment foreign" style="height:${foreignH}px" title="Foreign Rights: ${formatCurrency(d.foreign)}"></div>` : ''}
+                    ${d.subsidiary > 0 ? `<div class="chart-bar-segment subsidiary" style="height:${subsidH}px" title="Nevenrechten: ${formatCurrency(d.subsidiary)}"></div>` : ''}
+                    ${d.royalty > 0 ? `<div class="chart-bar-segment royalty" style="height:${royaltyH}px" title="Royalties: ${formatCurrency(d.royalty)}"></div>` : ''}
+                </div>
+                <div class="chart-bar-year">${year}</div>
+            </div>
+        `;
+    });
+    barsHTML += '</div>';
+
+    // Legend
+    const hasRoyalty = years.some(y => yearData[y].royalty > 0);
+    const hasSubsid = years.some(y => yearData[y].subsidiary > 0);
+    const hasForeign = years.some(y => yearData[y].foreign > 0);
+
+    let legendHTML = '<div class="chart-legend">';
+    if (hasRoyalty) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--color-primary)"></span>Royalties</div>';
+    if (hasSubsid) legendHTML += `<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'}</div>`;
+    if (hasForeign) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#6DB5C5"></span>Foreign Rights</div>';
+    legendHTML += '</div>';
+
+    chartEl.innerHTML = barsHTML + legendHTML;
 }
 
 // Helper to get current author data
