@@ -2562,7 +2562,14 @@ const TRANSLATIONS = {
         kpi_chart_title: 'Royalties per jaar',
         kpi_academy_sub: 'Cursussen en trainingen voor auteurs',
         kpi_events_title: 'Aankomende Evenementen',
-        kpi_news_title: 'Laatste Nieuws'
+        kpi_news_title: 'Laatste Nieuws',
+        // Onboarding
+        onboarding_title: 'Welkom bij het Auteursportaal',
+        onboarding_text: 'Hier vindt u al uw royalty-afrekeningen, contracten en prognoses op één plek. Bekijk uw gegevens, download afrekeningen en houd uw financiën bij.',
+        onboarding_f1: 'Afrekeningen inzien en downloaden',
+        onboarding_f2: 'Contracten beheren',
+        onboarding_f3: 'Royalty-prognoses bekijken',
+        onboarding_btn: 'Aan de slag'
     },
     en: {
         portal_subtitle: 'Author Portal', tagline: 'Get direct insight into your royalties, statements and forecasts.',
@@ -2937,7 +2944,14 @@ const TRANSLATIONS = {
         kpi_chart_title: 'Royalties per year',
         kpi_academy_sub: 'Courses and training for authors',
         kpi_events_title: 'Upcoming Events',
-        kpi_news_title: 'Latest News'
+        kpi_news_title: 'Latest News',
+        // Onboarding
+        onboarding_title: 'Welcome to the Author Portal',
+        onboarding_text: 'Here you will find all your royalty statements, contracts and forecasts in one place. View your details, download statements and keep track of your finances.',
+        onboarding_f1: 'View and download statements',
+        onboarding_f2: 'Manage contracts',
+        onboarding_f3: 'View royalty forecasts',
+        onboarding_btn: 'Get started'
     }
 };
 
@@ -3035,6 +3049,10 @@ function initAuthorDashboard() {
         renderFAQ();
         loadEvents();
         loadBlogPosts();
+        updatePaymentBadge();
+        updateDashboardFooter();
+        initDashboardAnimations();
+        checkOnboarding();
         console.log('initAuthorDashboard completed');
     } catch (err) {
         console.error('initAuthorDashboard error:', err);
@@ -3149,6 +3167,140 @@ function renderRoyaltyChart(payments) {
     chartEl.innerHTML = barsHTML + legendHTML;
 }
 
+// ============================================
+// DASHBOARD ANIMATIONS & UX POLISH
+// ============================================
+
+// Stagger fade-in animation on KPI cards and sections
+function initDashboardAnimations() {
+    // Animate KPI cards
+    document.querySelectorAll('.kpi-card').forEach((card, i) => {
+        card.classList.remove('fade-in-up');
+        void card.offsetWidth; // force reflow
+        card.classList.add('fade-in-up');
+    });
+
+    // Animate start sections
+    document.querySelectorAll('#tab-start .start-section, #tab-start .start-section-grid, #tab-start .academy-section').forEach((section, i) => {
+        section.classList.remove('fade-in-section');
+        section.style.animationDelay = `${0.25 + i * 0.08}s`;
+        void section.offsetWidth;
+        section.classList.add('fade-in-section');
+    });
+
+    // Animate chart
+    const chart = document.getElementById('royaltyChart');
+    if (chart) {
+        chart.classList.remove('fade-in-section');
+        chart.style.animationDelay = '0.2s';
+        void chart.offsetWidth;
+        chart.classList.add('fade-in-section');
+    }
+}
+
+// Onboarding — show once per author
+function checkOnboarding() {
+    const author = getCurrentAuthor();
+    if (!author) return;
+    const key = `onboarding_seen_${author.id || currentUser}`;
+    if (!localStorage.getItem(key)) {
+        setTimeout(() => {
+            document.getElementById('onboardingModal').classList.add('active');
+        }, 600);
+    }
+}
+
+function closeOnboarding() {
+    document.getElementById('onboardingModal').classList.remove('active');
+    const author = getCurrentAuthor();
+    if (author) {
+        localStorage.setItem(`onboarding_seen_${author.id || currentUser}`, '1');
+    }
+}
+
+document.getElementById('onboardingModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeOnboarding();
+});
+
+// Notification badge on Afrekeningen tab
+function updatePaymentBadge() {
+    const author = getCurrentAuthor();
+    if (!author || !author.payments) return;
+
+    // Count payments from current or recent period that haven't been "seen"
+    const seenKey = `payments_seen_${author.id || currentUser}`;
+    const seenCount = parseInt(localStorage.getItem(seenKey) || '0');
+    const totalPayments = author.payments.length;
+    const newCount = Math.max(0, totalPayments - seenCount);
+
+    // Find the payments tab button
+    const paymentsTab = document.querySelector('.tab-btn[data-tab="payments"]');
+    if (!paymentsTab) return;
+
+    // Remove existing badge
+    const existing = paymentsTab.querySelector('.tab-badge');
+    if (existing) existing.remove();
+
+    if (newCount > 0) {
+        const badge = document.createElement('span');
+        badge.className = 'tab-badge';
+        badge.textContent = newCount;
+        paymentsTab.appendChild(badge);
+    }
+}
+
+function markPaymentsSeen() {
+    const author = getCurrentAuthor();
+    if (!author || !author.payments) return;
+    localStorage.setItem(`payments_seen_${author.id || currentUser}`, author.payments.length.toString());
+    // Remove badge
+    const badge = document.querySelector('.tab-btn[data-tab="payments"] .tab-badge');
+    if (badge) badge.remove();
+}
+
+// Dashboard footer — "last updated" timestamp
+function updateDashboardFooter() {
+    const el = document.getElementById('dashboardUpdatedText');
+    if (!el) return;
+    const now = new Date();
+    const locale = currentLang === 'nl' ? 'nl-NL' : 'en-GB';
+    const timeStr = now.toLocaleString(locale, {
+        day: 'numeric', month: 'long', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+    el.textContent = (currentLang === 'nl' ? 'Gegevens bijgewerkt op ' : 'Data updated on ') + timeStr;
+}
+
+// Empty state with illustration
+function emptyStateHTML(type) {
+    const illustrations = {
+        contracts: {
+            svg: '<svg viewBox="0 0 80 80" fill="none" stroke="#9ca3af" stroke-width="1.2"><rect x="18" y="10" width="44" height="56" rx="4"/><path d="M32 10V6a4 4 0 014-4h8a4 4 0 014 4v4"/><line x1="30" y1="28" x2="50" y2="28"/><line x1="30" y1="36" x2="50" y2="36"/><line x1="30" y1="44" x2="42" y2="44"/><path d="M34 54l4 4 8-8" stroke="#007460" stroke-width="1.5"/></svg>',
+            title: { nl: 'Geen contracten', en: 'No contracts' },
+            text: { nl: 'Uw contracten verschijnen hier zodra deze zijn vastgelegd.', en: 'Your contracts will appear here once they are recorded.' }
+        },
+        payments: {
+            svg: '<svg viewBox="0 0 80 80" fill="none" stroke="#9ca3af" stroke-width="1.2"><rect x="8" y="20" width="64" height="40" rx="6"/><line x1="8" y1="32" x2="72" y2="32"/><circle cx="56" cy="46" r="6"/><rect x="16" y="40" width="20" height="4" rx="2"/><rect x="16" y="48" width="14" height="4" rx="2"/><path d="M40 8l4 4M40 8l-4 4M40 8v10" stroke="#007460" stroke-width="1.5"/></svg>',
+            title: { nl: 'Geen afrekeningen', en: 'No statements' },
+            text: { nl: 'Uw royalty-afrekeningen verschijnen hier na de eerste uitbetaling.', en: 'Your royalty statements will appear here after the first payment.' }
+        },
+        faq: {
+            svg: '<svg viewBox="0 0 80 80" fill="none" stroke="#9ca3af" stroke-width="1.2"><path d="M60 52a20 20 0 10-28 18v8l8-6a20 20 0 0020-20z"/><text x="38" y="48" font-size="22" font-weight="600" fill="#9ca3af" stroke="none" text-anchor="middle">?</text></svg>',
+            title: { nl: 'Geen vragen beschikbaar', en: 'No questions available' },
+            text: { nl: 'De FAQ-sectie wordt binnenkort aangevuld.', en: 'The FAQ section will be updated soon.' }
+        }
+    };
+
+    const illus = illustrations[type];
+    if (!illus) return '<div class="empty-state">Geen gegevens beschikbaar</div>';
+
+    return `<div class="empty-state-illustrated">
+        ${illus.svg}
+        <h4>${illus.title[currentLang]}</h4>
+        <p>${illus.text[currentLang]}</p>
+    </div>`;
+}
+
 // Helper to get current author data
 function getCurrentAuthor() {
     return isSupabaseMode && currentAuthorData
@@ -3160,7 +3312,16 @@ function renderContracts() {
     const author = getCurrentAuthor();
     if (!author || !author.contracts) return;
 
-    document.getElementById('contractsTableBody').innerHTML = author.contracts.map((contract, i) => `
+    const tbody = document.getElementById('contractsTableBody');
+    if (author.contracts.length === 0) {
+        // Show empty state — replace the whole table parent
+        tbody.closest('.tab-content').querySelector('.info-header').insertAdjacentHTML('afterend', emptyStateHTML('contracts'));
+        tbody.closest('table').style.display = 'none';
+        return;
+    }
+
+    tbody.closest('table').style.display = '';
+    tbody.innerHTML = author.contracts.map((contract, i) => `
         <tr>
             <td>${contract.number}</td>
             <td>${contract.name}</td>
@@ -3290,7 +3451,13 @@ function renderPayments(filterYear = 'all') {
         return distA - distB;
     });
 
-    document.getElementById('paymentsList').innerHTML = sortedPayments.map((payment, idx) => `
+    const paymentsList = document.getElementById('paymentsList');
+    if (sortedPayments.length === 0) {
+        paymentsList.innerHTML = emptyStateHTML('payments');
+        return;
+    }
+
+    paymentsList.innerHTML = sortedPayments.map((payment, idx) => `
         <div class="payment-item ${payment.type === 'annual' ? 'annual-statement' : ''}">
             <div class="payment-icon" style="background: ${iconColors[payment.type]}">
                 <svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/></svg>
@@ -4399,6 +4566,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         this.classList.add('active');
         document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        // Mark payments as seen when tab is opened
+        if (this.dataset.tab === 'payments') {
+            markPaymentsSeen();
+        }
     });
 });
 
