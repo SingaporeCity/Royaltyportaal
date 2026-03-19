@@ -6070,21 +6070,112 @@ body.dashboard-active .lang-toggle {
     background: rgba(0, 116, 96, 0.1);
 }
 
-/* Contracts & payments cards */
-[data-theme="dark"] .contract-card,
-[data-theme="dark"] .payment-card,
-[data-theme="dark"] .forecast-card {
+/* Payments tab */
+[data-theme="dark"] .payment-item {
     background: var(--color-white);
     border-color: var(--color-border);
 }
 
-/* FAQ */
-[data-theme="dark"] .faq-item {
+[data-theme="dark"] .payment-item:hover {
     border-color: var(--color-border);
+}
+
+[data-theme="dark"] .payment-download {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .year-filter {
+    background: var(--color-bg);
+}
+
+[data-theme="dark"] .year-btn:hover,
+[data-theme="dark"] .year-btn.active {
+    background: var(--color-white);
+}
+
+[data-theme="dark"] .payment-item.annual-statement {
+    background: var(--color-white);
+}
+
+/* Forecast tab */
+[data-theme="dark"] .prediction-card {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .prediction-badge-pill {
+    background: rgba(0, 116, 96, 0.12);
+    border-color: rgba(0, 116, 96, 0.2);
+}
+
+[data-theme="dark"] .prediction-range {
+    border-top-color: var(--color-border);
+}
+
+[data-theme="dark"] .prediction-range-track {
+    background: var(--color-bg);
+}
+
+[data-theme="dark"] .prediction-range-dot {
+    border-color: var(--color-white);
+}
+
+[data-theme="dark"] .prediction-contracts {
+    background: var(--color-bg);
+}
+
+[data-theme="dark"] .prediction-note {
+    background: var(--color-bg);
+}
+
+[data-theme="dark"] .historical-card {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .contract-card {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+/* FAQ tab */
+[data-theme="dark"] .faq-item {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .faq-item:hover {
+    border-color: rgba(0, 116, 96, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .faq-item.open {
+    border-color: rgba(0, 116, 96, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 [data-theme="dark"] .faq-question {
     color: var(--color-text);
+}
+
+[data-theme="dark"] .faq-question svg {
+    background: var(--color-bg);
+    stroke: var(--color-text-light);
+}
+
+[data-theme="dark"] .faq-item:hover .faq-question svg {
+    background: rgba(0, 116, 96, 0.15);
+}
+
+[data-theme="dark"] .faq-item.open .faq-question svg {
+    background: var(--color-primary);
+    stroke: white;
+}
+
+/* Badge */
+[data-theme="dark"] .badge {
+    background: var(--color-bg);
 }
 
 /* Onboarding modal */
