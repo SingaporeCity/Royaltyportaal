@@ -45,10 +45,21 @@ Single-page application (vanilla HTML/CSS/JS) voor het Noordhoff Auteursportaal.
 - **Topbar**: puur wit, geen border-top meer, subtiele border-bottom
 - **Schaduwen**: kleur-getint, meerdere lagen (soft/medium/lg)
 
+### Dark Mode
+- Toggle via `toggleDarkMode()` — pill-vormige switch met zon/maan-iconen in dashboard header (auteur + admin)
+- Persistentie via `localStorage` key `theme` (`"light"` of `"dark"`)
+- Initialisatie bij laden via `initDarkMode()` (vóór `initPublicSite()`)
+- CSS: `[data-theme="dark"]` selector op `<html>` overschrijft `:root` variabelen
+- **Dark kleuren**: `--color-bg: #0f1117`, `--color-bg-alt: #161922`, `--color-white: #1a1d27`, `--color-text: #e8eaed`, `--color-text-light: #8b8fa4`, `--color-border: #2a2d3a`
+- Dekking: header, tabs, KPI cards, chart, info cards, modals, formulieren, tabellen, admin panels, scrollbar
+- Smooth transitions: `0.3s ease` op background-color, border-color, color, box-shadow
+- Dashboard logo krijgt `filter: brightness(0) invert(1)` in dark mode
+
 ## Logo
 Het logo is `noordhoff-logo.png` — een PNG met het icoon + "Noordhoff" tekst in teal. Dit wordt als `<img>` tag gebruikt op alle pagina's:
 - **Nav**: 36px hoog (via CSS `.public-nav-logo img`)
-- **Login**: 36px hoog, gecentreerd
+- **Login branding panel**: wit versie via CSS `filter: brightness(0) invert(1)`, 40px hoog
+- **Login form (mobiel)**: 32px hoog, getoond via `.login-logo-mobile` (verborgen op desktop)
 - **Dashboards**: 28px hoog
 - **Footer**: wit versie via CSS `filter: brightness(0) invert(1)`
 
@@ -98,6 +109,17 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - Fallback: 8 hardcoded vacatures als Supabase niet beschikbaar is
 - Admin CRUD via `openVacancyManager()` / `openVacancyEditor()` / `saveVacancy()` / `deleteVacancy()`
 - Migratie: `database/add-vacancies.sql`
+
+## Royalty Chart — Horizontale Revenue Timeline
+- **Vervangt** de vorige stacked bar chart (die slecht werkte voor 1-3 producten per jaar)
+- **Layout**: horizontale rijen per jaar (nieuwste bovenaan) via `.chart-timeline` → `.chart-year-row` (CSS grid: `52px 1fr auto`)
+- **Per rij**: jaarlabel links, horizontale progress bar (`.chart-year-bar-track` met `.chart-year-bar-fill` segmenten), totaalbedrag rechts
+- **Segmenten**: `.royalty` (primary), `.subsidiary` (#14b8a6), `.foreign` (#6DB5C5) — zelfde kleuren als voorheen
+- **Detail labels**: bij meerdere types verschijnen `.chart-year-segments` onder de bar met bedragen per type
+- **Legend**: alleen getoond als er meerdere payment types zijn
+- **Hover**: subtiele groene tint op `.chart-year-row:hover`
+- **Responsive**: op mobiel (≤768px) verdwijnen segment-labels, grid krimpt
+- **Functie**: `renderRoyaltyChart(payments)` in `app.js`, groepeert payments per jaar en type
 
 ## Nieuwe features (verbeterplan)
 - **Informatiesessie-banner**: Op home + auteur pagina, groen gradient met aanmeldknop
@@ -169,6 +191,13 @@ Vereist `SUPABASE_URL` en `SUPABASE_SERVICE_ROLE_KEY` in `scripts/.env`.
 - Na elke operatie: `loadAllAuthorsForAdmin()` voor data refresh uit DB
 
 ## Login & Authenticatie
+
+### Login scherm — Split-screen design
+- **Layout**: `.login-page-inner` is een flex container met twee panelen
+- **Links** (`.login-brand-panel`): Noordhoff branding — donkergroen gradient (`160deg, #007460 → #005a49 → #004035`), wit logo, "Auteursportaal" titel, subtitel, statistieken (190+ jaar, 500+ auteurs, 1000+ publicaties), decoratieve cirkels via `::before`/`::after`
+- **Rechts** (`.login-form-panel`): witte kaart met formulier, "Terug naar website" knop linksboven (met SVG pijl-icoon)
+- **Mobiel** (≤768px): branding panel verborgen (`display: none`), `.login-logo-mobile` wordt zichtbaar, back-knop wordt `position: static`
+- **Tablet** (≤1024px): branding panel krimpt naar 40%
 
 ### Sessie-persistentie
 - Bij app-init: `restoreSession()` → `supabaseClient.auth.getSession()` → als sessie bestaat, profiel laden en direct naar dashboard
