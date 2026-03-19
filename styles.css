@@ -5177,6 +5177,63 @@ body.dashboard-active .lang-toggle {
     }
 }
 
+/* Bulk Upload Drop Zone */
+.bulk-drop-zone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+.bulk-drop-zone:hover,
+.bulk-drop-zone.drag-over {
+    border-color: var(--color-primary);
+    background: rgba(0, 116, 96, 0.04);
+}
+.bulk-drop-zone p {
+    margin-top: 0.75rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+}
+#bulkPreviewTable th,
+#bulkPreviewTable td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+#bulkPreviewTable th {
+    background: #f9f9f9;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+#bulkPreviewTable .match {
+    color: var(--color-success);
+}
+#bulkPreviewTable .no-match {
+    color: var(--color-danger);
+}
+
+/* Account list items */
+.account-author-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+.account-author-item:last-child {
+    border-bottom: none;
+}
+.account-author-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    cursor: pointer;
+}
+
 /* Hidden utility */
 .hidden {
     display: none !important;

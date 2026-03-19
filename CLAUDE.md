@@ -10,11 +10,24 @@ Single-page application (vanilla HTML/CSS/JS) voor het Noordhoff Auteursportaal.
 | Bestand | Inhoud |
 |---------|--------|
 | `index.html` | Alle HTML: publieke pagina's, login, auteur dashboard, admin dashboard, modals |
-| `styles.css` | Alle CSS (~5200 regels) |
+| `styles.css` | Alle CSS |
 | `app.js` | Routing, i18n (NL/EN), Supabase integratie, dashboard logica, quiz, vacatures |
 | `config.js` | Supabase configuratie |
 | `noordhoff-logo.png` | Officieel Noordhoff logo (teal, 602x128px) — gebruik ALTIJD dit bestand |
 | `database/add-vacancies.sql` | Supabase migratie voor vacatures-tabel + seed data |
+
+### Database & Scripts
+| Pad | Inhoud |
+|-----|--------|
+| `database/schema.sql` | Volledige database schema (incl. `file_path` kolom op payments) |
+| `database/add-file-path.sql` | Migratie: voegt `file_path` toe aan `payments` tabel |
+| `database/add-storage-policies.sql` | RLS policies voor `statements` Storage bucket |
+| `database/seed-data.sql` | Initiële data |
+| `scripts/bulk-upload-pdfs.js` | CLI script voor bulk PDF upload naar Supabase Storage |
+| `scripts/package.json` | Dependencies voor CLI scripts |
+| `scripts/.env.example` | Template voor env variabelen |
+| `supabase/functions/create-accounts/index.ts` | Edge Function: bulk aanmaken auth accounts |
+| `supabase/functions/sync-netsuite/` | Edge Function: NetSuite sync |
 
 ## Design — Noordhoff Huisstijl
 - **Primary color**: `#007460` (teal)
@@ -66,7 +79,8 @@ De publieke site gebruikt een multi-page router via `navigateTo(pageName)`:
 Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elementen gebruiken `data-i18n` attributen. Taalswitch in de nav.
 
 ## Supabase Backend
-- Events, blog posts, FAQ, contracten, afrekeningen, **vacatures**
+- **URL**: `https://izulahsrsaspbskejbbp.supabase.co`
+- Events, blog posts, FAQ, contracten, afrekeningen, **vacatures**, Storage (PDFs)
 - Als Supabase niet bereikbaar is: statische fallback content wordt getoond (nieuws, evenementen, vacatures)
 - Admin kan events/nieuws/FAQ/vacatures beheren via modals
 
@@ -93,6 +107,79 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - **Deelfunctie**: WhatsApp/LinkedIn/Email/Kopieer knoppen op page-contact
 - **SEO meta tags**: Description, keywords, Open Graph, canonical URL
 
+### Database tabellen
+| Tabel | Doel |
+|-------|------|
+| `authors` | Auteurprofielen met NetSuite IDs, persoonlijke gegevens, bankinfo |
+| `contracts` | Contracten per auteur |
+| `payments` | Afrekeningen (type: royalty/subsidiary/foreign), met `file_path` naar Storage |
+| `forecasts` | Prognoses (min/max bedrag per jaar) |
+| `change_requests` | Wijzigingsverzoeken (pending/approved/rejected) |
+| `login_history` | Login timestamps |
+| `events` | Evenementen (admin managed) |
+| `blog_posts` | Nieuwsberichten (admin managed) |
+| `sync_log` | Import tracking |
+
+### Storage
+- **Bucket**: `statements` (private)
+- **Padconventie**: `{author_uuid}/{type}/{year}/{bestandsnaam}.pdf`
+- RLS: auteurs downloaden eigen bestanden, admins uploaden/verwijderen
+
+## PDF Afrekeningen
+
+### Auteur-download
+- `downloadPaymentPDF()` controleert eerst `payment.filePath`
+- Als `filePath` bestaat → download via `createSignedUrl()` (echte PDF uit Storage)
+- Als geen `filePath` → fallback naar jsPDF-gegenereerde PDF (jaaropgaves, legacy data)
+
+### Admin — enkelvoudige upload
+- File input in "Document toevoegen" en "Document bewerken" modals
+- Bij opslaan: upload naar Storage + `file_path` opslaan in payment record
+- Toont huidige bestandsnaam als er al een PDF geüpload is
+
+### Admin — bulk upload modal
+- Trigger: "PDF afrekeningen importeren" knop in admin dashboard
+- **Prefix-configuratie**: 3 invoervelden per type (royalty/nevenrechten/foreign), opgeslagen in `localStorage`
+- **Drop zone**: drag & drop of file picker voor meerdere PDFs
+- **Filename parser**: splitst `PREFIX_xxxxxxx_Naam_YYYYMM.pdf` → type (via prefix), auteur (via `netsuite_internal_id` lookup), jaar
+- **Preview tabel**: bestandsnaam, gematcht type, gevonden auteur, status (match/geen match)
+- **Upload**: sequentieel per bestand → Storage upload + payment record aanmaken
+- **Voortgang**: progressbar + samenvatting
+
+### CLI bulk upload
+```bash
+cd scripts && npm install
+node bulk-upload-pdfs.js ./pdfs-map --prefix-royalty=RA --prefix-subsidiary=NR --prefix-foreign=FR
+```
+Vereist `SUPABASE_URL` en `SUPABASE_SERVICE_ROLE_KEY` in `scripts/.env`.
+
+## Admin Payment CRUD
+`saveNewPayment()`, `saveStatement()`, `deletePayment()` schrijven naar Supabase:
+- **Create**: `supabaseClient.from('payments').insert()` + Storage upload
+- **Update**: `supabaseClient.from('payments').update()` + Storage upload (upsert)
+- **Delete**: `supabaseClient.from('payments').delete()` + Storage file verwijderen
+- Na elke operatie: `loadAllAuthorsForAdmin()` voor data refresh uit DB
+
+## Login & Authenticatie
+
+### Sessie-persistentie
+- Bij app-init: `restoreSession()` → `supabaseClient.auth.getSession()` → als sessie bestaat, profiel laden en direct naar dashboard
+- `onAuthStateChange` listener voor `SIGNED_OUT` (logout) en `PASSWORD_RECOVERY` (wachtwoord reset link) events
+
+### Wachtwoord vergeten flow
+Drie schermen in de login-card:
+1. **Login** (`#loginForm`): standaard login
+2. **Reset aanvragen** (`#forgotPasswordForm`): email invoeren → `resetPasswordForEmail()` → bevestigingsbericht
+3. **Nieuw wachtwoord** (`#setNewPasswordForm`): verschijnt na klikken op email-link → `updateUser({ password })` → redirect naar login
+
+### Bulk account-aanmaak
+- **Edge Function**: `supabase/functions/create-accounts/index.ts`
+  - Ontvangt `{ accounts: [{ email, author_id }] }`
+  - Maakt auth user aan met `admin.createUser({ id: author_id })` — UUID matcht bestaande author
+  - Stuurt recovery email
+  - Skipped bestaande accounts
+- **Admin UI**: "Accounts aanmaken" knop in dashboard → modal met selecteerbare auteurs → Edge Function aanroepen
+
 ## Nieuws & Evenementen (statische fallback)
 Als Supabase niet beschikbaar is, worden deze items getoond:
 
@@ -114,3 +201,11 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 - "Ontworpen door Patrick Jeeninga" (NL) / "Designed by Patrick Jeeninga" (EN)
 - Social icons: LinkedIn, Instagram, X
 - Legal links: Privacybeleid, Voorwaarden, Cookies
+
+## Deployment stappen (na code push)
+1. **Supabase SQL Editor**: Run `database/add-file-path.sql`
+2. **Supabase SQL Editor**: Run `database/add-storage-policies.sql`
+3. **Supabase Dashboard**: Email templates aanpassen voor wachtwoord-reset (Noordhoff branding)
+4. **Supabase Dashboard**: Redirect URL instellen → `https://singaporecity.github.io/Royaltyportaal/`
+5. **Edge Function deployen**: `supabase functions deploy create-accounts`
+6. **CLI script** (optioneel): `cd scripts && npm install && node bulk-upload-pdfs.js ./pdfs-map`

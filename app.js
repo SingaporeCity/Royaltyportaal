@@ -150,13 +150,15 @@ async function fetchAuthorProfile(userId) {
                 contractPdf: c.contract_pdf
             })),
             payments: (payments || []).map(p => ({
+                id: p.id,
                 year: p.year,
                 type: p.type,
                 title: { nl: p.title_nl, en: p.title_en },
                 date: { nl: p.date_nl, en: p.date_en },
                 sortDate: p.sort_date,
                 amount: parseFloat(p.amount),
-                filename: p.filename
+                filename: p.filename,
+                filePath: p.file_path
             })),
             prediction: forecasts && forecasts.length > 0
                 ? { min: parseFloat(forecasts[0].min_amount), max: parseFloat(forecasts[0].max_amount) }
@@ -202,6 +204,93 @@ async function supabaseLogout() {
         isSupabaseMode = false;
     } catch (err) {
         console.error('Logout error:', err);
+    }
+}
+
+// ============================================
+// PASSWORD RESET FUNCTIONS
+// ============================================
+
+function showForgotPasswordForm() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('forgotPasswordForm').style.display = '';
+    document.getElementById('setNewPasswordForm').style.display = 'none';
+    document.getElementById('resetSuccess').style.display = 'none';
+    document.getElementById('resetError').style.display = 'none';
+    document.getElementById('resetEmail').value = '';
+}
+
+function showLoginForm() {
+    document.getElementById('loginForm').style.display = '';
+    document.getElementById('forgotPasswordForm').style.display = 'none';
+    document.getElementById('setNewPasswordForm').style.display = 'none';
+}
+
+function showSetNewPasswordForm() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('forgotPasswordForm').style.display = 'none';
+    document.getElementById('setNewPasswordForm').style.display = '';
+    document.getElementById('newPasswordError').style.display = 'none';
+}
+
+async function sendPasswordReset() {
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email) return;
+
+    document.getElementById('resetError').style.display = 'none';
+
+    if (supabaseClient) {
+        try {
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname
+            });
+            if (error) throw error;
+        } catch (err) {
+            console.error('Password reset error:', err);
+            // Still show success message to avoid leaking whether email exists
+        }
+    }
+
+    // Always show success (security: don't reveal if email exists)
+    document.getElementById('resetSuccess').style.display = '';
+}
+
+async function setNewPassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmNewPassword').value;
+    const errorEl = document.getElementById('newPasswordError');
+
+    if (newPassword.length < 8) {
+        errorEl.textContent = currentLang === 'nl'
+            ? 'Wachtwoord moet minimaal 8 tekens zijn.'
+            : 'Password must be at least 8 characters.';
+        errorEl.style.display = '';
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        errorEl.textContent = currentLang === 'nl'
+            ? 'Wachtwoorden komen niet overeen.'
+            : 'Passwords do not match.';
+        errorEl.style.display = '';
+        return;
+    }
+
+    if (!supabaseClient) return;
+
+    try {
+        const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+        if (error) throw error;
+
+        // Password updated successfully - show login form with success message
+        showLoginForm();
+        alert(currentLang === 'nl'
+            ? 'Uw wachtwoord is succesvol gewijzigd. U kunt nu inloggen.'
+            : 'Your password has been changed successfully. You can now log in.');
+    } catch (err) {
+        console.error('Set password error:', err);
+        errorEl.textContent = err.message;
+        errorEl.style.display = '';
     }
 }
 
@@ -1608,7 +1697,8 @@ async function loadAllAuthorsForAdmin() {
                     date: { nl: p.date_nl, en: p.date_en },
                     sortDate: p.sort_date,
                     amount: parseFloat(p.amount),
-                    filename: p.filename
+                    filename: p.filename,
+                    filePath: p.file_path
                 })),
                 prediction: authorForecast
                     ? { min: parseFloat(authorForecast.min_amount), max: parseFloat(authorForecast.max_amount) }
@@ -2260,7 +2350,41 @@ const TRANSLATIONS = {
         vacancy_type_medeauteur: 'Medeauteur',
         vacancy_type_reviewer: 'Reviewer',
         vacancy_type_digitaal: 'Digitale content',
-        vacancy_empty: 'Er zijn momenteel geen openstaande vacatures in dit segment.'
+        vacancy_empty: 'Er zijn momenteel geen openstaande vacatures in dit segment.',
+        // Password Reset
+        reset_title: 'Wachtwoord herstellen',
+        reset_subtitle: 'Voer uw e-mailadres in om een herstelmail te ontvangen.',
+        reset_btn: 'Herstelmail versturen',
+        reset_sent: 'Als dit e-mailadres bij ons bekend is, ontvangt u een e-mail met instructies om uw wachtwoord te herstellen.',
+        back_to_login: 'Terug naar inloggen',
+        new_password_title: 'Nieuw wachtwoord instellen',
+        new_password_subtitle: 'Kies een nieuw wachtwoord voor uw account.',
+        new_password_label: 'Nieuw wachtwoord',
+        confirm_password_label: 'Wachtwoord bevestigen',
+        set_password_btn: 'Wachtwoord opslaan',
+        password_min_length: 'Wachtwoord moet minimaal 8 tekens zijn.',
+        passwords_no_match: 'Wachtwoorden komen niet overeen.',
+        password_changed: 'Uw wachtwoord is succesvol gewijzigd. U kunt nu inloggen.',
+        // Bulk Upload
+        bulk_upload_title: 'PDF Afrekeningen importeren',
+        bulk_prefix_config: 'Prefix configuratie',
+        bulk_drop_text: 'Sleep PDF-bestanden hierheen of klik om te selecteren',
+        bulk_uploading: 'Uploaden...',
+        bulk_complete: 'Upload voltooid!',
+        bulk_failed: 'Upload mislukt',
+        bulk_uploaded: 'Geüpload',
+        bulk_skipped: 'Overgeslagen',
+        // Account Creation
+        accounts_title: 'Accounts aanmaken',
+        accounts_desc: 'Onderstaande auteurs hebben nog geen login-account. Zij ontvangen een e-mail met een link om hun wachtwoord in te stellen.',
+        accounts_select_all: 'Selecteer alles',
+        accounts_creating: 'Accounts aanmaken...',
+        accounts_complete: 'Accounts aangemaakt!',
+        accounts_failed: 'Aanmaken mislukt',
+        accounts_created: 'Aangemaakt',
+        // Upload Status
+        pdf_uploaded: 'PDF geüpload',
+        no_pdf: 'Geen PDF'
     },
     en: {
         portal_subtitle: 'Author Portal', tagline: 'Get direct insight into your royalties, statements and forecasts.',
@@ -2591,7 +2715,41 @@ const TRANSLATIONS = {
         vacancy_type_medeauteur: 'Co-author',
         vacancy_type_reviewer: 'Reviewer',
         vacancy_type_digitaal: 'Digital content',
-        vacancy_empty: 'There are currently no open vacancies in this segment.'
+        vacancy_empty: 'There are currently no open vacancies in this segment.',
+        // Password Reset
+        reset_title: 'Reset Password',
+        reset_subtitle: 'Enter your email address to receive a password reset link.',
+        reset_btn: 'Send Reset Email',
+        reset_sent: 'If this email address is registered with us, you will receive an email with instructions to reset your password.',
+        back_to_login: 'Back to login',
+        new_password_title: 'Set New Password',
+        new_password_subtitle: 'Choose a new password for your account.',
+        new_password_label: 'New password',
+        confirm_password_label: 'Confirm password',
+        set_password_btn: 'Save Password',
+        password_min_length: 'Password must be at least 8 characters.',
+        passwords_no_match: 'Passwords do not match.',
+        password_changed: 'Your password has been changed successfully. You can now log in.',
+        // Bulk Upload
+        bulk_upload_title: 'Import PDF Statements',
+        bulk_prefix_config: 'Prefix configuration',
+        bulk_drop_text: 'Drag PDF files here or click to select',
+        bulk_uploading: 'Uploading...',
+        bulk_complete: 'Upload completed!',
+        bulk_failed: 'Upload failed',
+        bulk_uploaded: 'Uploaded',
+        bulk_skipped: 'Skipped',
+        // Account Creation
+        accounts_title: 'Create Accounts',
+        accounts_desc: 'The authors below do not yet have a login account. They will receive an email with a link to set their password.',
+        accounts_select_all: 'Select all',
+        accounts_creating: 'Creating accounts...',
+        accounts_complete: 'Accounts created!',
+        accounts_failed: 'Creation failed',
+        accounts_created: 'Created',
+        // Upload Status
+        pdf_uploaded: 'PDF uploaded',
+        no_pdf: 'No PDF'
     }
 };
 
@@ -2872,8 +3030,7 @@ function toggleFAQ(index) {
     document.getElementById('faq-' + index).classList.toggle('open');
 }
 
-function downloadPaymentPDF(paymentIndex, filterYear) {
-    const { jsPDF } = window.jspdf;
+async function downloadPaymentPDF(paymentIndex, filterYear) {
     const author = getCurrentAuthor();
     if (!author || !author.payments) return;
     const filtered = filterYear === 'all' ? author.payments : author.payments.filter(p => p.year.toString() === filterYear);
@@ -2910,8 +3067,32 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
     });
 
     const payment = sortedPayments[paymentIndex];
-    const fullName = author.info.firstName + ' ' + author.info.lastName;
 
+    // If real PDF exists in Storage, download via signed URL
+    if (payment.filePath && supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('statements')
+                .createSignedUrl(payment.filePath, 60);
+            if (error) throw error;
+            // Trigger browser download
+            const a = document.createElement('a');
+            a.href = data.signedUrl;
+            a.download = payment.filename || payment.filePath.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            return;
+        } catch (err) {
+            console.error('Signed URL error:', err);
+            alert('Fout bij downloaden PDF: ' + err.message);
+            return;
+        }
+    }
+
+    // Fallback: generate PDF client-side (for annual statements and legacy data)
+    const { jsPDF } = window.jspdf;
+    const fullName = author.info.firstName + ' ' + author.info.lastName;
     const doc = new jsPDF();
 
     // Header
@@ -2923,10 +3104,8 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
     doc.setFontSize(12);
     doc.text(payment.title[currentLang], 20, 35);
 
-    // Reset color
     doc.setTextColor(0, 0, 0);
 
-    // Author info
     doc.setFontSize(11);
     doc.text(currentLang === 'nl' ? 'Auteur:' : 'Author:', 20, 55);
     doc.setFontSize(14);
@@ -2939,7 +3118,6 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
     doc.text(currentLang === 'nl' ? 'Datum:' : 'Date:', 20, 85);
     doc.text(payment.date[currentLang], 50, 85);
 
-    // Amount box
     doc.setFillColor(237, 186, 39);
     doc.rect(20, 100, 170, 30, 'F');
     doc.setTextColor(0, 0, 0);
@@ -2950,16 +3128,13 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
 
     let yPos = 150;
 
-    // For annual statements, show breakdown
     if (payment.type === 'annual' && payment.breakdown) {
         doc.setFontSize(14);
         doc.setTextColor(0, 130, 198);
         doc.text(currentLang === 'nl' ? 'Specificatie' : 'Breakdown', 20, yPos);
         yPos += 15;
-
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(11);
-
         if (payment.breakdown.royalty > 0) {
             doc.text(currentLang === 'nl' ? 'Royalties:' : 'Royalties:', 25, yPos);
             doc.text(formatCurrency(payment.breakdown.royalty), 120, yPos);
@@ -2978,19 +3153,16 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
         yPos += 10;
     }
 
-    // Contracts section
     doc.setFontSize(14);
     doc.setTextColor(0, 130, 198);
     doc.text(currentLang === 'nl' ? 'Gekoppelde contracten' : 'Linked Contracts', 20, yPos);
     yPos += 10;
-
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
     doc.setFillColor(240, 240, 240);
     doc.rect(20, yPos - 5, 170, 8, 'F');
     doc.text(currentLang === 'nl' ? 'Contractnr.' : 'Contract No.', 25, yPos);
     doc.text(currentLang === 'nl' ? 'Naam' : 'Name', 70, yPos);
-
     yPos += 10;
     author.contracts.forEach(contract => {
         doc.text(contract.number, 25, yPos);
@@ -2998,7 +3170,6 @@ function downloadPaymentPDF(paymentIndex, filterYear) {
         yPos += 8;
     });
 
-    // Footer
     doc.setFontSize(9);
     doc.setTextColor(128, 128, 128);
     doc.text('Noordhoff Uitgevers B.V. | rights@noordhoff.nl | (050) 522 69 22', 20, 280);
@@ -3443,6 +3614,7 @@ function renderAuthorDetail() {
                                     <div>
                                         <div class="admin-payment-title">${p.title.nl}</div>
                                         <div class="admin-payment-amount">${formatCurrency(p.amount)}</div>
+                                        <div class="admin-payment-file-status" style="font-size:0.75rem;margin-top:2px;">${p.filePath ? '<span style="color:var(--color-success);">&#10003; PDF geüpload</span>' : '<span style="color:var(--color-text-light);">Geen PDF</span>'}</div>
                                     </div>
                                 </div>
                                 <div class="admin-payment-actions">
@@ -3459,11 +3631,31 @@ function renderAuthorDetail() {
     `;
 }
 
-function deletePayment(email, index) {
-    if (confirm('Weet u zeker dat u dit document wilt verwijderen?')) {
+async function deletePayment(email, index) {
+    if (!confirm('Weet u zeker dat u dit document wilt verwijderen?')) return;
+
+    const payment = getAuthorsData()[email].payments[index];
+
+    if (isSupabaseMode && supabaseClient && payment.id) {
+        try {
+            // Delete file from Storage if it exists
+            if (payment.filePath) {
+                await supabaseClient.storage.from('statements').remove([payment.filePath]);
+            }
+            // Delete payment record from DB
+            const { error } = await supabaseClient.from('payments').delete().eq('id', payment.id);
+            if (error) throw error;
+            // Reload data from DB
+            await loadAllAuthorsForAdmin();
+        } catch (err) {
+            console.error('Error deleting payment:', err);
+            alert('Fout bij verwijderen: ' + err.message);
+            return;
+        }
+    } else {
         getAuthorsData()[email].payments.splice(index, 1);
-        renderAuthorDetail();
     }
+    renderAuthorDetail();
 }
 
 function movePayment(index, direction) {
@@ -3509,6 +3701,13 @@ function openEditStatementModal(index) {
     document.getElementById('editStatementFilename').value = payment.filename;
     document.getElementById('editStatementOrder').value = index + 1;
     document.getElementById('statementModalTitle').textContent = 'Document bewerken';
+    // Show current file info
+    const fileInfo = document.getElementById('currentStatementFile');
+    if (fileInfo) {
+        fileInfo.textContent = payment.filePath ? `Huidig bestand: ${payment.filePath.split('/').pop()}` : 'Geen PDF geüpload';
+    }
+    const fileInput = document.getElementById('editStatementFile');
+    if (fileInput) fileInput.value = '';
     document.getElementById('editStatementModal').classList.add('active');
 }
 
@@ -3517,33 +3716,72 @@ function closeEditStatementModal() {
     editingStatementIndex = null;
 }
 
-function saveStatement() {
+async function saveStatement() {
     const type = document.getElementById('editStatementType').value;
     const year = parseInt(document.getElementById('editStatementYear').value);
     const amount = parseFloat(document.getElementById('editStatementAmount').value);
     const filename = document.getElementById('editStatementFilename').value;
     const newOrder = parseInt(document.getElementById('editStatementOrder').value) - 1;
+    const fileInput = document.getElementById('editStatementFile');
 
     const typeNames = { royalty: 'Royalty-afrekening', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
     const typeNamesEn = { royalty: 'Royalty Statement', subsidiary: 'Reader Rights', foreign: 'Foreign Rights' };
     const months = { royalty: { nl: '15 maart', en: 'March 15' }, subsidiary: { nl: '15 juni', en: 'June 15' }, foreign: { nl: '15 juli', en: 'July 15' }};
     const sortMonths = { royalty: '03-15', subsidiary: '06-15', foreign: '07-15' };
 
+    const payments = getAuthorsData()[selectedAuthor].payments;
+    const existingPayment = payments[editingStatementIndex];
+    const authorId = getAuthorsData()[selectedAuthor].id;
+
+    let filePath = existingPayment.filePath || null;
+
+    // Handle file upload if a new file was selected
+    if (fileInput && fileInput.files.length > 0 && isSupabaseMode && supabaseClient && authorId) {
+        const file = fileInput.files[0];
+        filePath = `${authorId}/${type}/${year}/${file.name}`;
+        try {
+            const { error: uploadError } = await supabaseClient.storage
+                .from('statements')
+                .upload(filePath, file, { upsert: true });
+            if (uploadError) throw uploadError;
+        } catch (err) {
+            console.error('Upload error:', err);
+            alert('Fout bij uploaden PDF: ' + err.message);
+            return;
+        }
+    }
+
     const updatedPayment = {
+        id: existingPayment.id,
         year, type,
         title: { nl: `${typeNames[type]} ${year}`, en: `${typeNamesEn[type]} ${year}` },
         date: { nl: `${months[type].nl} ${year + 1}`, en: `${months[type].en}, ${year + 1}` },
         sortDate: `${year + 1}-${sortMonths[type]}`,
-        amount, filename
+        amount, filename, filePath
     };
 
-    const payments = getAuthorsData()[selectedAuthor].payments;
-    payments[editingStatementIndex] = updatedPayment;
-
-    // Reorder if necessary
-    if (newOrder !== editingStatementIndex && newOrder >= 0 && newOrder < payments.length) {
-        payments.splice(editingStatementIndex, 1);
-        payments.splice(newOrder, 0, updatedPayment);
+    if (isSupabaseMode && supabaseClient && existingPayment.id) {
+        try {
+            const { error } = await supabaseClient.from('payments').update({
+                type, year, amount, filename,
+                title_nl: updatedPayment.title.nl, title_en: updatedPayment.title.en,
+                date_nl: updatedPayment.date.nl, date_en: updatedPayment.date.en,
+                sort_date: updatedPayment.sortDate,
+                file_path: filePath
+            }).eq('id', existingPayment.id);
+            if (error) throw error;
+            await loadAllAuthorsForAdmin();
+        } catch (err) {
+            console.error('Error updating payment:', err);
+            alert('Fout bij opslaan: ' + err.message);
+            return;
+        }
+    } else {
+        payments[editingStatementIndex] = updatedPayment;
+        if (newOrder !== editingStatementIndex && newOrder >= 0 && newOrder < payments.length) {
+            payments.splice(editingStatementIndex, 1);
+            payments.splice(newOrder, 0, updatedPayment);
+        }
     }
 
     closeEditStatementModal();
@@ -3558,22 +3796,65 @@ function closeAddPaymentModal() {
     document.getElementById('addPaymentModal').classList.remove('active');
 }
 
-function saveNewPayment() {
+async function saveNewPayment() {
     const type = document.getElementById('newPaymentType').value;
     const year = parseInt(document.getElementById('newPaymentYear').value);
     const amount = parseFloat(document.getElementById('newPaymentAmount').value);
     const filename = document.getElementById('newPaymentFilename').value;
+    const fileInput = document.getElementById('newPaymentFile');
 
     const typeNames = { royalty: 'Royalty-afrekening', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
     const typeNamesEn = { royalty: 'Royalty Statement', subsidiary: 'Reader Rights', foreign: 'Foreign Rights' };
     const months = { royalty: { nl: '15 maart', en: 'March 15' }, subsidiary: { nl: '15 juni', en: 'June 15' }, foreign: { nl: '15 juli', en: 'July 15' }};
+    const sortMonths = { royalty: '03-15', subsidiary: '06-15', foreign: '07-15' };
 
-    getAuthorsData()[selectedAuthor].payments.push({
+    const authorId = getAuthorsData()[selectedAuthor].id;
+    let filePath = null;
+
+    // Handle file upload
+    if (fileInput && fileInput.files.length > 0 && isSupabaseMode && supabaseClient && authorId) {
+        const file = fileInput.files[0];
+        filePath = `${authorId}/${type}/${year}/${file.name}`;
+        try {
+            const { error: uploadError } = await supabaseClient.storage
+                .from('statements')
+                .upload(filePath, file, { upsert: true });
+            if (uploadError) throw uploadError;
+        } catch (err) {
+            console.error('Upload error:', err);
+            alert('Fout bij uploaden PDF: ' + err.message);
+            return;
+        }
+    }
+
+    const paymentData = {
         year, type,
         title: { nl: `${typeNames[type]} ${year}`, en: `${typeNamesEn[type]} ${year}` },
         date: { nl: `${months[type].nl} ${year + 1}`, en: `${months[type].en}, ${year + 1}` },
-        amount, filename
-    });
+        sortDate: `${year + 1}-${sortMonths[type]}`,
+        amount, filename, filePath
+    };
+
+    if (isSupabaseMode && supabaseClient && authorId) {
+        try {
+            const { error } = await supabaseClient.from('payments').insert({
+                author_id: authorId,
+                type, year, amount, filename,
+                title_nl: paymentData.title.nl, title_en: paymentData.title.en,
+                date_nl: paymentData.date.nl, date_en: paymentData.date.en,
+                sort_date: paymentData.sortDate,
+                file_path: filePath
+            });
+            if (error) throw error;
+            await loadAllAuthorsForAdmin();
+        } catch (err) {
+            console.error('Error creating payment:', err);
+            alert('Fout bij aanmaken: ' + err.message);
+            return;
+        }
+    } else {
+        getAuthorsData()[selectedAuthor].payments.push(paymentData);
+    }
 
     closeAddPaymentModal();
     renderAuthorDetail();
@@ -4228,6 +4509,380 @@ document.getElementById('verifyPassword').addEventListener('keypress', function(
 });
 
 // ============================================
+// BULK PDF UPLOAD FUNCTIONS
+// ============================================
+
+let bulkFiles = [];
+let bulkAuthorLookup = {}; // netsuite_internal_id → { authorId, email, name }
+
+function openBulkUploadModal() {
+    // Load prefix config from localStorage
+    const savedPrefixes = JSON.parse(localStorage.getItem('bulkPrefixes') || '{}');
+    document.getElementById('bulkPrefixRoyalty').value = savedPrefixes.royalty || 'RA';
+    document.getElementById('bulkPrefixSubsidiary').value = savedPrefixes.subsidiary || 'NR';
+    document.getElementById('bulkPrefixForeign').value = savedPrefixes.foreign || 'FR';
+
+    bulkFiles = [];
+    document.getElementById('bulkStep1').style.display = 'block';
+    document.getElementById('bulkStep2').style.display = 'none';
+    document.getElementById('bulkStep3').style.display = 'none';
+    document.getElementById('bulkPreview').style.display = 'none';
+    document.getElementById('bulkUploadBtn').disabled = true;
+    document.getElementById('bulkFileInput').value = '';
+    document.getElementById('bulkUploadModal').classList.add('active');
+
+    // Build author lookup from admin data
+    bulkAuthorLookup = {};
+    const authors = getAuthorsData();
+    Object.entries(authors).forEach(([email, author]) => {
+        if (author.info.alliantNumber) {
+            bulkAuthorLookup[author.info.alliantNumber] = {
+                authorId: author.id,
+                email,
+                name: `${author.info.firstName} ${author.info.lastName}`
+            };
+        }
+    });
+}
+
+function closeBulkUploadModal() {
+    document.getElementById('bulkUploadModal').classList.remove('active');
+    bulkFiles = [];
+}
+
+// Drop zone setup
+document.addEventListener('DOMContentLoaded', () => {
+    const dropZone = document.getElementById('bulkDropZone');
+    const fileInput = document.getElementById('bulkFileInput');
+    if (!dropZone || !fileInput) return;
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        const files = Array.from(e.dataTransfer.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+        if (files.length > 0) handleBulkFiles(files);
+    });
+    fileInput.addEventListener('change', () => {
+        const files = Array.from(fileInput.files);
+        if (files.length > 0) handleBulkFiles(files);
+    });
+});
+
+function parseBulkFilename(filename) {
+    // Expected format: PREFIX_xxxxxxx_Voorletters_Achternaam_YYYYMM.pdf
+    // Type is determined by prefix, author by 7-digit internal ID, date by last segment
+    const name = filename.replace(/\.pdf$/i, '');
+    const parts = name.split('_');
+
+    if (parts.length < 3) return null;
+
+    const prefix = parts[0].toUpperCase();
+    const prefixRoyalty = document.getElementById('bulkPrefixRoyalty').value.toUpperCase();
+    const prefixSubsidiary = document.getElementById('bulkPrefixSubsidiary').value.toUpperCase();
+    const prefixForeign = document.getElementById('bulkPrefixForeign').value.toUpperCase();
+
+    let type = null;
+    if (prefix === prefixRoyalty) type = 'royalty';
+    else if (prefix === prefixSubsidiary) type = 'subsidiary';
+    else if (prefix === prefixForeign) type = 'foreign';
+
+    // Find the 7-digit internal ID (second part usually)
+    let internalId = null;
+    for (let i = 1; i < parts.length; i++) {
+        if (/^\d{5,9}$/.test(parts[i])) {
+            internalId = parts[i];
+            break;
+        }
+    }
+
+    // Find year+month in last segment (YYYYMM)
+    let year = null;
+    let month = null;
+    const lastPart = parts[parts.length - 1];
+    const dateMatch = lastPart.match(/^(\d{4})(\d{2})$/);
+    if (dateMatch) {
+        year = parseInt(dateMatch[1]);
+        month = parseInt(dateMatch[2]);
+    }
+
+    return { type, internalId, year, month, prefix };
+}
+
+function handleBulkFiles(files) {
+    bulkFiles = files;
+
+    // Save prefix config
+    localStorage.setItem('bulkPrefixes', JSON.stringify({
+        royalty: document.getElementById('bulkPrefixRoyalty').value,
+        subsidiary: document.getElementById('bulkPrefixSubsidiary').value,
+        foreign: document.getElementById('bulkPrefixForeign').value
+    }));
+
+    // Parse and preview
+    const typeLabels = { royalty: 'Royalty', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
+    let tableHTML = '<thead><tr><th>Bestandsnaam</th><th>Type</th><th>Auteur</th><th>Jaar</th><th>Status</th></tr></thead><tbody>';
+
+    let matchCount = 0;
+    files.forEach(file => {
+        const parsed = parseBulkFilename(file.name);
+        const authorMatch = parsed?.internalId ? bulkAuthorLookup[parsed.internalId] : null;
+        const hasMatch = parsed?.type && authorMatch && parsed?.year;
+        if (hasMatch) matchCount++;
+
+        tableHTML += `<tr>
+            <td style="font-family:monospace;font-size:0.75rem;">${file.name}</td>
+            <td>${parsed?.type ? typeLabels[parsed.type] : '<span class="no-match">?</span>'}</td>
+            <td>${authorMatch ? `<span class="match">${authorMatch.name}</span>` : `<span class="no-match">${parsed?.internalId || '?'}</span>`}</td>
+            <td>${parsed?.year || '<span class="no-match">?</span>'}</td>
+            <td>${hasMatch ? '<span class="match">&#10003;</span>' : '<span class="no-match">&#10007;</span>'}</td>
+        </tr>`;
+    });
+    tableHTML += '</tbody>';
+
+    document.getElementById('bulkPreviewTable').innerHTML = tableHTML;
+    document.getElementById('bulkFileCount').textContent = `${files.length} bestanden, ${matchCount} gematcht`;
+    document.getElementById('bulkPreview').style.display = 'block';
+    document.getElementById('bulkUploadBtn').disabled = matchCount === 0;
+}
+
+async function startBulkUpload() {
+    if (bulkFiles.length === 0 || !supabaseClient) return;
+
+    document.getElementById('bulkStep1').style.display = 'none';
+    document.getElementById('bulkStep2').style.display = 'block';
+    document.getElementById('bulkUploadBtn').disabled = true;
+
+    const typeNames = { royalty: 'Royalty-afrekening', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
+    const typeNamesEn = { royalty: 'Royalty Statement', subsidiary: 'Reader Rights', foreign: 'Foreign Rights' };
+    const months = { royalty: { nl: '15 maart', en: 'March 15' }, subsidiary: { nl: '15 juni', en: 'June 15' }, foreign: { nl: '15 juli', en: 'July 15' }};
+    const sortMonths = { royalty: '03-15', subsidiary: '06-15', foreign: '07-15' };
+
+    let uploaded = 0, skipped = 0, failed = 0;
+    const errors = [];
+    const total = bulkFiles.length;
+
+    for (let i = 0; i < total; i++) {
+        const file = bulkFiles[i];
+        const parsed = parseBulkFilename(file.name);
+        const authorMatch = parsed?.internalId ? bulkAuthorLookup[parsed.internalId] : null;
+
+        if (!parsed?.type || !authorMatch || !parsed?.year) {
+            skipped++;
+        } else {
+            try {
+                const filePath = `${authorMatch.authorId}/${parsed.type}/${parsed.year}/${file.name}`;
+
+                // Upload to Storage
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('statements')
+                    .upload(filePath, file, { upsert: true });
+                if (uploadError) throw uploadError;
+
+                // Create payment record
+                const { error: dbError } = await supabaseClient.from('payments').insert({
+                    author_id: authorMatch.authorId,
+                    type: parsed.type,
+                    year: parsed.year,
+                    amount: 0,
+                    filename: file.name,
+                    title_nl: `${typeNames[parsed.type]} ${parsed.year}`,
+                    title_en: `${typeNamesEn[parsed.type]} ${parsed.year}`,
+                    date_nl: `${months[parsed.type].nl} ${parsed.year + 1}`,
+                    date_en: `${months[parsed.type].en}, ${parsed.year + 1}`,
+                    sort_date: `${parsed.year + 1}-${sortMonths[parsed.type]}`,
+                    file_path: filePath
+                });
+                if (dbError) throw dbError;
+
+                uploaded++;
+            } catch (err) {
+                errors.push({ file: file.name, error: err.message });
+                failed++;
+            }
+        }
+
+        // Update progress
+        const progress = Math.round(((i + 1) / total) * 100);
+        document.getElementById('bulkProgressBar').style.width = progress + '%';
+        document.getElementById('bulkProgressText').textContent = `${i + 1} / ${total}`;
+        document.getElementById('bulkStatus').textContent = `Uploaden... ${file.name}`;
+
+        // Small delay to avoid rate limiting
+        if (i < total - 1) await new Promise(r => setTimeout(r, 100));
+    }
+
+    // Show results
+    document.getElementById('bulkStep2').style.display = 'none';
+    document.getElementById('bulkStep3').style.display = 'block';
+
+    const success = uploaded > 0;
+    document.getElementById('bulkResultIcon').innerHTML = success
+        ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>'
+        : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    document.getElementById('bulkResultTitle').textContent = success ? 'Upload voltooid!' : 'Upload mislukt';
+
+    let detailsHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+            <div><strong>Geüpload:</strong></div><div style="color:#2e7d32;">${uploaded}</div>
+            <div><strong>Overgeslagen:</strong></div><div style="color:#b8860b;">${skipped}</div>
+            <div><strong>Mislukt:</strong></div><div style="color:#c62828;">${failed}</div>
+        </div>
+    `;
+    if (errors.length > 0) {
+        detailsHTML += `<div style="margin-top:1rem;"><strong>Fouten:</strong><ul style="margin:0.5rem 0 0 1rem;font-size:0.85rem;">
+            ${errors.slice(0, 10).map(e => `<li>${e.file}: ${e.error}</li>`).join('')}</ul></div>`;
+    }
+    document.getElementById('bulkResultDetails').innerHTML = detailsHTML;
+
+    // Refresh admin data
+    if (isSupabaseMode) {
+        await loadAllAuthorsForAdmin();
+    }
+    renderAuthorList();
+    if (selectedAuthor) renderAuthorDetail();
+}
+
+// Close bulk upload modal on overlay click
+document.getElementById('bulkUploadModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeBulkUploadModal();
+});
+
+// ============================================
+// BULK ACCOUNT CREATION FUNCTIONS
+// ============================================
+
+function openCreateAccountsModal() {
+    document.getElementById('accountsStep1').style.display = 'block';
+    document.getElementById('accountsStep2').style.display = 'none';
+    document.getElementById('accountsStep3').style.display = 'none';
+    document.getElementById('createAccountsBtn').disabled = true;
+    document.getElementById('createAccountsModal').classList.add('active');
+
+    // List authors without auth accounts (we check by listing all authors)
+    const authors = getAuthorsData();
+    const listEl = document.getElementById('accountsAuthorList');
+    const authorEntries = Object.entries(authors).filter(([email, a]) => !a.isAdmin && email);
+
+    if (authorEntries.length === 0) {
+        listEl.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--color-text-light);">Geen auteurs gevonden</div>';
+        document.getElementById('accountsCount').textContent = '';
+        return;
+    }
+
+    listEl.innerHTML = authorEntries.map(([email, author]) => `
+        <div class="account-author-item">
+            <label>
+                <input type="checkbox" class="account-checkbox" value="${email}" data-author-id="${author.id}">
+                <span>${author.info.firstName} ${author.info.lastName}</span>
+                <span style="color:var(--color-text-light);font-size:0.85rem;margin-left:auto;">${email}</span>
+            </label>
+        </div>
+    `).join('');
+
+    document.getElementById('accountsCount').textContent = `${authorEntries.length} auteurs`;
+    document.getElementById('selectAllAccounts').checked = false;
+
+    // Enable button when at least one is checked
+    listEl.addEventListener('change', () => {
+        const checked = document.querySelectorAll('.account-checkbox:checked').length;
+        document.getElementById('createAccountsBtn').disabled = checked === 0;
+    });
+}
+
+function closeCreateAccountsModal() {
+    document.getElementById('createAccountsModal').classList.remove('active');
+}
+
+function toggleAllAccountSelections() {
+    const selectAll = document.getElementById('selectAllAccounts').checked;
+    document.querySelectorAll('.account-checkbox').forEach(cb => cb.checked = selectAll);
+    document.getElementById('createAccountsBtn').disabled = !selectAll;
+}
+
+async function startCreateAccounts() {
+    const selectedCheckboxes = document.querySelectorAll('.account-checkbox:checked');
+    if (selectedCheckboxes.length === 0) return;
+
+    const accounts = Array.from(selectedCheckboxes).map(cb => ({
+        email: cb.value,
+        author_id: cb.dataset.authorId
+    }));
+
+    document.getElementById('accountsStep1').style.display = 'none';
+    document.getElementById('accountsStep2').style.display = 'block';
+    document.getElementById('createAccountsBtn').disabled = true;
+
+    let created = 0, skipped = 0, failed = 0;
+    const errors = [];
+    const total = accounts.length;
+
+    for (let i = 0; i < total; i++) {
+        const account = accounts[i];
+        try {
+            // Call the Edge Function
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/create-accounts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                },
+                body: JSON.stringify({ accounts: [account] })
+            });
+
+            const result = await response.json();
+            if (result.error) throw new Error(result.error);
+            if (result.created > 0) created++;
+            else if (result.skipped > 0) skipped++;
+        } catch (err) {
+            errors.push({ email: account.email, error: err.message });
+            failed++;
+        }
+
+        const progress = Math.round(((i + 1) / total) * 100);
+        document.getElementById('accountsProgressBar').style.width = progress + '%';
+        document.getElementById('accountsProgressText').textContent = `${i + 1} / ${total}`;
+        document.getElementById('accountsStatus').textContent = `Account aanmaken... ${account.email}`;
+    }
+
+    // Show results
+    document.getElementById('accountsStep2').style.display = 'none';
+    document.getElementById('accountsStep3').style.display = 'block';
+
+    const success = created > 0;
+    document.getElementById('accountsResultIcon').innerHTML = success
+        ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#007460" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 16 7 13"/></svg>'
+        : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    document.getElementById('accountsResultTitle').textContent = success ? 'Accounts aangemaakt!' : 'Aanmaken mislukt';
+
+    let detailsHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+            <div><strong>Aangemaakt:</strong></div><div style="color:#2e7d32;">${created}</div>
+            <div><strong>Overgeslagen:</strong></div><div style="color:#b8860b;">${skipped}</div>
+            <div><strong>Mislukt:</strong></div><div style="color:#c62828;">${failed}</div>
+        </div>
+    `;
+    if (errors.length > 0) {
+        detailsHTML += `<div style="margin-top:1rem;"><strong>Fouten:</strong><ul style="margin:0.5rem 0 0 1rem;font-size:0.85rem;">
+            ${errors.slice(0, 10).map(e => `<li>${e.email}: ${e.error}</li>`).join('')}</ul></div>`;
+    }
+    document.getElementById('accountsResultDetails').innerHTML = detailsHTML;
+}
+
+document.getElementById('createAccountsModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeCreateAccountsModal();
+});
+
+// ============================================
 // CSV IMPORT FUNCTIONS
 // ============================================
 
@@ -4508,7 +5163,70 @@ document.getElementById('importModal')?.addEventListener('click', function(e) {
     if (e.target === this) closeImportModal();
 });
 
+// ============================================
+// SESSION PERSISTENCE
+// ============================================
+
+async function restoreSession() {
+    if (!supabaseClient) return;
+
+    try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        if (error || !session) return;
+
+        console.log('Restoring session for:', session.user.email);
+        const authorData = await fetchAuthorProfile(session.user.id);
+        if (authorData.error) return;
+
+        isSupabaseMode = true;
+        currentAuthorData = authorData.data;
+        currentUser = session.user.email;
+
+        if (authorData.data.isAdmin) {
+            showDashboard(true);
+            document.getElementById('adminDashboard').classList.add('active');
+            document.body.classList.add('dashboard-active');
+            await initAdminDashboard();
+        } else {
+            showDashboard(false);
+            document.getElementById('dashboard').classList.add('active');
+            document.body.classList.add('dashboard-active');
+            initAuthorDashboard();
+        }
+    } catch (err) {
+        console.error('Session restore error:', err);
+    }
+}
+
+// Listen for auth state changes (e.g. sign out from another tab)
+if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT') {
+            currentUser = null;
+            selectedAuthor = null;
+            currentAuthorData = null;
+            isSupabaseMode = false;
+            if (adminRefreshInterval) {
+                clearInterval(adminRefreshInterval);
+                adminRefreshInterval = null;
+            }
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('adminDashboard').classList.remove('active');
+            document.body.classList.remove('dashboard-active');
+            showPublicSite();
+        }
+        if (event === 'PASSWORD_RECOVERY') {
+            // Show the set-new-password form
+            showLoginPage();
+            showSetNewPasswordForm();
+        }
+    });
+}
+
 // Initialize public site content on load
 initPublicSite();
+
+// Restore session if user was previously logged in
+restoreSession();
 
 console.log('Script loaded successfully. Available authors:', Object.keys(DATA.authors));

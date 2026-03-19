@@ -81,6 +81,7 @@ CREATE TABLE payments (
     date_nl VARCHAR(100),
     date_en VARCHAR(100),
     sort_date DATE,
+    file_path VARCHAR(500),
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -130,6 +131,40 @@ CREATE TABLE login_history (
 );
 
 -- ============================================
+-- EVENTS TABLE (Evenementen)
+-- ============================================
+CREATE TABLE events (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    location VARCHAR(255),
+    link VARCHAR(500),
+
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_by UUID REFERENCES authors(id)
+);
+
+-- ============================================
+-- BLOG POSTS TABLE (Nieuwsberichten)
+-- ============================================
+CREATE TABLE blog_posts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    summary VARCHAR(500),
+    image_url VARCHAR(500),
+
+    is_published BOOLEAN DEFAULT false,
+    published_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_by UUID REFERENCES authors(id)
+);
+
+-- ============================================
 -- INDEXES
 -- ============================================
 CREATE INDEX idx_authors_email ON authors(email);
@@ -139,6 +174,10 @@ CREATE INDEX idx_payments_year ON payments(year);
 CREATE INDEX idx_change_requests_author ON change_requests(author_id);
 CREATE INDEX idx_change_requests_status ON change_requests(status);
 CREATE INDEX idx_login_history_author ON login_history(author_id);
+CREATE INDEX idx_events_date ON events(event_date);
+CREATE INDEX idx_events_active ON events(is_active);
+CREATE INDEX idx_blog_posts_published ON blog_posts(is_published);
+CREATE INDEX idx_blog_posts_published_at ON blog_posts(published_at DESC);
 
 -- ============================================
 -- ROW LEVEL SECURITY (RLS)
@@ -222,6 +261,28 @@ CREATE POLICY "Users can view own login history" ON login_history
 
 CREATE POLICY "System can insert login history" ON login_history
     FOR INSERT WITH CHECK (true);
+
+-- Events: everyone can read active events, admins can manage
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Everyone can view active events" ON events
+    FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Admins can manage events" ON events
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM authors WHERE id = auth.uid() AND is_admin = true)
+    );
+
+-- Blog posts: everyone can read published posts, admins can manage
+ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Everyone can view published blog posts" ON blog_posts
+    FOR SELECT USING (is_published = true);
+
+CREATE POLICY "Admins can manage blog posts" ON blog_posts
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM authors WHERE id = auth.uid() AND is_admin = true)
+    );
 
 -- ============================================
 -- FUNCTIONS
