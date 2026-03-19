@@ -3124,47 +3124,62 @@ function renderRoyaltyChart(payments) {
 
     const years = Object.keys(yearData).sort();
     if (years.length === 0) {
-        chartEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-text-light);font-size:0.9rem;">' +
+        chartEl.innerHTML = '<div class="chart-empty-state">' +
+            '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="7 14 10 10 13 13 17 8"/></svg>' +
             (currentLang === 'nl' ? 'Nog geen afrekeningen beschikbaar' : 'No statements available yet') + '</div>';
         return;
     }
 
     const maxTotal = Math.max(...years.map(y => yearData[y].total));
-    const maxHeight = 130; // px
 
-    let barsHTML = '<div class="chart-bars">';
-    years.forEach(year => {
+    // Build horizontal timeline rows (newest first)
+    let timelineHTML = '<div class="chart-timeline">';
+    years.slice().reverse().forEach(year => {
         const d = yearData[year];
-        const royaltyH = maxTotal > 0 ? (d.royalty / maxTotal) * maxHeight : 0;
-        const subsidH = maxTotal > 0 ? (d.subsidiary / maxTotal) * maxHeight : 0;
-        const foreignH = maxTotal > 0 ? (d.foreign / maxTotal) * maxHeight : 0;
+        const pct = maxTotal > 0 ? (d.total / maxTotal) * 100 : 0;
+        const royaltyPct = d.total > 0 ? (d.royalty / d.total) * pct : 0;
+        const subsidPct = d.total > 0 ? (d.subsidiary / d.total) * pct : 0;
+        const foreignPct = d.total > 0 ? (d.foreign / d.total) * pct : 0;
 
-        barsHTML += `
-            <div class="chart-bar-group">
-                <div class="chart-bar-amount">${formatCurrency(d.total)}</div>
-                <div class="chart-bar-stack">
-                    ${d.foreign > 0 ? `<div class="chart-bar-segment foreign" style="height:${foreignH}px" title="Foreign Rights: ${formatCurrency(d.foreign)}"></div>` : ''}
-                    ${d.subsidiary > 0 ? `<div class="chart-bar-segment subsidiary" style="height:${subsidH}px" title="Nevenrechten: ${formatCurrency(d.subsidiary)}"></div>` : ''}
-                    ${d.royalty > 0 ? `<div class="chart-bar-segment royalty" style="height:${royaltyH}px" title="Royalties: ${formatCurrency(d.royalty)}"></div>` : ''}
+        // Segment labels for detail
+        const segments = [];
+        if (d.royalty > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:var(--color-primary)"></span>Royalties ${formatCurrency(d.royalty)}</span>`);
+        if (d.subsidiary > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'} ${formatCurrency(d.subsidiary)}</span>`);
+        if (d.foreign > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:#6DB5C5"></span>Foreign Rights ${formatCurrency(d.foreign)}</span>`);
+
+        timelineHTML += `
+            <div class="chart-year-row">
+                <div class="chart-year-label">${year}</div>
+                <div class="chart-year-bar-container">
+                    <div class="chart-year-bar-track">
+                        ${d.royalty > 0 ? `<div class="chart-year-bar-fill royalty" style="width:${royaltyPct}%"></div>` : ''}
+                        ${d.subsidiary > 0 ? `<div class="chart-year-bar-fill subsidiary" style="width:${subsidPct}%"></div>` : ''}
+                        ${d.foreign > 0 ? `<div class="chart-year-bar-fill foreign" style="width:${foreignPct}%"></div>` : ''}
+                    </div>
+                    ${segments.length > 1 ? `<div class="chart-year-segments">${segments.join('')}</div>` : ''}
                 </div>
-                <div class="chart-bar-year">${year}</div>
+                <div class="chart-year-amount">${formatCurrency(d.total)}</div>
             </div>
         `;
     });
-    barsHTML += '</div>';
+    timelineHTML += '</div>';
 
     // Legend
     const hasRoyalty = years.some(y => yearData[y].royalty > 0);
     const hasSubsid = years.some(y => yearData[y].subsidiary > 0);
     const hasForeign = years.some(y => yearData[y].foreign > 0);
+    const typeCount = [hasRoyalty, hasSubsid, hasForeign].filter(Boolean).length;
 
-    let legendHTML = '<div class="chart-legend">';
-    if (hasRoyalty) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--color-primary)"></span>Royalties</div>';
-    if (hasSubsid) legendHTML += `<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'}</div>`;
-    if (hasForeign) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#6DB5C5"></span>Foreign Rights</div>';
-    legendHTML += '</div>';
+    let legendHTML = '';
+    if (typeCount > 1) {
+        legendHTML = '<div class="chart-legend">';
+        if (hasRoyalty) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--color-primary)"></span>Royalties</div>';
+        if (hasSubsid) legendHTML += `<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'}</div>`;
+        if (hasForeign) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#6DB5C5"></span>Foreign Rights</div>';
+        legendHTML += '</div>';
+    }
 
-    chartEl.innerHTML = barsHTML + legendHTML;
+    chartEl.innerHTML = timelineHTML + legendHTML;
 }
 
 // ============================================
@@ -5689,6 +5704,26 @@ if (supabaseClient) {
         }
     });
 }
+
+// ============================================
+// DARK MODE
+// ============================================
+
+function toggleDarkMode() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+
+function initDarkMode() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+}
+
+initDarkMode();
 
 // Initialize public site content on load
 initPublicSite();

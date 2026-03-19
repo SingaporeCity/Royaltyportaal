@@ -944,58 +944,89 @@
     <!-- Login Page -->
     <div class="login-container hidden" id="loginPage">
         <div class="login-page-inner">
-            <div class="login-card">
+            <!-- Branding Panel -->
+            <div class="login-brand-panel">
+                <div class="login-brand-content">
+                    <img src="noordhoff-logo.png" alt="Noordhoff" class="login-brand-logo">
+                    <h1 class="login-brand-title">Auteursportaal</h1>
+                    <p class="login-brand-subtitle">Inzicht in uw royalties, contracten en afrekeningen — altijd en overal.</p>
+                    <div class="login-brand-stats">
+                        <div class="login-brand-stat">
+                            <span class="login-brand-stat-value">190+</span>
+                            <span class="login-brand-stat-label">jaar ervaring</span>
+                        </div>
+                        <div class="login-brand-stat-divider"></div>
+                        <div class="login-brand-stat">
+                            <span class="login-brand-stat-value">500+</span>
+                            <span class="login-brand-stat-label">actieve auteurs</span>
+                        </div>
+                        <div class="login-brand-stat-divider"></div>
+                        <div class="login-brand-stat">
+                            <span class="login-brand-stat-value">1000+</span>
+                            <span class="login-brand-stat-label">publicaties</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="login-brand-footer">
+                    &copy; 2026 Noordhoff Uitgevers
+                </div>
+            </div>
+            <!-- Form Panel -->
+            <div class="login-form-panel">
                 <button class="btn-back-to-site" onclick="showPublicSite()">
-                    <span>&larr;</span> <span data-i18n="back_to_site">Terug naar website</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    <span data-i18n="back_to_site">Terug naar website</span>
                 </button>
-                <div class="login-logo" style="text-align:center; margin-bottom:2.5rem;">
-                    <img src="noordhoff-logo.png" alt="Noordhoff" style="height:36px; width:auto;">
+                <div class="login-card">
+                    <div class="login-logo-mobile">
+                        <img src="noordhoff-logo.png" alt="Noordhoff" style="height:32px; width:auto;">
+                    </div>
+                    <!-- Login Form -->
+                    <form class="login-form" id="loginForm">
+                        <h2 data-i18n="welcome_login">Welkom bij Noordhoff</h2>
+                        <p data-i18n="login_subtitle">Log in om uw royalty-informatie te bekijken</p>
+                        <div class="login-error" id="loginError" data-i18n="login_error">Ongeldig e-mailadres of wachtwoord.</div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="email_label">E-mailadres</label>
+                            <input type="email" id="email" placeholder="uw@email.nl" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" data-i18n="password_label">Wachtwoord</label>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="login-btn" data-i18n="login_btn">Inloggen</button>
+                        <button type="button" class="forgot-password-btn" onclick="showForgotPasswordForm()">Wachtwoord vergeten?</button>
+                    </form>
+                    <!-- Forgot Password Form -->
+                    <div class="login-form" id="forgotPasswordForm" style="display:none;">
+                        <h2 data-i18n="reset_title">Wachtwoord herstellen</h2>
+                        <p data-i18n="reset_subtitle">Voer uw e-mailadres in om een herstelmail te ontvangen.</p>
+                        <div class="login-success" id="resetSuccess" style="display:none;background:#e8f5e9;color:#2e7d32;padding:0.75rem 1rem;border-radius:4px;margin-bottom:1rem;font-size:0.9rem;" data-i18n="reset_sent">Als dit e-mailadres bij ons bekend is, ontvangt u een e-mail met instructies om uw wachtwoord te herstellen.</div>
+                        <div class="login-error" id="resetError" style="display:none;">Er is een fout opgetreden. Probeer het opnieuw.</div>
+                        <div class="form-group">
+                            <label for="resetEmail" data-i18n="email_label">E-mailadres</label>
+                            <input type="email" id="resetEmail" placeholder="uw@email.nl" required>
+                        </div>
+                        <button type="button" class="login-btn" onclick="sendPasswordReset()" data-i18n="reset_btn">Herstelmail versturen</button>
+                        <button type="button" class="forgot-password-btn" onclick="showLoginForm()" data-i18n="back_to_login">Terug naar inloggen</button>
+                    </div>
+                    <!-- Set New Password Form (after clicking email link) -->
+                    <div class="login-form" id="setNewPasswordForm" style="display:none;">
+                        <h2 data-i18n="new_password_title">Nieuw wachtwoord instellen</h2>
+                        <p data-i18n="new_password_subtitle">Kies een nieuw wachtwoord voor uw account.</p>
+                        <div class="login-error" id="newPasswordError" style="display:none;"></div>
+                        <div class="form-group">
+                            <label for="newPassword" data-i18n="new_password_label">Nieuw wachtwoord</label>
+                            <input type="password" id="newPassword" placeholder="••••••••" required minlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmNewPassword" data-i18n="confirm_password_label">Wachtwoord bevestigen</label>
+                            <input type="password" id="confirmNewPassword" placeholder="••••••••" required minlength="8">
+                        </div>
+                        <button type="button" class="login-btn" onclick="setNewPassword()" data-i18n="set_password_btn">Wachtwoord opslaan</button>
+                    </div>
+                    <p class="login-footer-text">Auteursportaal &mdash; Krijg direct inzicht in uw royalties, afrekeningen en prognoses.</p>
                 </div>
-                <!-- Login Form -->
-                <form class="login-form" id="loginForm">
-                    <h2 data-i18n="welcome_login">Welkom bij Noordhoff</h2>
-                    <p data-i18n="login_subtitle">Log in om uw royalty-informatie te bekijken</p>
-                    <div class="login-error" id="loginError" data-i18n="login_error">Ongeldig e-mailadres of wachtwoord.</div>
-                    <div class="form-group">
-                        <label for="email" data-i18n="email_label">E-mailadres</label>
-                        <input type="email" id="email" placeholder="uw@email.nl" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" data-i18n="password_label">Wachtwoord</label>
-                        <input type="password" id="password" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="login-btn" data-i18n="login_btn">Inloggen</button>
-                    <button type="button" class="forgot-password-btn" onclick="showForgotPasswordForm()">Wachtwoord vergeten?</button>
-                </form>
-                <!-- Forgot Password Form -->
-                <div class="login-form" id="forgotPasswordForm" style="display:none;">
-                    <h2 data-i18n="reset_title">Wachtwoord herstellen</h2>
-                    <p data-i18n="reset_subtitle">Voer uw e-mailadres in om een herstelmail te ontvangen.</p>
-                    <div class="login-success" id="resetSuccess" style="display:none;background:#e8f5e9;color:#2e7d32;padding:0.75rem 1rem;border-radius:4px;margin-bottom:1rem;font-size:0.9rem;" data-i18n="reset_sent">Als dit e-mailadres bij ons bekend is, ontvangt u een e-mail met instructies om uw wachtwoord te herstellen.</div>
-                    <div class="login-error" id="resetError" style="display:none;">Er is een fout opgetreden. Probeer het opnieuw.</div>
-                    <div class="form-group">
-                        <label for="resetEmail" data-i18n="email_label">E-mailadres</label>
-                        <input type="email" id="resetEmail" placeholder="uw@email.nl" required>
-                    </div>
-                    <button type="button" class="login-btn" onclick="sendPasswordReset()" data-i18n="reset_btn">Herstelmail versturen</button>
-                    <button type="button" class="forgot-password-btn" onclick="showLoginForm()" data-i18n="back_to_login">Terug naar inloggen</button>
-                </div>
-                <!-- Set New Password Form (after clicking email link) -->
-                <div class="login-form" id="setNewPasswordForm" style="display:none;">
-                    <h2 data-i18n="new_password_title">Nieuw wachtwoord instellen</h2>
-                    <p data-i18n="new_password_subtitle">Kies een nieuw wachtwoord voor uw account.</p>
-                    <div class="login-error" id="newPasswordError" style="display:none;"></div>
-                    <div class="form-group">
-                        <label for="newPassword" data-i18n="new_password_label">Nieuw wachtwoord</label>
-                        <input type="password" id="newPassword" placeholder="••••••••" required minlength="8">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmNewPassword" data-i18n="confirm_password_label">Wachtwoord bevestigen</label>
-                        <input type="password" id="confirmNewPassword" placeholder="••••••••" required minlength="8">
-                    </div>
-                    <button type="button" class="login-btn" onclick="setNewPassword()" data-i18n="set_password_btn">Wachtwoord opslaan</button>
-                </div>
-                <p class="login-footer-text">Auteursportaal &mdash; Krijg direct inzicht in uw royalties, afrekeningen en prognoses.</p>
             </div>
         </div>
     </div>
@@ -1007,6 +1038,10 @@
                 <img src="noordhoff-logo.png" alt="Noordhoff" style="height:28px; width:auto;">
             </div>
             <div class="header-user">
+                <button class="theme-toggle" onclick="toggleDarkMode()" title="Dark mode" aria-label="Toggle dark mode">
+                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM5 13H3a1 1 0 110-2h2a1 1 0 110 2zm14.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zm12.73 0a1 1 0 01-.7-1.7l1.41-1.42a1 1 0 111.41 1.42l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7L7.05 3.4a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/></svg>
+                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73A8.15 8.15 0 019.08 5.49a8.59 8.59 0 01.25-2 1 1 0 00-1.29-1.22A10 10 0 1021.64 13z"/></svg>
+                </button>
                 <div class="user-info">
                     <div class="user-name" id="dashboardUserName"></div>
                     <div class="user-role" data-i18n="author">Auteur</div>
@@ -1258,6 +1293,10 @@
                 <img src="noordhoff-logo.png" alt="Noordhoff" style="height:28px; width:auto;">
             </div>
             <div class="header-user">
+                <button class="theme-toggle" onclick="toggleDarkMode()" title="Dark mode" aria-label="Toggle dark mode">
+                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM5 13H3a1 1 0 110-2h2a1 1 0 110 2zm14.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zm12.73 0a1 1 0 01-.7-1.7l1.41-1.42a1 1 0 111.41 1.42l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7L7.05 3.4a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/></svg>
+                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73A8.15 8.15 0 019.08 5.49a8.59 8.59 0 01.25-2 1 1 0 00-1.29-1.22A10 10 0 1021.64 13z"/></svg>
+                </button>
                 <div class="user-info">
                     <div class="user-name">Administrator</div>
                     <div class="user-role">Admin</div>
