@@ -3485,8 +3485,8 @@ function renderPayments(filterYear = 'all') {
                 <div class="payment-amount-value">${formatCurrency(payment.amount)}</div>
                 <div class="payment-amount-label">${typeLabels[payment.type][currentLang]}</div>
             </div>
-            <button class="payment-download" onclick="downloadPaymentPDF(${idx}, '${filterYear}')">
-                <svg viewBox="0 0 24 24"><path d="M12 16l-6-6h4V4h4v6h4l-6 6z"/><path d="M4 18h16v2H4z"/></svg>
+            <button class="payment-download" onclick="previewPaymentPDF(${idx}, '${filterYear}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
         </div>
     `).join('');
@@ -3508,13 +3508,13 @@ function toggleFAQ(index) {
     document.getElementById('faq-' + index).classList.toggle('open');
 }
 
-async function downloadPaymentPDF(paymentIndex, filterYear) {
+// Resolve payment object from index + filter (shared helper)
+function resolvePayment(paymentIndex, filterYear) {
     const author = getCurrentAuthor();
-    if (!author || !author.payments) return;
+    if (!author || !author.payments) return null;
     const filtered = filterYear === 'all' ? author.payments : author.payments.filter(p => p.year.toString() === filterYear);
     const today = new Date().toISOString().split('T')[0];
 
-    // Calculate annual statements
     const yearlyTotals = {};
     author.payments.forEach(p => {
         if (!yearlyTotals[p.year]) yearlyTotals[p.year] = { royalty: 0, subsidiary: 0, foreign: 0 };
@@ -3544,36 +3544,15 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
         return distA - distB;
     });
 
-    const payment = sortedPayments[paymentIndex];
+    return { payment: sortedPayments[paymentIndex], author };
+}
 
-    // If real PDF exists in Storage, download via signed URL
-    if (payment.filePath && supabaseClient) {
-        try {
-            const { data, error } = await supabaseClient.storage
-                .from('statements')
-                .createSignedUrl(payment.filePath, 60);
-            if (error) throw error;
-            // Trigger browser download
-            const a = document.createElement('a');
-            a.href = data.signedUrl;
-            a.download = payment.filename || payment.filePath.split('/').pop();
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            return;
-        } catch (err) {
-            console.error('Signed URL error:', err);
-            alert('Fout bij downloaden PDF: ' + err.message);
-            return;
-        }
-    }
-
-    // Fallback: generate PDF client-side (for annual statements and legacy data)
+// Generate jsPDF document (shared between preview and download)
+function generatePaymentPDFDoc(payment, author) {
     const { jsPDF } = window.jspdf;
     const fullName = author.info.firstName + ' ' + author.info.lastName;
     const doc = new jsPDF();
 
-    // Header
     doc.setFillColor(0, 130, 198);
     doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(255, 255, 255);
@@ -3583,7 +3562,6 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
     doc.text(payment.title[currentLang], 20, 35);
 
     doc.setTextColor(0, 0, 0);
-
     doc.setFontSize(11);
     doc.text(currentLang === 'nl' ? 'Auteur:' : 'Author:', 20, 55);
     doc.setFontSize(14);
@@ -3592,7 +3570,6 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
     doc.setFontSize(11);
     doc.text('Email:', 20, 75);
     doc.text(author.info.email, 50, 75);
-
     doc.text(currentLang === 'nl' ? 'Datum:' : 'Date:', 20, 85);
     doc.text(payment.date[currentLang], 50, 85);
 
@@ -3652,6 +3629,131 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
     doc.setTextColor(128, 128, 128);
     doc.text('Noordhoff Uitgevers B.V. | rights@noordhoff.nl | (050) 522 69 22', 20, 280);
 
+    return doc;
+}
+
+// PDF Preview — open in modal
+async function previewPaymentPDF(paymentIndex, filterYear) {
+    const result = resolvePayment(paymentIndex, filterYear);
+    if (!result) return;
+    const { payment, author } = result;
+
+    const modal = document.getElementById('pdfPreviewModal');
+    const frame = document.getElementById('pdfPreviewFrame');
+    const loading = document.getElementById('pdfPreviewLoading');
+    const titleEl = document.getElementById('pdfPreviewTitle');
+    const metaEl = document.getElementById('pdfPreviewMeta');
+    const downloadBtn = document.getElementById('pdfPreviewDownload');
+
+    // Set title and meta
+    titleEl.textContent = payment.title[currentLang];
+    metaEl.textContent = payment.date[currentLang] + ' — ' + formatCurrency(payment.amount);
+
+    // Show modal with loading state
+    frame.src = '';
+    loading.classList.remove('hidden');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    let pdfUrl = '';
+    let downloadFilename = payment.filename || 'document.pdf';
+
+    if (payment.filePath && supabaseClient) {
+        // Real PDF from Storage
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('statements')
+                .createSignedUrl(payment.filePath, 300);
+            if (error) throw error;
+            pdfUrl = data.signedUrl;
+            downloadFilename = payment.filename || payment.filePath.split('/').pop();
+        } catch (err) {
+            console.error('Signed URL error:', err);
+            loading.innerHTML = '<span style="color:var(--color-danger);">Fout bij laden: ' + err.message + '</span>';
+            return;
+        }
+    } else {
+        // Generate PDF client-side and create blob URL
+        const doc = generatePaymentPDFDoc(payment, author);
+        const blob = doc.output('blob');
+        pdfUrl = URL.createObjectURL(blob);
+    }
+
+    // Load into iframe
+    frame.onload = () => {
+        loading.classList.add('hidden');
+    };
+    frame.src = pdfUrl;
+
+    // Fallback: hide loading after 3s (some browsers don't fire onload for PDFs in iframes)
+    setTimeout(() => { loading.classList.add('hidden'); }, 3000);
+
+    // Wire up download button
+    downloadBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = pdfUrl;
+        a.download = downloadFilename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+}
+
+function closePdfPreview() {
+    const modal = document.getElementById('pdfPreviewModal');
+    const frame = document.getElementById('pdfPreviewFrame');
+    const loading = document.getElementById('pdfPreviewLoading');
+
+    // Revoke blob URL if it was a generated PDF
+    if (frame.src && frame.src.startsWith('blob:')) {
+        URL.revokeObjectURL(frame.src);
+    }
+    frame.src = '';
+    modal.classList.remove('active');
+    loading.classList.remove('hidden');
+    loading.innerHTML = '<div class="pdf-preview-spinner"></div><span>Document laden...</span>';
+    document.body.style.overflow = '';
+}
+
+// Close on overlay click
+document.getElementById('pdfPreviewModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closePdfPreview();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('pdfPreviewModal')?.classList.contains('active')) {
+        closePdfPreview();
+    }
+});
+
+// Legacy download function (kept for admin or direct download needs)
+async function downloadPaymentPDF(paymentIndex, filterYear) {
+    const result = resolvePayment(paymentIndex, filterYear);
+    if (!result) return;
+    const { payment, author } = result;
+
+    if (payment.filePath && supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('statements')
+                .createSignedUrl(payment.filePath, 60);
+            if (error) throw error;
+            const a = document.createElement('a');
+            a.href = data.signedUrl;
+            a.download = payment.filename || payment.filePath.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            return;
+        } catch (err) {
+            console.error('Signed URL error:', err);
+            alert('Fout bij downloaden PDF: ' + err.message);
+            return;
+        }
+    }
+
+    const doc = generatePaymentPDFDoc(payment, author);
     doc.save(payment.filename);
 }
 
