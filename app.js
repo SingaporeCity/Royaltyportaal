@@ -3986,11 +3986,13 @@ function showChangesPanel() {
     document.getElementById('authorDetailView').classList.remove('active');
     document.getElementById('changesView').classList.add('active');
     renderAllChanges('pending');
+    updateAdminBreadcrumb();
 }
 
 function showAuthorDetailPanel() {
     document.getElementById('changesView').classList.remove('active');
     document.getElementById('authorDetailView').classList.add('active');
+    updateAdminBreadcrumb();
 }
 
 let currentChangesFilter = 'pending';
@@ -4295,6 +4297,244 @@ function formatTimeAgo(date) {
 }
 
 // ============================================
+// ADMIN BREADCRUMB
+// ============================================
+
+function updateAdminBreadcrumb() {
+    const bc = document.getElementById('adminBreadcrumb');
+    if (!bc) return;
+
+    const sep = '<span class="breadcrumb-sep">›</span>';
+    let html = `<span class="breadcrumb-item breadcrumb-root" onclick="adminBreadcrumbNav('dashboard')">Dashboard</span>`;
+
+    const changesActive = document.getElementById('changesView')?.classList.contains('active');
+
+    if (changesActive) {
+        html += `${sep}<span class="breadcrumb-item breadcrumb-current">Wijzigingen</span>`;
+    } else if (selectedAuthor) {
+        const authors = getAuthorsData();
+        const author = authors[selectedAuthor];
+        if (author) {
+            const name = author.info.firstName + ' ' + author.info.lastName;
+            html += `${sep}<span class="breadcrumb-item breadcrumb-link" onclick="adminBreadcrumbNav('authors')">Auteurs</span>`;
+            html += `${sep}<span class="breadcrumb-item breadcrumb-current">${name}</span>`;
+        }
+    }
+
+    bc.innerHTML = html;
+}
+
+function adminBreadcrumbNav(target) {
+    if (target === 'dashboard' || target === 'authors') {
+        selectedAuthor = null;
+        showAuthorDetailPanel();
+        renderAuthorList();
+        renderAuthorDetail();
+        updateAdminBreadcrumb();
+    }
+}
+
+// ============================================
+// COMMAND PALETTE (Ctrl+K / Cmd+K)
+// ============================================
+
+let cmdPaletteActiveIndex = 0;
+let cmdPaletteItems = [];
+
+function openCmdPalette() {
+    const overlay = document.getElementById('cmdPalette');
+    const input = document.getElementById('cmdPaletteInput');
+    overlay.classList.add('active');
+    input.value = '';
+    document.body.style.overflow = 'hidden';
+    renderCmdPaletteResults('');
+    setTimeout(() => input.focus(), 50);
+}
+
+function closeCmdPalette() {
+    document.getElementById('cmdPalette').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function getCmdPaletteCommands() {
+    const commands = [];
+    const isDashboard = document.getElementById('dashboard')?.classList.contains('active');
+    const isAdmin = document.getElementById('adminDashboard')?.classList.contains('active');
+
+    // Navigation — auteur dashboard
+    if (isDashboard) {
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Start', hint: 'Dashboard overzicht', action: () => { document.querySelector('.tab-btn[data-tab="start"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Gegevens', hint: 'Persoonlijke informatie', action: () => { document.querySelector('.tab-btn[data-tab="info"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Contracten', hint: 'Actieve contracten', action: () => { document.querySelector('.tab-btn[data-tab="contracts"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Afrekeningen', hint: 'Royalty-afrekeningen', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Prognose', hint: 'Verwachte royalties', action: () => { document.querySelector('.tab-btn[data-tab="forecast"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'FAQ', hint: 'Veelgestelde vragen', action: () => { document.querySelector('.tab-btn[data-tab="faq"]')?.click(); } });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Exporteer afrekeningen', hint: 'Download als CSV', action: () => exportPaymentsCSV(), svg: 'download' });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Dark mode wisselen', hint: 'Schakel tussen licht en donker', action: () => toggleDarkMode() });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Uitloggen', hint: 'Sessie beëindigen', action: () => { closeCmdPalette(); logout(); } });
+    }
+
+    // Navigation — admin dashboard
+    if (isAdmin) {
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Dashboard', hint: 'Terug naar overzicht', action: () => adminBreadcrumbNav('dashboard') });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Wijzigingen', hint: 'Wijzigingsverzoeken beoordelen', action: () => showChangesPanel() });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Dark mode wisselen', hint: 'Schakel tussen licht en donker', action: () => toggleDarkMode() });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Uitloggen', hint: 'Sessie beëindigen', action: () => { closeCmdPalette(); logout(); } });
+
+        // Authors as searchable items
+        const authors = getAuthorsData();
+        if (authors) {
+            Object.entries(authors).forEach(([email, author]) => {
+                if (author.isAdmin) return;
+                const name = author.info.firstName + ' ' + author.info.lastName;
+                commands.push({
+                    group: 'Auteurs',
+                    icon: 'author',
+                    iconText: author.info.initials || name[0],
+                    title: name,
+                    hint: email,
+                    action: () => selectAuthor(email)
+                });
+            });
+        }
+    }
+
+    // Public site navigation
+    if (!isDashboard && !isAdmin) {
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Home', hint: 'Startpagina', action: () => { closeCmdPalette(); navigateTo('home'); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Auteur worden', hint: 'Vacatures en informatie', action: () => { closeCmdPalette(); navigateTo('auteur'); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Het proces', hint: 'Stappen en ervaringen', action: () => { closeCmdPalette(); navigateTo('proces'); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Academy', hint: 'Cursussen en trainingen', action: () => { closeCmdPalette(); navigateTo('academy'); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Contact', hint: 'FAQ en contactformulier', action: () => { closeCmdPalette(); navigateTo('contact'); } });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Inloggen', hint: 'Naar het auteursportaal', action: () => { closeCmdPalette(); showLoginPage(); } });
+    }
+
+    return commands;
+}
+
+function renderCmdPaletteResults(query) {
+    const resultsEl = document.getElementById('cmdPaletteResults');
+    const commands = getCmdPaletteCommands();
+    const q = query.toLowerCase().trim();
+
+    const filtered = q ? commands.filter(c =>
+        c.title.toLowerCase().includes(q) ||
+        c.hint.toLowerCase().includes(q) ||
+        c.group.toLowerCase().includes(q)
+    ) : commands;
+
+    cmdPaletteItems = filtered;
+    cmdPaletteActiveIndex = 0;
+
+    if (filtered.length === 0) {
+        resultsEl.innerHTML = '<div class="cmd-palette-empty">Geen resultaten voor "' + query + '"</div>';
+        return;
+    }
+
+    // Group items
+    const groups = {};
+    filtered.forEach(item => {
+        if (!groups[item.group]) groups[item.group] = [];
+        groups[item.group].push(item);
+    });
+
+    const svgIcons = {
+        nav: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>',
+        action: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>',
+    };
+
+    let globalIdx = 0;
+    let html = '';
+    Object.entries(groups).forEach(([group, items]) => {
+        html += `<div class="cmd-palette-group-label">${group}</div>`;
+        items.forEach(item => {
+            const iconContent = item.icon === 'author'
+                ? item.iconText
+                : (svgIcons[item.icon] || '');
+            html += `
+                <div class="cmd-palette-item ${globalIdx === 0 ? 'active' : ''}" data-index="${globalIdx}" onclick="executeCmdPaletteItem(${globalIdx})" onmouseenter="setCmdPaletteActive(${globalIdx})">
+                    <div class="cmd-palette-item-icon ${item.icon}">${iconContent}</div>
+                    <div class="cmd-palette-item-text">
+                        <div class="cmd-palette-item-title">${item.title}</div>
+                        <div class="cmd-palette-item-hint">${item.hint}</div>
+                    </div>
+                </div>
+            `;
+            globalIdx++;
+        });
+    });
+
+    resultsEl.innerHTML = html;
+}
+
+function setCmdPaletteActive(index) {
+    cmdPaletteActiveIndex = index;
+    document.querySelectorAll('.cmd-palette-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+    });
+}
+
+function executeCmdPaletteItem(index) {
+    const item = cmdPaletteItems[index];
+    if (!item) return;
+    closeCmdPalette();
+    item.action();
+}
+
+// Keyboard listeners
+document.addEventListener('keydown', function(e) {
+    // Ctrl+K / Cmd+K — open command palette
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const overlay = document.getElementById('cmdPalette');
+        if (overlay.classList.contains('active')) {
+            closeCmdPalette();
+        } else {
+            openCmdPalette();
+        }
+        return;
+    }
+
+    // Command palette keyboard navigation
+    const overlay = document.getElementById('cmdPalette');
+    if (!overlay?.classList.contains('active')) return;
+
+    if (e.key === 'Escape') {
+        closeCmdPalette();
+        return;
+    }
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = Math.min(cmdPaletteActiveIndex + 1, cmdPaletteItems.length - 1);
+        setCmdPaletteActive(next);
+        document.querySelector(`.cmd-palette-item[data-index="${next}"]`)?.scrollIntoView({ block: 'nearest' });
+    }
+
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = Math.max(cmdPaletteActiveIndex - 1, 0);
+        setCmdPaletteActive(prev);
+        document.querySelector(`.cmd-palette-item[data-index="${prev}"]`)?.scrollIntoView({ block: 'nearest' });
+    }
+
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        executeCmdPaletteItem(cmdPaletteActiveIndex);
+    }
+});
+
+// Input listener
+document.getElementById('cmdPaletteInput')?.addEventListener('input', function() {
+    renderCmdPaletteResults(this.value);
+});
+
+// Close on overlay click
+document.getElementById('cmdPalette')?.addEventListener('click', function(e) {
+    if (e.target === this) closeCmdPalette();
+});
+
+// ============================================
 // EMAIL SETTINGS (cosmetic toggles)
 // ============================================
 
@@ -4418,6 +4658,7 @@ function selectAuthor(email) {
     showAuthorDetailPanel();
     renderAuthorList();
     renderAuthorDetail();
+    updateAdminBreadcrumb();
 }
 
 let currentAdminTab = 'personal';
