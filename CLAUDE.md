@@ -51,9 +51,19 @@ Single-page application (vanilla HTML/CSS/JS) voor het Noordhoff Auteursportaal.
 - Initialisatie bij laden via `initDarkMode()` (vóór `initPublicSite()`)
 - CSS: `[data-theme="dark"]` selector op `<html>` overschrijft `:root` variabelen
 - **Dark kleuren**: `--color-bg: #0f1117`, `--color-bg-alt: #161922`, `--color-white: #1a1d27`, `--color-text: #e8eaed`, `--color-text-light: #8b8fa4`, `--color-border: #2a2d3a`
-- Dekking: header, tabs, KPI cards, chart, info cards, modals, formulieren, tabellen, admin panels, scrollbar
+- Dekking: header, tabs, KPI cards, chart, info cards, modals, formulieren, tabellen, admin panels, scrollbar, stat-cards, changes filter, detail tabs, content buttons, skeleton loaders, command palette, PDF preview
+- Admin stat-cards gebruiken CSS classes (`stat-card-amber/green/blue/purple`) ipv inline styles voor dark mode compatibiliteit
 - Smooth transitions: `0.3s ease` op background-color, border-color, color, box-shadow
 - Dashboard logo krijgt `filter: brightness(0) invert(1)` in dark mode
+
+### Skeleton Loading States
+- Shimmer-animatie (`@keyframes shimmer`, 1.8s loop) op grijze placeholder-blokken
+- `.skeleton-line` met breedte-varianten (`.w25` t/m `.w70`)
+- **Events & Nieuws**: 2 items met tekst-skeletons in `.skeleton-list` → `.skeleton-item`
+- **Payments**: 3 rijen met `.skeleton-payment` (circle + text + amount layout, zelfde structuur als echte items)
+- **FAQ**: 4 bars met `.skeleton-faq` (border + radius matcht echte FAQ items)
+- Worden automatisch vervangen door echte content zodra data laadt
+- Dark mode: aangepaste gradient-kleuren voor shimmer
 
 ## Logo
 Het logo is `noordhoff-logo.png` — een PNG met het icoon + "Noordhoff" tekst in teal. Dit wordt als `<img>` tag gebruikt op alle pagina's:
@@ -110,6 +120,26 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - Admin CRUD via `openVacancyManager()` / `openVacancyEditor()` / `saveVacancy()` / `deleteVacancy()`
 - Migratie: `database/add-vacancies.sql`
 
+## Dashboard UX Polish
+
+### Header Zoekbalk
+- `.header-search-trigger` tussen logo en user-info — klikbaar, opent command palette
+- Toont vergrootglas + "Zoeken..." + `⌘K` badge
+- Mobiel: collapsed naar alleen icoon
+
+### Tijd-gebaseerde Begroeting
+- `updateGreeting()` zet "Goedemorgen/Goedemiddag/Goedenavond/Goedenacht" op basis van uur
+- Tweetalig NL/EN, aangeroepen in `initAuthorDashboard()`
+- Element: `#greetingText` (was statisch `data-i18n="greeting"`)
+
+### Animated KPI Counters
+- `animateCounter(elementId, targetValue, isCurrency, delay)` — count-up animatie
+- Ease-out cubic easing, 800ms duur, staggered delays (0/100/200/300ms)
+- Gebruikt `requestAnimationFrame` voor smooth 60fps
+
+### Scroll-to-top bij Tab Switch
+- Bij tab-klik: `document.querySelector('.tabs-container').scrollIntoView({ behavior: 'smooth', block: 'start' })`
+
 ## Royalty Chart — Horizontale Revenue Timeline
 - **Vervangt** de vorige stacked bar chart (die slecht werkte voor 1-3 producten per jaar)
 - **Layout**: horizontale rijen per jaar (nieuwste bovenaan) via `.chart-timeline` → `.chart-year-row` (CSS grid: `52px 1fr auto`)
@@ -120,6 +150,43 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - **Hover**: subtiele groene tint op `.chart-year-row:hover`
 - **Responsive**: op mobiel (≤768px) verdwijnen segment-labels, grid krimpt
 - **Functie**: `renderRoyaltyChart(payments)` in `app.js`, groepeert payments per jaar en type
+
+## Trend Chart (Prognose Tab)
+- Pure SVG area chart boven de prediction card op tab-forecast
+- Historische royalty-totalen per jaar + geprojecteerd prognosejaar
+- Gevulde area met gradient, gestreepte lijn voor forecast, pulserende dot
+- Compacte labels (`formatCompactCurrency`: €2,4k formaat), y-as gridlijnen
+- `renderTrendChart(author)` aangeroepen vanuit `initPredictions()`
+- Geen externe dependencies (geen Chart.js)
+
+## Command Palette (Ctrl+K / Cmd+K)
+- `openCmdPalette()` / `closeCmdPalette()` — Notion/Linear-style zoekoverlay
+- **Context-aware**: toont dashboard tabs (auteur), auteurs + navigatie (admin), pagina's (publiek)
+- `getCmdPaletteCommands()` bouwt commands lijst op basis van actieve view
+- Keyboard: pijltjestoetsen navigeren, Enter voert uit, Escape sluit
+- `renderCmdPaletteResults(query)` filtert en groepeert resultaten
+- Gegroepeerde items (Navigatie / Acties / Auteurs) met iconen en hints
+- Admin: alle auteurs doorzoekbaar met initialen-avatar
+
+## Admin Breadcrumbs
+- `updateAdminBreadcrumb()` — toont "Dashboard › Auteurs › Patrick Jeeninga"
+- Aangeroepen bij `selectAuthor()`, `showChangesPanel()`, `showAuthorDetailPanel()`
+- `adminBreadcrumbNav(target)` voor klikbare navigatie terug
+- Element: `#adminBreadcrumb` in `.admin-content`
+
+## Admin Activiteiten Feed
+- `renderActivityFeed()` — verzamelt login + change_request events van alle auteurs
+- Sorteert op tijd (nieuwste eerst), limiet 20 items
+- Per item: avatar met type-kleur (login/change/approved/rejected), tekst, relatieve tijd
+- `formatTimeAgo(date)` — "Zojuist", "5 min geleden", "2 uur geleden", "3 dagen geleden"
+- Slide-in animatie met staggered delay, auto-refresh elke 30s
+- Layout: zijkolom naast Content beheer + Email instellingen (`.admin-two-col` grid: `1fr 320px`)
+
+## Admin E-mail Instellingen (cosmetisch)
+- Drie toggles: "Nieuwe afrekening", "Wijzigingsverzoek goedgekeurd", "Wachtwoord reset"
+- `toggleEmailSetting(btn)` + `restoreEmailSettings()` via `localStorage`
+- Puur visueel — geen backend, geen e-mails
+- Badge "Configuratie" naast titel
 
 ## Nieuwe features (verbeterplan)
 - **Informatiesessie-banner**: Op home + auteur pagina, groen gradient met aanmeldknop
@@ -155,7 +222,28 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - **Padconventie**: `{author_uuid}/{type}/{year}/{bestandsnaam}.pdf`
 - RLS: auteurs downloaden eigen bestanden, admins uploaden/verwijderen
 
-## PDF Afrekeningen
+## PDF Preview & Afrekeningen
+
+### PDF Preview Modal
+- Klik op oog-icoon bij afrekening opent PDF in modal viewer (`#pdfPreviewModal`)
+- Modal: 900px breed, 88vh hoog, met header (titel + bedrag), download-knop, sluit-knop
+- Echte PDF: laadt via signed URL in `<iframe>`
+- jsPDF fallback: genereert blob URL en toont in iframe
+- Loading spinner met fallback timeout (3s), sluit op Escape/overlay-klik, scroll-lock op body
+- Blob URLs worden vrijgegeven bij sluiten via `URL.revokeObjectURL()`
+
+### Zoeken & Filteren in Afrekeningen
+- **Zoekbalk** (`#paymentsSearchInput`): filtert live op titel, datum, bedrag, type-naam
+- **Type pills** (`#paymentsTypeFilter`): Alle / Royalties / Nevenrechten / Foreign met gekleurde dots
+- **Resultaatteller** (`#paymentsResultCount`): "3 van 8 afrekeningen" bij actief filter
+- **State**: `_paymentTypeFilter` en `_paymentYearFilter` variabelen, `filterPayments()` en `setPaymentTypeFilter()`
+- Clear-knop (x) in zoekveld, lege state met zoek-icoon
+
+### CSV Export
+- `exportPaymentsCSV()` — genereert CSV met `;` als scheidingsteken + UTF-8 BOM
+- Kolommen: Jaar, Type, Omschrijving, Datum, Bedrag (komma als decimaalteken)
+- Inclusief totalen per jaar + eindtotaal
+- Bestandsnaam: `afrekeningen_{Naam}_{datum}.csv`
 
 ### Auteur-download
 - `downloadPaymentPDF()` controleert eerst `payment.filePath`
@@ -194,9 +282,9 @@ Vereist `SUPABASE_URL` en `SUPABASE_SERVICE_ROLE_KEY` in `scripts/.env`.
 
 ### Login scherm — Split-screen design
 - **Layout**: `.login-page-inner` is een flex container met twee panelen
-- **Links** (`.login-brand-panel`): Noordhoff branding — donkergroen gradient (`160deg, #007460 → #005a49 → #004035`), wit logo, "Auteursportaal" titel, subtitel, statistieken (190+ jaar, 500+ auteurs, 1000+ publicaties), decoratieve cirkels via `::before`/`::after`
-- **Rechts** (`.login-form-panel`): witte kaart met formulier, "Terug naar website" knop linksboven (met SVG pijl-icoon)
-- **Mobiel** (≤768px): branding panel verborgen (`display: none`), `.login-logo-mobile` wordt zichtbaar, back-knop wordt `position: static`
+- **Links** (`.login-brand-panel`): Noordhoff branding — donkergroen gradient (`160deg, #007460 → #005a49 → #004035`), wit logo, "Auteursportaal" titel, subtitel, statistieken (190 jaar, 2500+ auteurs, 1000+ publicaties), decoratieve cirkels via `::before`/`::after`
+- **Rechts** (`.login-form-panel`): eigen topbar (`.login-form-topbar`) met "Terug naar website" knop, kaart gecentreerd in `.login-form-center`
+- **Mobiel** (≤768px): branding panel verborgen (`display: none`), `.login-logo-mobile` wordt zichtbaar
 - **Tablet** (≤1024px): branding panel krimpt naar 40%
 
 ### Sessie-persistentie
