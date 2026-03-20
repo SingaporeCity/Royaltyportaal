@@ -250,17 +250,22 @@ body.dashboard-active .lang-toggle {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 3rem;
     background: var(--color-bg-alt);
-    position: relative;
 }
 
-.login-form-panel .btn-back-to-site {
-    position: absolute;
-    top: 2rem;
-    left: 2.5rem;
+.login-form-topbar {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    flex-shrink: 0;
+}
+
+.login-form-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3rem 3rem;
 }
 
 .login-logo-mobile {
@@ -2715,8 +2720,8 @@ body.dashboard-active .lang-toggle {
 
 @media (max-width: 768px) {
     .login-brand-panel { display: none; }
-    .login-form-panel { padding: 1.5rem; }
-    .login-form-panel .btn-back-to-site { position: static; margin-bottom: 1.5rem; }
+    .login-form-topbar { padding: 1rem 1.25rem; }
+    .login-form-center { padding: 0 1.5rem 2rem; }
     .login-logo-mobile { display: block; }
     .login-card { padding: 2rem 1.5rem; max-width: 100%; }
     .login-form h2 { font-size: 1.65rem; }
