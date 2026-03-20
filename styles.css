@@ -7534,6 +7534,106 @@ body.dashboard-active .lang-toggle {
     .cmd-palette-footer { display: none; }
 }
 
+/* ===== Skeleton Loading States ===== */
+@keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.skeleton-line {
+    height: 10px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--color-bg-alt) 25%, rgba(0,0,0,0.04) 50%, var(--color-bg-alt) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-line:last-child { margin-bottom: 0; }
+
+.skeleton-line.w25 { width: 25%; }
+.skeleton-line.w30 { width: 30%; }
+.skeleton-line.w35 { width: 35%; }
+.skeleton-line.w40 { width: 40%; }
+.skeleton-line.w45 { width: 45%; }
+.skeleton-line.w50 { width: 50%; }
+.skeleton-line.w60 { width: 60%; }
+.skeleton-line.w70 { width: 70%; }
+
+.skeleton-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, var(--color-bg-alt) 25%, rgba(0,0,0,0.04) 50%, var(--color-bg-alt) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.skeleton-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skeleton-item {
+    padding: 0.5rem 0;
+}
+
+/* Payment skeleton */
+.skeleton-payment {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-white);
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 0.875rem;
+}
+
+.skeleton-payment-text {
+    flex: 1;
+}
+
+.skeleton-payment-amount {
+    width: 80px;
+    text-align: right;
+}
+
+.skeleton-payment-amount .skeleton-line {
+    margin-left: auto;
+    height: 14px;
+}
+
+/* FAQ skeleton */
+.skeleton-faq {
+    padding: 1.25rem 1.5rem;
+    background: var(--color-white);
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-faq .skeleton-line {
+    height: 12px;
+    margin-bottom: 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .skeleton-line,
+[data-theme="dark"] .skeleton-circle {
+    background: linear-gradient(90deg, var(--color-bg) 25%, rgba(255,255,255,0.04) 50%, var(--color-bg) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+
+[data-theme="dark"] .skeleton-payment,
+[data-theme="dark"] .skeleton-faq {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
 /* Hidden utility */
 .hidden {
     display: none !important;

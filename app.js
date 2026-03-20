@@ -5359,6 +5359,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
+        // Scroll to top of tabs container
+        document.querySelector('.tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 });
 
