@@ -1041,6 +1041,11 @@
             <div class="header-logo" onclick="showPublicSite()" style="cursor:pointer;">
                 <img src="noordhoff-logo.png" alt="Noordhoff" style="height:28px; width:auto;">
             </div>
+            <button class="header-search-trigger" onclick="openCmdPalette()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span data-i18n="search_placeholder">Zoeken...</span>
+                <kbd class="header-search-kbd">⌘K</kbd>
+            </button>
             <div class="header-user">
                 <button class="theme-toggle" onclick="toggleDarkMode()" title="Dark mode" aria-label="Toggle dark mode">
                     <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM5 13H3a1 1 0 110-2h2a1 1 0 110 2zm14.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zm12.73 0a1 1 0 01-.7-1.7l1.41-1.42a1 1 0 111.41 1.42l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7L7.05 3.4a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/></svg>
@@ -1056,7 +1061,7 @@
         </header>
         <main class="dashboard-content">
             <div class="welcome-section">
-                <h1><span data-i18n="greeting">Welkom</span> <span id="welcomeName"></span></h1>
+                <h1><span id="greetingText">Welkom</span>, <span id="welcomeName"></span></h1>
                 <p data-i18n="dashboard_subtitle">Hier vindt u een overzicht van uw royalty-informatie</p>
             </div>
             <div class="tabs-container">

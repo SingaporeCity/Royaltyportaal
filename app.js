@@ -3028,6 +3028,7 @@ function initAuthorDashboard() {
         document.getElementById('userAvatar').textContent = author.info.initials;
         document.getElementById('welcomeName').textContent = author.info.firstName;
         document.getElementById('startWelcomeName').textContent = author.info.firstName;
+        updateGreeting();
         document.getElementById('infoVendorNumber').textContent = author.info.vendorNumber || '';
         document.getElementById('infoAlliantNumber').textContent = author.info.alliantNumber || '';
         document.getElementById('infoFirstName').textContent = author.info.firstName;
@@ -3072,7 +3073,7 @@ function initDashboardKPIs() {
     // 1. Total paid across all years
     const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
     const years = [...new Set(payments.map(p => p.year))].sort();
-    document.getElementById('kpiTotalPaid').textContent = formatCurrency(totalPaid);
+    animateCounter('kpiTotalPaid', totalPaid, true);
     document.getElementById('kpiTotalYears').textContent = years.length > 0
         ? `${years[0]}–${years[years.length - 1]}`
         : '';
@@ -3085,17 +3086,17 @@ function initDashboardKPIs() {
             return new Date(db) - new Date(da);
         });
         const last = sorted[0];
-        document.getElementById('kpiLastPayment').textContent = formatCurrency(last.amount);
+        animateCounter('kpiLastPayment', last.amount, true, 100);
         document.getElementById('kpiLastPaymentDate').textContent = last.date?.[currentLang] || last.year;
     }
 
     // 3. Active contracts
-    document.getElementById('kpiContracts').textContent = contracts.length;
+    animateCounter('kpiContracts', contracts.length, false, 200);
 
     // 4. Forecast
     const mid = Math.round((prediction.min + prediction.max) / 2);
     if (mid > 0) {
-        document.getElementById('kpiForecast').textContent = formatCurrency(mid);
+        animateCounter('kpiForecast', mid, true, 300);
     }
 
     // 5. Royalty chart per year
@@ -3187,6 +3188,58 @@ function renderRoyaltyChart(payments) {
 // ============================================
 
 // Stagger fade-in animation on KPI cards and sections
+// Time-based greeting
+function updateGreeting() {
+    const el = document.getElementById('greetingText');
+    if (!el) return;
+    const hour = new Date().getHours();
+    let greeting;
+    if (currentLang === 'nl') {
+        if (hour < 6) greeting = 'Goedenacht';
+        else if (hour < 12) greeting = 'Goedemorgen';
+        else if (hour < 18) greeting = 'Goedemiddag';
+        else greeting = 'Goedenavond';
+    } else {
+        if (hour < 6) greeting = 'Good night';
+        else if (hour < 12) greeting = 'Good morning';
+        else if (hour < 18) greeting = 'Good afternoon';
+        else greeting = 'Good evening';
+    }
+    el.textContent = greeting;
+}
+
+// Animated counter
+function animateCounter(elementId, targetValue, isCurrency, delay = 0) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    setTimeout(() => {
+        const duration = 800;
+        const start = performance.now();
+        const startValue = 0;
+
+        function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = startValue + (targetValue - startValue) * eased;
+
+            if (isCurrency) {
+                el.textContent = formatCurrency(Math.round(current));
+            } else {
+                el.textContent = Math.round(current);
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        }
+
+        requestAnimationFrame(update);
+    }, delay);
+}
+
 function initDashboardAnimations() {
     // Animate KPI cards
     document.querySelectorAll('.kpi-card').forEach((card, i) => {
