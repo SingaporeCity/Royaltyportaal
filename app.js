@@ -6492,14 +6492,6 @@ function initDarkMode() {
 
 initDarkMode();
 
-// Style variant switcher (?style=2 or ?style=3)
-(function() {
-    const style = new URLSearchParams(window.location.search).get('style');
-    if (style === '2' || style === '3') {
-        document.documentElement.setAttribute('data-style', style);
-    }
-})();
-
 // Initialize public site content on load
 initPublicSite();
 
