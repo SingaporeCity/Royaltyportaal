@@ -7710,6 +7710,290 @@ body.dashboard-active .lang-toggle {
     border-color: var(--color-border);
 }
 
+/* ============================================
+   STYLE VARIANT 2 — Merkportaal (Noordhoff brand typography)
+   Activate via ?style=2
+   ============================================ */
+
+[data-style="2"] {
+    --color-bg-alt: #e8f2f5;
+    --color-primary-subtle: #daeef3;
+    --color-primary-light: #C0E0E7;
+}
+
+/* Typography — Noordhoff brand guide: light headings, bold H2, wide characters */
+[data-style="2"] .welcome-section h1,
+[data-style="2"] .login-brand-title {
+    font-variation-settings: 'wght' 360, 'wdth' 110;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+}
+
+[data-style="2"] .welcome-section p,
+[data-style="2"] .login-brand-subtitle,
+[data-style="2"] .kpi-sub,
+[data-style="2"] .dashboard-footer {
+    font-variation-settings: 'wght' 300, 'wdth' 110;
+    line-height: 1.4;
+}
+
+[data-style="2"] .payments-header h3,
+[data-style="2"] .info-header h3,
+[data-style="2"] .prediction-title {
+    font-variation-settings: 'wght' 800, 'wdth' 110;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+[data-style="2"] .dash-tile-title h3,
+[data-style="2"] .chart-header h3 {
+    font-variation-settings: 'wght' 360, 'wdth' 110;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
+}
+
+[data-style="2"] .kpi-label {
+    font-variation-settings: 'wght' 500, 'wdth' 110;
+}
+
+[data-style="2"] .kpi-value {
+    font-variation-settings: 'wght' 800, 'wdth' 110;
+    letter-spacing: -0.03em;
+}
+
+[data-style="2"] .tab-btn {
+    font-variation-settings: 'wght' 360, 'wdth' 110;
+}
+
+[data-style="2"] .tab-btn.active {
+    font-variation-settings: 'wght' 600, 'wdth' 110;
+}
+
+[data-style="2"] .user-name {
+    font-variation-settings: 'wght' 360, 'wdth' 110;
+    font-size: 1rem;
+}
+
+[data-style="2"] .login-form h2 {
+    font-variation-settings: 'wght' 800, 'wdth' 110;
+    letter-spacing: -0.02em;
+}
+
+[data-style="2"] .login-form > p {
+    font-variation-settings: 'wght' 300, 'wdth' 110;
+}
+
+[data-style="2"] body {
+    font-variation-settings: 'wght' 300, 'wdth' 110;
+}
+
+/* Light blue accents */
+[data-style="2"] .tabs-nav {
+    background: #edf5f7;
+}
+
+[data-style="2"] .tab-content {
+    background: #e8f2f5;
+}
+
+[data-style="2"] .dashboard-header {
+    border-bottom: 2px solid var(--color-primary);
+}
+
+[data-style="2"] .kpi-card.kpi-primary {
+    background: linear-gradient(135deg, #007460 0%, #004035 100%);
+}
+
+[data-style="2"] .dash-tile {
+    border-top: 3px solid var(--color-blue);
+}
+
+[data-style="2"] .prediction-card {
+    border-top: 3px solid var(--color-primary);
+}
+
+[data-style="2"] .trend-chart-card {
+    border-top: 3px solid var(--color-blue);
+}
+
+/* Softer shadows */
+[data-style="2"] .tabs-container {
+    box-shadow: none;
+    border: 1px solid #C0E0E7;
+}
+
+[data-style="2"] .kpi-card {
+    box-shadow: none;
+}
+
+[data-style="2"] .login-brand-panel {
+    background: linear-gradient(160deg, #007460 0%, #004035 100%);
+}
+
+[data-style="2"] .login-brand-stats {
+    border-color: rgba(255,255,255,0.08);
+}
+
+/* ============================================
+   STYLE VARIANT 3 — Warm Accent (coral/orange accents)
+   Activate via ?style=3
+   ============================================ */
+
+[data-style="3"] {
+    --color-bg-alt: #FFF9F6;
+    --color-primary-subtle: #FFF0E8;
+}
+
+/* Warm accent color system */
+[data-style="3"] .dash-tile {
+    border-top: 2px solid var(--color-accent);
+}
+
+[data-style="3"] .trend-chart-card {
+    border-top: 2px solid var(--color-salmon);
+}
+
+[data-style="3"] .kpi-card.kpi-primary {
+    background: linear-gradient(135deg, #FF7143 0%, #e5633a 100%);
+}
+
+[data-style="3"] .kpi-card.kpi-primary .kpi-icon {
+    background: rgba(255,255,255,0.2);
+}
+
+[data-style="3"] .tab-btn.active {
+    color: var(--color-accent);
+}
+
+[data-style="3"] .tab-btn::after {
+    background: var(--color-accent);
+}
+
+[data-style="3"] .tab-btn:hover {
+    color: var(--color-accent);
+    background: rgba(255, 113, 67, 0.04);
+}
+
+[data-style="3"] .dashboard-header {
+    border-bottom: 2px solid var(--color-accent);
+}
+
+[data-style="3"] .tabs-container {
+    border: 1px solid #f0ddd5;
+}
+
+[data-style="3"] .tab-content {
+    background: #FFF9F6;
+}
+
+[data-style="3"] .tabs-nav {
+    background: #FFFCFA;
+}
+
+/* Warm buttons */
+[data-style="3"] .login-btn {
+    background: var(--color-accent);
+    box-shadow: 0 4px 14px rgba(255, 113, 67, 0.3);
+}
+
+[data-style="3"] .login-btn:hover {
+    background: #e5633a;
+    box-shadow: 0 6px 20px rgba(255, 113, 67, 0.4);
+}
+
+[data-style="3"] .login-brand-panel {
+    background: linear-gradient(160deg, #FF7143 0%, #e5633a 50%, #cc5530 100%);
+}
+
+/* Coral accents on interactive elements */
+[data-style="3"] .header-search-trigger:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+[data-style="3"] .academy-banner {
+    border-left-color: var(--color-accent);
+}
+
+[data-style="3"] .academy-banner-icon {
+    background: var(--color-accent);
+}
+
+[data-style="3"] .academy-banner-badge {
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border-color: rgba(255, 113, 67, 0.15);
+}
+
+[data-style="3"] .academy-banner:hover .academy-banner-badge {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+}
+
+[data-style="3"] .prediction-badge-pill {
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border-color: rgba(255, 113, 67, 0.15);
+}
+
+[data-style="3"] .prediction-hero-value {
+    color: var(--color-accent);
+}
+
+[data-style="3"] .prediction-card {
+    border-top: 3px solid var(--color-accent);
+}
+
+/* Warmer KPI card accents */
+[data-style="3"] .kpi-card:has(.kpi-icon-blue) {
+    border-top-color: var(--color-salmon);
+}
+
+[data-style="3"] .kpi-card:has(.kpi-icon-teal) {
+    border-top-color: var(--color-accent);
+}
+
+[data-style="3"] .kpi-card:has(.kpi-icon-purple) {
+    border-top-color: #e5633a;
+}
+
+/* Warm chart colors */
+[data-style="3"] .chart-year-bar-fill.royalty {
+    background: var(--color-accent);
+}
+
+[data-style="3"] .chart-year-bar-fill.subsidiary {
+    background: var(--color-salmon);
+}
+
+/* Typography — slightly warmer, softer */
+[data-style="3"] .welcome-section h1 {
+    font-variation-settings: 'wght' 600, 'wdth' 105;
+}
+
+[data-style="3"] .kpi-value {
+    font-variation-settings: 'wght' 700, 'wdth' 105;
+}
+
+/* Style indicator badge (shows which variant is active) */
+[data-style] .dashboard-header::after,
+[data-style] .login-form-topbar::after {
+    content: 'Stijl ' attr(data-style);
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: var(--radius-pill);
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
 /* Hidden utility */
 .hidden {
     display: none !important;
