@@ -1430,6 +1430,45 @@
                     </button>
                 </div>
             </div>
+            <div class="admin-content-section email-settings-section">
+                <div class="email-settings-header">
+                    <div class="email-settings-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <h3>E-mail notificaties</h3>
+                    </div>
+                    <span class="email-settings-badge">Configuratie</span>
+                </div>
+                <p class="email-settings-desc">Automatische e-mails die auteurs ontvangen bij belangrijke gebeurtenissen.</p>
+                <div class="email-settings-list">
+                    <div class="email-setting-row">
+                        <div class="email-setting-info">
+                            <div class="email-setting-label">Nieuwe afrekening beschikbaar</div>
+                            <div class="email-setting-hint">Auteur ontvangt een e-mail wanneer een nieuwe royalty-afrekening is geüpload.</div>
+                        </div>
+                        <button class="email-toggle" data-key="email_new_statement" onclick="toggleEmailSetting(this)" aria-label="Toggle notificatie">
+                            <span class="email-toggle-knob"></span>
+                        </button>
+                    </div>
+                    <div class="email-setting-row">
+                        <div class="email-setting-info">
+                            <div class="email-setting-label">Wijzigingsverzoek goedgekeurd</div>
+                            <div class="email-setting-hint">Auteur ontvangt een bevestiging wanneer een gegevenswijziging is verwerkt.</div>
+                        </div>
+                        <button class="email-toggle active" data-key="email_change_approved" onclick="toggleEmailSetting(this)" aria-label="Toggle notificatie">
+                            <span class="email-toggle-knob"></span>
+                        </button>
+                    </div>
+                    <div class="email-setting-row">
+                        <div class="email-setting-info">
+                            <div class="email-setting-label">Wachtwoord reset</div>
+                            <div class="email-setting-hint">Standaard herstelmail via Supabase Auth bij wachtwoord vergeten.</div>
+                        </div>
+                        <button class="email-toggle active" data-key="email_password_reset" onclick="toggleEmailSetting(this)" aria-label="Toggle notificatie">
+                            <span class="email-toggle-knob"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="admin-grid">
                 <div class="author-list">
                     <div class="author-list-header">Auteurs</div>

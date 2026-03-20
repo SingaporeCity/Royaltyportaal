@@ -3831,6 +3831,7 @@ async function initAdminDashboard() {
     renderAllChanges();
     updateAdminStats();
     renderActivityFeed();
+    restoreEmailSettings();
 
     // Auto-refresh elke 30 seconden om data up-to-date te houden
     if (adminRefreshInterval) clearInterval(adminRefreshInterval);
@@ -4157,6 +4158,25 @@ function formatTimeAgo(date) {
     if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'dag' : 'dagen'} geleden`;
 
     return date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+// ============================================
+// EMAIL SETTINGS (cosmetic toggles)
+// ============================================
+
+function toggleEmailSetting(btn) {
+    btn.classList.toggle('active');
+    const key = btn.dataset.key;
+    localStorage.setItem(key, btn.classList.contains('active') ? '1' : '0');
+}
+
+function restoreEmailSettings() {
+    document.querySelectorAll('.email-toggle[data-key]').forEach(btn => {
+        const saved = localStorage.getItem(btn.dataset.key);
+        if (saved !== null) {
+            btn.classList.toggle('active', saved === '1');
+        }
+    });
 }
 
 // ============================================
