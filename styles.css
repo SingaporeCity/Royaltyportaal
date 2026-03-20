@@ -277,7 +277,7 @@ body.dashboard-active .lang-toggle {
 .login-card {
     width: 100%;
     max-width: 440px;
-    background: white;
+    background: var(--color-white);
     border-radius: 20px;
     padding: 3rem 2.75rem;
     box-shadow: 0 8px 30px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.03);
@@ -469,6 +469,7 @@ body.dashboard-active .lang-toggle {
 .dashboard, .admin-dashboard {
     display: none;
     min-height: 100vh;
+    background: var(--color-bg-alt);
 }
 
 .dashboard.active, .admin-dashboard.active { display: block; }
@@ -686,7 +687,7 @@ body.dashboard-active .lang-toggle {
 .tabs-nav {
     display: flex;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    background: white;
+    background: var(--color-white);
     overflow-x: auto;
     padding: 0.5rem 0.75rem 0;
     -ms-overflow-style: none;
@@ -766,6 +767,7 @@ body.dashboard-active .lang-toggle {
     display: none;
     padding: 2rem;
     animation: tabFadeIn 0.4s ease;
+    background: var(--color-bg-alt);
 }
 
 .tab-content.active { display: block; }
@@ -911,7 +913,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .info-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 12px;
     padding: 1rem 1.25rem;
     border: 1px solid var(--color-border);
@@ -1367,7 +1369,7 @@ body.dashboard-active .lang-toggle {
     display: flex;
     align-items: center;
     padding: 1.25rem 1.5rem;
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     border: 1px solid var(--color-border);
     transition: all 0.25s ease;
@@ -1482,7 +1484,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .historical-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 12px;
     padding: 1.5rem;
     border-left: 3px solid var(--color-primary);
@@ -1683,7 +1685,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .prediction-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 16px;
     padding: 2rem 2.25rem;
     color: var(--color-text);
@@ -1872,7 +1874,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .faq-item {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--color-border);
@@ -1962,7 +1964,7 @@ body.dashboard-active .lang-toggle {
     justify-content: flex-start;
 }
 .stat-card {
-    background: white;
+    background: var(--color-white);
     padding: 0.5rem 1rem;
     border-radius: 14px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -3506,7 +3508,7 @@ body.dashboard-active .lang-toggle {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: white;
+    background: var(--color-white);
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
@@ -4013,7 +4015,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .btn-outline-nh {
-    background: white;
+    background: var(--color-white);
     color: var(--color-primary);
     border: 1.5px solid var(--color-border);
     padding: 0.9rem 2.25rem;
@@ -4245,7 +4247,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .segment-card {
-    background: white !important;
+    background: var(--color-white) !important;
     border: 1px solid var(--color-border) !important;
     border-radius: 16px !important;
     padding: 2.5rem 1.5rem !important;
@@ -4299,7 +4301,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .feature-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     padding: 2.5rem 2rem;
     text-align: center;
@@ -4381,7 +4383,7 @@ body.dashboard-active .lang-toggle {
 
 /* Academy Cards */
 .academy-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     overflow: hidden;
     box-shadow: var(--shadow-soft);
@@ -4466,7 +4468,7 @@ body.dashboard-active .lang-toggle {
     border-radius: 12px;
     margin-bottom: 0.75rem;
     overflow: hidden;
-    background: white;
+    background: var(--color-white);
 }
 
 .public-faq-question {
@@ -4531,7 +4533,7 @@ body.dashboard-active .lang-toggle {
 
 .public-news-card,
 .public-event-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: var(--shadow-soft);
@@ -4656,7 +4658,7 @@ body.dashboard-active .lang-toggle {
 /* Financial Section */
 .financial-section {
     padding: 5rem 2rem;
-    background: white;
+    background: var(--color-white);
 }
 
 .financial-highlight {
@@ -4696,7 +4698,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .testimonial-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     padding: 2.5rem;
     box-shadow: var(--shadow-soft);
@@ -4924,7 +4926,7 @@ body.dashboard-active .lang-toggle {
 
 /* Profile Cards ("Wie zoeken wij?") */
 .profile-card {
-    background: white;
+    background: var(--color-white);
     border-radius: var(--radius-lg);
     padding: 2rem 1.5rem;
     text-align: center;
@@ -5104,7 +5106,7 @@ body.dashboard-active .lang-toggle {
         top: 100%;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--color-white);
         flex-direction: column;
         align-items: stretch;
         gap: 0;
@@ -5302,7 +5304,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .practical-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     padding: 2rem 1.5rem;
     box-shadow: var(--shadow-soft);
@@ -5346,7 +5348,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .financial-detail-item {
-    background: white;
+    background: var(--color-white);
     border-radius: 12px;
     padding: 1.5rem;
     border-left: 3px solid var(--color-primary);
@@ -5573,7 +5575,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .info-session-action .btn-primary-large {
-    background: white;
+    background: var(--color-white);
     color: var(--color-primary);
     white-space: nowrap;
     font-variation-settings: 'wght' 600;
@@ -5592,7 +5594,7 @@ body.dashboard-active .lang-toggle {
 .quiz-container {
     max-width: 640px;
     margin: 2rem auto 0;
-    background: white;
+    background: var(--color-white);
     border-radius: 16px;
     padding: 2rem;
     box-shadow: var(--shadow-soft);
@@ -5634,7 +5636,7 @@ body.dashboard-active .lang-toggle {
     padding: 0.85rem 1.25rem;
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    background: white;
+    background: var(--color-white);
     text-align: left;
     cursor: pointer;
     font-size: 0.95rem;
@@ -5831,7 +5833,7 @@ body.dashboard-active .lang-toggle {
 .week-day {
     display: flex;
     align-items: stretch;
-    background: white;
+    background: var(--color-white);
     border-bottom: 1px solid var(--color-border);
 }
 
@@ -5941,7 +5943,7 @@ body.dashboard-active .lang-toggle {
     text-decoration: none;
     cursor: pointer;
     border: 1px solid var(--color-border);
-    background: white;
+    background: var(--color-white);
     color: var(--color-text);
     transition: var(--transition);
 }
@@ -6016,7 +6018,7 @@ body.dashboard-active .lang-toggle {
     padding: 0.5rem 1rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background: white;
+    background: var(--color-white);
     font-family: var(--font-body);
     font-size: 0.85rem;
     font-variation-settings: 'wght' 400;
@@ -6045,7 +6047,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .vacancy-card {
-    background: white;
+    background: var(--color-white);
     border-radius: 14px;
     padding: 1.5rem;
     box-shadow: var(--shadow-soft);
@@ -6504,7 +6506,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .kpi-card {
-    background: white;
+    background: var(--color-white);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: 1.25rem 1.5rem;
@@ -6614,7 +6616,7 @@ body.dashboard-active .lang-toggle {
 /* (chart-header and kpi-updated removed — replaced by dash-tile-header) */
 
 .royalty-chart {
-    background: white;
+    background: var(--color-white);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: 1.5rem;
@@ -6854,7 +6856,7 @@ body.dashboard-active .lang-toggle {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: white;
+    background: var(--color-white);
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
