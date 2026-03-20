@@ -3027,7 +3027,8 @@ function initAuthorDashboard() {
         document.getElementById('dashboardUserName').textContent = fullName;
         document.getElementById('userAvatar').textContent = author.info.initials;
         document.getElementById('welcomeName').textContent = author.info.firstName;
-        document.getElementById('startWelcomeName').textContent = author.info.firstName;
+        const startNameEl = document.getElementById('startWelcomeName');
+        if (startNameEl) startNameEl.textContent = author.info.firstName;
         updateGreeting();
         document.getElementById('infoVendorNumber').textContent = author.info.vendorNumber || '';
         document.getElementById('infoAlliantNumber').textContent = author.info.alliantNumber || '';
@@ -3102,13 +3103,6 @@ function initDashboardKPIs() {
     // 5. Royalty chart per year
     renderRoyaltyChart(payments);
 
-    // 6. Last updated indicator
-    const now = new Date();
-    const timeStr = now.toLocaleString(currentLang === 'nl' ? 'nl-NL' : 'en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-    });
-    const updatedEl = document.getElementById('kpiUpdated');
-    if (updatedEl) updatedEl.textContent = timeStr;
 }
 
 function renderRoyaltyChart(payments) {
@@ -3248,8 +3242,8 @@ function initDashboardAnimations() {
         card.classList.add('fade-in-up');
     });
 
-    // Animate start sections
-    document.querySelectorAll('#tab-start .start-section, #tab-start .start-section-grid, #tab-start .academy-section').forEach((section, i) => {
+    // Animate dashboard tiles and sections
+    document.querySelectorAll('#tab-start .dash-tile, #tab-start .start-section-grid, #tab-start .academy-banner').forEach((section, i) => {
         section.classList.remove('fade-in-section');
         section.style.animationDelay = `${0.25 + i * 0.08}s`;
         void section.offsetWidth;

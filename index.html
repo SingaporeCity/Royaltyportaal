@@ -1076,9 +1076,6 @@
 
                 <!-- Start Tab -->
                 <div class="tab-content active" id="tab-start">
-                    <div class="start-welcome">
-                        <h2>Welkom, <span id="startWelcomeName"></span></h2>
-                    </div>
 
                     <!-- KPI Cards -->
                     <div class="kpi-grid" id="kpiGrid">
@@ -1123,40 +1120,51 @@
                         </div>
                     </div>
 
-                    <!-- Royalty Chart -->
-                    <div class="start-section">
-                        <div class="chart-header">
-                            <h3 data-i18n="kpi_chart_title">Royalties per jaar</h3>
-                            <div class="kpi-updated" id="kpiUpdated"></div>
+                    <!-- Royalty Chart Tile -->
+                    <div class="dash-tile">
+                        <div class="dash-tile-header">
+                            <div class="dash-tile-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V13"/><path d="M12 17V9"/><path d="M17 17V11"/></svg>
+                                <h3 data-i18n="kpi_chart_title">Royalties per jaar</h3>
+                            </div>
                         </div>
                         <div class="royalty-chart" id="royaltyChart"></div>
                     </div>
 
-                    <div class="start-section academy-section">
-                        <a href="https://noordhoffacademy.nl/" target="_blank" class="academy-link">
-                            <span class="academy-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
-                            <div class="academy-text">
-                                <span class="academy-title">Noordhoff Academy</span>
-                                <span class="academy-subtitle" data-i18n="kpi_academy_sub">Cursussen en trainingen voor auteurs</span>
-                            </div>
-                            <span class="academy-arrow">&rarr;</span>
-                        </a>
-                    </div>
-
+                    <!-- Events & News -->
                     <div class="start-section-grid">
-                        <div class="start-section">
-                            <h3 data-i18n="kpi_events_title">Aankomende Evenementen</h3>
+                        <div class="dash-tile">
+                            <div class="dash-tile-header">
+                                <div class="dash-tile-title">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <h3 data-i18n="kpi_events_title">Evenementen</h3>
+                                </div>
+                            </div>
                             <div id="eventsContainer" class="events-container">
                                 <div class="skeleton-list"><div class="skeleton-item"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div><div class="skeleton-item"><div class="skeleton-line w70"></div><div class="skeleton-line w30"></div></div></div>
                             </div>
                         </div>
-                        <div class="start-section">
-                            <h3 data-i18n="kpi_news_title">Laatste Nieuws</h3>
+                        <div class="dash-tile">
+                            <div class="dash-tile-header">
+                                <div class="dash-tile-title">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="16" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/></svg>
+                                    <h3 data-i18n="kpi_news_title">Nieuws</h3>
+                                </div>
+                            </div>
                             <div id="blogPostsContainer" class="blog-posts-container">
                                 <div class="skeleton-list"><div class="skeleton-item"><div class="skeleton-line w70"></div><div class="skeleton-line w50"></div></div><div class="skeleton-item"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Academy link (compact) -->
+                    <a href="https://noordhoffacademy.nl/" target="_blank" class="academy-banner">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        <span class="academy-banner-text">Noordhoff Academy</span>
+                        <span class="academy-banner-sep">&mdash;</span>
+                        <span class="academy-banner-sub" data-i18n="kpi_academy_sub">Cursussen en trainingen voor auteurs</span>
+                        <svg class="academy-banner-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
                 </div>
 
                 <!-- Personal Info Tab -->
