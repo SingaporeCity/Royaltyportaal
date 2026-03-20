@@ -3406,16 +3406,22 @@ function initPredictions() {
 }
 
 
-function renderPayments(filterYear = 'all') {
+// Active payment filters
+let _paymentTypeFilter = 'all';
+let _paymentYearFilter = 'all';
+
+function renderPayments(filterYear) {
+    // If called with a year arg, update the stored year filter
+    if (filterYear !== undefined) _paymentYearFilter = filterYear;
+    const yearFilter = _paymentYearFilter;
+    const typeFilter = _paymentTypeFilter;
+    const searchQuery = (document.getElementById('paymentsSearchInput')?.value || '').toLowerCase().trim();
+
     const author = getCurrentAuthor();
     if (!author || !author.payments) return;
-    const filtered = filterYear === 'all' ? author.payments : author.payments.filter(p => p.year.toString() === filterYear);
+    const filtered = yearFilter === 'all' ? author.payments : author.payments.filter(p => p.year.toString() === yearFilter);
     const today = new Date().toISOString().split('T')[0];
-    const payments = [...filtered].sort((a, b) => {
-        const distA = Math.abs(new Date(a.sortDate) - new Date(today));
-        const distB = Math.abs(new Date(b.sortDate) - new Date(today));
-        return distA - distB;
-    });
+
     const iconColors = {
         royalty: 'linear-gradient(135deg, #e53935 0%, #c62828 100%)',
         subsidiary: 'linear-gradient(135deg, #00A5A5 0%, #008080 100%)',
@@ -3436,29 +3442,24 @@ function renderPayments(filterYear = 'all') {
         yearlyTotals[p.year][p.type] = p.amount;
     });
 
-    // Create annual statement items
     const annualStatements = [];
     Object.keys(yearlyTotals).forEach(year => {
         const totals = yearlyTotals[year];
         const totalAmount = totals.royalty + totals.subsidiary + totals.foreign;
         if (totalAmount > 0) {
             annualStatements.push({
-                year: parseInt(year),
-                type: 'annual',
+                year: parseInt(year), type: 'annual',
                 title: { nl: `Jaaropgave ${year}`, en: `Annual Statement ${year}` },
                 date: { nl: `Totaaloverzicht ${year}`, en: `Total Overview ${year}` },
-                sortDate: `${parseInt(year) + 1}-12-31`,
-                amount: totalAmount,
-                filename: `jaaropgave-${year}.pdf`,
-                breakdown: totals
+                sortDate: `${parseInt(year) + 1}-12-31`, amount: totalAmount,
+                filename: `jaaropgave-${year}.pdf`, breakdown: totals
             });
         }
     });
 
-    // Combine and filter
-    const allPayments = [...filtered, ...annualStatements.filter(a => filterYear === 'all' || a.year.toString() === filterYear)];
-    const sortedPayments = allPayments.sort((a, b) => {
-        // Sort annual statements first, then by date
+    // Combine and sort
+    let allPayments = [...filtered, ...annualStatements.filter(a => yearFilter === 'all' || a.year.toString() === yearFilter)];
+    allPayments.sort((a, b) => {
         if (a.type === 'annual' && b.type !== 'annual') return -1;
         if (a.type !== 'annual' && b.type === 'annual') return 1;
         const distA = Math.abs(new Date(a.sortDate) - new Date(today));
@@ -3466,13 +3467,53 @@ function renderPayments(filterYear = 'all') {
         return distA - distB;
     });
 
+    // Apply type filter
+    if (typeFilter !== 'all') {
+        allPayments = allPayments.filter(p => p.type === typeFilter);
+    }
+
+    // Apply search query
+    const totalBeforeSearch = allPayments.length;
+    if (searchQuery) {
+        allPayments = allPayments.filter(p => {
+            const title = (p.title[currentLang] || '').toLowerCase();
+            const date = (p.date[currentLang] || '').toLowerCase();
+            const amount = formatCurrency(p.amount).toLowerCase();
+            const typeLabel = (typeLabels[p.type]?.[currentLang] || '').toLowerCase();
+            return title.includes(searchQuery) || date.includes(searchQuery) || amount.includes(searchQuery) || typeLabel.includes(searchQuery);
+        });
+    }
+
+    // Update result count
+    const resultCountEl = document.getElementById('paymentsResultCount');
+    if (searchQuery || typeFilter !== 'all') {
+        resultCountEl.classList.remove('hidden');
+        const countText = currentLang === 'nl'
+            ? `${allPayments.length} van ${totalBeforeSearch} ${totalBeforeSearch === 1 ? 'afrekening' : 'afrekeningen'}`
+            : `${allPayments.length} of ${totalBeforeSearch} ${totalBeforeSearch === 1 ? 'statement' : 'statements'}`;
+        resultCountEl.textContent = countText;
+    } else {
+        resultCountEl.classList.add('hidden');
+    }
+
+    // Update clear button
+    const clearBtn = document.getElementById('paymentsSearchClear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', !searchQuery);
+
     const paymentsList = document.getElementById('paymentsList');
-    if (sortedPayments.length === 0) {
-        paymentsList.innerHTML = emptyStateHTML('payments');
+    if (allPayments.length === 0) {
+        if (searchQuery || typeFilter !== 'all') {
+            paymentsList.innerHTML = `<div class="payments-no-results">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <p>${currentLang === 'nl' ? 'Geen afrekeningen gevonden' : 'No statements found'}</p>
+            </div>`;
+        } else {
+            paymentsList.innerHTML = emptyStateHTML('payments');
+        }
         return;
     }
 
-    paymentsList.innerHTML = sortedPayments.map((payment, idx) => `
+    paymentsList.innerHTML = allPayments.map((payment, idx) => `
         <div class="payment-item ${payment.type === 'annual' ? 'annual-statement' : ''}">
             <div class="payment-icon" style="background: ${iconColors[payment.type]}">
                 <svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/></svg>
@@ -3485,11 +3526,29 @@ function renderPayments(filterYear = 'all') {
                 <div class="payment-amount-value">${formatCurrency(payment.amount)}</div>
                 <div class="payment-amount-label">${typeLabels[payment.type][currentLang]}</div>
             </div>
-            <button class="payment-download" onclick="previewPaymentPDF(${idx}, '${filterYear}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
+            <button class="payment-download" onclick="previewPaymentPDF(${idx}, '${yearFilter}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
         </div>
     `).join('');
+}
+
+function filterPayments() {
+    renderPayments();
+}
+
+function clearPaymentsSearch() {
+    const input = document.getElementById('paymentsSearchInput');
+    if (input) { input.value = ''; input.focus(); }
+    renderPayments();
+}
+
+function setPaymentTypeFilter(type) {
+    _paymentTypeFilter = type;
+    document.querySelectorAll('#paymentsTypeFilter .type-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    renderPayments();
 }
 
 function renderFAQ() {
