@@ -123,7 +123,7 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 ## Dashboard UX Polish
 
 ### Header Zoekbalk
-- `.header-search-trigger` tussen logo en user-info — klikbaar, opent command palette
+- `.header-search-trigger` rechts in `.header-user` groep — klikbaar, opent command palette
 - Toont vergrootglas + "Zoeken..." + `⌘K` badge
 - Mobiel: collapsed naar alleen icoon
 
@@ -139,6 +139,15 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 
 ### Scroll-to-top bij Tab Switch
 - Bij tab-klik: `document.querySelector('.tabs-container').scrollIntoView({ behavior: 'smooth', block: 'start' })`
+
+## Dashboard Tile Systeem (Start Tab)
+- `.dash-tile`: kaart met header-bar (icoon + titel) + content area, border-top 2px teal accent
+- Gebruikt voor: royalty chart, evenementen, nieuws
+- `.dash-tile-header` met `.dash-tile-title` (icoon + h3)
+- KPI cards hebben gekleurde top-borders per type: blauw (#3b82f6), teal (#14b8a6), paars (#a855f7) via `:has()` selector
+- **Academy banner** (`.academy-banner`): compacte link met teal icoon-cirkel, twee-regelige tekst, groene linker border, "Bezoek site" badge met external-link icoon
+- **Achtergrond**: dashboard body en tab-content gebruiken `var(--color-bg-alt)` (#F7F8FA), kaarten zijn wit — creëert diepte
+- Alle hardcoded `background: white` vervangen door `var(--color-white)` voor consistente theming
 
 ## Royalty Chart — Horizontale Revenue Timeline
 - **Vervangt** de vorige stacked bar chart (die slecht werkte voor 1-3 producten per jaar)
@@ -157,6 +166,8 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - Gevulde area met gradient, gestreepte lijn voor forecast, pulserende dot
 - Compacte labels (`formatCompactCurrency`: €2,4k formaat), y-as gridlijnen
 - `renderTrendChart(author)` aangeroepen vanuit `initPredictions()`
+- **Aspect ratio**: viewBox breedte = `container.clientWidth`, hoogte = 22% van breedte (min 140px, max 180px)
+- `preserveAspectRatio="xMidYMid meet"` — cirkels blijven rond, tekst vervormt niet
 - Geen externe dependencies (geen Chart.js)
 
 ## Command Palette (Ctrl+K / Cmd+K)
@@ -283,7 +294,7 @@ Vereist `SUPABASE_URL` en `SUPABASE_SERVICE_ROLE_KEY` in `scripts/.env`.
 ### Login scherm — Split-screen design
 - **Layout**: `.login-page-inner` is een flex container met twee panelen
 - **Links** (`.login-brand-panel`): Noordhoff branding — donkergroen gradient (`160deg, #007460 → #005a49 → #004035`), wit logo, "Auteursportaal" titel, subtitel, statistieken (190 jaar, 2500+ auteurs, 1000+ publicaties), decoratieve cirkels via `::before`/`::after`
-- **Rechts** (`.login-form-panel`): eigen topbar (`.login-form-topbar`) met "Terug naar website" knop, kaart gecentreerd in `.login-form-center`
+- **Rechts** (`.login-form-panel`): eigen topbar (`.login-form-topbar`) met "Terug naar website" knop, kaart gecentreerd in `.login-form-center` (flex layout, geen absolute positionering)
 - **Mobiel** (≤768px): branding panel verborgen (`display: none`), `.login-logo-mobile` wordt zichtbaar
 - **Tablet** (≤1024px): branding panel krimpt naar 40%
 
