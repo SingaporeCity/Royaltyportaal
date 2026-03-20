@@ -3403,6 +3403,140 @@ function initPredictions() {
     document.getElementById('predHigh').textContent = formatCurrency(max);
     const contractNumbers = author.contracts.map(c => c.number).join(', ');
     document.getElementById('predictionContracts').innerHTML = `<strong>${currentLang === 'nl' ? 'Berekend op basis van contracten' : 'Calculated based on contracts'}:</strong> ${contractNumbers}`;
+
+    renderTrendChart(author);
+}
+
+function renderTrendChart(author) {
+    const container = document.getElementById('trendChart');
+    if (!container) return;
+
+    // Aggregate historical data per year
+    const yearTotals = {};
+    (author.payments || []).forEach(p => {
+        yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount;
+    });
+
+    const historicalYears = Object.keys(yearTotals).map(Number).sort();
+    if (historicalYears.length === 0) {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--color-text-light);font-size:0.85rem;">Geen historische data beschikbaar</div>';
+        return;
+    }
+
+    // Forecast year and value
+    const forecastYear = Math.max(...historicalYears) + 1;
+    const { min, max } = author.prediction || { min: 0, max: 0 };
+    const forecastMid = Math.round((min + max) / 2);
+
+    // Build data points: historical + forecast
+    const allYears = [...historicalYears, forecastYear];
+    const allValues = [...historicalYears.map(y => yearTotals[y]), forecastMid];
+
+    // Chart dimensions
+    const padding = { top: 25, right: 20, bottom: 30, left: 52 };
+    const w = 100; // percentage-based via viewBox
+    const h = 100;
+
+    // Get container actual dimensions for viewBox
+    const chartW = 800;
+    const chartH = 180;
+    const plotW = chartW - padding.left - padding.right;
+    const plotH = chartH - padding.top - padding.bottom;
+
+    // Scales
+    const maxVal = Math.max(...allValues) * 1.15;
+    const minVal = 0;
+
+    const xScale = (i) => padding.left + (i / (allYears.length - 1)) * plotW;
+    const yScale = (v) => padding.top + plotH - ((v - minVal) / (maxVal - minVal)) * plotH;
+
+    // Build points
+    const points = allValues.map((v, i) => ({ x: xScale(i), y: yScale(v), value: v, year: allYears[i] }));
+    const historicalPoints = points.slice(0, historicalYears.length);
+    const forecastPoint = points[points.length - 1];
+    const lastHistorical = historicalPoints[historicalPoints.length - 1];
+
+    // SVG path helpers
+    const linePoints = (pts) => pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+    const areaPoints = (pts) => {
+        const line = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+        return `${line} L${pts[pts.length-1].x},${padding.top + plotH} L${pts[0].x},${padding.top + plotH} Z`;
+    };
+
+    // Y-axis grid lines (3-4 lines)
+    const gridCount = 4;
+    const gridStep = maxVal / gridCount;
+    let gridHTML = '';
+    for (let i = 1; i < gridCount; i++) {
+        const val = gridStep * i;
+        const y = yScale(val);
+        gridHTML += `<line class="trend-grid-line" x1="${padding.left}" y1="${y}" x2="${chartW - padding.right}" y2="${y}"/>`;
+        gridHTML += `<text class="trend-y-label" x="${padding.left - 8}" y="${y + 3.5}">${formatCompactCurrency(val)}</text>`;
+    }
+
+    // Build SVG
+    let svg = `<svg viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">`;
+
+    // Gradient definition
+    svg += `<defs>
+        <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-primary)" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="var(--color-primary)" stop-opacity="0.02"/>
+        </linearGradient>
+        <linearGradient id="trendGradientForecast" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-primary)" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="var(--color-primary)" stop-opacity="0.01"/>
+        </linearGradient>
+    </defs>`;
+
+    // Grid
+    svg += gridHTML;
+
+    // Historical area
+    svg += `<path class="trend-area" d="${areaPoints(historicalPoints)}"/>`;
+
+    // Forecast area (triangle between last historical and forecast)
+    if (forecastMid > 0) {
+        const fcArea = `M${lastHistorical.x},${lastHistorical.y} L${forecastPoint.x},${forecastPoint.y} L${forecastPoint.x},${padding.top + plotH} L${lastHistorical.x},${padding.top + plotH} Z`;
+        svg += `<path class="trend-area-forecast" fill="url(#trendGradientForecast)" d="${fcArea}"/>`;
+    }
+
+    // Historical line
+    svg += `<path class="trend-line" d="${linePoints(historicalPoints)}"/>`;
+
+    // Forecast dashed line
+    if (forecastMid > 0) {
+        svg += `<path class="trend-line-forecast" d="M${lastHistorical.x},${lastHistorical.y} L${forecastPoint.x},${forecastPoint.y}"/>`;
+    }
+
+    // Value labels + dots for historical
+    historicalPoints.forEach(p => {
+        svg += `<text class="trend-value-label" x="${p.x}" y="${p.y - 12}">${formatCompactCurrency(p.value)}</text>`;
+        svg += `<circle class="trend-dot" cx="${p.x}" cy="${p.y}" r="4.5"/>`;
+    });
+
+    // Forecast dot + value
+    if (forecastMid > 0) {
+        svg += `<text class="trend-value-label" x="${forecastPoint.x}" y="${forecastPoint.y - 12}" opacity="0.6">${formatCompactCurrency(forecastPoint.value)}</text>`;
+        svg += `<circle class="trend-dot-forecast" cx="${forecastPoint.x}" cy="${forecastPoint.y}" r="5"/>`;
+    }
+
+    // X-axis year labels
+    points.forEach(p => {
+        const isForecast = p.year === forecastYear;
+        svg += `<text class="trend-label" x="${p.x}" y="${chartH - 5}" ${isForecast ? 'opacity="0.5"' : ''}>${p.year}</text>`;
+    });
+
+    svg += '</svg>';
+    container.innerHTML = svg;
+}
+
+function formatCompactCurrency(value) {
+    if (value >= 1000) {
+        const k = value / 1000;
+        return '€' + (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)).replace('.', ',') + 'k';
+    }
+    return '€' + Math.round(value);
 }
 
 
