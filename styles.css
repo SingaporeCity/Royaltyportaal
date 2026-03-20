@@ -2953,6 +2953,7 @@ body.dashboard-active .lang-toggle {
     border-radius: var(--radius-md);
     overflow: hidden;
     margin-bottom: 1.25rem;
+    border-top: 2px solid var(--color-primary);
 }
 
 .dash-tile-header {
@@ -2993,35 +2994,51 @@ body.dashboard-active .lang-toggle {
     padding: 1rem 1.5rem;
 }
 
-/* Academy Banner (compact) */
+/* Academy Banner */
 .academy-banner {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.25rem;
-    background: var(--color-bg-alt);
+    gap: 0.875rem;
+    padding: 0.875rem 1.25rem;
+    background: linear-gradient(135deg, rgba(0,116,96,0.04) 0%, var(--color-white) 100%);
     border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
     border-radius: var(--radius-sm);
     text-decoration: none;
-    color: var(--color-text-light);
-    font-size: 0.78rem;
-    font-variation-settings: 'wght' 450;
     transition: all 0.2s ease;
     margin-top: 0.25rem;
 }
 
 .academy-banner:hover {
     border-color: var(--color-primary);
-    color: var(--color-primary);
-    background: var(--color-primary-subtle);
+    background: linear-gradient(135deg, rgba(0,116,96,0.07) 0%, var(--color-primary-subtle) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,116,96,0.1);
 }
 
-.academy-banner svg:first-child {
-    color: var(--color-primary);
+.academy-banner-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 
+.academy-banner-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
 .academy-banner-text {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
     font-variation-settings: 'wght' 600;
     color: var(--color-text);
 }
@@ -3030,24 +3047,34 @@ body.dashboard-active .lang-toggle {
     color: var(--color-primary);
 }
 
-.academy-banner-sep {
-    opacity: 0.3;
-}
-
 .academy-banner-sub {
-    flex: 1;
+    font-size: 0.72rem;
+    color: var(--color-text-light);
+    font-variation-settings: 'wght' 400;
 }
 
-.academy-banner-arrow {
+.academy-banner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.65rem;
+    font-variation-settings: 'wght' 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-primary);
+    background: var(--color-primary-subtle);
+    border: 1px solid rgba(0,116,96,0.15);
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
     flex-shrink: 0;
-    opacity: 0;
-    transform: translateX(-4px);
     transition: all 0.2s ease;
 }
 
-.academy-banner:hover .academy-banner-arrow {
-    opacity: 1;
-    transform: translateX(0);
+.academy-banner:hover .academy-banner-badge {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
 }
 
 /* Events */
@@ -6531,14 +6558,26 @@ body.dashboard-active .lang-toggle {
     color: #3b82f6 !important;
 }
 
+.kpi-card:has(.kpi-icon-blue) {
+    border-top: 2px solid #3b82f6;
+}
+
 .kpi-icon-teal {
     background: #f0fdfa !important;
     color: #14b8a6 !important;
 }
 
+.kpi-card:has(.kpi-icon-teal) {
+    border-top: 2px solid #14b8a6;
+}
+
 .kpi-icon-purple {
     background: #faf5ff !important;
     color: #a855f7 !important;
+}
+
+.kpi-card:has(.kpi-icon-purple) {
+    border-top: 2px solid #a855f7;
 }
 
 .kpi-content {
@@ -6958,16 +6997,27 @@ body.dashboard-active .lang-toggle {
 }
 
 [data-theme="dark"] .academy-banner {
-    background: var(--color-bg);
+    background: linear-gradient(135deg, rgba(0,116,96,0.06) 0%, var(--color-white) 100%);
     border-color: var(--color-border);
+    border-left-color: var(--color-primary);
 }
 
 [data-theme="dark"] .academy-banner:hover {
-    background: rgba(0, 116, 96, 0.06);
+    background: linear-gradient(135deg, rgba(0,116,96,0.1) 0%, rgba(0,116,96,0.04) 100%);
 }
 
 [data-theme="dark"] .academy-banner-text {
     color: var(--color-text);
+}
+
+[data-theme="dark"] .academy-banner-badge {
+    background: rgba(0,116,96,0.12);
+    border-color: rgba(0,116,96,0.2);
+}
+
+[data-theme="dark"] .academy-banner:hover .academy-banner-badge {
+    background: var(--color-primary);
+    color: white;
 }
 
 /* Info cards */
