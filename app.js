@@ -3830,6 +3830,7 @@ async function initAdminDashboard() {
     renderAuthorList();
     renderAllChanges();
     updateAdminStats();
+    renderActivityFeed();
 
     // Auto-refresh elke 30 seconden om data up-to-date te houden
     if (adminRefreshInterval) clearInterval(adminRefreshInterval);
@@ -3842,6 +3843,7 @@ async function initAdminDashboard() {
         }
         renderAllChanges();
         updateAdminStats();
+        renderActivityFeed();
     }, 30000);
 }
 
@@ -4057,6 +4059,169 @@ function updateAdminStats() {
     document.getElementById('statPendingLabel').textContent = pendingChanges === 1
         ? 'Wijziging goed te keuren'
         : 'Wijzigingen goed te keuren';
+}
+
+// ============================================
+// ACTIVITY FEED
+// ============================================
+
+function renderActivityFeed() {
+    const feedList = document.getElementById('activityFeedList');
+    if (!feedList) return;
+
+    const authors = getAuthorsData();
+    const events = [];
+
+    Object.entries(authors).forEach(([email, author]) => {
+        const name = author.info.firstName + ' ' + author.info.lastName;
+        const initials = author.info.initials || (name[0] || '?');
+
+        // Login events
+        if (author.loginHistory) {
+            author.loginHistory.forEach(ts => {
+                events.push({
+                    type: 'login',
+                    name,
+                    initials,
+                    text: `<strong>${name}</strong> heeft ingelogd`,
+                    time: new Date(ts)
+                });
+            });
+        }
+
+        // Change request events
+        if (author.infoChanges) {
+            author.infoChanges.forEach(change => {
+                if (change.status === 'pending') {
+                    events.push({
+                        type: 'change',
+                        name,
+                        initials,
+                        text: `<strong>${name}</strong> heeft een wijzigingsverzoek ingediend <span style="color:var(--color-text-light);">(${change.field})</span>`,
+                        time: new Date(change.date)
+                    });
+                } else if (change.status === 'approved' && change.processedDate) {
+                    events.push({
+                        type: 'approved',
+                        name: 'Admin',
+                        initials: 'A',
+                        text: `Wijziging van <strong>${name}</strong> goedgekeurd <span style="color:var(--color-text-light);">(${change.field})</span>`,
+                        time: new Date(change.processedDate)
+                    });
+                } else if (change.status === 'rejected' && change.processedDate) {
+                    events.push({
+                        type: 'rejected',
+                        name: 'Admin',
+                        initials: 'A',
+                        text: `Wijziging van <strong>${name}</strong> afgewezen <span style="color:var(--color-text-light);">(${change.field})</span>`,
+                        time: new Date(change.processedDate)
+                    });
+                }
+            });
+        }
+    });
+
+    // Sort newest first, limit to 20
+    events.sort((a, b) => b.time - a.time);
+    const recentEvents = events.slice(0, 20);
+
+    if (recentEvents.length === 0) {
+        feedList.innerHTML = '<div class="activity-feed-empty">Geen recente activiteiten</div>';
+        return;
+    }
+
+    feedList.innerHTML = recentEvents.map((event, i) => {
+        const timeAgo = formatTimeAgo(event.time);
+        return `
+            <div class="activity-feed-item" style="animation-delay:${i * 0.04}s">
+                <div class="activity-feed-avatar ${event.type}">${event.initials}</div>
+                <div class="activity-feed-content">
+                    <div class="activity-feed-text">${event.text}</div>
+                    <div class="activity-feed-time">${timeAgo}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function formatTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Zojuist';
+    if (diffMins < 60) return `${diffMins} min geleden`;
+    if (diffHours < 24) return `${diffHours} uur geleden`;
+    if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'dag' : 'dagen'} geleden`;
+
+    return date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+// ============================================
+// CSV EXPORT
+// ============================================
+
+function exportPaymentsCSV() {
+    const author = getCurrentAuthor();
+    if (!author || !author.payments || author.payments.length === 0) return;
+
+    const typeLabels = {
+        royalty: 'Royalties',
+        subsidiary: 'Nevenrechten',
+        foreign: 'Foreign Rights'
+    };
+
+    // CSV header
+    const headers = ['Jaar', 'Type', 'Omschrijving', 'Datum', 'Bedrag'];
+    const rows = [headers.join(';')];
+
+    // Sort by year desc, then type
+    const sorted = [...author.payments].sort((a, b) => b.year - a.year || a.type.localeCompare(b.type));
+
+    sorted.forEach(p => {
+        const row = [
+            p.year,
+            typeLabels[p.type] || p.type,
+            '"' + (p.title?.[currentLang] || p.title?.nl || '').replace(/"/g, '""') + '"',
+            '"' + (p.date?.[currentLang] || p.date?.nl || '').replace(/"/g, '""') + '"',
+            p.amount.toFixed(2).replace('.', ',')
+        ];
+        rows.push(row.join(';'));
+    });
+
+    // Add totals per year
+    const yearTotals = {};
+    author.payments.forEach(p => {
+        yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount;
+    });
+    rows.push('');
+    rows.push('Jaar;Totaal;;;Bedrag');
+    Object.keys(yearTotals).sort((a, b) => b - a).forEach(year => {
+        rows.push(`${year};Totaal;;;${yearTotals[year].toFixed(2).replace('.', ',')}`);
+    });
+
+    // Grand total
+    const grandTotal = author.payments.reduce((sum, p) => sum + p.amount, 0);
+    rows.push(`;;Totaal generaal;;${grandTotal.toFixed(2).replace('.', ',')}`);
+
+    // BOM for Excel UTF-8 recognition + semicolon separator
+    const bom = '\uFEFF';
+    const csvContent = bom + rows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const fullName = author.info.firstName + '_' + author.info.lastName;
+    const filename = `afrekeningen_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 function filterAuthors() {
