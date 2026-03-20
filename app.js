@@ -3479,14 +3479,11 @@ function renderTrendChart(author) {
     const allYears = [...historicalYears, forecastYear];
     const allValues = [...historicalYears.map(y => yearTotals[y]), forecastMid];
 
-    // Chart dimensions
+    // Chart dimensions — use actual container width for proper aspect ratio
     const padding = { top: 25, right: 20, bottom: 30, left: 52 };
-    const w = 100; // percentage-based via viewBox
-    const h = 100;
 
-    // Get container actual dimensions for viewBox
-    const chartW = 800;
-    const chartH = 180;
+    const chartW = container.clientWidth || 700;
+    const chartH = Math.min(180, Math.max(140, chartW * 0.22));
     const plotW = chartW - padding.left - padding.right;
     const plotH = chartH - padding.top - padding.bottom;
 
@@ -3522,7 +3519,7 @@ function renderTrendChart(author) {
     }
 
     // Build SVG
-    let svg = `<svg viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">`;
+    let svg = `<svg viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="xMidYMid meet">`;
 
     // Gradient definition
     svg += `<defs>

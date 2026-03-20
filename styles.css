@@ -1574,12 +1574,12 @@ body.dashboard-active .lang-toggle {
 
 .trend-chart-container {
     position: relative;
-    height: 180px;
 }
 
 .trend-chart-container svg {
     width: 100%;
-    height: 100%;
+    height: auto;
+    display: block;
     overflow: visible;
 }
 
@@ -1679,7 +1679,7 @@ body.dashboard-active .lang-toggle {
 }
 
 @media (max-width: 768px) {
-    .trend-chart-container { height: 150px; }
+    .trend-chart-container { /* responsive via aspect ratio in JS */ }
     .trend-chart-card { padding: 1.25rem 1rem 1rem; }
     .trend-chart-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }
