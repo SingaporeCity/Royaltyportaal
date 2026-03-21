@@ -3248,7 +3248,7 @@ function renderYearReview(payments, contracts, prediction) {
             <div class="yr-stats yr-stats-3">
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
-                    <div class="yr-stat-label">Totaal all-time</div>
+                    <div class="yr-stat-label">${currentLang === 'nl' ? 'Totaal vanaf' : 'Total from'} <select class="yr-from-select" id="yrFromYear" onchange="updateTotalFrom()">${sortedYears.map(y => `<option value="${y}">${y}</option>`).join('')}</select></div>
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
@@ -3268,6 +3268,25 @@ function renderYearReview(payments, contracts, prediction) {
     if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
     if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
+
+    // Store yearTotals for the dropdown recalc
+    container._yearTotals = yearTotals;
+}
+
+function updateTotalFrom() {
+    const select = document.getElementById('yrFromYear');
+    const container = document.getElementById('yearReview');
+    if (!select || !container || !container._yearTotals) return;
+
+    const fromYear = parseInt(select.value);
+    const yearTotals = container._yearTotals;
+    let total = 0;
+    Object.entries(yearTotals).forEach(([y, amt]) => {
+        if (parseInt(y) >= fromYear) total += amt;
+    });
+
+    const el = document.getElementById('yrTotalAllTime');
+    if (el) el.textContent = formatCurrency(total);
 }
 
 // Time-based greeting

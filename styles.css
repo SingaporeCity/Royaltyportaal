@@ -4156,6 +4156,31 @@ body.dashboard-active .lang-toggle {
     font-variation-settings: 'wght' 400;
 }
 
+.yr-from-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.85);
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-variation-settings: 'wght' 650;
+    padding: 0.1rem 0.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.yr-from-select:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.yr-from-select:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.5);
+}
+
 .yr-footer {
     display: flex;
     align-items: center;
