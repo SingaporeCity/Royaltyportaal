@@ -1393,21 +1393,20 @@ body.dashboard-active .lang-toggle {
 }
 
 .payment-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 1.25rem;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .payment-icon svg {
     width: 22px;
     height: 22px;
-    fill: white;
 }
 
 .payment-details { flex: 1; }

@@ -3683,10 +3683,16 @@ function renderPayments(filterYear) {
     const today = new Date().toISOString().split('T')[0];
 
     const iconColors = {
-        royalty: 'linear-gradient(135deg, #e53935 0%, #c62828 100%)',
-        subsidiary: 'linear-gradient(135deg, #00A5A5 0%, #008080 100%)',
-        foreign: 'linear-gradient(135deg, #0082C6 0%, #005a8c 100%)',
-        annual: 'linear-gradient(135deg, #EDBA27 0%, #d4a520 100%)'
+        royalty: 'var(--color-primary)',
+        subsidiary: '#14b8a6',
+        foreign: '#6DB5C5',
+        annual: '#f59e0b'
+    };
+    const iconSvgs = {
+        royalty: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+        subsidiary: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
+        foreign: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
+        annual: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
     };
     const typeLabels = {
         royalty: { nl: 'Royalties', en: 'Royalties' },
@@ -3776,7 +3782,7 @@ function renderPayments(filterYear) {
     paymentsList.innerHTML = allPayments.map((payment, idx) => `
         <div class="payment-item ${payment.type === 'annual' ? 'annual-statement' : ''}">
             <div class="payment-icon" style="background: ${iconColors[payment.type]}">
-                <svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/></svg>
+                ${iconSvgs[payment.type] || iconSvgs.royalty}
             </div>
             <div class="payment-details">
                 <div class="payment-title">${payment.title[currentLang]}</div>
