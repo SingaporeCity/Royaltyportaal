@@ -2676,10 +2676,12 @@ body.dashboard-active .lang-toggle {
 }
 
 .fc-bar-forecast .fc-bar-year { color: var(--color-primary); }
-.fc-bar-forecast .fc-bar-amount {
-    color: var(--color-primary);
+.fc-bar-forecast .fc-bar-amount { color: var(--color-primary); }
+
+.fc-bar-amount-range {
     font-size: 0.78rem;
-    min-width: 140px;
+    line-height: 1.5;
+    min-width: 90px;
 }
 
 .fc-top {

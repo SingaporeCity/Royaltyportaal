@@ -3684,7 +3684,7 @@ function initPredictions() {
                     <div class="fc-bar-marker fc-bar-marker-min" style="left:${minPct}%"></div>
                     <div class="fc-bar-marker fc-bar-marker-max" style="left:${maxPct}%"></div>
                 </div>
-                <span class="fc-bar-amount">${formatCurrency(d.min)} — ${formatCurrency(d.max)}</span>
+                <span class="fc-bar-amount fc-bar-amount-range">${formatCurrency(d.min)}<br>${formatCurrency(d.max)}</span>
             </div>`;
         }
         return `<div class="fc-bar-row">
