@@ -2965,7 +2965,7 @@ body.dashboard-active .lang-toggle {
 .yr-card {
     background: linear-gradient(135deg, #007460 0%, #004a3f 40%, #003530 100%);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 2rem 1.25rem;
+    padding: 1.75rem 2.25rem 1.5rem;
     color: white;
     position: relative;
     overflow: hidden;
@@ -3004,7 +3004,7 @@ body.dashboard-active .lang-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     position: relative;
     z-index: 1;
 }
@@ -3013,7 +3013,7 @@ body.dashboard-active .lang-toggle {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     font-variation-settings: 'wght' 650;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -3034,28 +3034,28 @@ body.dashboard-active .lang-toggle {
 
 .yr-hero {
     text-align: center;
-    padding: 0.25rem 0 1.25rem;
+    padding: 0.5rem 0 1.5rem;
     position: relative;
     z-index: 1;
 }
 
 .yr-hero-label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-variation-settings: 'wght' 500;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.6);
     margin-bottom: 0.5rem;
 }
 
 .yr-hero-value {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-variation-settings: 'wght' 700;
     letter-spacing: -0.03em;
     line-height: 1;
     color: white;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .yr-hero-change {
@@ -3100,7 +3100,7 @@ body.dashboard-active .lang-toggle {
 
 .yr-stat {
     background: rgba(255,255,255,0.04);
-    padding: 0.75rem 0.75rem;
+    padding: 0.875rem 0.875rem;
     text-align: center;
     transition: background 0.2s;
 }
@@ -3111,25 +3111,25 @@ body.dashboard-active .lang-toggle {
 
 .yr-stat-value {
     font-family: var(--font-heading);
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-variation-settings: 'wght' 700;
     color: white;
     letter-spacing: -0.02em;
     line-height: 1.2;
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.2rem;
 }
 
 .yr-stat-label {
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     font-variation-settings: 'wght' 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.55);
 }
 
 .yr-stat-sub {
-    font-size: 0.6rem;
-    color: rgba(255,255,255,0.35);
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.4);
     margin-top: 0.15rem;
     font-variation-settings: 'wght' 400;
 }
