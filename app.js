@@ -3492,21 +3492,7 @@ function renderContracts() {
         return;
     }
 
-    // Summary cards
-    if (summaryEl) {
-        summaryEl.innerHTML = `
-            <div class="contracts-summary-grid contracts-summary-grid-2">
-                <div class="contracts-summary-item">
-                    <div class="contracts-summary-value">${author.contracts.length}</div>
-                    <div class="contracts-summary-label">${nl ? 'Actieve contracten' : 'Active contracts'}</div>
-                </div>
-                <div class="contracts-summary-item">
-                    <div class="contracts-summary-value">11%</div>
-                    <div class="contracts-summary-label">${nl ? 'Gem. royaltypercentage' : 'Avg. royalty percentage'}</div>
-                </div>
-            </div>
-        `;
-    }
+    if (summaryEl) summaryEl.innerHTML = '';
 
     // Table
     tbody.closest('table').style.display = '';
