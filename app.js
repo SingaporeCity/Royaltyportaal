@@ -5429,8 +5429,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Scroll to top of tabs container
-        document.querySelector('.tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll to top of tabs nav (accounting for sticky header)
+        const tabsNav = document.querySelector('.tabs-nav');
+        if (tabsNav) {
+            const headerHeight = document.querySelector('.dashboard-header')?.offsetHeight || 0;
+            const top = tabsNav.getBoundingClientRect().top + window.scrollY - headerHeight;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
     });
 });
 
