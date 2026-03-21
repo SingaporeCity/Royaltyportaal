@@ -3066,7 +3066,7 @@ function initAuthorDashboard() {
     }
 }
 
-// Dashboard KPI Overview
+// Dashboard KPI Overview — all integrated into Year in Review
 function initDashboardKPIs() {
     const author = getCurrentAuthor();
     if (!author) return;
@@ -3075,41 +3075,11 @@ function initDashboardKPIs() {
     const contracts = author.contracts || [];
     const prediction = author.prediction || { min: 0, max: 0 };
 
-    // 1. Total paid across all years
-    const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-    const years = [...new Set(payments.map(p => p.year))].sort();
-    animateCounter('kpiTotalPaid', totalPaid, true);
-    document.getElementById('kpiTotalYears').textContent = years.length > 0
-        ? `${years[0]}–${years[years.length - 1]}`
-        : '';
-
-    // 2. Last payment
-    if (payments.length > 0) {
-        const sorted = [...payments].sort((a, b) => {
-            const da = a.sortDate || `${a.year}-01-01`;
-            const db = b.sortDate || `${b.year}-01-01`;
-            return new Date(db) - new Date(da);
-        });
-        const last = sorted[0];
-        animateCounter('kpiLastPayment', last.amount, true, 100);
-        document.getElementById('kpiLastPaymentDate').textContent = last.date?.[currentLang] || last.year;
-    }
-
-    // 3. Active contracts
-    animateCounter('kpiContracts', contracts.length, false, 200);
-
-    // 4. Forecast
-    const mid = Math.round((prediction.min + prediction.max) / 2);
-    if (mid > 0) {
-        animateCounter('kpiForecast', mid, true, 300);
-    }
-
-    // 5. Year in Review
+    // Year in Review (includes all KPIs)
     renderYearReview(payments, contracts, prediction);
 
-    // 6. Royalty chart per year
+    // Royalty chart per year
     renderRoyaltyChart(payments);
-
 }
 
 function renderRoyaltyChart(payments) {
@@ -3197,19 +3167,15 @@ function renderYearReview(payments, contracts, prediction) {
     const container = document.getElementById('yearReview');
     if (!container || payments.length === 0) { if (container) container.innerHTML = ''; return; }
 
-    // Determine review year (most recent year with payments)
+    // Aggregate per year
     const yearTotals = {};
-    const yearTypes = {};
     payments.forEach(p => {
         yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount;
-        if (!yearTypes[p.year]) yearTypes[p.year] = {};
-        yearTypes[p.year][p.type] = (yearTypes[p.year][p.type] || 0) + p.amount;
     });
-
     const sortedYears = Object.keys(yearTotals).map(Number).sort();
     const reviewYear = sortedYears[sortedYears.length - 1];
     const reviewTotal = yearTotals[reviewYear];
-    const types = yearTypes[reviewYear] || {};
+    const totalAllTime = payments.reduce((s, p) => s + p.amount, 0);
 
     // Previous year comparison
     const prevYear = sortedYears.length >= 2 ? sortedYears[sortedYears.length - 2] : null;
@@ -3221,15 +3187,20 @@ function renderYearReview(payments, contracts, prediction) {
         changeDir = changePct > 0 ? 'up' : changePct < 0 ? 'down' : 'neutral';
     }
 
-    // Years as author
-    const firstYear = sortedYears[0];
-    const yearsActive = reviewYear - firstYear + 1;
+    // Last payment
+    const sortedPayments = [...payments].sort((a, b) => {
+        const da = a.sortDate || `${a.year}-01-01`;
+        const db = b.sortDate || `${b.year}-01-01`;
+        return new Date(db) - new Date(da);
+    });
+    const lastPayment = sortedPayments[0];
+    const lastPaymentDate = lastPayment?.date?.[currentLang] || lastPayment?.year || '';
 
-    // Type labels
-    const typeNames = { royalty: 'Royalties', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
+    // Forecast
+    const mid = Math.round((prediction.min + prediction.max) / 2);
 
-    // Build breakdown for stats bar
-    const typeEntries = Object.entries(types).filter(([, v]) => v > 0);
+    // Years active
+    const yearsActive = sortedYears.length > 0 ? (new Date().getFullYear() - sortedYears[0]) : 0;
 
     // Change arrow SVG
     const arrowUp = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
@@ -3253,41 +3224,48 @@ function renderYearReview(payments, contracts, prediction) {
                 <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
                 ${changeHTML}
             </div>
-            <div class="yr-stats">
-                ${typeEntries.map(([type, amount]) => `
-                    <div class="yr-stat">
-                        <div class="yr-stat-value">${formatCurrency(amount)}</div>
-                        <div class="yr-stat-label">${typeNames[type] || type}</div>
-                    </div>
-                `).join('')}
+            <div class="yr-stats yr-stats-6">
+                <div class="yr-stat">
+                    <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
+                    <div class="yr-stat-label">Totaal all-time</div>
+                </div>
+                <div class="yr-stat">
+                    <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
+                    <div class="yr-stat-label">Laatste afrekening</div>
+                    <div class="yr-stat-sub">${lastPaymentDate}</div>
+                </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value">${contracts.length}</div>
-                    <div class="yr-stat-label">Contracten</div>
+                    <div class="yr-stat-label">Actieve contracten</div>
                 </div>
-                ${yearsActive > 1 ? `
                 <div class="yr-stat">
-                    <div class="yr-stat-value">${yearsActive}</div>
-                    <div class="yr-stat-label">Jaar auteur</div>
-                </div>` : ''}
-                ${sortedYears.length > 1 ? `
+                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
+                    <div class="yr-stat-label">Prognose ${new Date().getFullYear()}</div>
+                    ${mid > 0 ? '<div class="yr-stat-sub">verwacht</div>' : ''}
+                </div>
                 <div class="yr-stat">
-                    <div class="yr-stat-value">${formatCurrency(payments.reduce((s, p) => s + p.amount, 0))}</div>
-                    <div class="yr-stat-label">Totaal all-time</div>
-                </div>` : ''}
-            </div>
-            <div class="yr-footer">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Gebaseerd op alle beschikbare afrekeningen
+                    <div class="yr-stat-value">${yearsActive > 0 ? yearsActive : '1'}</div>
+                    <div class="yr-stat-label">Jaar${yearsActive !== 1 ? '' : ''} als auteur</div>
+                </div>
+                <div class="yr-stat">
+                    <div class="yr-stat-value">${sortedYears.length}</div>
+                    <div class="yr-stat-label">Afrekenjaren</div>
+                </div>
             </div>
         </div>
     `;
 
-    // Animate the hero value
+    // Animate hero value
     const heroEl = document.getElementById('yrHeroValue');
     if (heroEl) {
         heroEl.textContent = '€0';
         animateCounter('yrHeroValue', reviewTotal, true, 200);
     }
+
+    // Animate stats
+    if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
+    if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
+    if (mid > 0) animateCounter('yrForecast', mid, true, 600);
 }
 
 // Time-based greeting
@@ -3343,15 +3321,8 @@ function animateCounter(elementId, targetValue, isCurrency, delay = 0) {
 }
 
 function initDashboardAnimations() {
-    // Animate KPI cards
-    document.querySelectorAll('.kpi-card').forEach((card, i) => {
-        card.classList.remove('fade-in-up');
-        void card.offsetWidth; // force reflow
-        card.classList.add('fade-in-up');
-    });
-
     // Animate dashboard tiles and sections
-    document.querySelectorAll('#tab-start .dash-tile, #tab-start .start-section-grid').forEach((section, i) => {
+    document.querySelectorAll('#tab-start .dash-tile, #tab-start .start-section-grid, #tab-start .year-review').forEach((section, i) => {
         section.classList.remove('fade-in-section');
         section.style.animationDelay = `${0.25 + i * 0.08}s`;
         void section.offsetWidth;
