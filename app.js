@@ -3473,15 +3473,42 @@ function getCurrentAuthor() {
 function renderContracts() {
     const author = getCurrentAuthor();
     if (!author || !author.contracts) return;
+    const nl = currentLang === 'nl';
 
     const tbody = document.getElementById('contractsTableBody');
+    const summaryEl = document.getElementById('contractsSummary');
+    const infoEl = document.getElementById('contractsInfoCard');
+
     if (author.contracts.length === 0) {
-        // Show empty state — replace the whole table parent
         tbody.closest('.tab-content').querySelector('.info-header').insertAdjacentHTML('afterend', emptyStateHTML('contracts'));
         tbody.closest('table').style.display = 'none';
+        if (summaryEl) summaryEl.innerHTML = '';
+        if (infoEl) infoEl.innerHTML = '';
         return;
     }
 
+    // Summary cards
+    const totalPaid = (author.payments || []).reduce((s, p) => s + p.amount, 0);
+    if (summaryEl) {
+        summaryEl.innerHTML = `
+            <div class="contracts-summary-grid">
+                <div class="contracts-summary-item">
+                    <div class="contracts-summary-value">${author.contracts.length}</div>
+                    <div class="contracts-summary-label">${nl ? 'Actieve contracten' : 'Active contracts'}</div>
+                </div>
+                <div class="contracts-summary-item">
+                    <div class="contracts-summary-value">11%</div>
+                    <div class="contracts-summary-label">${nl ? 'Royaltypercentage' : 'Royalty percentage'}</div>
+                </div>
+                <div class="contracts-summary-item">
+                    <div class="contracts-summary-value">${formatCurrency(totalPaid)}</div>
+                    <div class="contracts-summary-label">${nl ? 'Totaal uitgekeerd' : 'Total paid'}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Table
     tbody.closest('table').style.display = '';
     tbody.innerHTML = author.contracts.map((contract, i) => `
         <tr>
@@ -3489,9 +3516,31 @@ function renderContracts() {
             <td>${contract.name}</td>
             <td><span class="contract-royalty-badge">11%</span></td>
             <td>01-01-2023</td>
-            <td>${contract.contractPdf ? `<div class="contract-actions"><button class="contract-action-btn" onclick="previewContractPDF(${i})" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="contract-action-btn" onclick="downloadAuthorContractPDF(${i})" title="Download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div>` : '-'}</td>
+            <td>${contract.contractPdf ? `<div class="contract-actions"><button class="contract-action-btn" onclick="previewContractPDF(${i})" title="${nl ? 'Bekijken' : 'Preview'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="contract-action-btn" onclick="downloadAuthorContractPDF(${i})" title="Download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div>` : '-'}</td>
         </tr>
     `).join('');
+
+    // Info card
+    if (infoEl) {
+        infoEl.innerHTML = `
+            <div class="contracts-info">
+                <div class="contracts-info-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <div class="contracts-info-content">
+                    <h4>${nl ? 'Over uw contracten' : 'About your contracts'}</h4>
+                    <p>${nl
+                        ? 'Uw royaltypercentage wordt berekend over de netto-omzet per titel. Contracten worden jaarlijks verlengd tenzij anders overeengekomen. Bij vragen over uw contract of royaltyberekening kunt u contact opnemen met het rights-team.'
+                        : 'Your royalty percentage is calculated on net revenue per title. Contracts are renewed annually unless otherwise agreed. For questions about your contract or royalty calculation, please contact the rights team.'
+                    }</p>
+                    <a href="mailto:rights@noordhoff.nl" class="contracts-info-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+                        rights@noordhoff.nl
+                    </a>
+                </div>
+            </div>
+        `;
+    }
 }
 
 function generateContractPDFDoc(contract, author) {
