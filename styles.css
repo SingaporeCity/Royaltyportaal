@@ -2948,6 +2948,135 @@ body.dashboard-active .lang-toggle {
    START TAB STYLES
    ============================================ */
 
+/* Insights & Milestones */
+.insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.insight-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1.125rem 1.25rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--color-primary);
+    animation: insightFadeIn 0.5s ease-out both;
+}
+
+.insight-card:nth-child(2) { animation-delay: 0.08s; }
+.insight-card:nth-child(3) { animation-delay: 0.16s; }
+.insight-card:nth-child(4) { animation-delay: 0.24s; }
+
+@keyframes insightFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.insight-card.insight-milestone {
+    border-left-color: #f59e0b;
+}
+
+.insight-card.insight-growth {
+    border-left-color: var(--color-success);
+}
+
+.insight-card.insight-new {
+    border-left-color: var(--color-blue);
+}
+
+.insight-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.insight-icon.milestone {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.insight-icon.growth {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+}
+
+.insight-icon.info {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+}
+
+.insight-icon.new {
+    background: #e8f2f5;
+    color: var(--color-blue);
+}
+
+.insight-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.insight-title {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-variation-settings: 'wght' 600;
+    color: var(--color-text);
+    line-height: 1.35;
+    margin-bottom: 0.2rem;
+}
+
+.insight-title strong {
+    font-variation-settings: 'wght' 750;
+    color: var(--color-primary);
+}
+
+.insight-title .insight-value-up {
+    font-variation-settings: 'wght' 750;
+    color: var(--color-success);
+}
+
+.insight-title .insight-value-neutral {
+    font-variation-settings: 'wght' 750;
+    color: var(--color-text);
+}
+
+.insight-sub {
+    font-size: 0.7rem;
+    color: var(--color-text-light);
+    font-variation-settings: 'wght' 400;
+    line-height: 1.4;
+}
+
+/* Dark mode */
+[data-theme="dark"] .insight-card {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .insight-icon.milestone {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+[data-theme="dark"] .insight-icon.growth {
+    background: rgba(16, 185, 129, 0.12);
+}
+
+[data-theme="dark"] .insight-icon.new {
+    background: rgba(109, 181, 197, 0.12);
+}
+
+@media (max-width: 768px) {
+    .insights-grid { grid-template-columns: 1fr; }
+}
+
 /* Dashboard Tiles */
 .dash-tile {
     background: var(--color-white);
