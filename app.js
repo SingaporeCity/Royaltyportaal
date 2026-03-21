@@ -4800,6 +4800,7 @@ function getCmdPaletteCommands() {
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Prognose', hint: 'Verwachte royalties', action: () => { document.querySelector('.tab-btn[data-tab="forecast"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'FAQ', hint: 'Veelgestelde vragen', action: () => { document.querySelector('.tab-btn[data-tab="faq"]')?.click(); } });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Exporteer afrekeningen', hint: 'Download als CSV', action: () => exportPaymentsCSV(), svg: 'download' });
+        commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Rondleiding', hint: 'Stapsgewijze uitleg van het portaal', action: () => { closeCmdPalette(); setTimeout(() => startGuidedTour(), 200); } });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Dark mode wisselen', hint: 'Schakel tussen licht en donker', action: () => toggleDarkMode() });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Uitloggen', hint: 'Sessie beëindigen', action: () => { closeCmdPalette(); logout(); } });
 
@@ -5003,6 +5004,171 @@ document.getElementById('cmdPaletteInput')?.addEventListener('input', function()
 // Close on overlay click
 document.getElementById('cmdPalette')?.addEventListener('click', function(e) {
     if (e.target === this) closeCmdPalette();
+});
+
+// ============================================
+// GUIDED TOUR
+// ============================================
+
+let _tourStep = 0;
+let _tourActive = false;
+
+function getTourSteps() {
+    const nl = currentLang === 'nl';
+    return [
+        {
+            tab: 'start',
+            title: nl ? 'Start' : 'Start',
+            desc: nl
+                ? 'Uw persoonlijke dashboard met een overzicht van het afgelopen jaar: totaal uitgekeerde royalties, uw laatste uitbetaling en actieve contracten. Daaronder vindt u de royalty-grafiek, evenementen en nieuws.'
+                : 'Your personal dashboard with an overview of the past year: total royalties paid, your last payment, and active contracts. Below that you\'ll find the royalty chart, events, and news.'
+        },
+        {
+            tab: 'payments',
+            title: nl ? 'Afrekeningen' : 'Statements',
+            desc: nl
+                ? 'Hier vindt u al uw royalty-afrekeningen, nevenrechten en foreign rights. U kunt filteren op jaar of type, zoeken op naam of bedrag, en elke afrekening als PDF bekijken of downloaden.'
+                : 'Here you\'ll find all your royalty statements, reader rights, and foreign rights. Filter by year or type, search by name or amount, and preview or download each statement as PDF.'
+        },
+        {
+            tab: 'contracts',
+            title: nl ? 'Contracten' : 'Contracts',
+            desc: nl
+                ? 'Overzicht van al uw actieve auteurscontracten met contractnummer, naam en royaltypercentage. Klik op het oog-icoon om het contract te bekijken, of download het als PDF.'
+                : 'Overview of all your active author contracts with contract number, name, and royalty percentage. Click the eye icon to preview the contract, or download it as PDF.'
+        },
+        {
+            tab: 'forecast',
+            title: nl ? 'Prognose' : 'Forecast',
+            desc: nl
+                ? 'Verwachte royalties voor het komende jaar, gebaseerd op huidige contracten en verkoopcijfers. U ziet een conservatieve, verwachte en optimistische schatting, plus een trendgrafiek.'
+                : 'Expected royalties for the coming year, based on current contracts and sales figures. You\'ll see a conservative, expected, and optimistic estimate, plus a trend chart.'
+        },
+        {
+            tab: 'expenses',
+            title: nl ? 'Declaraties' : 'Expenses',
+            desc: nl
+                ? 'Dien hier declaraties in door een PDF-factuur te uploaden. Let op: vermeld altijd uw Vendor ID op de factuur. U kunt de status van ingediende declaraties hier volgen.'
+                : 'Submit expenses here by uploading a PDF invoice. Important: always include your Vendor ID on the invoice. You can track the status of submitted expenses here.'
+        },
+        {
+            tab: 'faq',
+            title: 'FAQ',
+            desc: nl
+                ? 'Antwoorden op veelgestelde vragen over uitbetalingen, nevenrechten, foreign rights, uw contract en het portaal. Klik op een vraag om het antwoord te openen.'
+                : 'Answers to frequently asked questions about payments, reader rights, foreign rights, your contract, and the portal. Click a question to reveal the answer.'
+        },
+        {
+            tab: 'info',
+            title: nl ? 'Profiel' : 'Profile',
+            desc: nl
+                ? 'Uw persoonlijke gegevens, adres, bankrekening en contactinformatie. Klik op "Bewerken" om wijzigingen aan te vragen. Wijzigingen in bankgegevens vereisen een wachtwoordbevestiging.'
+                : 'Your personal details, address, bank account, and contact information. Click "Edit" to request changes. Changes to bank details require password confirmation.'
+        }
+    ];
+}
+
+function startGuidedTour() {
+    _tourStep = 0;
+    _tourActive = true;
+    document.getElementById('tourOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    showTourStep();
+}
+
+function endGuidedTour() {
+    _tourActive = false;
+    document.getElementById('tourOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    // Remove highlight from all tabs
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tour-highlight'));
+}
+
+function tourNext() {
+    const steps = getTourSteps();
+    if (_tourStep < steps.length - 1) {
+        _tourStep++;
+        showTourStep();
+    } else {
+        endGuidedTour();
+    }
+}
+
+function tourPrev() {
+    if (_tourStep > 0) {
+        _tourStep--;
+        showTourStep();
+    }
+}
+
+function showTourStep() {
+    const steps = getTourSteps();
+    const step = steps[_tourStep];
+    const nl = currentLang === 'nl';
+
+    // Update tooltip content
+    document.getElementById('tourStepIndicator').textContent = `${_tourStep + 1} / ${steps.length}`;
+    document.getElementById('tourTitle').textContent = step.title;
+    document.getElementById('tourDesc').textContent = step.desc;
+
+    // Button labels
+    document.getElementById('tourSkipBtn').textContent = nl ? 'Sluiten' : 'Close';
+    const nextBtn = document.getElementById('tourNextBtn');
+    nextBtn.textContent = _tourStep === steps.length - 1
+        ? (nl ? 'Afronden' : 'Finish')
+        : (nl ? 'Volgende' : 'Next');
+
+    // Prev button visibility
+    document.getElementById('tourPrevBtn').style.visibility = _tourStep === 0 ? 'hidden' : 'visible';
+
+    // Highlight the target tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tour-highlight'));
+    const targetTab = document.querySelector(`.tab-btn[data-tab="${step.tab}"]`);
+    if (targetTab) {
+        targetTab.classList.add('tour-highlight');
+        // Also activate this tab to show its content
+        targetTab.click();
+    }
+
+    // Position spotlight on the tab button
+    positionSpotlight(targetTab);
+}
+
+function positionSpotlight(el) {
+    const spotlight = document.getElementById('tourSpotlight');
+    const tooltip = document.getElementById('tourTooltip');
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const pad = 6;
+
+    spotlight.style.top = (rect.top - pad) + 'px';
+    spotlight.style.left = (rect.left - pad) + 'px';
+    spotlight.style.width = (rect.width + pad * 2) + 'px';
+    spotlight.style.height = (rect.height + pad * 2) + 'px';
+
+    // Position tooltip below the tabs nav
+    const tabsNav = document.querySelector('.tabs-nav');
+    const navRect = tabsNav ? tabsNav.getBoundingClientRect() : rect;
+    tooltip.style.top = (navRect.bottom + 16) + 'px';
+
+    // Center tooltip horizontally, but keep it on screen
+    const tooltipWidth = tooltip.offsetWidth || 380;
+    let left = rect.left + rect.width / 2 - tooltipWidth / 2;
+    left = Math.max(16, Math.min(left, window.innerWidth - tooltipWidth - 16));
+    tooltip.style.left = left + 'px';
+}
+
+// Close tour on Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _tourActive) {
+        endGuidedTour();
+    }
+});
+
+// Close tour on overlay click (not on tooltip or spotlight)
+document.getElementById('tourOverlay')?.addEventListener('click', function(e) {
+    if (e.target === this) endGuidedTour();
 });
 
 // ============================================

@@ -1049,6 +1049,9 @@
                 <span data-i18n="search_placeholder">Zoeken...</span>
                 <kbd class="header-search-kbd">⌘K</kbd>
             </button>
+            <button class="header-help-btn" onclick="startGuidedTour()" title="Rondleiding">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>
+            </button>
             <div class="header-profile" onclick="toggleProfileMenu()" id="headerProfile">
                 <span class="header-profile-name" id="dashboardUserName"></span>
                 <div class="user-avatar" id="userAvatar"></div>
@@ -2162,6 +2165,25 @@
 
     <!-- Supabase Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Guided Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay">
+        <div class="tour-spotlight" id="tourSpotlight"></div>
+        <div class="tour-tooltip" id="tourTooltip">
+            <div class="tour-tooltip-step" id="tourStepIndicator"></div>
+            <h3 class="tour-tooltip-title" id="tourTitle"></h3>
+            <p class="tour-tooltip-desc" id="tourDesc"></p>
+            <div class="tour-tooltip-footer">
+                <button class="tour-btn-skip" id="tourSkipBtn" onclick="endGuidedTour()"></button>
+                <div class="tour-tooltip-nav">
+                    <button class="tour-btn-prev" id="tourPrevBtn" onclick="tourPrev()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="tour-btn-next" id="tourNextBtn" onclick="tourNext()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Configuration -->
     <script src="config.js"></script>
     <!-- Main Application -->
