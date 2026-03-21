@@ -3901,8 +3901,22 @@ body.dashboard-active .lang-toggle {
     z-index: 1;
 }
 
-.yr-stats.yr-stats-4 {
-    grid-template-columns: repeat(4, 1fr);
+.yr-hero-block {
+    text-align: center;
+    padding: 2rem 1.5rem 1.75rem;
+}
+
+.yr-hero-block .yr-hero-label {
+    margin-bottom: 0.4rem;
+}
+
+.yr-hero-block .yr-hero-value {
+    font-size: 3rem;
+    margin-bottom: 0.6rem;
+}
+
+.yr-hero-block .yr-hero-change {
+    font-size: 0.82rem;
 }
 
 .yr-stat {
@@ -3959,11 +3973,9 @@ body.dashboard-active .lang-toggle {
 
 @media (max-width: 768px) {
     .yr-card { padding: 1.25rem 1.25rem 1rem; }
-    .yr-top-row { grid-template-columns: 1fr; }
-    .yr-top-main .yr-hero-value { font-size: 2rem; text-align: center; }
-    .yr-top-main .yr-hero-label { text-align: center; }
-    .yr-top-cell { text-align: center; }
-    .yr-stats { grid-template-columns: repeat(2, 1fr); }
+    .yr-hero-block .yr-hero-value { font-size: 2.25rem; }
+    .yr-hero-block { padding: 1.5rem 1rem 1.25rem; }
+    .yr-stats { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* Dashboard Tiles */

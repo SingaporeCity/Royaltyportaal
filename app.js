@@ -3243,12 +3243,12 @@ function renderYearReview(payments, contracts, prediction) {
                 </span>
                 <span class="yr-year">${reviewYear}</span>
             </div>
-            <div class="yr-stats yr-stats-4">
-                <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
-                    <div class="yr-stat-label">Uitgekeerd in ${reviewYear}</div>
-                    ${changeHTML}
-                </div>
+            <div class="yr-hero-block">
+                <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
+                <div class="yr-hero-label">Uitgekeerd in ${reviewYear}</div>
+                ${changeHTML}
+            </div>
+            <div class="yr-stats yr-stats-3">
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
                     <div class="yr-stat-label">Totaal all-time</div>
