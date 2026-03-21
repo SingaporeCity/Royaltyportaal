@@ -3117,7 +3117,7 @@ function renderRoyaltyChart(payments) {
 
     const maxTotal = Math.max(...years.map(y => yearData[y].total));
     const typeNames = { royalty: 'Royalties', subsidiary: currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights', foreign: 'Foreign Rights' };
-    const typeColors = { royalty: 'var(--color-primary)', subsidiary: '#14b8a6', foreign: '#6DB5C5' };
+    const typeColors = { royalty: '#007460', subsidiary: '#e6a817', foreign: '#6366f1' };
 
     // Build year cards (newest first)
     let html = '<div class="chart-years">';
@@ -3802,8 +3802,8 @@ function renderPayments(filterYear) {
 
     const iconColors = {
         royalty: 'var(--color-primary)',
-        subsidiary: '#14b8a6',
-        foreign: '#6DB5C5',
+        subsidiary: '#e6a817',
+        foreign: '#6366f1',
         annual: '#f59e0b'
     };
     const iconSvgs = {
@@ -5149,9 +5149,9 @@ function renderAuthorDetail() {
     const author = authors[selectedAuthor];
     if (!author) return;
     const iconColors = {
-        royalty: 'linear-gradient(135deg, #e53935 0%, #c62828 100%)',
-        subsidiary: 'linear-gradient(135deg, #00A5A5 0%, #008080 100%)',
-        foreign: 'linear-gradient(135deg, #0082C6 0%, #005a8c 100%)'
+        royalty: 'linear-gradient(135deg, #007460 0%, #005a49 100%)',
+        subsidiary: 'linear-gradient(135deg, #e6a817 0%, #c78f0e 100%)',
+        foreign: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
     };
     document.getElementById('authorDetail').innerHTML = `
         <div class="author-detail-header">
