@@ -5421,7 +5421,7 @@ async function logout() {
     document.body.classList.remove('dashboard-active');
     document.getElementById('email').value = '';
     document.getElementById('password').value = '';
-    showPublicSite();
+    showLoginPage();
 }
 
 document.getElementById('logoutBtn').addEventListener('click', logout);
@@ -6563,7 +6563,7 @@ if (supabaseClient) {
             document.getElementById('dashboard').classList.remove('active');
             document.getElementById('adminDashboard').classList.remove('active');
             document.body.classList.remove('dashboard-active');
-            showPublicSite();
+            showLoginPage();
         }
         if (event === 'PASSWORD_RECOVERY') {
             // Show the set-new-password form
