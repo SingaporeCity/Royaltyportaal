@@ -7102,8 +7102,8 @@ body.dashboard-active .lang-toggle {
 
 .chart-card-pills {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .chart-card-pill {
