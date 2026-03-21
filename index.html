@@ -1225,54 +1225,7 @@
 
                 <!-- Forecast Tab -->
                 <div class="tab-content" id="tab-forecast">
-                    <div class="forecast-section">
-                        <div class="trend-chart-card">
-                            <div class="trend-chart-header">
-                                <h3 data-i18n="trend_title">Royalty-trend</h3>
-                                <div class="trend-chart-legend">
-                                    <span class="trend-legend-item"><span class="trend-legend-line solid"></span><span data-i18n="trend_historical">Historisch</span></span>
-                                    <span class="trend-legend-item"><span class="trend-legend-line dashed"></span><span data-i18n="trend_forecast">Prognose</span></span>
-                                </div>
-                            </div>
-                            <div class="trend-chart-container" id="trendChart"></div>
-                        </div>
-                    </div>
-                    <div class="forecast-section">
-                        <div class="prediction-card">
-                            <div class="prediction-header">
-                                <div class="prediction-header-left">
-                                    <span class="prediction-badge-pill" data-i18n="badge_prediction">Prognose</span>
-                                    <h3 class="prediction-title" data-i18n="prediction_title">Verwachte royalties 2025</h3>
-                                </div>
-                                <div class="prediction-payout" data-i18n="payout_date">Uitbetaling maart 2026</div>
-                            </div>
-                            <div class="prediction-hero">
-                                <div class="prediction-hero-value" id="predMid"></div>
-                                <div class="prediction-hero-label" data-i18n="expected">Verwacht</div>
-                            </div>
-                            <div class="prediction-range">
-                                <div class="prediction-range-item">
-                                    <div class="prediction-range-label" data-i18n="conservative">Conservatief</div>
-                                    <div class="prediction-range-value" id="predLow"></div>
-                                </div>
-                                <div class="prediction-range-bar">
-                                    <div class="prediction-range-track">
-                                        <div class="prediction-range-fill"></div>
-                                        <div class="prediction-range-dot"></div>
-                                    </div>
-                                </div>
-                                <div class="prediction-range-item prediction-range-item-right">
-                                    <div class="prediction-range-label" data-i18n="optimistic">Optimistisch</div>
-                                    <div class="prediction-range-value" id="predHigh"></div>
-                                </div>
-                            </div>
-                            <div class="prediction-contracts" id="predictionContracts"></div>
-                        </div>
-                        <div class="prediction-note">
-                            <svg viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                            <span data-i18n="prediction_disclaimer">Deze prognose is gebaseerd op de omzet van het prognosejaar. Hierbij worden de contracten, royaltypercentages en bijdragersaandelen van het jaar voor het prognosejaar gebruikt, aangezien deze waarden voor het huidige jaar nog niet definitief zijn.</span>
-                        </div>
-                    </div>
+                    <div class="forecast-unified" id="forecastUnified"></div>
                 </div>
 
                 <!-- FAQ Tab -->

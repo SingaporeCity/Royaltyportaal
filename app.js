@@ -3525,14 +3525,84 @@ function downloadAuthorContractPDF(index) {
 function initPredictions() {
     const author = getCurrentAuthor();
     if (!author || !author.prediction) return;
+    const container = document.getElementById('forecastUnified');
+    if (!container) return;
+
     const { min, max } = author.prediction;
     const mid = Math.round((min + max) / 2);
-    document.getElementById('predLow').textContent = formatCurrency(min);
-    document.getElementById('predMid').textContent = formatCurrency(mid);
-    document.getElementById('predHigh').textContent = formatCurrency(max);
-    const contractNumbers = author.contracts.map(c => c.number).join(', ');
-    document.getElementById('predictionContracts').innerHTML = `<strong>${currentLang === 'nl' ? 'Berekend op basis van contracten' : 'Calculated based on contracts'}:</strong> ${contractNumbers}`;
+    const payments = author.payments || [];
+    const contracts = author.contracts || [];
+    const forecastYear = new Date().getFullYear();
+    const payoutYear = forecastYear + 1;
 
+    // YoY comparison
+    const yearTotals = {};
+    payments.forEach(p => { yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount; });
+    const sortedYears = Object.keys(yearTotals).map(Number).sort();
+    const lastYear = sortedYears.length > 0 ? sortedYears[sortedYears.length - 1] : null;
+    const lastTotal = lastYear ? yearTotals[lastYear] : 0;
+    let changeHTML = '';
+    if (lastTotal > 0 && mid > 0) {
+        const pct = Math.round(((mid - lastTotal) / lastTotal) * 100);
+        const dir = pct > 0 ? 'up' : pct < 0 ? 'down' : '';
+        const arrow = dir === 'up' ? '&#9650;' : dir === 'down' ? '&#9660;' : '';
+        changeHTML = `<span class="fc-change ${dir}">${arrow} ${pct > 0 ? '+' : ''}${pct}% t.o.v. ${lastYear}</span>`;
+    }
+
+    container.innerHTML = `
+        <div class="fc-card">
+            <div class="fc-top">
+                <div class="fc-hero">
+                    <div class="fc-label">Verwachte royalties ${forecastYear}</div>
+                    <div class="fc-value" id="fcValue">${formatCurrency(mid)}</div>
+                    ${changeHTML}
+                    <div class="fc-payout">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Uitbetaling maart ${payoutYear}
+                    </div>
+                </div>
+                <div class="fc-range">
+                    <div class="fc-range-ends">
+                        <div class="fc-range-end">
+                            <div class="fc-range-amount">${formatCurrency(min)}</div>
+                            <div class="fc-range-label">Conservatief</div>
+                        </div>
+                        <div class="fc-range-end fc-range-end-right">
+                            <div class="fc-range-amount">${formatCurrency(max)}</div>
+                            <div class="fc-range-label">Optimistisch</div>
+                        </div>
+                    </div>
+                    <div class="fc-range-bar">
+                        <div class="fc-range-fill"></div>
+                        <div class="fc-range-dot"></div>
+                    </div>
+                    <div class="fc-contracts">
+                        ${contracts.map(c => `<span class="fc-contract-pill">${c.number}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="fc-chart-section">
+                <div class="fc-chart-header">
+                    <span class="fc-chart-title">Royalty-trend</span>
+                    <div class="fc-chart-legend">
+                        <span class="fc-legend-item"><span class="fc-legend-line solid"></span>Historisch</span>
+                        <span class="fc-legend-item"><span class="fc-legend-line dashed"></span>Prognose</span>
+                    </div>
+                </div>
+                <div class="trend-chart-container" id="trendChart"></div>
+            </div>
+            <div class="fc-disclaimer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Dit is een indicatieve prognose. Het werkelijke uitbetalingsbedrag kan afwijken op basis van definitieve verkoopcijfers, contractwijzigingen en bijdragersaandelen.</span>
+            </div>
+        </div>
+    `;
+
+    // Animate hero
+    const fcEl = document.getElementById('fcValue');
+    if (fcEl) { fcEl.textContent = '€0'; animateCounter('fcValue', mid, true, 200); }
+
+    // Render trend chart
     renderTrendChart(author);
 }
 
