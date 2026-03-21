@@ -347,12 +347,12 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 | Tab | data-tab | Inhoud |
 |-----|----------|--------|
 | Start | `start` | Year in Review (hero + 3 stats), royalty chart, events, nieuws |
-| Afrekeningen | `payments` | Zoek/filter, type pills, jaar filter, payment items met preview |
-| Contracten | `contracts` | Contracten tabel met preview/download icons |
-| Prognose | `forecast` | Verwachte royalties, trend chart, range bar |
-| Declaraties | `expenses` | Vendor ID notice, upload formulier, ingediende declaraties |
+| Afrekeningen | `payments` | Zoek/filter, type pills (Royalties/Nevenrechten/Foreign Rights), jaar filter, payment items met preview + download |
+| Contracten | `contracts` | Stats tegels (aantal + gem. royalty% + eerste contract), zoekbalk, contract cards (2-regig), contact link |
+| Prognose | `forecast` | Paginatitel "Verwachte royalties 2025", hero card (range min—max) + payout card + bar chart |
+| Declaraties | `expenses` | Titel "Nieuwe declaratie indienen", Vendor ID notice, upload formulier, ingediende declaraties |
 | FAQ | `faq` | Accordion FAQ items |
-| Profiel | `info` | ID nummers, persoonlijke gegevens, bewerken |
+| Profiel | `info` | Titel "Uw gegevens", ID banner (Vendor + Alliant in teal tegel), persoonlijke gegevens grid, bewerken |
 
 - Tab "Gegevens" is hernoemd naar **"Profiel"** (NL) / "Profile" (EN)
 - FAQ tekst referenties naar "Gegevens" zijn geüpdatet naar "Profiel"
@@ -360,13 +360,16 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 ## Year in Review (`.yr-card`)
 - Donkergroene kaart bovenaan Start tab
 - **Hero block**: groot gecentreerd bedrag "Uitgekeerd in [jaar]" + YoY percentage badge
-- **3 sub-stats** eronder: "Totaal vanaf [jaar-picker]", "Laatste betaling" (bedrag + datum), "Actieve contracten"
-- **Jaar-picker**: pill-toggle knoppen (2023 | 2024) onder "Totaal vanaf" — herberekent totaal on-click via `setTotalFromYear()`
+- **3 sub-stats** eronder: "Totaal vanaf [jaar-picker]", "Laatste betaling" (bedrag + datum), "Verwacht over 2025" (range min—max)
+- **Jaar-picker**: pill-toggle knoppen (2023 | 2024) gecentreerd onder "Totaal vanaf" — herberekent totaal on-click via `setTotalFromYear()`
 - `container._yearTotals` slaat data op voor herberekening
 - Geen ster-icoon bij "Jaaroverzicht" badge — alleen tekst
+- **Forecast jaar hardcoded op 2025** (niet `new Date().getFullYear()`)
+- Demo prediction data: min €20.000, max €28.000
 
 ## Declaraties Tab (nieuw)
-- **Vendor ID notice**: teal banner bovenaan toont het Vendor nummer van de auteur
+- **Paginatitel**: "Nieuwe declaratie indienen" (was eerder in card header)
+- **Vendor ID notice**: teal banner onder titel toont het Vendor nummer van de auteur
 - **Indienformulier**: omschrijving + bedrag + drag & drop PDF upload (alleen PDF, max 10 MB)
 - **File handling**: `handleExpenseFile()` valideert type/grootte, toont bestandsnaam met verwijder-knop
 - **Submit knop**: disabled tot alles ingevuld, success-feedback na indienen
@@ -374,17 +377,47 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 - **Opslag**: `localStorage` key `expenses` (demo-modus, geen Supabase backend)
 - **Vertaalsleutels**: `expenses_*` in NL en EN
 
-## Contract PDF Preview
-- `generateContractPDFDoc(contract, author)` — geëxtraheerde helper uit `downloadAuthorContractPDF()`
+## Contracten Tab
+- **Stats tegels** bovenaan: Actieve contracten (aantal) + Gem. royalty (11%) + Eerste contract (datum) — 3 kolommen
+- **Zoekbalk**: filtert contracten op naam of nummer via `filterContracts()`
+- **Card layout** ipv tabel: elke contract is een kaart met 2 regels (naam + meta: nummer · royalty · startdatum)
+- **Preview + download**: oog-icoon + download-icoon per contract via `.contract-actions`
+- `generateContractPDFDoc(contract, author)` — geëxtraheerde helper
 - `previewContractPDF(index)` — hergebruikt het bestaande PDF preview modal
-- Contracten tabel toont **oog-icoon** (preview) + **download-icoon** naast elkaar
-- CSS: `.contract-actions` flex container, `.contract-action-btn` met hover-state
+- **Contact tekst** onderaan: "Voor vragen over uw contract kunt u contact opnemen met rights@noordhoff.nl"
 
-## Afrekeningen — Jaar-groepering
+## Afrekeningen Tab
+- **Payment items**: oog-icoon (preview) + download-icoon naast elkaar via `.payment-actions` / `.payment-action-btn`
+- **Type filter pill**: "Foreign Rights" (was "Foreign")
+- Zelfde stijl als contract action buttons
+
+## Prognose Tab
+- **Paginatitel**: "Verwachte royalties 2025" als `info-header`
+- **Hero card** (`.fc-hero-card`): gradient accent-bar bovenaan
+  - Top rij: eyebrow "VERWACHTE ROYALTIES 2025" links, YoY badge rechtsboven
+  - Bedragen: `€20.000,00 tot €28.000,00` als grote teal waarden
+  - Disclaimer inline onderaan
+- **Payout card** (`.fc-payout-card`): aparte tegel naast hero met kalender-icoon + "Uitbetaling Maart 2026"
+- **Chart card** (`.fc-chart-card`): horizontale bars per jaar
+  - Historische jaren: solide teal bars, bedrag rechts
+  - Forecast 2025: lichte vulling 0→max, donkere range overlay min→max, twee dot-markers, bedragen op 2 regels
+  - Bars geschaald op ~80% max breedte (`maxAmount * 1.25`)
+- **Forecast jaar hardcoded op 2025**, payout 2026
+- Disclaimer ook los onder de chart card
+
+## Profiel Tab
+- **ID banner** (`.id-banner`): teal-getinte balk direct onder "Uw gegevens" titel
+  - Vendor ID + Alliant ID naast elkaar met verticale separator
+  - Achtergrond `primary-subtle`, groene rand
+  - Mobile: gestapeld, separator verborgen
+- Persoonlijke gegevens in `.info-grid` (zonder Vendor/Alliant, die staan in de banner)
+
+## Afrekeningen — Jaar-groepering & Sortering
 - Payments gesorteerd per jaar (nieuwste eerst), jaaropgave eerst binnen elk jaar
 - **Jaar-headers** getoond wanneer filter "Alle" en type filter "Alle"
 - `resolvePayment()` gesynchroniseerd met dezelfde sortering
 - CSS: `.payments-year-header` met uppercase styling
+- Tab-switch scrollt altijd naar tabs-container (hersteld)
 
 ## Favicon
 - Inline SVG in `<head>` — twee overlappende teal vierkanten
@@ -465,6 +498,10 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 | Contract PDF upload | Ontbreekt | Kolom `contract_pdf` bestaat maar geen upload-UI voor echte bestanden |
 | Duplicate payment preventie | Ontbreekt | Zelfde auteur/jaar/type kan meerdere keren aangemaakt worden |
 | Admin email instellingen | Cosmetisch | Toggles zijn UI-only, geen echte emails worden verstuurd |
+
+## Demo Tips
+- **Google Wachtwoordmanager popup**: Chrome toont een waarschuwing dat het demo-wachtwoord in een datalek voorkomt. Dit is een browser-feature, niet te fixen in code. Oplossing: Chrome → Instellingen → Google Wachtwoordmanager → Instellingen → "Waarschuwing over gelekte wachtwoorden" uitzetten. Of: log vooraf in zodat sessie-persistentie het loginscherm overslaat.
+- **Cache**: Na een push altijd Cmd+Shift+R (hard refresh) om de nieuwste versie te zien op GitHub Pages.
 
 ## Deployment stappen (na code push)
 1. **Supabase SQL Editor**: Run `database/add-file-path.sql`
