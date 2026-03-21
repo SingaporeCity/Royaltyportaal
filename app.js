@@ -3699,13 +3699,15 @@ function initPredictions() {
     container.innerHTML = `
         <div class="fc-top-grid">
             <div class="fc-hero-card">
-                <div class="fc-hero-eyebrow">${nl ? 'Verwachte royalties' : 'Expected royalties'} ${forecastYear}</div>
+                <div class="fc-hero-top">
+                    <div class="fc-hero-eyebrow">${nl ? 'Verwachte royalties' : 'Expected royalties'} ${forecastYear}</div>
+                    ${changeHTML}
+                </div>
                 <div class="fc-hero-amounts">
                     <span class="fc-hero-amount-value">${formatCurrency(min)}</span>
                     <span class="fc-hero-amount-to">${nl ? 'tot' : 'to'}</span>
                     <span class="fc-hero-amount-value">${formatCurrency(max)}</span>
                 </div>
-                ${changeHTML}
                 <div class="fc-hero-disclaimer">
                     ${nl ? 'Indicatieve prognose. Het werkelijke bedrag kan afwijken op basis van definitieve verkoopcijfers en contractwijzigingen.' : 'Indicative forecast. The actual amount may differ based on final sales figures and contract changes.'}
                 </div>

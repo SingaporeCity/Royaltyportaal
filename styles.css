@@ -2503,13 +2503,19 @@ body.dashboard-active .lang-toggle {
     background: linear-gradient(90deg, var(--color-primary), #2E8B7A, #93C5CF);
 }
 
+.fc-hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
 .fc-hero-eyebrow {
     font-size: 0.72rem;
     font-variation-settings: 'wght' 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--color-text-light);
-    margin-bottom: 0.75rem;
 }
 
 .fc-hero-amounts {
