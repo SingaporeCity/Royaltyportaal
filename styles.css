@@ -3312,6 +3312,59 @@ body.dashboard-active .lang-toggle {
     z-index: 1;
 }
 
+/* 3-column top row */
+.yr-top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1px;
+}
+
+.yr-top-cell {
+    background: rgba(255,255,255,0.04);
+    padding: 1.5rem 1.25rem;
+    transition: background 0.2s;
+}
+
+.yr-top-cell:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.yr-top-cell .yr-hero-label {
+    margin-bottom: 0.4rem;
+}
+
+.yr-top-main .yr-hero-value {
+    text-align: left;
+    font-size: 2.25rem;
+    margin-bottom: 0.4rem;
+}
+
+.yr-top-main .yr-hero-label {
+    text-align: left;
+}
+
+.yr-top-value {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-variation-settings: 'wght' 700;
+    color: white;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.25rem;
+}
+
+.yr-top-sub {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.4);
+    font-variation-settings: 'wght' 400;
+}
+
 .yr-hero-label {
     font-size: 0.75rem;
     font-variation-settings: 'wght' 500;
@@ -3360,15 +3413,11 @@ body.dashboard-active .lang-toggle {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 0 0 12px 12px;
     overflow: hidden;
     position: relative;
     z-index: 1;
-}
-
-.yr-stats-6 {
-    grid-template-columns: repeat(3, 1fr);
 }
 
 .yr-stat {
@@ -3425,14 +3474,11 @@ body.dashboard-active .lang-toggle {
 
 @media (max-width: 768px) {
     .yr-card { padding: 1.25rem 1.25rem 1rem; }
-    .yr-hero-value { font-size: 2rem; }
-    .yr-stats { grid-template-columns: repeat(2, 1fr); }
-    .yr-stats-6 { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-    .yr-stats-6 { grid-template-columns: repeat(2, 1fr); }
-    .yr-stat-value { font-size: 1.05rem; }
+    .yr-top-row { grid-template-columns: 1fr; }
+    .yr-top-main .yr-hero-value { font-size: 2rem; text-align: center; }
+    .yr-top-main .yr-hero-label { text-align: center; }
+    .yr-top-cell { text-align: center; }
+    .yr-stats { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* Dashboard Tiles */

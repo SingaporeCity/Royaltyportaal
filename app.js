@@ -3211,6 +3211,15 @@ function renderYearReview(payments, contracts, prediction) {
         ? `<span class="yr-hero-change ${changeDir}">${changeDir === 'up' ? arrowUp : changeDir === 'down' ? arrowDown : ''}${changePct > 0 ? '+' : ''}${changePct}% t.o.v. ${prevYear}</span>`
         : '';
 
+    // Forecast comparison
+    let fcChangeHTML = '';
+    if (lastTotal > 0 && mid > 0) {
+        const fcPct = Math.round(((mid - reviewTotal) / reviewTotal) * 100);
+        const fcDir = fcPct > 0 ? 'up' : fcPct < 0 ? 'down' : '';
+        const fcArrow = fcDir === 'up' ? '&#9650;' : fcDir === 'down' ? '&#9660;' : '';
+        fcChangeHTML = `<span class="yr-hero-change ${fcDir}" style="font-size:0.7rem;">${fcArrow} ${fcPct > 0 ? '+' : ''}${fcPct}%</span>`;
+    }
+
     container.innerHTML = `
         <div class="yr-card">
             <div class="yr-header">
@@ -3220,53 +3229,46 @@ function renderYearReview(payments, contracts, prediction) {
                 </span>
                 <span class="yr-year">${reviewYear}</span>
             </div>
-            <div class="yr-hero">
-                <div class="yr-hero-label">Totaal uitgekeerd in ${reviewYear}</div>
-                <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
-                ${changeHTML}
-            </div>
-            <div class="yr-stats yr-stats-6">
-                <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
-                    <div class="yr-stat-label">Totaal all-time</div>
+            <div class="yr-top-row">
+                <div class="yr-top-cell yr-top-main">
+                    <div class="yr-hero-label">Uitgekeerd in ${reviewYear}</div>
+                    <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
+                    ${changeHTML}
                 </div>
+                <div class="yr-top-cell">
+                    <div class="yr-hero-label">Totaal all-time</div>
+                    <div class="yr-top-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
+                    <div class="yr-top-sub">${sortedYears[0]}–${reviewYear}</div>
+                </div>
+                <div class="yr-top-cell">
+                    <div class="yr-hero-label">Prognose ${forecastYear}</div>
+                    <div class="yr-top-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
+                    ${mid > 0 ? fcChangeHTML : ''}
+                </div>
+            </div>
+            <div class="yr-stats">
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
                     <div class="yr-stat-label">Laatste afrekening</div>
-                    <div class="yr-stat-sub">${lastPaymentDate}</div>
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value">${contracts.length}</div>
                     <div class="yr-stat-label">Actieve contracten</div>
                 </div>
                 <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
-                    <div class="yr-stat-label">Prognose ${new Date().getFullYear()}</div>
-                    ${mid > 0 ? '<div class="yr-stat-sub">verwacht</div>' : ''}
-                </div>
-                <div class="yr-stat">
                     <div class="yr-stat-value">${yearsActive > 0 ? yearsActive : '1'}</div>
-                    <div class="yr-stat-label">Jaar${yearsActive !== 1 ? '' : ''} als auteur</div>
-                </div>
-                <div class="yr-stat">
-                    <div class="yr-stat-value">${sortedYears.length}</div>
-                    <div class="yr-stat-label">Afrekenjaren</div>
+                    <div class="yr-stat-label">Jaar als auteur</div>
                 </div>
             </div>
         </div>
     `;
 
-    // Animate hero value
+    // Animate values
     const heroEl = document.getElementById('yrHeroValue');
-    if (heroEl) {
-        heroEl.textContent = '€0';
-        animateCounter('yrHeroValue', reviewTotal, true, 200);
-    }
-
-    // Animate stats
+    if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
     if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
-    if (mid > 0) animateCounter('yrForecast', mid, true, 600);
+    if (mid > 0) animateCounter('yrForecast', mid, true, 400);
 }
 
 // Time-based greeting
