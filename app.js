@@ -5430,13 +5430,17 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Scroll to top of tabs nav (accounting for sticky header)
-        const tabsNav = document.querySelector('.tabs-nav');
-        if (tabsNav) {
-            const headerHeight = document.querySelector('.dashboard-header')?.offsetHeight || 0;
-            const top = tabsNav.getBoundingClientRect().top + window.scrollY - headerHeight;
-            window.scrollTo({ top, behavior: 'smooth' });
-        }
+        // Scroll tabs-nav to just below the sticky header
+        // Use requestAnimationFrame to ensure layout has updated after tab switch
+        requestAnimationFrame(() => {
+            const tabsNav = document.querySelector('.tabs-nav');
+            const header = document.querySelector('.dashboard-header');
+            if (tabsNav && header) {
+                const headerHeight = header.offsetHeight;
+                const navTop = tabsNav.getBoundingClientRect().top + window.scrollY - headerHeight;
+                window.scrollTo({ top: Math.max(0, navTop), behavior: 'smooth' });
+            }
+        });
     });
 });
 
