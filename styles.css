@@ -2948,133 +2948,192 @@ body.dashboard-active .lang-toggle {
    START TAB STYLES
    ============================================ */
 
-/* Insights & Milestones */
-.insights-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+/* Year in Review */
+.year-review {
     margin-bottom: 1.25rem;
 }
 
-.insight-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.875rem;
-    padding: 1.125rem 1.25rem;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--color-primary);
-    animation: insightFadeIn 0.5s ease-out both;
+.yr-card {
+    background: linear-gradient(135deg, #007460 0%, #004a3f 40%, #003530 100%);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem 2.5rem 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    animation: yrFadeIn 0.6s ease-out both;
 }
 
-.insight-card:nth-child(2) { animation-delay: 0.08s; }
-.insight-card:nth-child(3) { animation-delay: 0.16s; }
-.insight-card:nth-child(4) { animation-delay: 0.24s; }
-
-@keyframes insightFadeIn {
-    from { opacity: 0; transform: translateY(6px); }
+@keyframes yrFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.insight-card.insight-milestone {
-    border-left-color: #f59e0b;
+/* Decorative elements */
+.yr-card::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -40px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
 }
 
-.insight-card.insight-growth {
-    border-left-color: var(--color-success);
+.yr-card::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: 120px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.025);
 }
 
-.insight-card.insight-new {
-    border-left-color: var(--color-blue);
+.yr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+    position: relative;
+    z-index: 1;
 }
 
-.insight-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+.yr-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    font-variation-settings: 'wght' 650;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill);
+}
+
+.yr-year {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-variation-settings: 'wght' 300;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+}
+
+.yr-hero {
+    text-align: center;
+    padding: 0.5rem 0 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.yr-hero-label {
+    font-size: 0.7rem;
+    font-variation-settings: 'wght' 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 0.5rem;
+}
+
+.yr-hero-value {
+    font-family: var(--font-heading);
+    font-size: 3.25rem;
+    font-variation-settings: 'wght' 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.yr-hero-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-variation-settings: 'wght' 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+}
+
+.yr-hero-change.up {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+}
+
+.yr-hero-change.down {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.yr-hero-change.neutral {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+}
+
+.yr-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.yr-stat {
+    background: rgba(255,255,255,0.04);
+    padding: 1rem;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.yr-stat:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.yr-stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-variation-settings: 'wght' 700;
+    color: white;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+}
+
+.yr-stat-label {
+    font-size: 0.62rem;
+    font-variation-settings: 'wght' 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.5);
+}
+
+.yr-footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-}
-
-.insight-icon.milestone {
-    background: #fef3c7;
-    color: #f59e0b;
-}
-
-.insight-icon.growth {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--color-success);
-}
-
-.insight-icon.info {
-    background: var(--color-primary-subtle);
-    color: var(--color-primary);
-}
-
-.insight-icon.new {
-    background: #e8f2f5;
-    color: var(--color-blue);
-}
-
-.insight-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.insight-title {
-    font-family: var(--font-heading);
-    font-size: 0.82rem;
-    font-variation-settings: 'wght' 600;
-    color: var(--color-text);
-    line-height: 1.35;
-    margin-bottom: 0.2rem;
-}
-
-.insight-title strong {
-    font-variation-settings: 'wght' 750;
-    color: var(--color-primary);
-}
-
-.insight-title .insight-value-up {
-    font-variation-settings: 'wght' 750;
-    color: var(--color-success);
-}
-
-.insight-title .insight-value-neutral {
-    font-variation-settings: 'wght' 750;
-    color: var(--color-text);
-}
-
-.insight-sub {
+    gap: 0.5rem;
+    margin-top: 1.25rem;
     font-size: 0.7rem;
-    color: var(--color-text-light);
-    font-variation-settings: 'wght' 400;
-    line-height: 1.4;
+    color: rgba(255,255,255,0.35);
+    position: relative;
+    z-index: 1;
 }
 
-/* Dark mode */
-[data-theme="dark"] .insight-card {
-    background: var(--color-white);
-    border-color: var(--color-border);
-}
-
-[data-theme="dark"] .insight-icon.milestone {
-    background: rgba(245, 158, 11, 0.12);
-}
-
-[data-theme="dark"] .insight-icon.growth {
-    background: rgba(16, 185, 129, 0.12);
-}
-
-[data-theme="dark"] .insight-icon.new {
-    background: rgba(109, 181, 197, 0.12);
+.yr-footer svg {
+    opacity: 0.4;
 }
 
 @media (max-width: 768px) {
-    .insights-grid { grid-template-columns: 1fr; }
+    .yr-card { padding: 1.75rem 1.5rem 1.5rem; }
+    .yr-hero-value { font-size: 2.5rem; }
+    .yr-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* Dashboard Tiles */

@@ -3104,8 +3104,8 @@ function initDashboardKPIs() {
         animateCounter('kpiForecast', mid, true, 300);
     }
 
-    // 5. Insights & milestones
-    renderInsights(payments, contracts, prediction);
+    // 5. Year in Review
+    renderYearReview(payments, contracts, prediction);
 
     // 6. Royalty chart per year
     renderRoyaltyChart(payments);
@@ -3190,156 +3190,104 @@ function renderRoyaltyChart(payments) {
 
 // Stagger fade-in animation on KPI cards and sections
 // ============================================
-// INSIGHTS & MILESTONES
+// YEAR IN REVIEW
 // ============================================
 
-function renderInsights(payments, contracts, prediction) {
-    const grid = document.getElementById('insightsGrid');
-    if (!grid) return;
+function renderYearReview(payments, contracts, prediction) {
+    const container = document.getElementById('yearReview');
+    if (!container || payments.length === 0) { if (container) container.innerHTML = ''; return; }
 
-    const insights = [];
-    const author = getCurrentAuthor();
-    if (!author) return;
+    // Determine review year (most recent year with payments)
+    const yearTotals = {};
+    const yearTypes = {};
+    payments.forEach(p => {
+        yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount;
+        if (!yearTypes[p.year]) yearTypes[p.year] = {};
+        yearTypes[p.year][p.type] = (yearTypes[p.year][p.type] || 0) + p.amount;
+    });
 
-    // --- Milestones ---
+    const sortedYears = Object.keys(yearTotals).map(Number).sort();
+    const reviewYear = sortedYears[sortedYears.length - 1];
+    const reviewTotal = yearTotals[reviewYear];
+    const types = yearTypes[reviewYear] || {};
 
-    // Years as author (based on earliest payment year)
-    const paymentYears = [...new Set(payments.map(p => p.year))].sort();
-    if (paymentYears.length > 0) {
-        const firstYear = paymentYears[0];
-        const yearsActive = new Date().getFullYear() - firstYear;
-        if (yearsActive >= 1) {
-            insights.push({
-                type: 'milestone',
-                icon: 'milestone',
-                svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15l-3-3h2V8h2v4h2l-3 3z"/><circle cx="12" cy="12" r="10"/></svg>',
-                title: `Al <strong>${yearsActive} jaar</strong> auteur bij Noordhoff`,
-                sub: `Eerste afrekening in ${firstYear}`
-            });
-        }
+    // Previous year comparison
+    const prevYear = sortedYears.length >= 2 ? sortedYears[sortedYears.length - 2] : null;
+    const prevTotal = prevYear ? yearTotals[prevYear] : 0;
+    let changePct = 0;
+    let changeDir = 'neutral';
+    if (prevTotal > 0) {
+        changePct = Math.round(((reviewTotal - prevTotal) / prevTotal) * 100);
+        changeDir = changePct > 0 ? 'up' : changePct < 0 ? 'down' : 'neutral';
     }
 
-    // Total earned milestone
-    const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-    if (totalPaid > 0) {
-        const milestone = totalPaid >= 50000 ? '€50.000' : totalPaid >= 25000 ? '€25.000' : totalPaid >= 10000 ? '€10.000' : totalPaid >= 5000 ? '€5.000' : null;
-        if (milestone) {
-            insights.push({
-                type: 'milestone',
-                icon: 'milestone',
-                svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-                title: `Mijlpaal bereikt: <span class="insight-value-neutral">${milestone}+</span> totaal uitgekeerd`,
-                sub: `${formatCurrency(totalPaid)} over ${paymentYears.length} ${paymentYears.length === 1 ? 'jaar' : 'jaren'}`
-            });
-        }
-    }
+    // Years as author
+    const firstYear = sortedYears[0];
+    const yearsActive = reviewYear - firstYear + 1;
 
-    // --- Smart Insights ---
+    // Type labels
+    const typeNames = { royalty: 'Royalties', subsidiary: 'Nevenrechten', foreign: 'Foreign Rights' };
 
-    // YoY growth comparison
-    if (paymentYears.length >= 2) {
-        const yearTotals = {};
-        payments.forEach(p => { yearTotals[p.year] = (yearTotals[p.year] || 0) + p.amount; });
-        const sortedYears = Object.keys(yearTotals).map(Number).sort();
-        const lastYear = sortedYears[sortedYears.length - 1];
-        const prevYear = sortedYears[sortedYears.length - 2];
-        const lastTotal = yearTotals[lastYear];
-        const prevTotal = yearTotals[prevYear];
+    // Build breakdown for stats bar
+    const typeEntries = Object.entries(types).filter(([, v]) => v > 0);
 
-        if (prevTotal > 0 && lastTotal > 0) {
-            const growthPct = Math.round(((lastTotal - prevTotal) / prevTotal) * 100);
-            if (growthPct > 0) {
-                insights.push({
-                    type: 'growth',
-                    icon: 'growth',
-                    svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
-                    title: `Royalties <span class="insight-value-up">+${growthPct}%</span> gestegen in ${lastYear}`,
-                    sub: `${formatCurrency(prevTotal)} → ${formatCurrency(lastTotal)}`
-                });
-            } else if (growthPct < 0) {
-                insights.push({
-                    type: 'info',
-                    icon: 'info',
-                    svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-                    title: `Royalties ${lastYear}: <span class="insight-value-neutral">${formatCurrency(lastTotal)}</span>`,
-                    sub: `${Math.abs(growthPct)}% lager dan ${prevYear} (${formatCurrency(prevTotal)})`
-                });
-            }
-        }
-    }
+    // Change arrow SVG
+    const arrowUp = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
+    const arrowDown = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-    // New payment types detected
-    if (paymentYears.length >= 2) {
-        const yearTypes = {};
-        payments.forEach(p => {
-            if (!yearTypes[p.year]) yearTypes[p.year] = new Set();
-            yearTypes[p.year].add(p.type);
-        });
-        const sortedYrs = Object.keys(yearTypes).map(Number).sort();
-        const latestYr = sortedYrs[sortedYrs.length - 1];
-        const prevYrs = sortedYrs.slice(0, -1);
-        const allPrevTypes = new Set();
-        prevYrs.forEach(y => yearTypes[y].forEach(t => allPrevTypes.add(t)));
-        const newTypes = [...yearTypes[latestYr]].filter(t => !allPrevTypes.has(t));
+    const changeHTML = prevTotal > 0
+        ? `<span class="yr-hero-change ${changeDir}">${changeDir === 'up' ? arrowUp : changeDir === 'down' ? arrowDown : ''}${changePct > 0 ? '+' : ''}${changePct}% t.o.v. ${prevYear}</span>`
+        : '';
 
-        const typeNames = { subsidiary: 'Nevenrechten', foreign: 'Foreign Rights', royalty: 'Royalties' };
-        if (newTypes.length > 0) {
-            insights.push({
-                type: 'new',
-                icon: 'new',
-                svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
-                title: `Nieuw in ${latestYr}: <strong>${newTypes.map(t => typeNames[t] || t).join(', ')}</strong>`,
-                sub: 'Nieuw type inkomsten toegevoegd aan uw portefeuille'
-            });
-        }
-    }
-
-    // Forecast insight
-    const mid = Math.round((prediction.min + prediction.max) / 2);
-    if (mid > 0 && paymentYears.length > 0) {
-        const lastYearTotal = payments.filter(p => p.year === paymentYears[paymentYears.length - 1]).reduce((s, p) => s + p.amount, 0);
-        if (lastYearTotal > 0) {
-            const forecastGrowth = Math.round(((mid - lastYearTotal) / lastYearTotal) * 100);
-            if (forecastGrowth > 5) {
-                insights.push({
-                    type: 'growth',
-                    icon: 'growth',
-                    svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-                    title: `Prognose ${new Date().getFullYear()}: <span class="insight-value-up">+${forecastGrowth}%</span> verwachte groei`,
-                    sub: `${formatCurrency(mid)} verwacht (was ${formatCurrency(lastYearTotal)})`
-                });
-            }
-        }
-    }
-
-    // Number of contracts
-    if (contracts.length > 0) {
-        insights.push({
-            type: 'info',
-            icon: 'info',
-            svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>',
-            title: `<span class="insight-value-neutral">${contracts.length}</span> actieve ${contracts.length === 1 ? 'contract' : 'contracten'}`,
-            sub: contracts.map(c => c.name || c.number).slice(0, 3).join(', ') + (contracts.length > 3 ? ` +${contracts.length - 3} meer` : '')
-        });
-    }
-
-    // Limit to 4 most relevant insights
-    const shown = insights.slice(0, 4);
-
-    if (shown.length === 0) {
-        grid.innerHTML = '';
-        return;
-    }
-
-    grid.innerHTML = shown.map(insight => `
-        <div class="insight-card insight-${insight.type}">
-            <div class="insight-icon ${insight.icon}">${insight.svg}</div>
-            <div class="insight-content">
-                <div class="insight-title">${insight.title}</div>
-                <div class="insight-sub">${insight.sub}</div>
+    container.innerHTML = `
+        <div class="yr-card">
+            <div class="yr-header">
+                <span class="yr-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Jaaroverzicht
+                </span>
+                <span class="yr-year">${reviewYear}</span>
+            </div>
+            <div class="yr-hero">
+                <div class="yr-hero-label">Totaal uitgekeerd in ${reviewYear}</div>
+                <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
+                ${changeHTML}
+            </div>
+            <div class="yr-stats">
+                ${typeEntries.map(([type, amount]) => `
+                    <div class="yr-stat">
+                        <div class="yr-stat-value">${formatCurrency(amount)}</div>
+                        <div class="yr-stat-label">${typeNames[type] || type}</div>
+                    </div>
+                `).join('')}
+                <div class="yr-stat">
+                    <div class="yr-stat-value">${contracts.length}</div>
+                    <div class="yr-stat-label">Contracten</div>
+                </div>
+                ${yearsActive > 1 ? `
+                <div class="yr-stat">
+                    <div class="yr-stat-value">${yearsActive}</div>
+                    <div class="yr-stat-label">Jaar auteur</div>
+                </div>` : ''}
+                ${sortedYears.length > 1 ? `
+                <div class="yr-stat">
+                    <div class="yr-stat-value">${formatCurrency(payments.reduce((s, p) => s + p.amount, 0))}</div>
+                    <div class="yr-stat-label">Totaal all-time</div>
+                </div>` : ''}
+            </div>
+            <div class="yr-footer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Gebaseerd op alle beschikbare afrekeningen
             </div>
         </div>
-    `).join('');
+    `;
+
+    // Animate the hero value
+    const heroEl = document.getElementById('yrHeroValue');
+    if (heroEl) {
+        heroEl.textContent = '€0';
+        animateCounter('yrHeroValue', reviewTotal, true, 200);
+    }
 }
 
 // Time-based greeting
