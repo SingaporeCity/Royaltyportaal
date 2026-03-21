@@ -5438,15 +5438,19 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Scroll tabs-nav to just below the sticky header
-        // Use requestAnimationFrame to ensure layout has updated after tab switch
+        // Only scroll if tabs-nav is above the viewport (user scrolled past it)
+        // Don't scroll if tabs are already visible — avoids jarring jump on short tabs
         requestAnimationFrame(() => {
             const tabsNav = document.querySelector('.tabs-nav');
             const header = document.querySelector('.dashboard-header');
             if (tabsNav && header) {
                 const headerHeight = header.offsetHeight;
-                const navTop = tabsNav.getBoundingClientRect().top + window.scrollY - headerHeight;
-                window.scrollTo({ top: Math.max(0, navTop), behavior: 'smooth' });
+                const navRect = tabsNav.getBoundingClientRect();
+                // Only scroll if the tabs nav is above the visible area
+                if (navRect.top < headerHeight) {
+                    const navTop = navRect.top + window.scrollY - headerHeight;
+                    window.scrollTo({ top: Math.max(0, navTop), behavior: 'smooth' });
+                }
             }
         });
     });
