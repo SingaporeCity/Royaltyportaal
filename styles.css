@@ -1051,55 +1051,123 @@ body.dashboard-active .lang-toggle {
 .info-card.full-width { grid-column: span 2; }
 
 /* Contracts Table - Modern Design */
-.contracts-table {
+/* Contracts search */
+.contracts-search {
+    position: relative;
+    margin-bottom: 1.25rem;
+}
+
+.contracts-search-icon {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-light);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.contracts-search input {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+    padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    color: var(--color-text);
     background: var(--color-white);
+    border: 1.5px solid var(--color-border);
     border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-.contracts-table th,
-.contracts-table td {
-    padding: 1rem 1.5rem;
-    text-align: left;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-.contracts-table th {
-    background: linear-gradient(180deg, #f8fafc 0%, var(--color-bg) 100%);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    color: var(--color-text);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-.contracts-table td {
-    color: var(--color-text);
-    font-size: 0.9rem;
-}
-.contracts-table tbody tr {
-    transition: background 0.15s ease;
-}
-.contracts-table tbody tr:hover {
-    background: rgba(27, 94, 59, 0.03);
-}
-.contracts-table tbody tr:last-child td {
-    border-bottom: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 }
 
-.contract-royalty-badge {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
+.contracts-search input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0,116,96,0.08);
+}
+
+.contracts-search input::placeholder {
+    color: var(--color-text-light);
+    opacity: 0.5;
+}
+
+/* Contract cards */
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.contract-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    border: 1px solid var(--color-border);
+}
+
+.contract-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.contract-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.contract-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.contract-card-name {
+    font-size: 0.92rem;
+    font-variation-settings: 'wght' 600;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+}
+
+.contract-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.78rem;
-    font-variation-settings: 'wght' 650;
-    color: var(--color-primary);
-    background: var(--color-primary-subtle);
-    border-radius: var(--radius-pill);
+    color: var(--color-text-light);
+    font-variation-settings: 'wght' 420;
+    flex-wrap: wrap;
 }
 
-/* Contracts summary */
+.contract-card-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-text-light);
+    opacity: 0.4;
+    flex-shrink: 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .contracts-search input {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+[data-theme="dark"] .contract-card {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+/* Legacy contracts-summary (unused, kept for compat) */
 .contracts-summary {
     margin-bottom: 1.5rem;
 }
@@ -9137,13 +9205,6 @@ body.dashboard-active .lang-toggle {
     }
     .welcome-section h1 {
         font-size: 1.5rem;
-    }
-
-    /* Contracts table: horizontal scroll */
-    .contracts-table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     /* Year review: stack 3 stats */

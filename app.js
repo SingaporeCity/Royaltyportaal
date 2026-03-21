@@ -3481,37 +3481,58 @@ function getCurrentAuthor() {
         : DATA.authors[currentUser];
 }
 
-function renderContracts() {
+function renderContracts(searchQuery) {
     const author = getCurrentAuthor();
     if (!author || !author.contracts) return;
     const nl = currentLang === 'nl';
-
-    const tbody = document.getElementById('contractsTableBody');
-    const summaryEl = document.getElementById('contractsSummary');
-    const infoEl = document.getElementById('contractsInfoCard');
+    const listEl = document.getElementById('contractsList');
+    if (!listEl) return;
 
     if (author.contracts.length === 0) {
-        tbody.closest('.tab-content').querySelector('.info-header').insertAdjacentHTML('afterend', emptyStateHTML('contracts'));
-        tbody.closest('table').style.display = 'none';
-        if (summaryEl) summaryEl.innerHTML = '';
-        if (infoEl) infoEl.innerHTML = '';
+        listEl.innerHTML = emptyStateHTML('contracts');
         return;
     }
 
-    if (summaryEl) summaryEl.innerHTML = '';
+    const q = (searchQuery || '').toLowerCase().trim();
+    const filtered = q
+        ? author.contracts.filter(c => c.name.toLowerCase().includes(q) || c.number.toLowerCase().includes(q))
+        : author.contracts;
 
-    // Table
-    tbody.closest('table').style.display = '';
-    tbody.innerHTML = author.contracts.map((contract, i) => `
-        <tr>
-            <td>${contract.number}</td>
-            <td>${contract.name}</td>
-            <td><span class="contract-royalty-badge">11%</span></td>
-            <td>01-01-2023</td>
-            <td>${contract.contractPdf ? `<div class="contract-actions"><button class="contract-action-btn" onclick="previewContractPDF(${i})" title="${nl ? 'Bekijken' : 'Preview'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="contract-action-btn" onclick="downloadAuthorContractPDF(${i})" title="Download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div>` : '-'}</td>
-        </tr>
-    `).join('');
+    if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="payments-no-results">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <p>${nl ? 'Geen contracten gevonden' : 'No contracts found'}</p>
+        </div>`;
+        return;
+    }
 
+    listEl.innerHTML = filtered.map(contract => {
+        const idx = author.contracts.indexOf(contract);
+        return `<div class="contract-card">
+            <div class="contract-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+            </div>
+            <div class="contract-card-info">
+                <div class="contract-card-name">${contract.name}</div>
+                <div class="contract-card-meta">
+                    <span>${contract.number}</span>
+                    <span class="contract-card-dot"></span>
+                    <span>Royalty 11%</span>
+                    <span class="contract-card-dot"></span>
+                    <span>${nl ? 'Sinds' : 'Since'} 01-01-2023</span>
+                </div>
+            </div>
+            ${contract.contractPdf ? `<div class="contract-actions">
+                <button class="contract-action-btn" onclick="previewContractPDF(${idx})" title="${nl ? 'Bekijken' : 'Preview'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                <button class="contract-action-btn" onclick="downloadAuthorContractPDF(${idx})" title="Download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            </div>` : ''}
+        </div>`;
+    }).join('');
+}
+
+function filterContracts() {
+    const q = document.getElementById('contractsSearchInput')?.value || '';
+    renderContracts(q);
 }
 
 function generateContractPDFDoc(contract, author) {
@@ -6001,19 +6022,15 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         const label = this.querySelector('span:not(.tab-icon)')?.textContent;
         const mobileLabel = document.getElementById('mobileTabLabel');
         if (mobileLabel && label) mobileLabel.textContent = label;
-        // Scroll down to tabs if they're below the viewport (never scroll up)
+        // Scroll tabs into view
         if (!_tourActive) {
             requestAnimationFrame(() => {
                 const tabsContainer = document.querySelector('.tabs-container');
                 const header = document.querySelector('.dashboard-header');
                 if (tabsContainer && header) {
                     const headerHeight = header.offsetHeight;
-                    const containerTop = tabsContainer.getBoundingClientRect().top;
-                    // Only scroll if tabs are below the visible area
-                    if (containerTop > window.innerHeight * 0.6) {
-                        const targetTop = containerTop + window.scrollY - headerHeight - 8;
-                        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-                    }
+                    const targetTop = tabsContainer.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+                    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
                 }
             });
         }
