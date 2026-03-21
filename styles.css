@@ -1095,6 +1095,23 @@ body.dashboard-active .lang-toggle {
     border-color: var(--color-border);
 }
 
+.contracts-contact {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    font-variation-settings: 'wght' 420;
+}
+
+.contracts-contact a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-variation-settings: 'wght' 600;
+}
+
+.contracts-contact a:hover {
+    text-decoration: underline;
+}
+
 /* Contracts search */
 .contracts-search {
     position: relative;
