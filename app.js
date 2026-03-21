@@ -4004,9 +4004,14 @@ function renderPayments(filterYear) {
                 <div class="payment-amount-value">${formatCurrency(payment.amount)}</div>
                 <div class="payment-amount-label">${typeLabels[payment.type][currentLang]}</div>
             </div>
-            <button class="payment-download" onclick="previewPaymentPDF(${idx}, '${yearFilter}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
+            <div class="payment-actions">
+                <button class="payment-action-btn" onclick="previewPaymentPDF(${idx}, '${yearFilter}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="payment-action-btn" onclick="downloadPaymentPDF(${idx}, '${yearFilter}')" title="Download">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+            </div>
         </div>`;
     }).join('');
 }
