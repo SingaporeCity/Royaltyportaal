@@ -1073,6 +1073,10 @@
                 <p data-i18n="dashboard_subtitle">Hier vindt u een overzicht van uw royalty-informatie</p>
             </div>
             <div class="tabs-container">
+                <button class="mobile-tab-toggle" id="mobileTabToggle" onclick="toggleMobileTabs()">
+                    <span class="mobile-tab-toggle-label" id="mobileTabLabel">Start</span>
+                    <svg class="mobile-tab-toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
                 <nav class="tabs-nav" id="tabsNav">
                     <button class="tab-btn active" data-tab="start"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12.71 2.29a1 1 0 00-1.42 0l-9 9a1 1 0 00.33 1.64A1 1 0 003 13h1v7a2 2 0 002 2h4v-5a1 1 0 011-1h2a1 1 0 011 1v5h4a2 2 0 002-2v-7h1a1 1 0 00.71-1.71z" fill="currentColor" opacity="0.15"/><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="tab_start">Start</span></button>
                     <button class="tab-btn" data-tab="payments"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="currentColor" opacity="0.1"/><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="15" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span><span data-i18n="tab_payments">Afrekeningen</span></button>

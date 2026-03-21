@@ -571,6 +571,11 @@ function toggleMobileMenu() {
     hamburger.classList.toggle('active');
 }
 
+function toggleMobileTabs() {
+    document.getElementById('tabsNav')?.classList.toggle('mobile-open');
+    document.getElementById('mobileTabToggle')?.classList.toggle('open');
+}
+
 // ============================================
 // SMOOTH SCROLL
 // ============================================
@@ -5989,8 +5994,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Close mobile tabs dropdown after selection
+        // Close mobile tabs dropdown + update label
         document.getElementById('tabsNav')?.classList.remove('mobile-open');
+        document.getElementById('mobileTabToggle')?.classList.remove('open');
+        const label = this.querySelector('span:not(.tab-icon)')?.textContent;
+        const mobileLabel = document.getElementById('mobileTabLabel');
+        if (mobileLabel && label) mobileLabel.textContent = label;
         // Scroll down to tabs if they're below the viewport (never scroll up)
         if (!_tourActive) {
             requestAnimationFrame(() => {
