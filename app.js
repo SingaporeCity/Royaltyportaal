@@ -2087,7 +2087,7 @@ const DATA = {
                 { id: 'test3_ib', date: '2025-01-05T11:45:00.000Z', field: 'IBAN', old: 'NL91 ABNA 0123 4567 01', new: 'NL00 FAKE 9999 9999 99', status: 'rejected', processedDate: '2025-01-06T16:30:00.000Z', rejectionReason: 'IBAN verificatie mislukt - neem contact op met support.' }
             ],
             loginHistory: [],
-            prediction: { min: 15000, max: 20000 },
+            prediction: { min: 20000, max: 28000 },
             historicalRoyalties: [
                 { year: 2024, amount: 17641.50 },
                 { year: 2023, amount: 15420.00 }
@@ -3681,14 +3681,15 @@ function initPredictions() {
             return `<div class="fc-bar-row fc-bar-forecast">
                 <span class="fc-bar-year">${d.year}</span>
                 <div class="fc-bar-track">
+                    <div class="fc-bar-fill fc-bar-fill-light" style="width:${maxPct}%"></div>
                     <div class="fc-bar-range" style="left:${minPct}%;width:${maxPct - minPct}%"></div>
                     <div class="fc-bar-mid" style="left:${midPct}%"></div>
                 </div>
                 <span class="fc-bar-amount">${formatCurrency(d.amount)}</span>
             </div>
-            <div class="fc-bar-range-labels">
-                <span>${formatCurrency(d.min)} <em>${nl ? 'conservatief' : 'conservative'}</em></span>
-                <span>${formatCurrency(d.max)} <em>${nl ? 'optimistisch' : 'optimistic'}</em></span>
+            <div class="fc-bar-range-labels" style="margin-left:calc(48px + 1rem);">
+                <span style="position:relative;left:${minPct}%">${formatCurrency(d.min)} <em>${nl ? 'conservatief' : 'conservative'}</em></span>
+                <span style="position:relative;left:${minPct}%">${formatCurrency(d.max)} <em>${nl ? 'optimistisch' : 'optimistic'}</em></span>
             </div>`;
         }
         return `<div class="fc-bar-row">
