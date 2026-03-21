@@ -3702,25 +3702,43 @@ function initPredictions() {
     }).join('');
 
     container.innerHTML = `
-        <div class="fc-card">
-            <div class="fc-header">
-                <div>
-                    <div class="fc-label">${nl ? 'Verwachte royalties' : 'Expected royalties'} ${forecastYear}</div>
-                    <div class="fc-value" id="fcValue">${formatCurrency(mid)}</div>
-                    ${changeHTML}
-                </div>
+        <div class="fc-hero-card">
+            <div class="fc-hero-content">
+                <div class="fc-hero-eyebrow">${nl ? 'Prognose' : 'Forecast'} ${forecastYear}</div>
+                <div class="fc-value" id="fcValue">${formatCurrency(mid)}</div>
+                <div class="fc-hero-sub">${nl ? 'Verwachte royalties' : 'Expected royalties'}</div>
+                ${changeHTML}
+            </div>
+            <div class="fc-hero-side">
                 <div class="fc-payout-badge">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     ${nl ? 'Uitbetaling maart' : 'Payout March'} ${payoutYear}
                 </div>
+                <div class="fc-hero-range">
+                    <div class="fc-hero-range-item">
+                        <span class="fc-hero-range-value">${formatCurrency(min)}</span>
+                        <span class="fc-hero-range-label">${nl ? 'Conservatief' : 'Conservative'}</span>
+                    </div>
+                    <span class="fc-hero-range-sep">—</span>
+                    <div class="fc-hero-range-item">
+                        <span class="fc-hero-range-value">${formatCurrency(max)}</span>
+                        <span class="fc-hero-range-label">${nl ? 'Optimistisch' : 'Optimistic'}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fc-chart-card">
+            <div class="fc-chart-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V13"/><path d="M12 17V9"/><path d="M17 17V11"/></svg>
+                ${nl ? 'Royalty-ontwikkeling' : 'Royalty development'}
             </div>
             <div class="fc-bars">
                 ${barsHTML}
             </div>
-            <div class="fc-disclaimer">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>${nl ? 'Indicatieve prognose. Het werkelijke bedrag kan afwijken op basis van definitieve verkoopcijfers en contractwijzigingen.' : 'Indicative forecast. The actual amount may differ based on final sales figures and contract changes.'}</span>
-            </div>
+        </div>
+        <div class="fc-disclaimer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>${nl ? 'Indicatieve prognose. Het werkelijke bedrag kan afwijken op basis van definitieve verkoopcijfers en contractwijzigingen.' : 'Indicative forecast. The actual amount may differ based on final sales figures and contract changes.'}</span>
         </div>
     `;
 
