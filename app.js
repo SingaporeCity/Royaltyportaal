@@ -3230,27 +3230,20 @@ function renderYearReview(payments, contracts, prediction) {
                 </span>
                 <span class="yr-year">${reviewYear}</span>
             </div>
-            <div class="yr-top-row">
-                <div class="yr-top-cell yr-top-main">
-                    <div class="yr-hero-label">Uitgekeerd in ${reviewYear}</div>
-                    <div class="yr-hero-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
+            <div class="yr-stats yr-stats-4">
+                <div class="yr-stat">
+                    <div class="yr-stat-value" id="yrHeroValue">${formatCurrency(reviewTotal)}</div>
+                    <div class="yr-stat-label">Uitgekeerd in ${reviewYear}</div>
                     ${changeHTML}
                 </div>
-                <div class="yr-top-cell">
-                    <div class="yr-hero-label">Totaal all-time</div>
-                    <div class="yr-top-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
-                    <div class="yr-top-sub">${sortedYears[0]}–${reviewYear}</div>
-                </div>
-                <div class="yr-top-cell">
-                    <div class="yr-hero-label">Prognose ${forecastYear}</div>
-                    <div class="yr-top-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
-                    ${mid > 0 ? fcChangeHTML : ''}
-                </div>
-            </div>
-            <div class="yr-stats">
                 <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
-                    <div class="yr-stat-label">Laatste afrekening</div>
+                    <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
+                    <div class="yr-stat-label">Totaal all-time</div>
+                </div>
+                <div class="yr-stat">
+                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
+                    <div class="yr-stat-label">Prognose ${forecastYear}</div>
+                    ${mid > 0 ? fcChangeHTML : ''}
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value">${contracts.length}</div>
@@ -3264,8 +3257,7 @@ function renderYearReview(payments, contracts, prediction) {
     const heroEl = document.getElementById('yrHeroValue');
     if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
-    if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
-    if (mid > 0) animateCounter('yrForecast', mid, true, 400);
+    if (mid > 0) animateCounter('yrForecast', mid, true, 500);
 }
 
 // Time-based greeting

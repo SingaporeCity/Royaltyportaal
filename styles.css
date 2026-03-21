@@ -3491,6 +3491,10 @@ body.dashboard-active .lang-toggle {
     z-index: 1;
 }
 
+.yr-stats.yr-stats-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .yr-stat {
     background: rgba(255,255,255,0.04);
     padding: 0.875rem 0.875rem;
@@ -3549,7 +3553,7 @@ body.dashboard-active .lang-toggle {
     .yr-top-main .yr-hero-value { font-size: 2rem; text-align: center; }
     .yr-top-main .yr-hero-label { text-align: center; }
     .yr-top-cell { text-align: center; }
-    .yr-stats { grid-template-columns: repeat(3, 1fr); }
+    .yr-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* Dashboard Tiles */
