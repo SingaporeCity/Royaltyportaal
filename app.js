@@ -3199,6 +3199,7 @@ function renderYearReview(payments, contracts, prediction) {
 
     // Forecast
     const mid = Math.round((prediction.min + prediction.max) / 2);
+    const forecastYear = new Date().getFullYear();
 
     // Years active
     const yearsActive = sortedYears.length > 0 ? (new Date().getFullYear() - sortedYears[0]) : 0;
