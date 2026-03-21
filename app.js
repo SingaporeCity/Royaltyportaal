@@ -2182,7 +2182,7 @@ const DATA = {
         { q: { nl: 'Wat zijn nevenrechten?', en: 'What are reader rights?' }, a: { nl: 'Nevenrechten zijn een combinatie van reader- en verhuurgelden. Dit betreft inkomsten ontvangen van Stichting UVO voor readergelden en inkomsten ontvangen van bibliotheken voor verhuurgelden.', en: 'Reader rights are a combination of reader and rental fees. This includes income received from Stichting UVO for reader fees and income received from libraries for rental fees.' }},
         { q: { nl: 'Wat zijn foreign rights?', en: 'What are foreign rights?' }, a: { nl: 'Foreign rights zijn betalingen voor het gebruik van uw werken in internationale (digitale) bibliotheken van hogescholen.', en: 'Foreign rights are payments for the use of your works in international (digital) libraries of universities.' }},
         { q: { nl: 'Hoe wordt mijn royalty berekend?', en: 'How is my royalty calculated?' }, a: { nl: 'Uw royalty wordt berekend op basis van een percentage van de netto-omzet van uw boek(en), zoals vastgelegd in uw auteurscontract.', en: 'Your royalty is calculated based on a percentage of the net revenue from your book(s), as specified in your author contract.' }},
-        { q: { nl: 'Kan ik mijn bankgegevens wijzigen?', en: 'Can I change my bank details?' }, a: { nl: 'Ja, u kunt uw bankgegevens wijzigen via het tabblad "Gegevens". Wijzigingen worden verwerkt voor de eerstvolgende uitbetaling.', en: 'Yes, you can change your bank details via the "Info" tab. Changes will be processed before the next payment.' }},
+        { q: { nl: 'Kan ik mijn bankgegevens wijzigen?', en: 'Can I change my bank details?' }, a: { nl: 'Ja, u kunt uw bankgegevens wijzigen via het tabblad "Profiel". Wijzigingen worden verwerkt voor de eerstvolgende uitbetaling.', en: 'Yes, you can change your bank details via the "Profile" tab. Changes will be processed before the next payment.' }},
         { q: { nl: 'Wat moet ik doen als een auteur is overleden?', en: 'What should I do if an author has passed away?' }, a: { nl: 'In geval van overlijden van een auteur heeft Noordhoff een verklaring van erfrecht nodig, waarin de contactpersoon als erfgenaam wordt aangewezen. Deze erfgenaam heeft vervolgens het recht om het bankrekeningnummer te wijzigen voor toekomstige uitbetalingen.', en: "In case of an author's death, Noordhoff requires a certificate of inheritance, in which the contact person is designated as heir. This heir then has the right to change the bank account number for future payments." }},
         { q: { nl: 'Waar vind ik mijn auteurscontract?', en: 'Where can I find my author contract?' }, a: { nl: 'Uw auteurscontract is beschikbaar in het tabblad "Contracten". Voor vragen over uw contract kunt u contact opnemen via rights@noordhoff.nl.', en: 'Your author contract is available in the "Contracts" tab. For questions about your contract, please contact rights@noordhoff.nl.' }},
         { q: { nl: 'Hoe kan ik contact opnemen met Noordhoff?', en: 'How can I contact Noordhoff?' }, a: { nl: 'Voor vragen over royalties: rights@noordhoff.nl. Voor het indienen van facturen: crediteuren@noordhoff.nl. Telefonisch: (050) 522 69 22. Of via onze <a href="https://www.noordhoff.nl/klantenservice#services-widget" target="_blank">klantenservice</a>.', en: 'For questions about royalties: rights@noordhoff.nl. For submitting invoices: crediteuren@noordhoff.nl. Phone: (050) 522 69 22. Or via our <a href="https://www.noordhoff.nl/klantenservice#services-widget" target="_blank">customer service</a>.' }}
@@ -2199,7 +2199,7 @@ const TRANSLATIONS = {
         login_error: 'Ongeldig e-mailadres of wachtwoord.', email_label: 'E-mailadres', password_label: 'Wachtwoord',
         login_btn: 'Inloggen', forgot_password: 'Wachtwoord vergeten?', author: 'Auteur', logout_btn: 'Uitloggen', greeting: 'Welkom',
         dashboard_subtitle: 'Hier vindt u een overzicht van uw royalty-informatie',
-        tab_info: 'Gegevens', tab_contracts: 'Contracten', tab_payments: 'Afrekeningen', tab_forecast: 'Prognose', tab_faq: 'FAQ',
+        tab_info: 'Profiel', tab_contracts: 'Contracten', tab_payments: 'Afrekeningen', tab_forecast: 'Prognose', tab_faq: 'FAQ',
         id_numbers_title: 'Auteurs ID', label_vendor: 'Vendor ID', label_alliant: 'Alliant ID',
         info_title: 'Uw gegevens', edit_btn: 'Bewerken', label_firstname: 'Voornaam', label_lastname: 'Achternaam',
         label_initials: 'Voorletters', label_bsn: 'BSN', label_bic: 'BIC',
@@ -2210,7 +2210,7 @@ const TRANSLATIONS = {
         prediction_title: 'Verwachte royalties 2025', badge_prediction: 'Prognose', payout_date: 'Uitbetaling maart 2026',
         expected_range: 'Verwacht bedrag', conservative: 'Conservatief', expected: 'Verwacht', optimistic: 'Optimistisch',
         prediction_disclaimer: 'Deze prognose is gebaseerd op de omzet van het prognosejaar. Hierbij worden de contracten, royaltypercentages en bijdragersaandelen van het jaar voor het prognosejaar gebruikt, aangezien deze waarden voor het huidige jaar nog niet definitief zijn.',
-        edit_info_title: 'Gegevens bewerken', cancel_btn: 'Annuleren', save_btn: 'Opslaan', total_paid: 'Totaal uitgekeerd',
+        edit_info_title: 'Profiel bewerken', cancel_btn: 'Annuleren', save_btn: 'Opslaan', total_paid: 'Totaal uitgekeerd',
         faq_title: 'Veelgestelde vragen',
         verify_password_title: 'Wachtwoord bevestigen', verify_password_desc: 'Voor het wijzigen van uw bankgegevens is een wachtwoordbevestiging vereist.',
         password_incorrect: 'Onjuist wachtwoord', confirm_btn: 'Bevestigen',
@@ -2581,7 +2581,7 @@ const TRANSLATIONS = {
         login_error: 'Invalid email or password.', email_label: 'Email Address', password_label: 'Password',
         login_btn: 'Sign In', forgot_password: 'Forgot password?', author: 'Author', logout_btn: 'Sign Out', greeting: 'Welcome',
         dashboard_subtitle: 'Here is an overview of your royalty information',
-        tab_info: 'Info', tab_contracts: 'Contracts', tab_payments: 'Statements', tab_forecast: 'Forecast', tab_faq: 'FAQ',
+        tab_info: 'Profile', tab_contracts: 'Contracts', tab_payments: 'Statements', tab_forecast: 'Forecast', tab_faq: 'FAQ',
         id_numbers_title: 'Author ID', label_vendor: 'Vendor ID', label_alliant: 'Alliant ID',
         info_title: 'Your Information', edit_btn: 'Edit', label_firstname: 'First Name', label_lastname: 'Last Name',
         label_initials: 'Initials', label_bsn: 'BSN', label_bic: 'BIC',
@@ -2592,7 +2592,7 @@ const TRANSLATIONS = {
         prediction_title: 'Expected Royalties 2025', badge_prediction: 'Forecast', payout_date: 'Payout March 2026',
         expected_range: 'Expected Amount', conservative: 'Conservative', expected: 'Expected', optimistic: 'Optimistic',
         prediction_disclaimer: "This forecast is based on the revenue of the forecast year. The contracts, royalty percentages and contributor shares from the year before the forecast year are used, as these values are not yet finalized for the current year.",
-        edit_info_title: 'Edit Information', cancel_btn: 'Cancel', save_btn: 'Save', total_paid: 'Total Paid',
+        edit_info_title: 'Edit Profile', cancel_btn: 'Cancel', save_btn: 'Save', total_paid: 'Total Paid',
         faq_title: 'Frequently Asked Questions',
         verify_password_title: 'Confirm Password', verify_password_desc: 'Password confirmation is required to change your bank details.',
         password_incorrect: 'Incorrect password', confirm_btn: 'Confirm',
@@ -3213,7 +3213,7 @@ function renderYearReview(payments, contracts, prediction) {
 
     // Forecast comparison
     let fcChangeHTML = '';
-    if (lastTotal > 0 && mid > 0) {
+    if (reviewTotal > 0 && mid > 0) {
         const fcPct = Math.round(((mid - reviewTotal) / reviewTotal) * 100);
         const fcDir = fcPct > 0 ? 'up' : fcPct < 0 ? 'down' : '';
         const fcArrow = fcDir === 'up' ? '&#9650;' : fcDir === 'down' ? '&#9660;' : '';
@@ -3471,9 +3471,52 @@ function renderContracts() {
             <td>${contract.name}</td>
             <td><span class="contract-royalty-badge">11%</span></td>
             <td>01-01-2023</td>
-            <td>${contract.contractPdf ? `<button class="btn-secondary-small" onclick="downloadAuthorContractPDF(${i})">${currentLang === 'nl' ? 'Download' : 'Download'}</button>` : '-'}</td>
+            <td>${contract.contractPdf ? `<div class="contract-actions"><button class="contract-action-btn" onclick="previewContractPDF(${i})" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="contract-action-btn" onclick="downloadAuthorContractPDF(${i})" title="Download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div>` : '-'}</td>
         </tr>
     `).join('');
+}
+
+function generateContractPDFDoc(contract, author) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const fullName = author.info.firstName + ' ' + author.info.lastName;
+
+    // Header
+    doc.setFillColor(0, 130, 198);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text('Noordhoff', 20, 25);
+    doc.setFontSize(12);
+    doc.text('Auteurscontract', 20, 35);
+
+    doc.setTextColor(0, 0, 0);
+
+    // Contract details
+    doc.setFontSize(16);
+    doc.text(contract.name, 20, 60);
+
+    doc.setFontSize(11);
+    doc.text('Contractnummer:', 20, 80);
+    doc.setFontSize(14);
+    doc.text(contract.number, 70, 80);
+
+    doc.setFontSize(11);
+    doc.text('Auteur:', 20, 95);
+    doc.text(fullName, 70, 95);
+
+    doc.text('E-mail:', 20, 105);
+    doc.text(author.info.email, 70, 105);
+
+    doc.setTextColor(128, 128, 128);
+    doc.setFontSize(9);
+    doc.text('Dit is een digitale kopie van het ondertekende contract.', 20, 130);
+    doc.text('Voor vragen kunt u contact opnemen met rights@noordhoff.nl', 20, 137);
+
+    // Footer
+    doc.text('Noordhoff Uitgevers B.V. | rights@noordhoff.nl | (050) 522 69 22', 20, 280);
+
+    return doc;
 }
 
 function downloadAuthorContractPDF(index) {
@@ -3481,47 +3524,48 @@ function downloadAuthorContractPDF(index) {
     if (!author || !author.contracts) return;
     const contract = author.contracts[index];
     if (contract.contractPdf) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const fullName = author.info.firstName + ' ' + author.info.lastName;
-
-        // Header
-        doc.setFillColor(0, 130, 198);
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
-        doc.text('Noordhoff', 20, 25);
-        doc.setFontSize(12);
-        doc.text('Auteurscontract', 20, 35);
-
-        doc.setTextColor(0, 0, 0);
-
-        // Contract details
-        doc.setFontSize(16);
-        doc.text(contract.name, 20, 60);
-
-        doc.setFontSize(11);
-        doc.text('Contractnummer:', 20, 80);
-        doc.setFontSize(14);
-        doc.text(contract.number, 70, 80);
-
-        doc.setFontSize(11);
-        doc.text('Auteur:', 20, 95);
-        doc.text(fullName, 70, 95);
-
-        doc.text('E-mail:', 20, 105);
-        doc.text(author.info.email, 70, 105);
-
-        doc.setTextColor(128, 128, 128);
-        doc.setFontSize(9);
-        doc.text('Dit is een digitale kopie van het ondertekende contract.', 20, 130);
-        doc.text('Voor vragen kunt u contact opnemen met rights@noordhoff.nl', 20, 137);
-
-        // Footer
-        doc.text('Noordhoff Uitgevers B.V. | rights@noordhoff.nl | (050) 522 69 22', 20, 280);
-
+        const doc = generateContractPDFDoc(contract, author);
         doc.save(`contract-${contract.number}.pdf`);
     }
+}
+
+function previewContractPDF(index) {
+    const author = getCurrentAuthor();
+    if (!author || !author.contracts) return;
+    const contract = author.contracts[index];
+    if (!contract.contractPdf) return;
+
+    const doc = generateContractPDFDoc(contract, author);
+    const blob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(blob);
+
+    const modal = document.getElementById('pdfPreviewModal');
+    const frame = document.getElementById('pdfPreviewFrame');
+    const loading = document.getElementById('pdfPreviewLoading');
+    const titleEl = document.getElementById('pdfPreviewTitle');
+    const metaEl = document.getElementById('pdfPreviewMeta');
+    const downloadBtn = document.getElementById('pdfPreviewDownload');
+
+    titleEl.textContent = contract.name;
+    metaEl.textContent = currentLang === 'nl' ? `Contractnummer: ${contract.number}` : `Contract number: ${contract.number}`;
+
+    frame.src = '';
+    loading.classList.remove('hidden');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    frame.onload = () => { loading.classList.add('hidden'); };
+    frame.src = pdfUrl;
+    setTimeout(() => { loading.classList.add('hidden'); }, 3000);
+
+    downloadBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = pdfUrl;
+        a.download = `contract-${contract.number}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
 }
 
 function initPredictions() {
@@ -3795,11 +3839,15 @@ function renderPayments(filterYear) {
         }
     });
 
-    // Combine and sort
+    // Combine and sort — group by year (newest first), annual statement first within each year
     let allPayments = [...filtered, ...annualStatements.filter(a => yearFilter === 'all' || a.year.toString() === yearFilter)];
     allPayments.sort((a, b) => {
+        // Primary: by year descending
+        if (a.year !== b.year) return b.year - a.year;
+        // Secondary: annual statements first within same year
         if (a.type === 'annual' && b.type !== 'annual') return -1;
         if (a.type !== 'annual' && b.type === 'annual') return 1;
+        // Tertiary: by date closest to today
         const distA = Math.abs(new Date(a.sortDate) - new Date(today));
         const distB = Math.abs(new Date(b.sortDate) - new Date(today));
         return distA - distB;
@@ -3851,8 +3899,15 @@ function renderPayments(filterYear) {
         return;
     }
 
-    paymentsList.innerHTML = allPayments.map((payment, idx) => `
-        <div class="payment-item ${payment.type === 'annual' ? 'annual-statement' : ''}">
+    const showYearHeaders = yearFilter === 'all' && typeFilter === 'all';
+    let lastYear = null;
+    paymentsList.innerHTML = allPayments.map((payment, idx) => {
+        let yearHeader = '';
+        if (showYearHeaders && payment.year !== lastYear) {
+            lastYear = payment.year;
+            yearHeader = `<div class="payments-year-header">${payment.year}</div>`;
+        }
+        return `${yearHeader}<div class="payment-item ${payment.type === 'annual' ? 'annual-statement' : ''}">
             <div class="payment-icon" style="background: ${iconColors[payment.type]}">
                 ${iconSvgs[payment.type] || iconSvgs.royalty}
             </div>
@@ -3867,8 +3922,8 @@ function renderPayments(filterYear) {
             <button class="payment-download" onclick="previewPaymentPDF(${idx}, '${yearFilter}')" title="${currentLang === 'nl' ? 'Bekijken' : 'Preview'}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function filterPayments() {
@@ -3934,6 +3989,7 @@ function resolvePayment(paymentIndex, filterYear) {
 
     const allPayments = [...filtered, ...annualStatements.filter(a => filterYear === 'all' || a.year.toString() === filterYear)];
     const sortedPayments = allPayments.sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
         if (a.type === 'annual' && b.type !== 'annual') return -1;
         if (a.type !== 'annual' && b.type === 'annual') return 1;
         const distA = Math.abs(new Date(a.sortDate) - new Date(today));
@@ -4568,7 +4624,7 @@ function getCmdPaletteCommands() {
     // Navigation — auteur dashboard
     if (isDashboard) {
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Start', hint: 'Dashboard overzicht', action: () => { document.querySelector('.tab-btn[data-tab="start"]')?.click(); } });
-        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Gegevens', hint: 'Persoonlijke informatie', action: () => { document.querySelector('.tab-btn[data-tab="info"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Profiel', hint: 'Persoonlijke informatie', action: () => { document.querySelector('.tab-btn[data-tab="info"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Contracten', hint: 'Actieve contracten', action: () => { document.querySelector('.tab-btn[data-tab="contracts"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Afrekeningen', hint: 'Royalty-afrekeningen', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Prognose', hint: 'Verwachte royalties', action: () => { document.querySelector('.tab-btn[data-tab="forecast"]')?.click(); } });
@@ -4576,6 +4632,47 @@ function getCmdPaletteCommands() {
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Exporteer afrekeningen', hint: 'Download als CSV', action: () => exportPaymentsCSV(), svg: 'download' });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Dark mode wisselen', hint: 'Schakel tussen licht en donker', action: () => toggleDarkMode() });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Uitloggen', hint: 'Sessie beëindigen', action: () => { closeCmdPalette(); logout(); } });
+
+        // Payment type filters
+        commands.push({ group: 'Afrekeningen', icon: 'nav', iconText: '', title: 'Bekijk Royalties', hint: 'Filter op royalty-afrekeningen', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); setTimeout(() => setPaymentTypeFilter('royalty'), 100); } });
+        commands.push({ group: 'Afrekeningen', icon: 'nav', iconText: '', title: 'Bekijk Nevenrechten', hint: 'Filter op nevenrechten', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); setTimeout(() => setPaymentTypeFilter('subsidiary'), 100); } });
+        commands.push({ group: 'Afrekeningen', icon: 'nav', iconText: '', title: 'Bekijk Foreign Rights', hint: 'Filter op foreign rights', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); setTimeout(() => setPaymentTypeFilter('foreign'), 100); } });
+
+        // Contract names
+        const author = getCurrentAuthor();
+        if (author && author.contracts) {
+            author.contracts.forEach((contract, i) => {
+                commands.push({
+                    group: 'Contracten',
+                    icon: 'nav',
+                    iconText: '',
+                    title: contract.name,
+                    hint: contract.number,
+                    action: () => { document.querySelector('.tab-btn[data-tab="contracts"]')?.click(); }
+                });
+            });
+        }
+
+        // FAQ questions
+        if (DATA.faq) {
+            DATA.faq.forEach((item, i) => {
+                commands.push({
+                    group: 'FAQ',
+                    icon: 'nav',
+                    iconText: '',
+                    title: item.q[currentLang],
+                    hint: currentLang === 'nl' ? 'Veelgestelde vraag' : 'Frequently asked question',
+                    action: () => {
+                        document.querySelector('.tab-btn[data-tab="faq"]')?.click();
+                        setTimeout(() => {
+                            const faqEl = document.getElementById('faq-' + i);
+                            if (faqEl && !faqEl.classList.contains('open')) faqEl.classList.add('open');
+                            faqEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 150);
+                    }
+                });
+            });
+        }
     }
 
     // Navigation — admin dashboard
@@ -5474,8 +5571,8 @@ async function tryLocalLogin(email, password, errorEl) {
 }
 
 async function logout() {
-    // Supabase logout if in Supabase mode
-    if (isSupabaseMode && supabaseClient) {
+    // Always sign out from Supabase to clear stored session tokens
+    if (supabaseClient) {
         await supabaseLogout();
     }
 
@@ -6606,15 +6703,26 @@ document.getElementById('importModal')?.addEventListener('click', function(e) {
 // ============================================
 
 async function restoreSession() {
-    if (!supabaseClient) return;
+    if (!supabaseClient) {
+        showPublicSite('home');
+        return;
+    }
 
     try {
         const { data: { session }, error } = await supabaseClient.auth.getSession();
-        if (error || !session) return;
+        if (error || !session) {
+            showPublicSite('home');
+            return;
+        }
 
         console.log('Restoring session for:', session.user.email);
         const authorData = await fetchAuthorProfile(session.user.id);
-        if (authorData.error) return;
+        if (authorData.error) {
+            // Session token exists but profile fetch failed — clear stale session
+            await supabaseClient.auth.signOut();
+            showPublicSite('home');
+            return;
+        }
 
         isSupabaseMode = true;
         currentAuthorData = authorData.data;
@@ -6633,6 +6741,7 @@ async function restoreSession() {
         }
     } catch (err) {
         console.error('Session restore error:', err);
+        showPublicSite('home');
     }
 }
 

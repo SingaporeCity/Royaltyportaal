@@ -517,6 +517,8 @@ body.dashboard-active .lang-toggle {
     color: var(--color-primary);
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    position: relative;
+    top: 0.5px;
 }
 
 [data-theme="dark"] .header-logo-divider {
@@ -1098,6 +1100,32 @@ body.dashboard-active .lang-toggle {
     border-radius: var(--radius-pill);
 }
 
+.contract-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.contract-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.contract-action-btn:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background: var(--color-primary-subtle);
+}
+
 /* Modal - Refined Overlay */
 .modal-overlay {
     position: fixed;
@@ -1477,6 +1505,20 @@ body.dashboard-active .lang-toggle {
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
+}
+
+.payments-year-header {
+    font-size: 0.82rem;
+    font-variation-settings: 'wght' 600;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 0.25rem 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.payments-year-header:first-child {
+    margin-top: 0;
 }
 
 .payment-item {

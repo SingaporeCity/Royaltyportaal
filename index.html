@@ -16,11 +16,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,75..125,100..1000&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='6' width='18' height='18' rx='3' fill='%23007460'/><rect x='12' y='8' width='18' height='18' rx='3' fill='%23009e86' opacity='.85'/></svg>">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Public Website -->
-    <div id="publicSite" class="hidden">
+    <div id="publicSite">
 
         <!-- Navigation Bar -->
         <nav class="public-nav" id="publicNav">
@@ -942,7 +943,7 @@
     </div>
 
     <!-- Login Page -->
-    <div class="login-container" id="loginPage">
+    <div class="login-container hidden" id="loginPage">
         <div class="login-page-inner">
             <!-- Branding Panel -->
             <div class="login-brand-panel">
@@ -1071,11 +1072,11 @@
             <div class="tabs-container">
                 <nav class="tabs-nav">
                     <button class="tab-btn active" data-tab="start"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12.71 2.29a1 1 0 00-1.42 0l-9 9a1 1 0 00.33 1.64A1 1 0 003 13h1v7a2 2 0 002 2h4v-5a1 1 0 011-1h2a1 1 0 011 1v5h4a2 2 0 002-2v-7h1a1 1 0 00.71-1.71z" fill="currentColor" opacity="0.15"/><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="tab_start">Start</span></button>
-                    <button class="tab-btn" data-tab="info"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="currentColor" opacity="0.1"/><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 20c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span data-i18n="tab_info">Gegevens</span></button>
                     <button class="tab-btn" data-tab="contracts"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="currentColor" opacity="0.1"/><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 15l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="tab_contracts">Contracten</span></button>
                     <button class="tab-btn" data-tab="payments"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="currentColor" opacity="0.1"/><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="15" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span><span data-i18n="tab_payments">Afrekeningen</span></button>
                     <button class="tab-btn" data-tab="forecast"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor" opacity="0.1"/><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><polyline points="7 14 10 10 13 13 17 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 8 17 8 17 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="tab_forecast">Prognose</span></button>
                     <button class="tab-btn" data-tab="faq"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.1"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="currentColor" stroke-width="1"/></svg></span><span data-i18n="tab_faq">FAQ</span></button>
+                    <button class="tab-btn" data-tab="info"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="currentColor" opacity="0.1"/><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 20c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span data-i18n="tab_info">Profiel</span></button>
                 </nav>
 
                 <!-- Start Tab -->
@@ -1133,37 +1134,6 @@
                                 <span class="academy-tile-cta">Bezoek site <span>&rarr;</span></span>
                             </div>
                         </a>
-                    </div>
-                </div>
-
-                <!-- Personal Info Tab -->
-                <div class="tab-content" id="tab-info">
-                    <div class="id-numbers-section">
-                        <div class="id-numbers-grid">
-                            <div class="id-number-item"><span class="id-label" data-i18n="label_vendor">Vendor ID</span><span class="id-value" id="infoVendorNumber"></span></div>
-                            <div class="id-number-item"><span class="id-label" data-i18n="label_alliant">Alliant ID</span><span class="id-value" id="infoAlliantNumber"></span></div>
-                        </div>
-                    </div>
-                    <div class="info-header">
-                        <h3 data-i18n="info_title">Uw gegevens</h3>
-                        <button class="edit-btn" id="editInfoBtn">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                            <span data-i18n="edit_btn">Bewerken</span>
-                        </button>
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_firstname">Voornaam</div><div class="info-card-value" id="infoFirstName"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_initials">Voorletters</div><div class="info-card-value" id="infoInitialsField"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_lastname">Achternaam</div><div class="info-card-value" id="infoLastName"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_bsn">BSN</div><div class="info-card-value" id="infoBSN"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_email">E-mailadres</div><div class="info-card-value" id="infoEmail"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_address">Adres</div><div class="info-card-value" id="infoAddress"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_postcode">Postcode</div><div class="info-card-value" id="infoPostcode"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_country">Land</div><div class="info-card-value" id="infoCountry"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_birthdate">Geboortedatum</div><div class="info-card-value" id="infoBirthDate"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_phone">Telefoonnummer</div><div class="info-card-value" id="infoPhone"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_bank">IBAN</div><div class="info-card-value" id="infoBankAccount"></div></div>
-                        <div class="info-card"><div class="info-card-label" data-i18n="label_bic">BIC</div><div class="info-card-value" id="infoBIC"></div></div>
                     </div>
                 </div>
 
@@ -1238,6 +1208,37 @@
                         <h3 data-i18n="faq_title">Veelgestelde vragen</h3>
                     </div>
                     <div class="faq-list" id="faqList"><div class="skeleton-faq"><div class="skeleton-line w60"></div></div><div class="skeleton-faq"><div class="skeleton-line w50"></div></div><div class="skeleton-faq"><div class="skeleton-line w70"></div></div><div class="skeleton-faq"><div class="skeleton-line w45"></div></div></div>
+                </div>
+
+                <!-- Profile Tab (was: Gegevens) -->
+                <div class="tab-content" id="tab-info">
+                    <div class="id-numbers-section">
+                        <div class="id-numbers-grid">
+                            <div class="id-number-item"><span class="id-label" data-i18n="label_vendor">Vendor ID</span><span class="id-value" id="infoVendorNumber"></span></div>
+                            <div class="id-number-item"><span class="id-label" data-i18n="label_alliant">Alliant ID</span><span class="id-value" id="infoAlliantNumber"></span></div>
+                        </div>
+                    </div>
+                    <div class="info-header">
+                        <h3 data-i18n="info_title">Uw gegevens</h3>
+                        <button class="edit-btn" id="editInfoBtn">
+                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            <span data-i18n="edit_btn">Bewerken</span>
+                        </button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_firstname">Voornaam</div><div class="info-card-value" id="infoFirstName"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_initials">Voorletters</div><div class="info-card-value" id="infoInitialsField"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_lastname">Achternaam</div><div class="info-card-value" id="infoLastName"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bsn">BSN</div><div class="info-card-value" id="infoBSN"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_email">E-mailadres</div><div class="info-card-value" id="infoEmail"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_address">Adres</div><div class="info-card-value" id="infoAddress"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_postcode">Postcode</div><div class="info-card-value" id="infoPostcode"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_country">Land</div><div class="info-card-value" id="infoCountry"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_birthdate">Geboortedatum</div><div class="info-card-value" id="infoBirthDate"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_phone">Telefoonnummer</div><div class="info-card-value" id="infoPhone"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bank">IBAN</div><div class="info-card-value" id="infoBankAccount"></div></div>
+                        <div class="info-card"><div class="info-card-label" data-i18n="label_bic">BIC</div><div class="info-card-value" id="infoBIC"></div></div>
+                    </div>
                 </div>
             </div>
             <!-- Dashboard footer -->
