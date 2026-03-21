@@ -3669,7 +3669,7 @@ function initPredictions() {
     // Build horizontal bar rows (historical + forecast)
     const allYearData = sortedYears.map(y => ({ year: y, amount: yearTotals[y], type: 'historical' }));
     allYearData.push({ year: forecastYear, amount: mid, min, max, type: 'forecast' });
-    const maxAmount = Math.max(...allYearData.map(d => d.type === 'forecast' ? d.max : d.amount));
+    const maxAmount = Math.max(...allYearData.map(d => d.type === 'forecast' ? d.max : d.amount)) * 1.25;
 
     const barsHTML = allYearData.map(d => {
         const pct = maxAmount > 0 ? (d.amount / maxAmount) * 100 : 0;
