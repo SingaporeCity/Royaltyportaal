@@ -5494,8 +5494,23 @@ async function logout() {
     showLoginPage();
 }
 
-document.getElementById('logoutBtn').addEventListener('click', logout);
-document.getElementById('adminLogoutBtn').addEventListener('click', logout);
+document.getElementById('logoutBtn')?.addEventListener('click', logout);
+document.getElementById('adminLogoutBtn')?.addEventListener('click', logout);
+
+// Profile menu toggle
+function toggleProfileMenu() {
+    const menu = document.getElementById('profileMenu');
+    if (menu) menu.classList.toggle('active');
+}
+
+// Close profile menu on outside click
+document.addEventListener('click', function(e) {
+    const profile = document.getElementById('headerProfile');
+    const menu = document.getElementById('profileMenu');
+    if (menu && profile && !profile.contains(e.target)) {
+        menu.classList.remove('active');
+    }
+});
 
 // Tabs
 document.querySelectorAll('.tab-btn').forEach(btn => {
