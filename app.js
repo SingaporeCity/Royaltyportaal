@@ -6003,17 +6003,17 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Scroll so tabs-nav sits just below the sticky header (skip during tour)
+        // Scroll down to tabs if they're below the viewport (never scroll up)
         if (!_tourActive) {
             requestAnimationFrame(() => {
                 const tabsContainer = document.querySelector('.tabs-container');
                 const header = document.querySelector('.dashboard-header');
                 if (tabsContainer && header) {
                     const headerHeight = header.offsetHeight;
-                    const containerRect = tabsContainer.getBoundingClientRect();
-                    const targetTop = containerRect.top + window.scrollY - headerHeight - 8;
-                    const currentTop = window.scrollY;
-                    if (Math.abs(targetTop - currentTop) > 20) {
+                    const containerTop = tabsContainer.getBoundingClientRect().top;
+                    // Only scroll if tabs are below the visible area
+                    if (containerTop > window.innerHeight * 0.6) {
+                        const targetTop = containerTop + window.scrollY - headerHeight - 8;
                         window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
                     }
                 }
