@@ -2956,7 +2956,7 @@ body.dashboard-active .lang-toggle {
 .yr-card {
     background: linear-gradient(135deg, #007460 0%, #004a3f 40%, #003530 100%);
     border-radius: var(--radius-lg);
-    padding: 2.25rem 2.5rem 2rem;
+    padding: 1.5rem 2rem 1.25rem;
     color: white;
     position: relative;
     overflow: hidden;
@@ -2995,7 +2995,7 @@ body.dashboard-active .lang-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.75rem;
+    margin-bottom: 0.75rem;
     position: relative;
     z-index: 1;
 }
@@ -3025,7 +3025,7 @@ body.dashboard-active .lang-toggle {
 
 .yr-hero {
     text-align: center;
-    padding: 0.5rem 0 2rem;
+    padding: 0.25rem 0 1.25rem;
     position: relative;
     z-index: 1;
 }
@@ -3041,12 +3041,12 @@ body.dashboard-active .lang-toggle {
 
 .yr-hero-value {
     font-family: var(--font-heading);
-    font-size: 3.25rem;
+    font-size: 2.5rem;
     font-variation-settings: 'wght' 700;
     letter-spacing: -0.03em;
     line-height: 1;
     color: white;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .yr-hero-change {
@@ -3091,7 +3091,7 @@ body.dashboard-active .lang-toggle {
 
 .yr-stat {
     background: rgba(255,255,255,0.04);
-    padding: 1.1rem 1rem;
+    padding: 0.75rem 0.75rem;
     text-align: center;
     transition: background 0.2s;
 }
@@ -3102,12 +3102,12 @@ body.dashboard-active .lang-toggle {
 
 .yr-stat-value {
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-variation-settings: 'wght' 700;
     color: white;
     letter-spacing: -0.02em;
     line-height: 1.2;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.15rem;
 }
 
 .yr-stat-label {
@@ -3130,8 +3130,8 @@ body.dashboard-active .lang-toggle {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 1.25rem;
-    font-size: 0.7rem;
+    margin-top: 0.75rem;
+    font-size: 0.65rem;
     color: rgba(255,255,255,0.35);
     position: relative;
     z-index: 1;
@@ -3142,8 +3142,8 @@ body.dashboard-active .lang-toggle {
 }
 
 @media (max-width: 768px) {
-    .yr-card { padding: 1.75rem 1.5rem 1.5rem; }
-    .yr-hero-value { font-size: 2.5rem; }
+    .yr-card { padding: 1.25rem 1.25rem 1rem; }
+    .yr-hero-value { font-size: 2rem; }
     .yr-stats { grid-template-columns: repeat(2, 1fr); }
     .yr-stats-6 { grid-template-columns: repeat(2, 1fr); }
 }
