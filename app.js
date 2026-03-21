@@ -3494,6 +3494,7 @@ function renderContracts(searchQuery) {
         statsEl.innerHTML = `<div class="contracts-stats-grid">
             <div class="contracts-stat"><span class="contracts-stat-value">${author.contracts.length}</span><span class="contracts-stat-label">${nl ? 'Actieve contracten' : 'Active contracts'}</span></div>
             <div class="contracts-stat"><span class="contracts-stat-value">11%</span><span class="contracts-stat-label">${nl ? 'Gem. royalty' : 'Avg. royalty'}</span></div>
+            <div class="contracts-stat"><span class="contracts-stat-value">01-01-2023</span><span class="contracts-stat-label">${nl ? 'Eerste contract' : 'First contract'}</span></div>
         </div>`;
     } else if (statsEl) {
         statsEl.innerHTML = '';
