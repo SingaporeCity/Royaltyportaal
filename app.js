@@ -5072,17 +5072,34 @@ function startGuidedTour() {
     _tourStep = 0;
     _tourActive = true;
     window.scrollTo({ top: 0 });
+
+    // Store original welcome content and replace with tour panel
+    const welcome = document.querySelector('.welcome-section');
+    if (welcome) {
+        welcome._originalHTML = welcome.innerHTML;
+        welcome.classList.add('tour-mode');
+    }
+
+    // Show overlay (dims everything except highlighted elements)
     document.getElementById('tourOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
     showTourStep();
 }
 
 function endGuidedTour() {
     _tourActive = false;
     document.getElementById('tourOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-    // Remove highlight from all tabs
+
+    // Restore welcome section
+    const welcome = document.querySelector('.welcome-section');
+    if (welcome && welcome._originalHTML) {
+        welcome.innerHTML = welcome._originalHTML;
+        welcome.classList.remove('tour-mode');
+    }
+
+    // Remove highlights
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tour-highlight'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('tour-highlight-content'));
+    document.querySelector('.tabs-nav')?.classList.remove('tour-highlight-nav');
 }
 
 function tourNext() {
@@ -5107,57 +5124,45 @@ function showTourStep() {
     const step = steps[_tourStep];
     const nl = currentLang === 'nl';
 
-    // Update tooltip content
-    document.getElementById('tourStepIndicator').textContent = `${_tourStep + 1} / ${steps.length}`;
-    document.getElementById('tourTitle').textContent = step.title;
-    document.getElementById('tourDesc').textContent = step.desc;
+    // Render tour panel in welcome section
+    const welcome = document.querySelector('.welcome-section');
+    if (welcome) {
+        welcome.innerHTML = `
+            <div class="tour-panel">
+                <div class="tour-panel-header">
+                    <span class="tour-panel-step">${_tourStep + 1} / ${steps.length}</span>
+                    <span class="tour-panel-badge">${nl ? 'Rondleiding' : 'Guided Tour'}</span>
+                </div>
+                <h2 class="tour-panel-title">${step.title}</h2>
+                <p class="tour-panel-desc">${step.desc}</p>
+                <div class="tour-panel-footer">
+                    <button class="tour-btn-skip" onclick="endGuidedTour()">${nl ? 'Sluiten' : 'Close'}</button>
+                    <div class="tour-panel-nav">
+                        <button class="tour-btn-prev" onclick="tourPrev()" ${_tourStep === 0 ? 'style="visibility:hidden"' : ''}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button class="tour-btn-next" onclick="tourNext()">${_tourStep === steps.length - 1 ? (nl ? 'Afronden' : 'Finish') : (nl ? 'Volgende' : 'Next')}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
-    // Button labels
-    document.getElementById('tourSkipBtn').textContent = nl ? 'Sluiten' : 'Close';
-    const nextBtn = document.getElementById('tourNextBtn');
-    nextBtn.textContent = _tourStep === steps.length - 1
-        ? (nl ? 'Afronden' : 'Finish')
-        : (nl ? 'Volgende' : 'Next');
-
-    // Prev button visibility
-    document.getElementById('tourPrevBtn').style.visibility = _tourStep === 0 ? 'hidden' : 'visible';
-
-    // Highlight the target tab
+    // Highlight the target tab button
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tour-highlight'));
     const targetTab = document.querySelector(`.tab-btn[data-tab="${step.tab}"]`);
     if (targetTab) {
         targetTab.classList.add('tour-highlight');
-        // Also activate this tab to show its content
         targetTab.click();
     }
 
-    // Position spotlight on the tab button
-    positionSpotlight(targetTab);
-}
+    // Highlight the active tab content
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('tour-highlight-content'));
+    const activeContent = document.getElementById('tab-' + step.tab);
+    if (activeContent) activeContent.classList.add('tour-highlight-content');
 
-function positionSpotlight(el) {
-    const spotlight = document.getElementById('tourSpotlight');
-    const tooltip = document.getElementById('tourTooltip');
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-    const pad = 6;
-
-    spotlight.style.top = (rect.top - pad) + 'px';
-    spotlight.style.left = (rect.left - pad) + 'px';
-    spotlight.style.width = (rect.width + pad * 2) + 'px';
-    spotlight.style.height = (rect.height + pad * 2) + 'px';
-
-    // Position tooltip below the tabs nav
-    const tabsNav = document.querySelector('.tabs-nav');
-    const navRect = tabsNav ? tabsNav.getBoundingClientRect() : rect;
-    tooltip.style.top = (navRect.bottom + 16) + 'px';
-
-    // Center tooltip horizontally, but keep it on screen
-    const tooltipWidth = tooltip.offsetWidth || 380;
-    let left = rect.left + rect.width / 2 - tooltipWidth / 2;
-    left = Math.max(16, Math.min(left, window.innerWidth - tooltipWidth - 16));
-    tooltip.style.left = left + 'px';
+    // Highlight the tabs nav
+    document.querySelector('.tabs-nav')?.classList.add('tour-highlight-nav');
 }
 
 // Close tour on Escape
@@ -5165,11 +5170,6 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && _tourActive) {
         endGuidedTour();
     }
-});
-
-// Close tour on overlay click (not on tooltip or spotlight)
-document.getElementById('tourOverlay')?.addEventListener('click', function(e) {
-    if (e.target === this) endGuidedTour();
 });
 
 // ============================================
