@@ -6571,10 +6571,10 @@ function initDarkMode() {
 
 initDarkMode();
 
-// Initialize public site content on load
+// Initialize public site content (preload, don't show)
 initPublicSite();
 
-// Restore session if user was previously logged in
+// Restore session — if logged in, go to dashboard; otherwise stay on login
 restoreSession();
 
 console.log('Script loaded successfully. Available authors:', Object.keys(DATA.authors));
