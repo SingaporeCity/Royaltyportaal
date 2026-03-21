@@ -3493,21 +3493,16 @@ function renderContracts() {
     }
 
     // Summary cards
-    const totalPaid = (author.payments || []).reduce((s, p) => s + p.amount, 0);
     if (summaryEl) {
         summaryEl.innerHTML = `
-            <div class="contracts-summary-grid">
+            <div class="contracts-summary-grid contracts-summary-grid-2">
                 <div class="contracts-summary-item">
                     <div class="contracts-summary-value">${author.contracts.length}</div>
                     <div class="contracts-summary-label">${nl ? 'Actieve contracten' : 'Active contracts'}</div>
                 </div>
                 <div class="contracts-summary-item">
                     <div class="contracts-summary-value">11%</div>
-                    <div class="contracts-summary-label">${nl ? 'Royaltypercentage' : 'Royalty percentage'}</div>
-                </div>
-                <div class="contracts-summary-item">
-                    <div class="contracts-summary-value">${formatCurrency(totalPaid)}</div>
-                    <div class="contracts-summary-label">${nl ? 'Totaal uitgekeerd' : 'Total paid'}</div>
+                    <div class="contracts-summary-label">${nl ? 'Gem. royaltypercentage' : 'Avg. royalty percentage'}</div>
                 </div>
             </div>
         `;
@@ -3525,27 +3520,6 @@ function renderContracts() {
         </tr>
     `).join('');
 
-    // Info card
-    if (infoEl) {
-        infoEl.innerHTML = `
-            <div class="contracts-info">
-                <div class="contracts-info-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </div>
-                <div class="contracts-info-content">
-                    <h4>${nl ? 'Over uw contracten' : 'About your contracts'}</h4>
-                    <p>${nl
-                        ? 'Uw royaltypercentage wordt berekend over de netto-omzet per titel. Contracten worden jaarlijks verlengd tenzij anders overeengekomen. Bij vragen over uw contract of royaltyberekening kunt u contact opnemen met het rights-team.'
-                        : 'Your royalty percentage is calculated on net revenue per title. Contracts are renewed annually unless otherwise agreed. For questions about your contract or royalty calculation, please contact the rights team.'
-                    }</p>
-                    <a href="mailto:rights@noordhoff.nl" class="contracts-info-link">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
-                        rights@noordhoff.nl
-                    </a>
-                </div>
-            </div>
-        `;
-    }
 }
 
 function generateContractPDFDoc(contract, author) {
