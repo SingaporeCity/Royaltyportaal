@@ -3644,6 +3644,7 @@ function initPredictions() {
     if (!author || !author.prediction) return;
     const container = document.getElementById('forecastUnified');
     if (!container) return;
+    const nl = currentLang === 'nl';
 
     const { min, max } = author.prediction;
     const mid = Math.round((min + max) / 2);
