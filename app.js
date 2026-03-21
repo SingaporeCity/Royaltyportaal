@@ -2199,7 +2199,7 @@ const TRANSLATIONS = {
         login_error: 'Ongeldig e-mailadres of wachtwoord.', email_label: 'E-mailadres', password_label: 'Wachtwoord',
         login_btn: 'Inloggen', forgot_password: 'Wachtwoord vergeten?', author: 'Auteur', logout_btn: 'Uitloggen', greeting: 'Welkom',
         dashboard_subtitle: 'Hier vindt u een overzicht van uw royalty-informatie',
-        tab_info: 'Profiel', tab_contracts: 'Contracten', tab_payments: 'Afrekeningen', tab_forecast: 'Prognose', tab_faq: 'FAQ',
+        tab_info: 'Profiel', tab_contracts: 'Contracten', tab_payments: 'Afrekeningen', tab_expenses: 'Declaraties', tab_forecast: 'Prognose', tab_faq: 'FAQ',
         id_numbers_title: 'Auteurs ID', label_vendor: 'Vendor ID', label_alliant: 'Alliant ID',
         info_title: 'Uw gegevens', edit_btn: 'Bewerken', label_firstname: 'Voornaam', label_lastname: 'Achternaam',
         label_initials: 'Voorletters', label_bsn: 'BSN', label_bic: 'BIC',
@@ -2212,6 +2212,12 @@ const TRANSLATIONS = {
         prediction_disclaimer: 'Deze prognose is gebaseerd op de omzet van het prognosejaar. Hierbij worden de contracten, royaltypercentages en bijdragersaandelen van het jaar voor het prognosejaar gebruikt, aangezien deze waarden voor het huidige jaar nog niet definitief zijn.',
         edit_info_title: 'Profiel bewerken', cancel_btn: 'Annuleren', save_btn: 'Opslaan', total_paid: 'Totaal uitgekeerd',
         faq_title: 'Veelgestelde vragen',
+        expenses_title: 'Declaraties', expenses_vendor_notice: 'Vermeld uw Vendor ID op de factuur:',
+        expenses_submit_title: 'Nieuwe declaratie indienen', expenses_description: 'Omschrijving', expenses_amount: 'Bedrag (€)',
+        expenses_upload_title: 'Sleep uw factuur hierheen', expenses_upload_or: 'of', expenses_upload_browse: 'kies een bestand',
+        expenses_upload_hint: 'Alleen PDF — maximaal 10 MB', expenses_submit_btn: 'Declaratie indienen',
+        expenses_history_title: 'Ingediende declaraties', expenses_status_pending: 'In behandeling', expenses_status_approved: 'Goedgekeurd', expenses_status_rejected: 'Afgewezen',
+        expenses_empty: 'Nog geen declaraties ingediend', expenses_success: 'Declaratie succesvol ingediend',
         verify_password_title: 'Wachtwoord bevestigen', verify_password_desc: 'Voor het wijzigen van uw bankgegevens is een wachtwoordbevestiging vereist.',
         password_incorrect: 'Onjuist wachtwoord', confirm_btn: 'Bevestigen',
         iban_invalid: 'Ongeldig IBAN nummer', bank_change_pending: 'Uw bankgegevens wijziging is ingediend ter goedkeuring door de administrator.',
@@ -2581,7 +2587,7 @@ const TRANSLATIONS = {
         login_error: 'Invalid email or password.', email_label: 'Email Address', password_label: 'Password',
         login_btn: 'Sign In', forgot_password: 'Forgot password?', author: 'Author', logout_btn: 'Sign Out', greeting: 'Welcome',
         dashboard_subtitle: 'Here is an overview of your royalty information',
-        tab_info: 'Profile', tab_contracts: 'Contracts', tab_payments: 'Statements', tab_forecast: 'Forecast', tab_faq: 'FAQ',
+        tab_info: 'Profile', tab_contracts: 'Contracts', tab_payments: 'Statements', tab_expenses: 'Expenses', tab_forecast: 'Forecast', tab_faq: 'FAQ',
         id_numbers_title: 'Author ID', label_vendor: 'Vendor ID', label_alliant: 'Alliant ID',
         info_title: 'Your Information', edit_btn: 'Edit', label_firstname: 'First Name', label_lastname: 'Last Name',
         label_initials: 'Initials', label_bsn: 'BSN', label_bic: 'BIC',
@@ -2594,6 +2600,12 @@ const TRANSLATIONS = {
         prediction_disclaimer: "This forecast is based on the revenue of the forecast year. The contracts, royalty percentages and contributor shares from the year before the forecast year are used, as these values are not yet finalized for the current year.",
         edit_info_title: 'Edit Profile', cancel_btn: 'Cancel', save_btn: 'Save', total_paid: 'Total Paid',
         faq_title: 'Frequently Asked Questions',
+        expenses_title: 'Expenses', expenses_vendor_notice: 'Include your Vendor ID on the invoice:',
+        expenses_submit_title: 'Submit new expense', expenses_description: 'Description', expenses_amount: 'Amount (€)',
+        expenses_upload_title: 'Drop your invoice here', expenses_upload_or: 'or', expenses_upload_browse: 'choose a file',
+        expenses_upload_hint: 'PDF only — max 10 MB', expenses_submit_btn: 'Submit expense',
+        expenses_history_title: 'Submitted expenses', expenses_status_pending: 'Pending', expenses_status_approved: 'Approved', expenses_status_rejected: 'Rejected',
+        expenses_empty: 'No expenses submitted yet', expenses_success: 'Expense submitted successfully',
         verify_password_title: 'Confirm Password', verify_password_desc: 'Password confirmation is required to change your bank details.',
         password_incorrect: 'Incorrect password', confirm_btn: 'Confirm',
         iban_invalid: 'Invalid IBAN number', bank_change_pending: 'Your bank details change has been submitted for administrator approval.',
@@ -3053,6 +3065,7 @@ function initAuthorDashboard() {
         renderPayments('2024');
         renderContracts();
         renderFAQ();
+        initExpenses();
         loadEvents();
         loadBlogPosts();
         updatePaymentBadge();
@@ -3949,6 +3962,173 @@ function toggleFAQ(index) {
     document.getElementById('faq-' + index).classList.toggle('open');
 }
 
+// ============================================
+// EXPENSES (Declaraties)
+// ============================================
+
+let _submittedExpenses = JSON.parse(localStorage.getItem('expenses') || '[]');
+let _selectedExpenseFile = null;
+
+function initExpenses() {
+    const author = getCurrentAuthor();
+    if (!author) return;
+
+    // Show vendor ID
+    const vendorEl = document.getElementById('expenseVendorId');
+    if (vendorEl) vendorEl.textContent = author.info.vendorNumber || '—';
+
+    // Drag & drop
+    const dropzone = document.getElementById('expenseDropzone');
+    const fileInput = document.getElementById('expenseFile');
+    if (!dropzone || !fileInput) return;
+
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) handleExpenseFile(file);
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files[0]) handleExpenseFile(fileInput.files[0]);
+    });
+
+    // Form submit
+    document.getElementById('expenseForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitExpense();
+    });
+
+    renderExpenseHistory();
+    updateExpenseSubmitBtn();
+}
+
+function handleExpenseFile(file) {
+    if (file.type !== 'application/pdf') {
+        alert(currentLang === 'nl' ? 'Alleen PDF-bestanden zijn toegestaan.' : 'Only PDF files are allowed.');
+        return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+        alert(currentLang === 'nl' ? 'Bestand is te groot. Maximaal 10 MB.' : 'File is too large. Maximum 10 MB.');
+        return;
+    }
+
+    _selectedExpenseFile = file;
+    const content = document.getElementById('expenseDropzoneContent');
+    content.innerHTML = `
+        <div class="expense-file-selected">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="16 13 12 17 8 13"/><line x1="12" y1="12" x2="12" y2="17"/></svg>
+            <span class="expense-file-name">${file.name}</span>
+            <span class="expense-file-size">${(file.size / 1024).toFixed(0)} KB</span>
+            <button type="button" class="expense-file-remove" onclick="removeExpenseFile()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+    `;
+    document.getElementById('expenseDropzone').classList.add('has-file');
+    updateExpenseSubmitBtn();
+}
+
+function removeExpenseFile() {
+    _selectedExpenseFile = null;
+    document.getElementById('expenseFile').value = '';
+    document.getElementById('expenseDropzone').classList.remove('has-file');
+    document.getElementById('expenseDropzoneContent').innerHTML = `
+        <div class="expense-dropzone-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <p class="expense-dropzone-title">${currentLang === 'nl' ? 'Sleep uw factuur hierheen' : 'Drop your invoice here'}</p>
+        <p class="expense-dropzone-sub">${currentLang === 'nl' ? 'of' : 'or'} <button type="button" class="expense-browse-btn" onclick="document.getElementById('expenseFile').click()">${currentLang === 'nl' ? 'kies een bestand' : 'choose a file'}</button></p>
+        <p class="expense-dropzone-hint">${currentLang === 'nl' ? 'Alleen PDF — maximaal 10 MB' : 'PDF only — max 10 MB'}</p>
+    `;
+    updateExpenseSubmitBtn();
+}
+
+function updateExpenseSubmitBtn() {
+    const desc = document.getElementById('expenseDescription')?.value.trim();
+    const amount = document.getElementById('expenseAmount')?.value;
+    const btn = document.getElementById('expenseSubmitBtn');
+    if (btn) btn.disabled = !desc || !amount || !_selectedExpenseFile;
+}
+
+// Live validation on form fields
+document.getElementById('expenseDescription')?.addEventListener('input', updateExpenseSubmitBtn);
+document.getElementById('expenseAmount')?.addEventListener('input', updateExpenseSubmitBtn);
+
+function submitExpense() {
+    const author = getCurrentAuthor();
+    if (!author || !_selectedExpenseFile) return;
+
+    const expense = {
+        id: Date.now(),
+        description: document.getElementById('expenseDescription').value.trim(),
+        amount: parseFloat(document.getElementById('expenseAmount').value),
+        fileName: _selectedExpenseFile.name,
+        fileSize: _selectedExpenseFile.size,
+        vendorNumber: author.info.vendorNumber || '',
+        date: new Date().toISOString().split('T')[0],
+        status: 'pending'
+    };
+
+    _submittedExpenses.unshift(expense);
+    localStorage.setItem('expenses', JSON.stringify(_submittedExpenses));
+
+    // Reset form
+    document.getElementById('expenseDescription').value = '';
+    document.getElementById('expenseAmount').value = '';
+    removeExpenseFile();
+
+    // Show success feedback
+    const btn = document.getElementById('expenseSubmitBtn');
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span>${currentLang === 'nl' ? 'Ingediend!' : 'Submitted!'}</span>`;
+    btn.classList.add('success');
+    setTimeout(() => {
+        btn.classList.remove('success');
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span>${currentLang === 'nl' ? 'Declaratie indienen' : 'Submit expense'}</span>`;
+    }, 2000);
+
+    renderExpenseHistory();
+}
+
+function renderExpenseHistory() {
+    const list = document.getElementById('expenseHistoryList');
+    if (!list) return;
+
+    if (_submittedExpenses.length === 0) {
+        list.innerHTML = `<div class="expense-empty">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.25"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <p>${currentLang === 'nl' ? 'Nog geen declaraties ingediend' : 'No expenses submitted yet'}</p>
+        </div>`;
+        return;
+    }
+
+    const statusConfig = {
+        pending: { nl: 'In behandeling', en: 'Pending', class: 'pending' },
+        approved: { nl: 'Goedgekeurd', en: 'Approved', class: 'approved' },
+        rejected: { nl: 'Afgewezen', en: 'Rejected', class: 'rejected' }
+    };
+
+    list.innerHTML = _submittedExpenses.map(exp => {
+        const st = statusConfig[exp.status] || statusConfig.pending;
+        const dateStr = new Date(exp.date).toLocaleDateString(currentLang === 'nl' ? 'nl-NL' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        return `<div class="expense-item">
+            <div class="expense-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="expense-item-details">
+                <div class="expense-item-title">${exp.description}</div>
+                <div class="expense-item-meta">${dateStr} · ${exp.fileName}</div>
+            </div>
+            <div class="expense-item-right">
+                <div class="expense-item-amount">${formatCurrency(exp.amount)}</div>
+                <span class="expense-status-badge ${st.class}">${st[currentLang]}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
 // Resolve payment object from index + filter (shared helper)
 function resolvePayment(paymentIndex, filterYear) {
     const author = getCurrentAuthor();
@@ -4616,6 +4796,7 @@ function getCmdPaletteCommands() {
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Profiel', hint: 'Persoonlijke informatie', action: () => { document.querySelector('.tab-btn[data-tab="info"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Contracten', hint: 'Actieve contracten', action: () => { document.querySelector('.tab-btn[data-tab="contracts"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Afrekeningen', hint: 'Royalty-afrekeningen', action: () => { document.querySelector('.tab-btn[data-tab="payments"]')?.click(); } });
+        commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Declaraties', hint: 'Declaratie indienen', action: () => { document.querySelector('.tab-btn[data-tab="expenses"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'Prognose', hint: 'Verwachte royalties', action: () => { document.querySelector('.tab-btn[data-tab="forecast"]')?.click(); } });
         commands.push({ group: 'Navigatie', icon: 'nav', iconText: '', title: 'FAQ', hint: 'Veelgestelde vragen', action: () => { document.querySelector('.tab-btn[data-tab="faq"]')?.click(); } });
         commands.push({ group: 'Acties', icon: 'action', iconText: '', title: 'Exporteer afrekeningen', hint: 'Download als CSV', action: () => exportPaymentsCSV(), svg: 'download' });
