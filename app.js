@@ -3256,10 +3256,6 @@ function renderYearReview(payments, contracts, prediction) {
                     <div class="yr-stat-value">${contracts.length}</div>
                     <div class="yr-stat-label">Actieve contracten</div>
                 </div>
-                <div class="yr-stat">
-                    <div class="yr-stat-value">${yearsActive > 0 ? yearsActive : '1'}</div>
-                    <div class="yr-stat-label">Jaar als auteur</div>
-                </div>
             </div>
         </div>
     `;

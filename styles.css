@@ -518,7 +518,7 @@ body.dashboard-active .lang-toggle {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     position: relative;
-    top: 0.5px;
+    top: 1px;
 }
 
 [data-theme="dark"] .header-logo-divider {
