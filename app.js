@@ -3262,7 +3262,7 @@ function renderYearReview(payments, contracts, prediction) {
                     ${lastPayment ? `<div class="yr-stat-sub">${lastPayment.date[currentLang]}</div>` : ''}
                 </div>
                 <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
+                    <div class="yr-stat-value" id="yrForecast">${prediction.min > 0 ? formatCurrency(prediction.min) + ' — ' + formatCurrency(prediction.max) : '—'}</div>
                     <div class="yr-stat-label">${currentLang === 'nl' ? `Verwacht over ${forecastYear}` : `Expected for ${forecastYear}`}</div>
                 </div>
             </div>
@@ -3274,7 +3274,6 @@ function renderYearReview(payments, contracts, prediction) {
     if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
     if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
-    if (mid > 0) animateCounter('yrForecast', mid, true, 600);
 
     // Store yearTotals for the dropdown recalc
     container._yearTotals = yearTotals;
@@ -3677,19 +3676,15 @@ function initPredictions() {
         if (d.type === 'forecast') {
             const minPct = maxAmount > 0 ? (d.min / maxAmount) * 100 : 0;
             const maxPct = maxAmount > 0 ? (d.max / maxAmount) * 100 : 0;
-            const midPct = pct;
             return `<div class="fc-bar-row fc-bar-forecast">
                 <span class="fc-bar-year">${d.year}</span>
                 <div class="fc-bar-track">
                     <div class="fc-bar-fill fc-bar-fill-light" style="width:${maxPct}%"></div>
                     <div class="fc-bar-range" style="left:${minPct}%;width:${maxPct - minPct}%"></div>
-                    <div class="fc-bar-mid" style="left:${midPct}%"></div>
+                    <div class="fc-bar-marker fc-bar-marker-min" style="left:${minPct}%"></div>
+                    <div class="fc-bar-marker fc-bar-marker-max" style="left:${maxPct}%"></div>
                 </div>
-                <span class="fc-bar-amount">${formatCurrency(d.amount)}</span>
-            </div>
-            <div class="fc-bar-range-labels" style="margin-left:calc(48px + 1rem);">
-                <span style="position:relative;left:${minPct}%">${formatCurrency(d.min)} <em>${nl ? 'conservatief' : 'conservative'}</em></span>
-                <span style="position:relative;left:${minPct}%">${formatCurrency(d.max)} <em>${nl ? 'optimistisch' : 'optimistic'}</em></span>
+                <span class="fc-bar-amount">${formatCurrency(d.min)} — ${formatCurrency(d.max)}</span>
             </div>`;
         }
         return `<div class="fc-bar-row">
@@ -3705,15 +3700,7 @@ function initPredictions() {
         <div class="fc-hero-card">
             <div class="fc-hero-content">
                 <div class="fc-hero-eyebrow">${nl ? 'Prognose' : 'Forecast'} ${forecastYear}</div>
-                <div class="fc-value" id="fcValue">${formatCurrency(mid)}</div>
                 <div class="fc-hero-sub">${nl ? 'Verwachte royalties' : 'Expected royalties'}</div>
-                ${changeHTML}
-            </div>
-            <div class="fc-hero-side">
-                <div class="fc-payout-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    ${nl ? 'Uitbetaling maart' : 'Payout March'} ${payoutYear}
-                </div>
                 <div class="fc-hero-range">
                     <div class="fc-hero-range-item">
                         <span class="fc-hero-range-value">${formatCurrency(min)}</span>
@@ -3724,6 +3711,13 @@ function initPredictions() {
                         <span class="fc-hero-range-value">${formatCurrency(max)}</span>
                         <span class="fc-hero-range-label">${nl ? 'Optimistisch' : 'Optimistic'}</span>
                     </div>
+                </div>
+                ${changeHTML}
+            </div>
+            <div class="fc-hero-side">
+                <div class="fc-payout-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    ${nl ? 'Uitbetaling maart' : 'Payout March'} ${payoutYear}
                 </div>
             </div>
         </div>
