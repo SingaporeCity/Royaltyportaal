@@ -5956,6 +5956,15 @@ document.getElementById('modalSave').addEventListener('click', async function() 
             }
         }
 
+        // Validate postcode (Dutch format: 1234 AB)
+        if (newPostcode) {
+            const postcodePattern = /^\d{4}\s?[A-Za-z]{2}$/;
+            if (!postcodePattern.test(newPostcode)) {
+                alert(currentLang === 'nl' ? 'Ongeldige postcode. Gebruik het formaat 1234 AB.' : 'Invalid postal code. Use format 1234 AB.');
+                return;
+            }
+        }
+
         // Validate IBAN if changed
         if (newBank && newBank !== author.info.bankAccount) {
             if (!validateIBAN(newBank)) {
