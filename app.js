@@ -3248,7 +3248,8 @@ function renderYearReview(payments, contracts, prediction) {
             <div class="yr-stats yr-stats-3">
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrTotalAllTime">${formatCurrency(totalAllTime)}</div>
-                    <div class="yr-stat-label">${currentLang === 'nl' ? 'Totaal vanaf' : 'Total from'} <select class="yr-from-select" id="yrFromYear" onchange="updateTotalFrom()">${sortedYears.map(y => `<option value="${y}">${y}</option>`).join('')}</select></div>
+                    <div class="yr-stat-label">${currentLang === 'nl' ? 'Totaal vanaf' : 'Total from'}</div>
+                    <div class="yr-from-pills" id="yrFromPills">${sortedYears.map(y => `<button class="yr-from-pill ${y === sortedYears[0] ? 'active' : ''}" data-year="${y}" onclick="setTotalFromYear(${y})">${y}</button>`).join('')}</div>
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
@@ -3273,12 +3274,16 @@ function renderYearReview(payments, contracts, prediction) {
     container._yearTotals = yearTotals;
 }
 
-function updateTotalFrom() {
-    const select = document.getElementById('yrFromYear');
+function setTotalFromYear(fromYear) {
     const container = document.getElementById('yearReview');
-    if (!select || !container || !container._yearTotals) return;
+    if (!container || !container._yearTotals) return;
 
-    const fromYear = parseInt(select.value);
+    // Update active pill
+    document.querySelectorAll('.yr-from-pill').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.year) === fromYear);
+    });
+
+    // Recalculate total
     const yearTotals = container._yearTotals;
     let total = 0;
     Object.entries(yearTotals).forEach(([y, amt]) => {
