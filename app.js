@@ -3247,7 +3247,7 @@ function initDashboardAnimations() {
     });
 
     // Animate dashboard tiles and sections
-    document.querySelectorAll('#tab-start .dash-tile, #tab-start .start-section-grid, #tab-start .academy-banner').forEach((section, i) => {
+    document.querySelectorAll('#tab-start .dash-tile, #tab-start .start-section-grid').forEach((section, i) => {
         section.classList.remove('fade-in-section');
         section.style.animationDelay = `${0.25 + i * 0.08}s`;
         void section.offsetWidth;
