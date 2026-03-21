@@ -1039,7 +1039,7 @@
     <!-- Author Dashboard -->
     <div class="dashboard" id="dashboard">
         <header class="dashboard-header">
-            <div class="header-logo" onclick="showPublicSite()" style="cursor:pointer;">
+            <div class="header-logo" onclick="document.querySelector('.tab-btn[data-tab=&quot;start&quot;]')?.click()" style="cursor:pointer;">
                 <img src="noordhoff-logo.png" alt="Noordhoff" style="height:28px; width:auto;">
                 <span class="header-logo-divider"></span>
                 <span class="header-logo-sub">AUTEURSPORTAAL</span>
@@ -1369,7 +1369,7 @@
     <!-- Admin Dashboard -->
     <div class="admin-dashboard" id="adminDashboard">
         <header class="dashboard-header">
-            <div class="header-logo" onclick="showPublicSite()" style="cursor:pointer;">
+            <div class="header-logo" onclick="adminBreadcrumbNav('dashboard')" style="cursor:pointer;">
                 <img src="noordhoff-logo.png" alt="Noordhoff" style="height:28px; width:auto;">
                 <span class="header-logo-divider"></span>
                 <span class="header-logo-sub">AUTEURSPORTAAL</span>
