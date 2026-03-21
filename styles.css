@@ -768,6 +768,7 @@ body.dashboard-active .lang-toggle {
     padding: 2rem;
     animation: tabFadeIn 0.4s ease;
     background: var(--color-bg-alt);
+    min-height: calc(100vh - 140px);
 }
 
 .tab-content.active { display: block; }
