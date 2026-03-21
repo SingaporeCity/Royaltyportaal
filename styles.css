@@ -4268,9 +4268,10 @@ body.dashboard-active .lang-toggle {
 }
 
 .yr-from-pills {
-    display: flex;
+    display: inline-flex;
+    justify-content: center;
     gap: 3px;
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     background: rgba(255,255,255,0.08);
     border-radius: 6px;
     padding: 2px;
