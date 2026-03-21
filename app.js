@@ -3254,9 +3254,9 @@ function renderYearReview(payments, contracts, prediction) {
                     <div class="yr-stat-label">Totaal all-time</div>
                 </div>
                 <div class="yr-stat">
-                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
-                    <div class="yr-stat-label">Prognose ${forecastYear}</div>
-                    ${mid > 0 ? fcChangeHTML : ''}
+                    <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
+                    <div class="yr-stat-label">${lastPayment ? lastPayment.title[currentLang] : (currentLang === 'nl' ? 'Laatste uitbetaling' : 'Last payment')}</div>
+                    ${lastPayment ? `<div class="yr-stat-sub">${lastPayment.date[currentLang]}</div>` : ''}
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value">${contracts.length}</div>
@@ -3270,7 +3270,7 @@ function renderYearReview(payments, contracts, prediction) {
     const heroEl = document.getElementById('yrHeroValue');
     if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
-    if (mid > 0) animateCounter('yrForecast', mid, true, 500);
+    if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
 }
 
 // Time-based greeting
