@@ -2475,6 +2475,14 @@ body.dashboard-active .lang-toggle {
     gap: 1rem;
 }
 
+/* Forecast top grid */
+.fc-top-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: stretch;
+}
+
 /* Hero card */
 .fc-hero-card {
     background: var(--color-white);
@@ -2495,34 +2503,20 @@ body.dashboard-active .lang-toggle {
     background: linear-gradient(90deg, var(--color-primary), #2E8B7A, #93C5CF);
 }
 
-.fc-hero-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
 .fc-hero-eyebrow {
-    font-size: 0.75rem;
-    font-variation-settings: 'wght' 650;
+    font-size: 0.72rem;
+    font-variation-settings: 'wght' 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--color-text-light);
-}
-
-.fc-hero-badges {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .fc-hero-amounts {
     display: flex;
     align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
 }
 
 .fc-hero-amount-value {
@@ -2534,42 +2528,50 @@ body.dashboard-active .lang-toggle {
     line-height: 1;
 }
 
-.fc-hero-amount-label {
-    display: block;
-    font-size: 0.68rem;
-    font-variation-settings: 'wght' 500;
-    color: var(--color-text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-top: 0.25rem;
-}
-
 .fc-hero-amount-to {
     font-size: 0.82rem;
     font-variation-settings: 'wght' 450;
     color: var(--color-text-light);
-    align-self: center;
 }
 
 .fc-hero-disclaimer {
     font-size: 0.72rem;
     color: var(--color-text-light);
     font-variation-settings: 'wght' 400;
-    opacity: 0.7;
+    opacity: 0.65;
     line-height: 1.5;
+    margin-top: 0.75rem;
 }
 
-.fc-payout-badge {
-    display: inline-flex;
+/* Payout card */
+.fc-payout-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: center;
+    gap: 0.35rem;
+    text-align: center;
+    min-width: 140px;
+    color: var(--color-text-light);
+}
+
+.fc-payout-label {
     font-size: 0.72rem;
     font-variation-settings: 'wght' 550;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--color-text-light);
-    background: var(--color-bg-alt);
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--radius-pill);
-    white-space: nowrap;
+}
+
+.fc-payout-date {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-variation-settings: 'wght' 650;
+    color: var(--color-text);
 }
 
 /* Chart card */
@@ -2888,7 +2890,8 @@ body.dashboard-active .lang-toggle {
 
 /* Dark mode */
 [data-theme="dark"] .fc-hero-card,
-[data-theme="dark"] .fc-chart-card {
+[data-theme="dark"] .fc-chart-card,
+[data-theme="dark"] .fc-payout-card {
     background: var(--color-white);
     border-color: var(--color-border);
 }
@@ -2905,9 +2908,6 @@ body.dashboard-active .lang-toggle {
     border-color: var(--color-white);
 }
 
-[data-theme="dark"] .fc-payout-badge {
-    background: var(--color-bg);
-}
 
 [data-theme="dark"] .fc-bar-row + .fc-bar-row {
     border-top-color: var(--color-border);
@@ -2915,10 +2915,10 @@ body.dashboard-active .lang-toggle {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .fc-top-grid { grid-template-columns: 1fr; }
     .fc-hero-card { padding: 1.25rem; }
-    .fc-hero-amounts { flex-direction: column; gap: 0.25rem; }
-    .fc-hero-amount-to { display: none; }
     .fc-hero-amount-value { font-size: 1.65rem; }
+    .fc-payout-card { flex-direction: row; gap: 0.625rem; min-width: auto; padding: 1rem 1.25rem; }
     .fc-value { font-size: 2rem; }
     .fc-bars { padding: 1rem 1.25rem; }
     .fc-bar-row { grid-template-columns: 40px 1fr auto; gap: 0.75rem; }

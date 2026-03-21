@@ -3697,30 +3697,23 @@ function initPredictions() {
     }).join('');
 
     container.innerHTML = `
-        <div class="fc-hero-card">
-            <div class="fc-hero-top">
-                <span class="fc-hero-eyebrow">${nl ? 'Verwachte royalties' : 'Expected royalties'} ${forecastYear}</span>
-                <div class="fc-hero-badges">
-                    ${changeHTML}
-                    <div class="fc-payout-badge">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        ${nl ? 'Uitbetaling maart' : 'Payout March'} ${payoutYear}
-                    </div>
-                </div>
-            </div>
-            <div class="fc-hero-amounts">
-                <div class="fc-hero-amount">
+        <div class="fc-top-grid">
+            <div class="fc-hero-card">
+                <div class="fc-hero-eyebrow">${nl ? 'Verwachte royalties' : 'Expected royalties'} ${forecastYear}</div>
+                <div class="fc-hero-amounts">
                     <span class="fc-hero-amount-value">${formatCurrency(min)}</span>
-                    <span class="fc-hero-amount-label">${nl ? 'Conservatief' : 'Conservative'}</span>
-                </div>
-                <span class="fc-hero-amount-to">tot</span>
-                <div class="fc-hero-amount">
+                    <span class="fc-hero-amount-to">${nl ? 'tot' : 'to'}</span>
                     <span class="fc-hero-amount-value">${formatCurrency(max)}</span>
-                    <span class="fc-hero-amount-label">${nl ? 'Optimistisch' : 'Optimistic'}</span>
+                </div>
+                ${changeHTML}
+                <div class="fc-hero-disclaimer">
+                    ${nl ? 'Indicatieve prognose. Het werkelijke bedrag kan afwijken op basis van definitieve verkoopcijfers en contractwijzigingen.' : 'Indicative forecast. The actual amount may differ based on final sales figures and contract changes.'}
                 </div>
             </div>
-            <div class="fc-hero-disclaimer">
-                ${nl ? 'Indicatieve prognose. Het werkelijke bedrag kan afwijken op basis van definitieve verkoopcijfers en contractwijzigingen.' : 'Indicative forecast. The actual amount may differ based on final sales figures and contract changes.'}
+            <div class="fc-payout-card">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="fc-payout-label">${nl ? 'Uitbetaling' : 'Payout'}</span>
+                <span class="fc-payout-date">${nl ? 'Maart' : 'March'} ${payoutYear}</span>
             </div>
         </div>
         <div class="fc-chart-card">
