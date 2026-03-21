@@ -3488,6 +3488,17 @@ function renderContracts(searchQuery) {
     const listEl = document.getElementById('contractsList');
     if (!listEl) return;
 
+    // Stats tiles
+    const statsEl = document.getElementById('contractsStats');
+    if (statsEl && author.contracts.length > 0) {
+        statsEl.innerHTML = `<div class="contracts-stats-grid">
+            <div class="contracts-stat"><span class="contracts-stat-value">${author.contracts.length}</span><span class="contracts-stat-label">${nl ? 'Actieve contracten' : 'Active contracts'}</span></div>
+            <div class="contracts-stat"><span class="contracts-stat-value">11%</span><span class="contracts-stat-label">${nl ? 'Gem. royalty' : 'Avg. royalty'}</span></div>
+        </div>`;
+    } else if (statsEl) {
+        statsEl.innerHTML = '';
+    }
+
     if (author.contracts.length === 0) {
         listEl.innerHTML = emptyStateHTML('contracts');
         return;
