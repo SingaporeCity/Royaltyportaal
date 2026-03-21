@@ -571,6 +571,15 @@ function toggleMobileMenu() {
     hamburger.classList.toggle('active');
 }
 
+function toggleMobileTabs() {
+    const nav = document.getElementById('tabsNav');
+    const toggle = document.getElementById('tabsToggle');
+    if (nav && toggle) {
+        nav.classList.toggle('mobile-open');
+        toggle.classList.toggle('active');
+    }
+}
+
 // ============================================
 // SMOOTH SCROLL
 // ============================================
@@ -5989,6 +5998,11 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
+        // Close mobile tabs menu after selection
+        const mobileNav = document.getElementById('tabsNav');
+        const mobileToggle = document.getElementById('tabsToggle');
+        if (mobileNav) mobileNav.classList.remove('mobile-open');
+        if (mobileToggle) mobileToggle.classList.remove('active');
         // Scroll down to tabs if they're below the viewport (never scroll up)
         if (!_tourActive) {
             requestAnimationFrame(() => {

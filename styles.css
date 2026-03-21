@@ -9039,7 +9039,12 @@ body.dashboard-active .lang-toggle {
    RESPONSIVE — Mobile & Tablet Improvements
    ============================================ */
 
-/* -- 768px: Tablet -- */
+/* Tabs toggle button — hidden on desktop */
+.tabs-toggle {
+    display: none;
+}
+
+/* -- 768px: Tablet & Mobile -- */
 @media (max-width: 768px) {
     /* Header: account for 4 grid children */
     .dashboard-header {
@@ -9047,47 +9052,77 @@ body.dashboard-active .lang-toggle {
         gap: 0.5rem;
     }
 
-    /* Tabs: vertical sidebar layout */
-    .tabs-container {
-        display: grid;
-        grid-template-columns: 60px 1fr;
-        border-radius: 16px;
-        overflow: hidden;
+    /* Tabs toggle: visible */
+    .tabs-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: var(--color-white);
+        border: none;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        font-variation-settings: 'wght' 600;
+        color: var(--color-text-light);
+        cursor: pointer;
+        transition: all 0.2s;
     }
+    .tabs-toggle:hover {
+        color: var(--color-primary);
+    }
+    .tabs-toggle.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+    .tabs-toggle svg {
+        transition: transform 0.2s;
+    }
+    .tabs-toggle.active svg {
+        transform: rotate(90deg);
+    }
+
+    /* Tabs nav: hidden by default, shown on toggle */
     .tabs-nav {
+        display: none;
         flex-direction: column;
-        border-bottom: none;
-        border-right: 1px solid rgba(0, 0, 0, 0.06);
-        padding: 0.5rem 0;
-        overflow-x: visible;
-        overflow-y: auto;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        padding: 0.25rem 0;
+        overflow: visible;
+    }
+    .tabs-nav.mobile-open {
+        display: flex;
     }
     .tab-btn {
         flex: 0;
         min-width: auto;
-        padding: 0.875rem 0.5rem;
-        gap: 0.15rem;
+        flex-direction: row;
+        padding: 0.75rem 1.25rem;
+        gap: 0.625rem;
         border-radius: 0;
         margin-bottom: 0;
+        justify-content: flex-start;
+        font-size: 0.85rem;
     }
     .tab-btn > span:not(.tab-icon) {
-        display: none;
+        display: inline;
     }
     .tab-btn::after {
         bottom: auto;
-        left: auto;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%) scaleY(0);
+        left: 0;
+        right: auto;
+        top: 0;
+        transform: scaleY(0);
         width: 3px;
         height: 100%;
+        border-radius: 0 3px 3px 0;
     }
     .tab-btn.active::after {
-        transform: translateY(-50%) scaleY(1);
+        transform: scaleY(1);
     }
-    .tab-icon svg {
-        width: 22px;
-        height: 22px;
+    .tab-btn.active {
+        background: var(--color-primary-subtle);
     }
 
     /* Dashboard content tighter padding */
@@ -9160,16 +9195,14 @@ body.dashboard-active .lang-toggle {
         height: 14px;
     }
 
-    /* Tabs: narrower vertical rail */
-    .tabs-container {
-        grid-template-columns: 50px 1fr;
+    /* Tabs toggle smaller */
+    .tabs-toggle {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.78rem;
     }
     .tab-btn {
-        padding: 0.75rem 0.375rem;
-    }
-    .tab-icon svg {
-        width: 20px;
-        height: 20px;
+        padding: 0.625rem 1rem;
+        font-size: 0.82rem;
     }
 
     /* Dashboard content */
@@ -9276,10 +9309,17 @@ body.dashboard-active .lang-toggle {
     }
 }
 
-/* Dark mode: vertical tabs border */
+/* Dark mode: mobile tabs */
 @media (max-width: 768px) {
+    [data-theme="dark"] .tabs-toggle {
+        background: var(--color-white);
+        border-bottom-color: var(--color-border);
+    }
     [data-theme="dark"] .tabs-nav {
-        border-right-color: var(--color-border);
+        border-bottom-color: var(--color-border);
+    }
+    [data-theme="dark"] .tab-btn.active {
+        background: rgba(0,116,96,0.1);
     }
 }
 
