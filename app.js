@@ -3467,6 +3467,8 @@ function renderContracts() {
         <tr>
             <td>${contract.number}</td>
             <td>${contract.name}</td>
+            <td><span class="contract-royalty-badge">11%</span></td>
+            <td>01-01-2023</td>
             <td>${contract.contractPdf ? `<button class="btn-secondary-small" onclick="downloadAuthorContractPDF(${i})">${currentLang === 'nl' ? 'Download' : 'Download'}</button>` : '-'}</td>
         </tr>
     `).join('');

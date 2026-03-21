@@ -984,6 +984,16 @@ body.dashboard-active .lang-toggle {
     border-bottom: none;
 }
 
+.contract-royalty-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.78rem;
+    font-variation-settings: 'wght' 650;
+    color: var(--color-primary);
+    background: var(--color-primary-subtle);
+    border-radius: var(--radius-pill);
+}
+
 /* Modal - Refined Overlay */
 .modal-overlay {
     position: fixed;
