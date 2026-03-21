@@ -137,8 +137,10 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - Ease-out cubic easing, 800ms duur, staggered delays (0/100/200/300ms)
 - Gebruikt `requestAnimationFrame` voor smooth 60fps
 
-### Scroll-to-top bij Tab Switch
-- Bij tab-klik: `document.querySelector('.tabs-container').scrollIntoView({ behavior: 'smooth', block: 'start' })`
+### Scroll bij Tab Switch
+- Bij tab-klik: scrollt alleen **omlaag** als tabs onder de viewport zitten, nooit omhoog
+- Voorkomt dat korte tabs (bijv. Contracten) ongewenst omhoog springen
+- Scroll wordt overgeslagen als de guided tour actief is (`_tourActive`)
 
 ## Dashboard Tile Systeem (Start Tab)
 - `.dash-tile`: kaart met header-bar (icoon + titel) + content area, border-top 2px teal accent
@@ -149,16 +151,15 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - **Achtergrond**: dashboard body en tab-content gebruiken `var(--color-bg-alt)` (#F7F8FA), kaarten zijn wit — creëert diepte
 - Alle hardcoded `background: white` vervangen door `var(--color-white)` voor consistente theming
 
-## Royalty Chart — Horizontale Revenue Timeline
-- **Vervangt** de vorige stacked bar chart (die slecht werkte voor 1-3 producten per jaar)
-- **Layout**: horizontale rijen per jaar (nieuwste bovenaan) via `.chart-timeline` → `.chart-year-row` (CSS grid: `52px 1fr auto`)
-- **Per rij**: jaarlabel links, horizontale progress bar (`.chart-year-bar-track` met `.chart-year-bar-fill` segmenten), totaalbedrag rechts
-- **Segmenten**: `.royalty` (primary), `.subsidiary` (#14b8a6), `.foreign` (#6DB5C5) — zelfde kleuren als voorheen
-- **Detail labels**: bij meerdere types verschijnen `.chart-year-segments` onder de bar met bedragen per type
-- **Legend**: alleen getoond als er meerdere payment types zijn
-- **Hover**: subtiele groene tint op `.chart-year-row:hover`
-- **Responsive**: op mobiel (≤768px) verdwijnen segment-labels, grid krimpt
-- **Functie**: `renderRoyaltyChart(payments)` in `app.js`, groepeert payments per jaar en type
+## Royalty Chart — Card Grid per Jaar
+- **Layout**: CSS grid met kaarten per jaar (nieuwste eerst), `repeat(auto-fit, minmax(240px, 1fr))`
+- **Per kaart**: jaarlabel, YoY verandering (%), totaalbedrag, gesegmenteerde bar, type-pills met bedragen
+- **Kleuren** (Noordhoff brand): Royalties = `#2E8B7A` (donker teal), Nevenrechten = `#93C5CF` (lichtblauw), Foreign = `#E8734A` (koraal)
+- **Bar**: 10px dik, pill-dots 8px — goed zichtbaar
+- **Animatie**: `chartCardIn` fade-in met staggered delay per kaart
+- **Responsive**: op mobiel (≤768px) grid wordt 1 kolom
+- **Functie**: `renderRoyaltyChart(payments)` in `app.js`
+- **BELANGRIJK**: Kleuren zijn consistent overal — chart, payment icons, type filter pills, admin detail gradients
 
 ## Trend Chart (Prognose Tab)
 - Pure SVG area chart boven de prediction card op tab-forecast
@@ -176,8 +177,10 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - `getCmdPaletteCommands()` bouwt commands lijst op basis van actieve view
 - Keyboard: pijltjestoetsen navigeren, Enter voert uit, Escape sluit
 - `renderCmdPaletteResults(query)` filtert en groepeert resultaten
-- Gegroepeerde items (Navigatie / Acties / Auteurs) met iconen en hints
+- Gegroepeerde items (Navigatie / Acties / Auteurs / Afrekeningen / Contracten / FAQ) met iconen en hints
 - Admin: alle auteurs doorzoekbaar met initialen-avatar
+- **Uitgebreide zoek**: payment type filters (Royalties/Nevenrechten/Foreign), contract namen, FAQ vragen doorzoekbaar
+- **Rondleiding**: "Rondleiding" commando start de guided tour
 
 ## Admin Breadcrumbs
 - `updateAdminBreadcrumb()` — toont "Dashboard › Auteurs › Patrick Jeeninga"
@@ -337,6 +340,131 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 - "Ontworpen door Patrick Jeeninga" (NL) / "Designed by Patrick Jeeninga" (EN)
 - Social icons: LinkedIn, Instagram, X
 - Legal links: Privacybeleid, Voorwaarden, Cookies
+
+## Dashboard Tabs — Volgorde & Structuur
+**Volgorde**: Start, Afrekeningen, Contracten, Prognose, Declaraties, FAQ, Profiel
+
+| Tab | data-tab | Inhoud |
+|-----|----------|--------|
+| Start | `start` | Year in Review (hero + 3 stats), royalty chart, events, nieuws |
+| Afrekeningen | `payments` | Zoek/filter, type pills, jaar filter, payment items met preview |
+| Contracten | `contracts` | Contracten tabel met preview/download icons |
+| Prognose | `forecast` | Verwachte royalties, trend chart, range bar |
+| Declaraties | `expenses` | Vendor ID notice, upload formulier, ingediende declaraties |
+| FAQ | `faq` | Accordion FAQ items |
+| Profiel | `info` | ID nummers, persoonlijke gegevens, bewerken |
+
+- Tab "Gegevens" is hernoemd naar **"Profiel"** (NL) / "Profile" (EN)
+- FAQ tekst referenties naar "Gegevens" zijn geüpdatet naar "Profiel"
+
+## Year in Review (`.yr-card`)
+- Donkergroene kaart bovenaan Start tab
+- **Hero block**: groot gecentreerd bedrag "Uitgekeerd in [jaar]" + YoY percentage badge
+- **3 sub-stats** eronder: "Totaal vanaf [jaar-picker]", "Laatste betaling" (bedrag + datum), "Actieve contracten"
+- **Jaar-picker**: pill-toggle knoppen (2023 | 2024) onder "Totaal vanaf" — herberekent totaal on-click via `setTotalFromYear()`
+- `container._yearTotals` slaat data op voor herberekening
+- Geen ster-icoon bij "Jaaroverzicht" badge — alleen tekst
+
+## Declaraties Tab (nieuw)
+- **Vendor ID notice**: teal banner bovenaan toont het Vendor nummer van de auteur
+- **Indienformulier**: omschrijving + bedrag + drag & drop PDF upload (alleen PDF, max 10 MB)
+- **File handling**: `handleExpenseFile()` valideert type/grootte, toont bestandsnaam met verwijder-knop
+- **Submit knop**: disabled tot alles ingevuld, success-feedback na indienen
+- **Geschiedenis**: lijst van ingediende declaraties met status badges (In behandeling/Goedgekeurd/Afgewezen)
+- **Opslag**: `localStorage` key `expenses` (demo-modus, geen Supabase backend)
+- **Vertaalsleutels**: `expenses_*` in NL en EN
+
+## Contract PDF Preview
+- `generateContractPDFDoc(contract, author)` — geëxtraheerde helper uit `downloadAuthorContractPDF()`
+- `previewContractPDF(index)` — hergebruikt het bestaande PDF preview modal
+- Contracten tabel toont **oog-icoon** (preview) + **download-icoon** naast elkaar
+- CSS: `.contract-actions` flex container, `.contract-action-btn` met hover-state
+
+## Afrekeningen — Jaar-groepering
+- Payments gesorteerd per jaar (nieuwste eerst), jaaropgave eerst binnen elk jaar
+- **Jaar-headers** getoond wanneer filter "Alle" en type filter "Alle"
+- `resolvePayment()` gesynchroniseerd met dezelfde sortering
+- CSS: `.payments-year-header` met uppercase styling
+
+## Favicon
+- Inline SVG in `<head>` — twee overlappende teal vierkanten
+- Geen extern bestand nodig
+
+## Guided Tour (Rondleiding)
+- **"?" knop** in dashboard header (`header-help-btn`) start `startGuidedTour()`
+- Tour-panel vervangt de welcome section content inline (geen floating tooltip)
+- **7 stappen**: Start → Afrekeningen → Contracten → Prognose → Declaraties → FAQ → Profiel
+- Elke stap: titel + beginner-friendly beschrijving (NL/EN via `getTourSteps()`)
+- Actieve tab wordt geklikt → content zichtbaar, tab + content gehighlight boven overlay
+- **Overlay** dimt achtergrond (`tour-overlay` z-index 999), highlighted elementen z-index 1001+
+- Navigatie: Vorige/Volgende/Sluiten + Escape
+- Welcome section content wordt hersteld bij sluiten (`welcome._originalHTML`)
+- Tab-switch scroll overgeslagen tijdens tour (`_tourActive` flag)
+- Ook bereikbaar via Cmd+K → "Rondleiding"
+
+## Sessie & Login Fixes
+- **`restoreSession()`**: bij geen sessie/fout → `showLoginPage()` (niet publieke site)
+- Bij fout profiel-fetch → `signOut()` om stale tokens op te ruimen
+- **`logout()`**: roept ALTIJD `supabaseLogout()` aan (ook bij lokale demo-login) om localStorage tokens te wissen
+- **Startpagina**: loginscherm is standaard zichtbaar bij pageload (`loginPage` geen `hidden` class, `publicSite` wel)
+- **Logo-klik** in dashboard → navigeert naar Start tab (auteur) / Dashboard overzicht (admin), niet naar publieke site
+
+## Postcode Validatie
+- Nederlands formaat: `^\d{4}\s?[A-Za-z]{2}$` (bijv. "1234 AB")
+- Gevalideerd in `saveEditedInfo()` vóór IBAN check
+- Alert met NL/EN foutmelding bij ongeldig formaat
+
+## Header Styling
+- `.header-logo-sub` ("AUTEURSPORTAAL") heeft `position: relative; top: 1px` voor verticale uitlijning met logo
+
+## Responsive Design (Mobile)
+
+### 768px (Tablet)
+- Header: 4-kolom grid (`auto 1fr auto auto`)
+- **Tabs**: hamburger-stijl dropdown — `.mobile-tab-toggle` toont actieve tab-naam + chevron
+  - Klik → `.tabs-nav.mobile-open` toont alle tabs verticaal (icon + label)
+  - Tab kiezen → menu sluit, label update
+  - Desktop: toggle knop `display: none`, tabs normaal horizontaal
+- Dashboard content: padding `1.5rem 1rem`
+- Contracten tabel: horizontaal scrollbaar
+- Year Review stats: 1 kolom gestapeld
+- `.tab-btn.active`: teal achtergrond, geen bottom-bar maar left-accent via `::after`
+
+### 480px (Telefoon)
+- Header: logo-tekst + divider verborgen, alleen logo-afbeelding
+- Help-knop: 30×30px
+- Tab toggle: kleiner padding/font
+- Dashboard content: `1rem 0.75rem`
+- Welcome h1: 1.3rem
+- Year Review: hero 1.85rem, compactere stats
+- Year pills: kleiner (0.58rem)
+- Payments: scrollbare year-filter
+- Profiel: ID nummers gestapeld
+- Tour panel: compacter
+- Command palette: bijna full-width
+
+## Auteur Onboarding — End-to-End Flow
+
+### Wat werkt
+1. **Admin maakt accounts aan** via Edge Function `create-accounts` → Supabase auth users met recovery email
+2. **Auteur ontvangt email** met wachtwoord-reset link → stelt wachtwoord in → kan inloggen
+3. **Auteur ziet alleen eigen data** — RLS enforced op alle tabellen (`author_id = auth.uid()`)
+4. **Admin uploadt statements** — enkel of bulk → PDF in Storage + payment record in DB
+5. **Auteur bekijkt statements** — filter, zoek, preview PDF, download, CSV export
+
+### Wat geconfigureerd moet worden (geen code)
+- **Supabase Dashboard → Auth → Email Templates**: wachtwoord-reset email aanpassen met Noordhoff branding
+- **Redirect URL**: `https://singaporecity.github.io/Royaltyportaal/`
+
+### Bekende beperkingen
+| Issue | Status | Details |
+|-------|--------|---------|
+| Bulk upload zet bedrag op €0 | Bug | Admin moet bedragen handmatig invullen na bulk import |
+| Geen email bij nieuwe statement | Ontbreekt | Auteur krijgt geen notificatie als admin een afrekening uploadt |
+| Declaraties tab geen backend | Ontbreekt | UI werkt met localStorage, geen Supabase tabel, geen admin-goedkeuring |
+| Contract PDF upload | Ontbreekt | Kolom `contract_pdf` bestaat maar geen upload-UI voor echte bestanden |
+| Duplicate payment preventie | Ontbreekt | Zelfde auteur/jaar/type kan meerdere keren aangemaakt worden |
+| Admin email instellingen | Cosmetisch | Toggles zijn UI-only, geen echte emails worden verstuurd |
 
 ## Deployment stappen (na code push)
 1. **Supabase SQL Editor**: Run `database/add-file-path.sql`
