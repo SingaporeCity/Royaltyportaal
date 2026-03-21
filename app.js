@@ -6705,14 +6705,14 @@ document.getElementById('importModal')?.addEventListener('click', function(e) {
 
 async function restoreSession() {
     if (!supabaseClient) {
-        showPublicSite('home');
+        showLoginPage();
         return;
     }
 
     try {
         const { data: { session }, error } = await supabaseClient.auth.getSession();
         if (error || !session) {
-            showPublicSite('home');
+            showLoginPage();
             return;
         }
 
@@ -6721,7 +6721,7 @@ async function restoreSession() {
         if (authorData.error) {
             // Session token exists but profile fetch failed — clear stale session
             await supabaseClient.auth.signOut();
-            showPublicSite('home');
+            showLoginPage();
             return;
         }
 
@@ -6742,7 +6742,7 @@ async function restoreSession() {
         }
     } catch (err) {
         console.error('Session restore error:', err);
-        showPublicSite('home');
+        showLoginPage();
     }
 }
 
