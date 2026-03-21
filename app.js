@@ -3103,55 +3103,56 @@ function renderRoyaltyChart(payments) {
     }
 
     const maxTotal = Math.max(...years.map(y => yearData[y].total));
+    const typeNames = { royalty: 'Royalties', subsidiary: currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights', foreign: 'Foreign Rights' };
+    const typeColors = { royalty: 'var(--color-primary)', subsidiary: '#14b8a6', foreign: '#6DB5C5' };
 
-    // Build horizontal timeline rows (newest first)
-    let timelineHTML = '<div class="chart-timeline">';
-    years.slice().reverse().forEach(year => {
+    // Build year cards (newest first)
+    let html = '<div class="chart-years">';
+    const reversedYears = years.slice().reverse();
+    reversedYears.forEach((year, idx) => {
         const d = yearData[year];
         const pct = maxTotal > 0 ? (d.total / maxTotal) * 100 : 0;
-        const royaltyPct = d.total > 0 ? (d.royalty / d.total) * pct : 0;
-        const subsidPct = d.total > 0 ? (d.subsidiary / d.total) * pct : 0;
-        const foreignPct = d.total > 0 ? (d.foreign / d.total) * pct : 0;
 
-        // Segment labels for detail
-        const segments = [];
-        if (d.royalty > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:var(--color-primary)"></span>Royalties ${formatCurrency(d.royalty)}</span>`);
-        if (d.subsidiary > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'} ${formatCurrency(d.subsidiary)}</span>`);
-        if (d.foreign > 0) segments.push(`<span class="chart-year-segment-label"><span class="chart-year-segment-dot" style="background:#6DB5C5"></span>Foreign Rights ${formatCurrency(d.foreign)}</span>`);
+        // YoY change
+        const prevYear = years[years.indexOf(year) - 1];
+        const prevTotal = prevYear ? yearData[prevYear].total : 0;
+        let changeHTML = '';
+        if (prevTotal > 0) {
+            const changePct = Math.round(((d.total - prevTotal) / prevTotal) * 100);
+            const dir = changePct > 0 ? 'up' : changePct < 0 ? 'down' : '';
+            const arrow = dir === 'up' ? '&#9650;' : dir === 'down' ? '&#9660;' : '';
+            changeHTML = `<span class="chart-card-change ${dir}">${arrow} ${changePct > 0 ? '+' : ''}${changePct}%</span>`;
+        }
 
-        timelineHTML += `
-            <div class="chart-year-row">
-                <div class="chart-year-label">${year}</div>
-                <div class="chart-year-bar-container">
-                    <div class="chart-year-bar-track">
-                        ${d.royalty > 0 ? `<div class="chart-year-bar-fill royalty" style="width:${royaltyPct}%"></div>` : ''}
-                        ${d.subsidiary > 0 ? `<div class="chart-year-bar-fill subsidiary" style="width:${subsidPct}%"></div>` : ''}
-                        ${d.foreign > 0 ? `<div class="chart-year-bar-fill foreign" style="width:${foreignPct}%"></div>` : ''}
-                    </div>
-                    ${segments.length > 1 ? `<div class="chart-year-segments">${segments.join('')}</div>` : ''}
+        // Type breakdown pills
+        const types = ['royalty', 'subsidiary', 'foreign'].filter(t => d[t] > 0);
+        const pillsHTML = types.map(t =>
+            `<span class="chart-card-pill"><span class="chart-card-pill-dot" style="background:${typeColors[t]}"></span>${typeNames[t]} <strong>${formatCurrency(d[t])}</strong></span>`
+        ).join('');
+
+        // Segmented bar
+        const barSegments = types.map(t => {
+            const segPct = d.total > 0 ? (d[t] / d.total) * 100 : 0;
+            return `<div class="chart-card-bar-seg" style="width:${segPct}%;background:${typeColors[t]}"></div>`;
+        }).join('');
+
+        html += `
+            <div class="chart-card" style="animation-delay:${idx * 0.06}s">
+                <div class="chart-card-header">
+                    <span class="chart-card-year">${year}</span>
+                    ${changeHTML}
                 </div>
-                <div class="chart-year-amount">${formatCurrency(d.total)}</div>
+                <div class="chart-card-amount">${formatCurrency(d.total)}</div>
+                <div class="chart-card-bar" style="opacity:${0.35 + (pct / 100) * 0.65}">
+                    ${barSegments}
+                </div>
+                ${types.length > 0 ? `<div class="chart-card-pills">${pillsHTML}</div>` : ''}
             </div>
         `;
     });
-    timelineHTML += '</div>';
+    html += '</div>';
 
-    // Legend
-    const hasRoyalty = years.some(y => yearData[y].royalty > 0);
-    const hasSubsid = years.some(y => yearData[y].subsidiary > 0);
-    const hasForeign = years.some(y => yearData[y].foreign > 0);
-    const typeCount = [hasRoyalty, hasSubsid, hasForeign].filter(Boolean).length;
-
-    let legendHTML = '';
-    if (typeCount > 1) {
-        legendHTML = '<div class="chart-legend">';
-        if (hasRoyalty) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--color-primary)"></span>Royalties</div>';
-        if (hasSubsid) legendHTML += `<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#14b8a6"></span>${currentLang === 'nl' ? 'Nevenrechten' : 'Reader Rights'}</div>`;
-        if (hasForeign) legendHTML += '<div class="chart-legend-item"><span class="chart-legend-dot" style="background:#6DB5C5"></span>Foreign Rights</div>';
-        legendHTML += '</div>';
-    }
-
-    chartEl.innerHTML = timelineHTML + legendHTML;
+    chartEl.innerHTML = html;
 }
 
 // ============================================
