@@ -649,6 +649,7 @@ function initCounterAnimation() {
 function animateCounter(el, target) {
     const duration = 2000;
     const startTime = performance.now();
+    const prefix = el.getAttribute('data-prefix') || '';
 
     function update(currentTime) {
         const elapsed = currentTime - startTime;
@@ -657,13 +658,16 @@ function animateCounter(el, target) {
 
         const current = Math.round(eased * target);
 
+        let display;
         if (target >= 1000000) {
-            el.textContent = (current / 1000000).toFixed(1).replace('.0', '') + 'M+';
+            const mln = current / 1000000;
+            display = prefix + (mln >= 1 ? mln.toFixed(1).replace('.0', '') + ' mln' : current.toLocaleString('nl-NL'));
         } else if (target >= 1000) {
-            el.textContent = current.toLocaleString('nl-NL') + '+';
+            display = prefix + current.toLocaleString('nl-NL');
         } else {
-            el.textContent = current + '+';
+            display = prefix + current;
         }
+        el.textContent = display;
 
         if (progress < 1) {
             requestAnimationFrame(update);
