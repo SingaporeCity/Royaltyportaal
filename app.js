@@ -3217,7 +3217,7 @@ function renderYearReview(payments, contracts, prediction) {
 
     // Forecast
     const mid = Math.round((prediction.min + prediction.max) / 2);
-    const forecastYear = new Date().getFullYear();
+    const forecastYear = 2025;
 
     // Years active
     const yearsActive = sortedYears.length > 0 ? (new Date().getFullYear() - sortedYears[0]) : 0;
@@ -3262,8 +3262,8 @@ function renderYearReview(payments, contracts, prediction) {
                     ${lastPayment ? `<div class="yr-stat-sub">${lastPayment.date[currentLang]}</div>` : ''}
                 </div>
                 <div class="yr-stat">
-                    <div class="yr-stat-value">${contracts.length}</div>
-                    <div class="yr-stat-label">Actieve contracten</div>
+                    <div class="yr-stat-value" id="yrForecast">${mid > 0 ? formatCurrency(mid) : '—'}</div>
+                    <div class="yr-stat-label">${currentLang === 'nl' ? `Verwacht over ${forecastYear}` : `Expected for ${forecastYear}`}</div>
                 </div>
             </div>
         </div>
@@ -3274,6 +3274,7 @@ function renderYearReview(payments, contracts, prediction) {
     if (heroEl) { heroEl.textContent = '€0'; animateCounter('yrHeroValue', reviewTotal, true, 200); }
     if (totalAllTime > 0) animateCounter('yrTotalAllTime', totalAllTime, true, 400);
     if (lastPayment) animateCounter('yrLastPayment', lastPayment.amount, true, 500);
+    if (mid > 0) animateCounter('yrForecast', mid, true, 600);
 
     // Store yearTotals for the dropdown recalc
     container._yearTotals = yearTotals;
@@ -3615,8 +3616,8 @@ function initPredictions() {
     const mid = Math.round((min + max) / 2);
     const payments = author.payments || [];
     const contracts = author.contracts || [];
-    const forecastYear = new Date().getFullYear();
-    const payoutYear = forecastYear + 1;
+    const forecastYear = 2025;
+    const payoutYear = 2026;
 
     // YoY comparison
     const yearTotals = {};
