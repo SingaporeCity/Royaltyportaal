@@ -890,6 +890,55 @@ body.dashboard-active .lang-toggle {
     margin-bottom: 1.75rem;
 }
 
+.id-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--color-primary-subtle);
+    border: 1px solid rgba(0,116,96,0.1);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.id-banner-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.id-banner-label {
+    font-size: 0.72rem;
+    font-variation-settings: 'wght' 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-light);
+}
+
+.id-banner-value {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-variation-settings: 'wght' 700;
+    color: var(--color-primary);
+    letter-spacing: 0.02em;
+}
+
+.id-banner-sep {
+    width: 1px;
+    height: 24px;
+    background: rgba(0,116,96,0.15);
+}
+
+[data-theme="dark"] .id-banner {
+    background: rgba(0,116,96,0.08);
+    border-color: rgba(0,116,96,0.2);
+}
+
+@media (max-width: 480px) {
+    .id-banner { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+    .id-banner-sep { display: none; }
+}
+
 .info-header h3 {
     font-family: var(--font-heading);
     font-size: 1.35rem;
