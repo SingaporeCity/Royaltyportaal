@@ -488,14 +488,43 @@ body.dashboard-active .lang-toggle {
     z-index: 100;
 }
 
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .header-logo img {
-    width: 150px;
-    height: auto;
+    height: 26px;
+    width: auto;
     transition: opacity 0.2s ease;
 }
 
-.header-logo img:hover {
+.header-logo:hover img {
     opacity: 0.85;
+}
+
+.header-logo-divider {
+    width: 1px;
+    height: 22px;
+    background: #b0b5b3;
+}
+
+.header-logo-sub {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-variation-settings: 'wght' 600;
+    color: var(--color-primary);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+[data-theme="dark"] .header-logo-divider {
+    background: var(--color-border);
+}
+
+[data-theme="dark"] .header-logo-sub {
+    color: var(--color-primary-hover);
 }
 
 /* Header search trigger — centered */
