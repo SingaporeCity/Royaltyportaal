@@ -3252,7 +3252,7 @@ function renderYearReview(payments, contracts, prediction) {
                 </div>
                 <div class="yr-stat">
                     <div class="yr-stat-value" id="yrLastPayment">${lastPayment ? formatCurrency(lastPayment.amount) : '—'}</div>
-                    <div class="yr-stat-label">${lastPayment ? lastPayment.title[currentLang] : (currentLang === 'nl' ? 'Laatste uitbetaling' : 'Last payment')}</div>
+                    <div class="yr-stat-label">${currentLang === 'nl' ? 'Laatste betaling' : 'Last payment'}</div>
                     ${lastPayment ? `<div class="yr-stat-sub">${lastPayment.date[currentLang]}</div>` : ''}
                 </div>
                 <div class="yr-stat">
