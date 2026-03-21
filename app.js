@@ -5071,6 +5071,7 @@ function getTourSteps() {
 function startGuidedTour() {
     _tourStep = 0;
     _tourActive = true;
+    window.scrollTo({ top: 0 });
     document.getElementById('tourOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
     showTourStep();
@@ -5958,22 +5959,22 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (this.dataset.tab === 'payments') {
             markPaymentsSeen();
         }
-        // Scroll so tabs-nav sits just below the sticky header
-        requestAnimationFrame(() => {
-            const tabsContainer = document.querySelector('.tabs-container');
-            const header = document.querySelector('.dashboard-header');
-            if (tabsContainer && header) {
-                const headerHeight = header.offsetHeight;
-                const containerRect = tabsContainer.getBoundingClientRect();
-                // Scroll down if tabs-container is below viewport, or up if it's above
-                const targetTop = containerRect.top + window.scrollY - headerHeight - 8;
-                const currentTop = window.scrollY;
-                // Only scroll if we're not already roughly there (within 20px)
-                if (Math.abs(targetTop - currentTop) > 20) {
-                    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        // Scroll so tabs-nav sits just below the sticky header (skip during tour)
+        if (!_tourActive) {
+            requestAnimationFrame(() => {
+                const tabsContainer = document.querySelector('.tabs-container');
+                const header = document.querySelector('.dashboard-header');
+                if (tabsContainer && header) {
+                    const headerHeight = header.offsetHeight;
+                    const containerRect = tabsContainer.getBoundingClientRect();
+                    const targetTop = containerRect.top + window.scrollY - headerHeight - 8;
+                    const currentTop = window.scrollY;
+                    if (Math.abs(targetTop - currentTop) > 20) {
+                        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 });
 
