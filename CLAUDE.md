@@ -499,6 +499,24 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 | Duplicate payment preventie | Ontbreekt | Zelfde auteur/jaar/type kan meerdere keren aangemaakt worden |
 | Admin email instellingen | Cosmetisch | Toggles zijn UI-only, geen echte emails worden verstuurd |
 
+## Demo Accounts (lokaal, zonder Supabase)
+
+| Rol | Email | Wachtwoord |
+|-----|-------|------------|
+| Admin | `admin@noordhoff.nl` | `Admin123` |
+| Auteur | `patrick@noordhoff.nl` | `Patrick123` |
+| Auteur | `suzanna@noordhoff.nl` | `Suzanna123` |
+| Auteur | `anita@noordhoff.nl` | `Anita123` |
+
+Werken altijd als fallback wanneer Supabase niet bereikbaar is. Login probeert eerst Supabase, daarna lokale DATA.
+
+## Auteur Import Flow (Admin)
+1. **CSV importeren**: Admin dashboard → "Auteurs importeren" → upload CSV met kolommen: `email` (verplicht), `first_name`, `last_name`, `vendor_id`, `internal_id`, `voorletters`, `phone`, `street`, `house_number`, `postcode`, `country`, `iban`, `bic`, `bsn`, `birth_date`. NL-alternatieven (`straat`, `huisnummer`, `telefoon`, `geboortedatum`, `land`) worden ook herkend.
+2. **Accounts aanmaken**: Admin dashboard → "Accounts aanmaken" → selecteer geïmporteerde auteurs → Edge Function maakt auth-accounts + stuurt recovery-emails.
+3. **Auteur ontvangt email** → stelt wachtwoord in → kan inloggen en ziet alleen eigen data (RLS).
+
+Geen SQL nodig — alles via de admin UI.
+
 ## Demo Tips
 - **Google Wachtwoordmanager popup**: Chrome toont een waarschuwing dat het demo-wachtwoord in een datalek voorkomt. Dit is een browser-feature, niet te fixen in code. Oplossing: Chrome → Instellingen → Google Wachtwoordmanager → Instellingen → "Waarschuwing over gelekte wachtwoorden" uitzetten. Of: log vooraf in zodat sessie-persistentie het loginscherm overslaat.
 - **Cache**: Na een push altijd Cmd+Shift+R (hard refresh) om de nieuwste versie te zien op GitHub Pages.
