@@ -1271,60 +1271,77 @@ function renderEvents(events) {
     const container = document.getElementById('eventsContainer');
     if (!container) return;
 
-    if (!events || events.length === 0) {
-        container.innerHTML = `
-            <div class="event-card event-featured">
-                <div class="event-date-badge event-date-featured"><span class="event-day">21</span><span class="event-month">jun</span></div>
-                <div class="event-details">
-                    <span class="event-badge-label">Uitnodiging</span>
-                    <h4 class="event-title">Noordhoff 190 jaar — Jubileumfeest</h4>
-                    <p class="event-description">Vier mee! Alle auteurs, redacteuren en partners zijn van harte uitgenodigd voor een feestelijke middag en avond ter ere van 190 jaar Noordhoff.</p>
-                    <div class="event-meta"><span class="event-location">📍 Martiniplaza, Groningen</span><span class="event-time">14:00 – 22:00</span></div>
-                </div>
-            </div>
-            <div class="event-card">
-                <div class="event-date-badge"><span class="event-day">10</span><span class="event-month">apr</span></div>
-                <div class="event-details">
-                    <h4 class="event-title">Auteursbijeenkomst: Nieuwe kerndoelen in de praktijk</h4>
-                    <p class="event-description">Interactieve sessie over de implementatie van de herziene kerndoelen in methodes als Getal & Ruimte en Nieuw Nederlands.</p>
-                    <div class="event-meta"><span class="event-location">📍 Noordhoff, Groningen & online</span></div>
-                </div>
-            </div>
-            <div class="event-card">
-                <div class="event-date-badge"><span class="event-day">15</span><span class="event-month">mei</span></div>
-                <div class="event-details">
-                    <h4 class="event-title">Workshop: Schrijven voor Learnbeat & adaptief leren</h4>
-                    <p class="event-description">Hands-on sessie over content ontwikkelen voor Noordhoff's digitale leerplatform, gebruikt door 40.000+ mbo-studenten.</p>
-                    <div class="event-meta"><span class="event-location">📍 Noordhoff Academy, Groningen</span></div>
-                </div>
-            </div>`;
-        return;
-    }
+    const demoEvents = [
+        { day: '21', month: 'jun', title: 'Noordhoff 190 jaar — Jubileumfeest', description: 'Vier mee! Alle auteurs, redacteuren en partners zijn van harte uitgenodigd voor een feestelijke middag en avond ter ere van 190 jaar Noordhoff.', location: 'Martiniplaza, Groningen', time: '14:00 – 22:00', featured: true },
+        { day: '10', month: 'apr', title: 'Auteursbijeenkomst: Nieuwe kerndoelen', description: 'Interactieve sessie over de implementatie van de herziene kerndoelen in methodes als Getal & Ruimte en Nieuw Nederlands.', location: 'Noordhoff, Groningen & online', time: '10:00 – 12:30' },
+        { day: '15', month: 'mei', title: 'Workshop: Schrijven voor Learnbeat', description: 'Hands-on sessie over content ontwikkelen voor Noordhoff\'s digitale leerplatform, gebruikt door 40.000+ mbo-studenten.', location: 'Noordhoff Academy, Groningen', time: '13:00 – 16:00' }
+    ];
 
-    container.innerHTML = events.map(event => {
+    const items = (events && events.length > 0) ? events.map(event => {
         const eventDate = new Date(event.event_date);
-        const day = eventDate.getDate();
-        const month = eventDate.toLocaleDateString('nl-NL', { month: 'short' });
-        const time = eventDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+        return { day: eventDate.getDate(), month: eventDate.toLocaleDateString('nl-NL', { month: 'short' }), title: event.title, description: event.description || '', location: event.location || '', time: eventDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) };
+    }) : demoEvents;
 
-        return `
-            <div class="event-card">
-                <div class="event-date-badge">
-                    <span class="event-day">${day}</span>
-                    <span class="event-month">${month}</span>
-                </div>
-                <div class="event-details">
-                    <h4 class="event-title">${event.title}</h4>
-                    ${event.description ? `<p class="event-description">${event.description}</p>` : ''}
-                    <div class="event-meta">
-                        <span class="event-time">${time}</span>
-                        ${event.location ? `<span class="event-location">${event.location}</span>` : ''}
-                    </div>
-                </div>
-                ${event.link ? `<a href="${event.link}" target="_blank" class="event-link">Meer info →</a>` : ''}
+    container.innerHTML = items.map((ev, i) => `
+        <div class="event-row ${ev.featured ? 'event-row-featured' : ''}" onclick="openEventDetail(${i})">
+            <div class="event-row-date${ev.featured ? ' event-row-date-featured' : ''}"><span class="event-row-day">${ev.day}</span><span class="event-row-month">${ev.month}</span></div>
+            <div class="event-row-title">${ev.title}</div>
+            <svg class="event-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+    `).join('');
+
+    // Store for detail popup
+    window._eventItems = items;
+}
+
+function openEventDetail(index) {
+    const ev = window._eventItems[index];
+    if (!ev) return;
+
+    // Remove existing modal if any
+    let modal = document.getElementById('eventDetailModal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'eventDetailModal';
+    modal.className = 'event-modal-overlay';
+    modal.innerHTML = `
+        <div class="event-modal-card">
+            <button class="event-modal-close" onclick="closeEventDetail()">&times;</button>
+            <div class="event-modal-date-block${ev.featured ? ' event-modal-date-featured' : ''}">
+                <span class="event-modal-day">${ev.day}</span>
+                <span class="event-modal-month">${ev.month} 2026</span>
             </div>
-        `;
-    }).join('');
+            <h3 class="event-modal-title">${ev.title}</h3>
+            <p class="event-modal-desc">${ev.description}</p>
+            <div class="event-modal-info">
+                ${ev.location ? `<div class="event-modal-info-row"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${ev.location}</span></div>` : ''}
+                ${ev.time ? `<div class="event-modal-info-row"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>${ev.time}</span></div>` : ''}
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Trigger animation
+    requestAnimationFrame(() => { modal.classList.add('active'); });
+
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeEventDetail(); });
+    document.addEventListener('keydown', _eventModalEsc);
+}
+
+function _eventModalEsc(e) { if (e.key === 'Escape') closeEventDetail(); }
+
+function closeEventDetail() {
+    const modal = document.getElementById('eventDetailModal');
+    if (!modal) return;
+    document.removeEventListener('keydown', _eventModalEsc);
+    modal.classList.remove('active');
+    modal.classList.add('closing');
+    setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+    }, 300);
 }
 
 // Load latest blog posts — always use hardcoded content for demo
@@ -1336,52 +1353,54 @@ function renderBlogPosts(posts) {
     const container = document.getElementById('blogPostsContainer');
     if (!container) return;
 
-    if (!posts || posts.length === 0) {
-        container.innerHTML = `
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h4 class="blog-title">Klaar voor de nieuwe kerndoelen met Noordhoff</h4>
-                    <p class="blog-summary">De grootste onderwijsvernieuwing in 20 jaar gaat in per 1 augustus 2026. Moderne Wiskunde 14e editie, Nieuw Nederlands en Getal & Ruimte zijn volledig herzien.</p>
-                    <div class="blog-meta"><span class="blog-date">12 maart 2026</span></div>
-                </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h4 class="blog-title">Learnbeat bereikt 40.000 dagelijkse mbo-studenten</h4>
-                    <p class="blog-summary">Noordhoff's adaptieve leerplatform groeit door. Studenten waarderen Studiemeister met een 7,9 — auteurs kunnen bijdragen aan interactieve content.</p>
-                    <div class="blog-meta"><span class="blog-date">19 februari 2026</span></div>
-                </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-content">
-                    <h4 class="blog-title">Noordhoff viert 190-jarig bestaan in 2026</h4>
-                    <p class="blog-summary">Van P. Noordhoff in 1836 tot de grootste educatieve uitgever van Nederland. Op 21 juni vieren we dit met alle auteurs in Groningen.</p>
-                    <div class="blog-meta"><span class="blog-date">15 januari 2026</span></div>
-                </div>
-            </div>`;
-        return;
-    }
+    const demoNews = [
+        { title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', summary: 'De grootste onderwijsvernieuwing in 20 jaar gaat in per 1 augustus 2026. Moderne Wiskunde 14e editie, Nieuw Nederlands en Getal & Ruimte zijn volledig herzien op basis van de nieuwe kerndoelen.', date: '12 maart 2026' },
+        { title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', summary: 'Noordhoff\'s adaptieve leerplatform groeit door. Studenten waarderen Studiemeister met een 7,9 — auteurs kunnen bijdragen aan interactieve content.', date: '19 februari 2026' },
+        { title: 'Noordhoff viert 190-jarig bestaan in 2026', summary: 'Van P. Noordhoff in 1836 tot de grootste educatieve uitgever van Nederland. Op 21 juni vieren we dit met alle auteurs in Groningen.', date: '15 januari 2026' }
+    ];
 
-    container.innerHTML = posts.map(post => {
-        const pubDate = post.published_at ? new Date(post.published_at).toLocaleDateString('nl-NL', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }) : '';
+    const items = (posts && posts.length > 0) ? posts.map(post => ({
+        title: post.title,
+        summary: post.summary || '',
+        date: post.published_at ? new Date(post.published_at).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+    })) : demoNews;
 
-        return `
-            <div class="blog-card">
-                ${post.image_url ? `<div class="blog-image" style="background-image:url('${post.image_url}')"></div>` : ''}
-                <div class="blog-content">
-                    <h4 class="blog-title">${post.title}</h4>
-                    ${post.summary ? `<p class="blog-summary">${post.summary}</p>` : ''}
-                    <div class="blog-meta">
-                        <span class="blog-date">${pubDate}</span>
-                    </div>
-                </div>
+    container.innerHTML = items.map((news, i) => `
+        <div class="news-row" onclick="openNewsDetail(${i})">
+            <div class="news-row-content">
+                <h4 class="news-row-title">${news.title}</h4>
+                <span class="news-row-date">${news.date}</span>
             </div>
-        `;
-    }).join('');
+            <svg class="news-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+    `).join('');
+
+    window._newsItems = items;
+}
+
+function openNewsDetail(index) {
+    const news = window._newsItems[index];
+    if (!news) return;
+
+    let modal = document.getElementById('eventDetailModal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'eventDetailModal';
+    modal.className = 'event-modal-overlay';
+    modal.innerHTML = `
+        <div class="event-modal-card">
+            <button class="event-modal-close" onclick="closeEventDetail()">&times;</button>
+            <span class="news-modal-date">${news.date}</span>
+            <h3 class="event-modal-title">${news.title}</h3>
+            <p class="event-modal-desc">${news.summary}</p>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => { modal.classList.add('active'); });
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeEventDetail(); });
+    document.addEventListener('keydown', _eventModalEsc);
 }
 
 // ============================================
