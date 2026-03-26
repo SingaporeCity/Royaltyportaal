@@ -1974,17 +1974,6 @@ const DATA = {
                 { year: 2023, type: 'foreign', title: { nl: 'Foreign Rights 2023', en: 'Foreign Rights 2023' }, date: { nl: '15 juli 2024', en: 'July 15, 2024' }, sortDate: '2024-07-15', amount: 872.03, filename: 'foreign-rights-2023.pdf' }
             ]
         },
-        'els@noordhoff.nl': {
-            password: 'Els12345',
-            info: { vendorNumber: 'V0029411', alliantNumber: '2589012', firstName: 'Els', lastName: 'Bakker-Smit', voorletters: 'E.C.', bsn: '321654987', email: 'els@noordhoff.nl', street: 'Herestraat', houseNumber: '78', postcode: '9711 LB', country: 'Nederland', birthDate: '14-05-1980', phone: '+31 6 45678901', bankAccount: 'NL33 ABNA 0567 8901 23', bic: 'ABNANL2A', initials: 'EB' },
-            contracts: [{ number: 'CC_16700', name: 'Kern Taal & Lezen groep 5', contractPdf: 'CC_16700_contract.pdf' }],
-            infoChanges: [], loginHistory: ['2026-03-24T14:20:00.000Z', '2026-03-18T09:00:00.000Z'], prediction: { min: 5000, max: 8000 },
-            historicalRoyalties: [{ year: 2024, amount: 6230.00 }, { year: 2023, amount: 5890.00 }],
-            payments: [
-                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 6230.00, filename: 'royalty-2024.pdf' },
-                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 5890.00, filename: 'royalty-2023.pdf' }
-            ]
-        },
         'jan@noordhoff.nl': {
             password: 'Jan12345',
             info: { vendorNumber: 'V0035890', alliantNumber: '2601234', firstName: 'Jan', lastName: 'de Groot', voorletters: 'J.W.', bsn: '654321789', email: 'jan@noordhoff.nl', street: 'Vismarkt', houseNumber: '3a', postcode: '9711 JB', country: 'Nederland', birthDate: '30-09-1968', phone: '+31 6 56789012', bankAccount: 'NL71 RABO 0345 6789 01', bic: 'RABONL2U', initials: 'JG' },
