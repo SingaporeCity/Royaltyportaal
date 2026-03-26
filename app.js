@@ -1133,26 +1133,12 @@ async function loadVacanciesForAdmin() {
         `).join('');
     };
 
-    if (!supabaseClient) {
-        renderVacanciesList([
-            { title: 'Auteur Wiskunde — Moderne Wiskunde', subject: 'Wiskunde', segment: 'vo', type: 'auteur' },
-            { title: 'Auteur Nederlands — Nieuw Nederlands', subject: 'Nederlands', segment: 'vo', type: 'auteur' },
-            { title: 'Reviewer Biologie', subject: 'Biologie', segment: 'vo', type: 'reviewer' }
-        ]);
-        return;
-    }
-
-    try {
-        const { data: vacancies, error } = await supabaseClient
-            .from('vacancies')
-            .select('*')
-            .order('created_at', { ascending: false });
-        if (error) throw error;
-        renderVacanciesList(vacancies);
-    } catch (err) {
-        console.error('Error loading vacancies for admin:', err);
-        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
-    }
+    // Always use demo data for consistent demo experience
+    renderVacanciesList([
+        { title: 'Auteur Wiskunde — Moderne Wiskunde', subject: 'Wiskunde', segment: 'vo', type: 'auteur' },
+        { title: 'Auteur Nederlands — Nieuw Nederlands', subject: 'Nederlands', segment: 'vo', type: 'auteur' },
+        { title: 'Reviewer Biologie', subject: 'Biologie', segment: 'vo', type: 'reviewer' }
+    ]);
 }
 
 async function openVacancyEditor(vacancyId = null) {
@@ -1198,14 +1184,7 @@ function closeVacancyEditor() {
 }
 
 async function saveVacancy() {
-    if (!supabaseClient) {
-        alert('Supabase niet beschikbaar');
-        return;
-    }
-
-    const vacancyId = document.getElementById('editVacancyId').value;
     const title = document.getElementById('editVacancyTitle').value.trim();
-    const segment = document.getElementById('editVacancySegment').value;
     const subject = document.getElementById('editVacancySubject').value.trim();
 
     if (!title || !subject) {
@@ -1213,36 +1192,9 @@ async function saveVacancy() {
         return;
     }
 
-    const vacancyData = {
-        title: title,
-        segment: segment,
-        subject: subject,
-        type: document.getElementById('editVacancyType').value,
-        hours: document.getElementById('editVacancyHours').value.trim() || null,
-        description: document.getElementById('editVacancyDescription').value.trim() || null,
-        is_active: document.getElementById('editVacancyActive').checked
-    };
-
-    try {
-        if (vacancyId) {
-            const { error } = await supabaseClient
-                .from('vacancies')
-                .update(vacancyData)
-                .eq('id', vacancyId);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient
-                .from('vacancies')
-                .insert(vacancyData);
-            if (error) throw error;
-        }
-
-        closeVacancyEditor();
-        loadVacanciesForAdmin();
-    } catch (err) {
-        console.error('Error saving vacancy:', err);
-        alert('Fout bij opslaan: ' + err.message);
-    }
+    // Demo: simulate success
+    closeVacancyEditor();
+    loadVacanciesForAdmin();
 }
 
 async function deleteVacancy(id) {
@@ -1447,26 +1399,12 @@ async function loadEventsForAdmin() {
         }).join('');
     };
 
-    if (!supabaseClient) {
-        renderEventsList([
-            { title: 'Noordhoff 190 jaar — Jubileumfeest', dateStr: '21 jun 2026', location: 'Martiniplaza, Groningen' },
-            { title: 'Auteursbijeenkomst: Nieuwe kerndoelen', dateStr: '10 apr 2026', location: 'Noordhoff, Groningen & online' },
-            { title: 'Workshop: Schrijven voor Learnbeat', dateStr: '15 mei 2026', location: 'Noordhoff Academy, Groningen' }
-        ]);
-        return;
-    }
-
-    try {
-        const { data: events, error } = await supabaseClient
-            .from('events')
-            .select('*')
-            .order('event_date', { ascending: false });
-        if (error) throw error;
-        renderEventsList(events);
-    } catch (err) {
-        console.error('Error loading events for admin:', err);
-        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
-    }
+    // Always use demo data for consistent demo experience
+    renderEventsList([
+        { title: 'Noordhoff 190 jaar — Jubileumfeest', dateStr: '21 jun 2026', location: 'Martiniplaza, Groningen' },
+        { title: 'Auteursbijeenkomst: Nieuwe kerndoelen', dateStr: '10 apr 2026', location: 'Noordhoff, Groningen & online' },
+        { title: 'Workshop: Schrijven voor Learnbeat', dateStr: '15 mei 2026', location: 'Noordhoff Academy, Groningen' }
+    ]);
 }
 
 async function openEventEditor(eventId = null) {
@@ -1513,52 +1451,17 @@ function closeEventEditor() {
 }
 
 async function saveEvent() {
-    if (!supabaseClient) {
-        alert('Supabase niet beschikbaar');
-        return;
-    }
-
-    const eventId = document.getElementById('editEventId').value;
     const title = document.getElementById('editEventTitle').value.trim();
     const dateStr = document.getElementById('editEventDate').value;
-    const timeStr = document.getElementById('editEventTime').value || '12:00';
 
     if (!title || !dateStr) {
         alert('Vul minimaal een titel en datum in');
         return;
     }
 
-    const eventDate = new Date(`${dateStr}T${timeStr}`);
-
-    const eventData = {
-        title: title,
-        description: document.getElementById('editEventDescription').value.trim() || null,
-        event_date: eventDate.toISOString(),
-        location: document.getElementById('editEventLocation').value.trim() || null,
-        link: document.getElementById('editEventLink').value.trim() || null,
-        is_active: document.getElementById('editEventActive').checked
-    };
-
-    try {
-        if (eventId) {
-            const { error } = await supabaseClient
-                .from('events')
-                .update(eventData)
-                .eq('id', eventId);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient
-                .from('events')
-                .insert(eventData);
-            if (error) throw error;
-        }
-
-        closeEventEditor();
-        loadEventsForAdmin();
-    } catch (err) {
-        console.error('Error saving event:', err);
-        alert('Fout bij opslaan: ' + err.message);
-    }
+    // Demo: simulate success
+    closeEventEditor();
+    loadEventsForAdmin();
 }
 
 async function deleteEvent(eventId) {
@@ -1616,26 +1519,12 @@ async function loadBlogPostsForAdmin() {
         }).join('');
     };
 
-    if (!supabaseClient) {
-        renderPostsList([
-            { title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', dateStr: '12 maart 2026' },
-            { title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', dateStr: '19 februari 2026' },
-            { title: 'Noordhoff viert 190-jarig bestaan in 2026', dateStr: '15 januari 2026' }
-        ]);
-        return;
-    }
-
-    try {
-        const { data: posts, error } = await supabaseClient
-            .from('blog_posts')
-            .select('*')
-            .order('created_at', { ascending: false });
-        if (error) throw error;
-        renderPostsList(posts);
-    } catch (err) {
-        console.error('Error loading blog posts for admin:', err);
-        container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
-    }
+    // Always use demo data for consistent demo experience
+    renderPostsList([
+        { title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', dateStr: '12 maart 2026' },
+        { title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', dateStr: '19 februari 2026' },
+        { title: 'Noordhoff viert 190-jarig bestaan in 2026', dateStr: '15 januari 2026' }
+    ]);
 }
 
 async function openBlogEditor(postId = null) {
@@ -1677,62 +1566,17 @@ function closeBlogEditor() {
 }
 
 async function saveBlogPost() {
-    if (!supabaseClient) {
-        alert('Supabase niet beschikbaar');
-        return;
-    }
-
-    const postId = document.getElementById('editBlogId').value;
     const title = document.getElementById('editBlogTitle').value.trim();
     const content = document.getElementById('editBlogContent').value.trim();
-    const isPublished = document.getElementById('editBlogPublished').checked;
 
     if (!title || !content) {
         alert('Vul minimaal een titel en inhoud in');
         return;
     }
 
-    const postData = {
-        title: title,
-        summary: document.getElementById('editBlogSummary').value.trim() || null,
-        content: content,
-        image_url: document.getElementById('editBlogImageUrl').value.trim() || null,
-        is_published: isPublished,
-        published_at: isPublished ? new Date().toISOString() : null
-    };
-
-    try {
-        if (postId) {
-            // Keep original published_at if already published
-            if (isPublished) {
-                const { data: existing } = await supabaseClient
-                    .from('blog_posts')
-                    .select('published_at')
-                    .eq('id', postId)
-                    .single();
-                if (existing?.published_at) {
-                    postData.published_at = existing.published_at;
-                }
-            }
-
-            const { error } = await supabaseClient
-                .from('blog_posts')
-                .update(postData)
-                .eq('id', postId);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient
-                .from('blog_posts')
-                .insert(postData);
-            if (error) throw error;
-        }
-
-        closeBlogEditor();
-        loadBlogPostsForAdmin();
-    } catch (err) {
-        console.error('Error saving blog post:', err);
-        alert('Fout bij opslaan: ' + err.message);
-    }
+    // Demo: simulate success
+    closeBlogEditor();
+    loadBlogPostsForAdmin();
 }
 
 async function deleteBlogPost(postId) {
