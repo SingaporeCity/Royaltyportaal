@@ -1973,6 +1973,97 @@ const DATA = {
                 { year: 2023, type: 'subsidiary', title: { nl: 'Nevenrechten 2023', en: 'Reader Rights 2023' }, date: { nl: '15 juni 2024', en: 'June 15, 2024' }, sortDate: '2024-06-15', amount: 2180.08, filename: 'nevenrechten-2023.pdf' },
                 { year: 2023, type: 'foreign', title: { nl: 'Foreign Rights 2023', en: 'Foreign Rights 2023' }, date: { nl: '15 juli 2024', en: 'July 15, 2024' }, sortDate: '2024-07-15', amount: 872.03, filename: 'foreign-rights-2023.pdf' }
             ]
+        },
+        'els@noordhoff.nl': {
+            password: 'Els12345',
+            info: { vendorNumber: 'V0029411', alliantNumber: '2589012', firstName: 'Els', lastName: 'Bakker-Smit', voorletters: 'E.C.', bsn: '321654987', email: 'els@noordhoff.nl', street: 'Herestraat', houseNumber: '78', postcode: '9711 LB', country: 'Nederland', birthDate: '14-05-1980', phone: '+31 6 45678901', bankAccount: 'NL33 ABNA 0567 8901 23', bic: 'ABNANL2A', initials: 'EB' },
+            contracts: [{ number: 'CC_16700', name: 'Kern Taal & Lezen groep 5', contractPdf: 'CC_16700_contract.pdf' }],
+            infoChanges: [], loginHistory: ['2026-03-24T14:20:00.000Z', '2026-03-18T09:00:00.000Z'], prediction: { min: 5000, max: 8000 },
+            historicalRoyalties: [{ year: 2024, amount: 6230.00 }, { year: 2023, amount: 5890.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 6230.00, filename: 'royalty-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 5890.00, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'jan@noordhoff.nl': {
+            password: 'Jan12345',
+            info: { vendorNumber: 'V0035890', alliantNumber: '2601234', firstName: 'Jan', lastName: 'de Groot', voorletters: 'J.W.', bsn: '654321789', email: 'jan@noordhoff.nl', street: 'Vismarkt', houseNumber: '3a', postcode: '9711 JB', country: 'Nederland', birthDate: '30-09-1968', phone: '+31 6 56789012', bankAccount: 'NL71 RABO 0345 6789 01', bic: 'RABONL2U', initials: 'JG' },
+            contracts: [{ number: 'CC_19300', name: 'Nectar Biologie 5e ed.', contractPdf: 'CC_19300_contract.pdf' }, { number: 'CC_19301', name: 'Nectar Biologie Digitaal', contractPdf: 'CC_19301_contract.pdf' }],
+            infoChanges: [{ id: 'jg1', date: '2026-03-20T11:00:00.000Z', field: 'Adres', old: 'Vismarkt 3a', new: 'Vismarkt 5', status: 'pending' }],
+            loginHistory: ['2026-03-26T07:45:00.000Z', '2026-03-21T16:30:00.000Z', '2026-03-14T10:15:00.000Z'],
+            prediction: { min: 15000, max: 19000 },
+            historicalRoyalties: [{ year: 2024, amount: 16420.00 }, { year: 2023, amount: 14850.50 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 16420.00, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 1642.00, filename: 'nevenrechten-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 14850.50, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'fatima@noordhoff.nl': {
+            password: 'Fatima12345',
+            info: { vendorNumber: 'V0041023', alliantNumber: '2612345', firstName: 'Fatima', lastName: 'El Amrani', voorletters: 'F.Z.', bsn: '789123456', email: 'fatima@noordhoff.nl', street: 'Zwanestraat', houseNumber: '22', postcode: '9712 CL', country: 'Nederland', birthDate: '03-02-1990', phone: '+31 6 67890123', bankAccount: 'NL56 INGB 0678 9012 34', bic: 'INGBNL2A', initials: 'FA' },
+            contracts: [{ number: 'CC_22100', name: 'Stepping Stones 7e ed.', contractPdf: 'CC_22100_contract.pdf' }],
+            infoChanges: [], loginHistory: ['2026-03-22T12:00:00.000Z', '2026-03-16T08:15:00.000Z'], prediction: { min: 7000, max: 10000 },
+            historicalRoyalties: [{ year: 2024, amount: 8340.00 }, { year: 2023, amount: 7120.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 8340.00, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'foreign', title: { nl: 'Foreign Rights 2024', en: 'Foreign Rights 2024' }, date: { nl: '15 juli 2025', en: 'July 15, 2025' }, sortDate: '2025-07-15', amount: 417.00, filename: 'foreign-rights-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 7120.00, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'robert@noordhoff.nl': {
+            password: 'Robert12345',
+            info: { vendorNumber: 'V0015678', alliantNumber: '2523456', firstName: 'Robert', lastName: 'Dijkstra', voorletters: 'R.', bsn: '234567891', email: 'robert@noordhoff.nl', street: 'A-Kerkhof', houseNumber: '10', postcode: '9712 BA', country: 'Nederland', birthDate: '19-12-1965', phone: '+31 6 78901234', bankAccount: 'NL19 ABNA 0890 1234 56', bic: 'ABNANL2A', initials: 'RD' },
+            contracts: [{ number: 'CC_11200', name: 'Fundament Economie 4e ed.', contractPdf: 'CC_11200_contract.pdf' }, { number: 'CC_11201', name: 'Fundament Economie Opgaven', contractPdf: 'CC_11201_contract.pdf' }],
+            infoChanges: [{ id: 'rd1', date: '2026-01-15T10:00:00.000Z', field: 'Postcode', old: '9712 BA', new: '9713 AV', status: 'approved', processedDate: '2026-01-16T09:30:00.000Z' }],
+            loginHistory: ['2026-03-25T15:45:00.000Z', '2026-03-20T11:00:00.000Z', '2026-03-12T09:30:00.000Z', '2026-03-05T14:00:00.000Z'],
+            prediction: { min: 30000, max: 38000 },
+            historicalRoyalties: [{ year: 2024, amount: 33150.00 }, { year: 2023, amount: 29840.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 33150.00, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 3315.00, filename: 'nevenrechten-2024.pdf' },
+                { year: 2024, type: 'foreign', title: { nl: 'Foreign Rights 2024', en: 'Foreign Rights 2024' }, date: { nl: '15 juli 2025', en: 'July 15, 2025' }, sortDate: '2025-07-15', amount: 1657.50, filename: 'foreign-rights-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 29840.00, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'linda@noordhoff.nl': {
+            password: 'Linda12345',
+            info: { vendorNumber: 'V0038901', alliantNumber: '2598765', firstName: 'Linda', lastName: 'Bos', voorletters: 'L.M.', bsn: '567891234', email: 'linda@noordhoff.nl', street: 'Oude Boteringestraat', houseNumber: '56', postcode: '9712 GH', country: 'Nederland', birthDate: '25-08-1978', phone: '+31 6 89012345', bankAccount: 'NL42 RABO 0901 2345 67', bic: 'RABONL2U', initials: 'LB' },
+            contracts: [{ number: 'CC_20400', name: 'BuiteNLand Aardrijkskunde 5e ed.', contractPdf: 'CC_20400_contract.pdf' }],
+            infoChanges: [], loginHistory: ['2026-03-21T13:30:00.000Z', '2026-03-11T10:00:00.000Z'], prediction: { min: 6000, max: 9000 },
+            historicalRoyalties: [{ year: 2024, amount: 7450.00 }, { year: 2023, amount: 6920.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 7450.00, filename: 'royalty-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 6920.00, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'thomas@noordhoff.nl': {
+            password: 'Thomas12345',
+            info: { vendorNumber: 'V0042567', alliantNumber: '2615678', firstName: 'Thomas', lastName: 'Visser', voorletters: 'T.A.', bsn: '891234567', email: 'thomas@noordhoff.nl', street: 'Folkingestraat', houseNumber: '31', postcode: '9711 JT', country: 'Nederland', birthDate: '07-04-1988', phone: '+31 6 90123456', bankAccount: 'NL65 INGB 0012 3456 78', bic: 'INGBNL2A', initials: 'TV' },
+            contracts: [{ number: 'CC_23800', name: 'Memo Geschiedenis 4e ed.', contractPdf: 'CC_23800_contract.pdf' }, { number: 'CC_23801', name: 'Memo Digitaal', contractPdf: 'CC_23801_contract.pdf' }],
+            infoChanges: [{ id: 'tv1', date: '2026-03-24T16:00:00.000Z', field: 'E-mail', old: 'thomas@noordhoff.nl', new: 't.visser@noordhoff.nl', status: 'pending' }],
+            loginHistory: ['2026-03-26T11:00:00.000Z', '2026-03-24T08:30:00.000Z', '2026-03-17T14:45:00.000Z'],
+            prediction: { min: 11000, max: 15000 },
+            historicalRoyalties: [{ year: 2024, amount: 12780.00 }, { year: 2023, amount: 11200.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 12780.00, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 1278.00, filename: 'nevenrechten-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 11200.00, filename: 'royalty-2023.pdf' }
+            ]
+        },
+        'mirjam@noordhoff.nl': {
+            password: 'Mirjam12345',
+            info: { vendorNumber: 'V0027890', alliantNumber: '2578901', firstName: 'Mirjam', lastName: 'Konings', voorletters: 'M.E.', bsn: '345678912', email: 'mirjam@noordhoff.nl', street: 'Brugstraat', houseNumber: '8', postcode: '9711 HZ', country: 'Nederland', birthDate: '12-06-1975', phone: '+31 6 01234567', bankAccount: 'NL88 ABNA 0234 5678 90', bic: 'ABNANL2A', initials: 'MK' },
+            contracts: [{ number: 'CC_17500', name: 'Pluspunt Rekenen groep 6', contractPdf: 'CC_17500_contract.pdf' }, { number: 'CC_17501', name: 'Pluspunt Rekenen groep 7', contractPdf: 'CC_17501_contract.pdf' }, { number: 'CC_17502', name: 'Pluspunt Digitaal', contractPdf: 'CC_17502_contract.pdf' }],
+            infoChanges: [], loginHistory: ['2026-03-23T10:15:00.000Z', '2026-03-17T13:00:00.000Z', '2026-03-09T11:30:00.000Z'],
+            prediction: { min: 13000, max: 17000 },
+            historicalRoyalties: [{ year: 2024, amount: 14920.00 }, { year: 2023, amount: 13450.00 }],
+            payments: [
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 14920.00, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 1492.00, filename: 'nevenrechten-2024.pdf' },
+                { year: 2024, type: 'foreign', title: { nl: 'Foreign Rights 2024', en: 'Foreign Rights 2024' }, date: { nl: '15 juli 2025', en: 'July 15, 2025' }, sortDate: '2025-07-15', amount: 596.80, filename: 'foreign-rights-2024.pdf' },
+                { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 13450.00, filename: 'royalty-2023.pdf' }
+            ]
         }
     },
     faq: [
