@@ -1375,17 +1375,19 @@
                 <span class="header-logo-divider"></span>
                 <span class="header-logo-sub">AUTEURSPORTAAL</span>
             </div>
-            <div class="header-user">
-                <button class="theme-toggle" onclick="toggleDarkMode()" title="Dark mode" aria-label="Toggle dark mode">
-                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM5 13H3a1 1 0 110-2h2a1 1 0 110 2zm14.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zm12.73 0a1 1 0 01-.7-1.7l1.41-1.42a1 1 0 111.41 1.42l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7L7.05 3.4a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/></svg>
-                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73A8.15 8.15 0 019.08 5.49a8.59 8.59 0 01.25-2 1 1 0 00-1.29-1.22A10 10 0 1021.64 13z"/></svg>
-                </button>
-                <div class="user-info">
-                    <div class="user-name">Administrator</div>
-                    <div class="user-role">Admin</div>
-                </div>
+            <div class="header-profile" onclick="toggleProfileMenu()" id="adminHeaderProfile">
+                <span class="header-profile-name">Administrator</span>
                 <div class="user-avatar admin">A</div>
-                <button class="logout-btn" id="adminLogoutBtn">Uitloggen</button>
+                <div class="profile-menu" id="adminProfileMenu">
+                    <div class="profile-menu-item" onclick="event.stopPropagation(); toggleDarkMode();">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                        <span>Weergave wisselen</span>
+                    </div>
+                    <div class="profile-menu-item" id="adminLogoutBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span>Uitloggen</span>
+                    </div>
+                </div>
             </div>
         </header>
         <main class="dashboard-content admin-content">

@@ -6040,17 +6040,27 @@ document.getElementById('adminLogoutBtn')?.addEventListener('click', logout);
 
 // Profile menu toggle
 function toggleProfileMenu() {
-    const menu = document.getElementById('profileMenu');
-    if (menu) menu.classList.toggle('active');
+    // Find the closest profile menu to the clicked element
+    const authorMenu = document.getElementById('profileMenu');
+    const adminMenu = document.getElementById('adminProfileMenu');
+    // Toggle whichever is visible (check which dashboard is active)
+    const adminDash = document.getElementById('adminDashboard');
+    if (adminDash && !adminDash.classList.contains('hidden')) {
+        if (adminMenu) adminMenu.classList.toggle('active');
+    } else {
+        if (authorMenu) authorMenu.classList.toggle('active');
+    }
 }
 
 // Close profile menu on outside click
 document.addEventListener('click', function(e) {
-    const profile = document.getElementById('headerProfile');
-    const menu = document.getElementById('profileMenu');
-    if (menu && profile && !profile.contains(e.target)) {
-        menu.classList.remove('active');
-    }
+    ['headerProfile', 'adminHeaderProfile'].forEach(id => {
+        const profile = document.getElementById(id);
+        const menu = profile?.querySelector('.profile-menu');
+        if (menu && profile && !profile.contains(e.target)) {
+            menu.classList.remove('active');
+        }
+    });
 });
 
 // Tabs
