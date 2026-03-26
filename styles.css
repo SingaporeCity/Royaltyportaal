@@ -10100,6 +10100,36 @@ body.dashboard-active .lang-toggle {
     }
 }
 
+/* FAQ intro */
+.faq-intro {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+}
+
+/* BSN toggle */
+.bsn-masked {
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+}
+
+.bsn-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-light);
+    padding: 0.15rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+}
+
+.bsn-toggle:hover {
+    color: var(--color-primary);
+}
+
 /* Hidden utility */
 .hidden {
     display: none !important;

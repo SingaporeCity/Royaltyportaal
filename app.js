@@ -2189,6 +2189,7 @@ const TRANSLATIONS = {
         prediction_disclaimer: 'Deze prognose is gebaseerd op de omzet van het prognosejaar. Hierbij worden de contracten, royaltypercentages en bijdragersaandelen van het jaar voor het prognosejaar gebruikt, aangezien deze waarden voor het huidige jaar nog niet definitief zijn.',
         edit_info_title: 'Profiel bewerken', cancel_btn: 'Annuleren', save_btn: 'Opslaan', total_paid: 'Totaal uitgekeerd',
         faq_title: 'Veelgestelde vragen',
+        faq_intro: 'Antwoorden op de meest gestelde vragen over royalties, contracten en het portaal.',
         expenses_title: 'Declaraties', expenses_vendor_notice: 'Vermeld uw Vendor ID op de factuur:',
         expenses_submit_title: 'Nieuwe declaratie indienen', expenses_description: 'Omschrijving', expenses_amount: 'Bedrag (€)',
         expenses_upload_title: 'Sleep uw factuur hierheen', expenses_upload_or: 'of', expenses_upload_browse: 'kies een bestand',
@@ -2577,6 +2578,7 @@ const TRANSLATIONS = {
         prediction_disclaimer: "This forecast is based on the revenue of the forecast year. The contracts, royalty percentages and contributor shares from the year before the forecast year are used, as these values are not yet finalized for the current year.",
         edit_info_title: 'Edit Profile', cancel_btn: 'Cancel', save_btn: 'Save', total_paid: 'Total Paid',
         faq_title: 'Frequently Asked Questions',
+        faq_intro: 'Answers to the most frequently asked questions about royalties, contracts and the portal.',
         expenses_title: 'Expenses', expenses_vendor_notice: 'Include your Vendor ID on the invoice:',
         expenses_submit_title: 'Submit new expense', expenses_description: 'Description', expenses_amount: 'Amount (€)',
         expenses_upload_title: 'Drop your invoice here', expenses_upload_or: 'or', expenses_upload_browse: 'choose a file',
@@ -3028,7 +3030,10 @@ function initAuthorDashboard() {
         document.getElementById('infoFirstName').textContent = author.info.firstName;
         document.getElementById('infoInitialsField').textContent = author.info.voorletters || '';
         document.getElementById('infoLastName').textContent = author.info.lastName;
-        document.getElementById('infoBSN').textContent = author.info.bsn ? '••••••' + author.info.bsn.slice(-3) : '';
+        const bsn = author.info.bsn || '';
+        const maskedBsn = bsn.length > 4 ? '•••••' + bsn.slice(-4) : bsn;
+        const bsnEl = document.getElementById('infoBSN');
+        bsnEl.innerHTML = `<span class="bsn-masked">${maskedBsn}</span>${bsn ? `<button class="bsn-toggle" onclick="toggleBsnVisibility(this, '${bsn}')" title="Tonen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>` : ''}`;
         document.getElementById('infoEmail').textContent = author.info.email;
         document.getElementById('infoAddress').textContent = (author.info.street || '') + ' ' + (author.info.houseNumber || '');
         document.getElementById('infoPostcode').textContent = author.info.postcode || '';
@@ -3039,7 +3044,7 @@ function initAuthorDashboard() {
         document.getElementById('infoBIC').textContent = author.info.bic || '';
         initPredictions();
         initDashboardKPIs();
-        renderPayments('2024');
+        renderPayments('all');
         renderContracts();
         renderFAQ();
         initExpenses();
@@ -4050,6 +4055,33 @@ function toggleFAQ(index) {
 
 let _submittedExpenses = JSON.parse(localStorage.getItem('expenses') || '[]');
 let _selectedExpenseFile = null;
+
+// Seed demo expenses if none exist
+if (_submittedExpenses.length === 0) {
+    _submittedExpenses = [
+        {
+            id: 1708000000000,
+            description: 'Reiskosten auteursbijeenkomst Groningen',
+            amount: 87.50,
+            fileName: 'reiskosten-groningen.pdf',
+            fileSize: 204800,
+            vendorNumber: '',
+            date: '2026-02-15',
+            status: 'pending'
+        },
+        {
+            id: 1706000000000,
+            description: 'Drukproeven Moderne Wiskunde 14e ed.',
+            amount: 42.00,
+            fileName: 'drukproeven-wiskunde.pdf',
+            fileSize: 153600,
+            vendorNumber: '',
+            date: '2026-01-22',
+            status: 'approved'
+        }
+    ];
+    localStorage.setItem('expenses', JSON.stringify(_submittedExpenses));
+}
 
 function initExpenses() {
     const author = getCurrentAuthor();
@@ -6039,6 +6071,18 @@ document.getElementById('logoutBtn')?.addEventListener('click', logout);
 document.getElementById('adminLogoutBtn')?.addEventListener('click', logout);
 
 // Profile menu toggle
+function toggleBsnVisibility(btn, fullBsn) {
+    const span = btn.previousElementSibling;
+    const masked = '•••••' + fullBsn.slice(-4);
+    if (span.textContent === fullBsn) {
+        span.textContent = masked;
+        btn.title = 'Tonen';
+    } else {
+        span.textContent = fullBsn;
+        btn.title = 'Verbergen';
+    }
+}
+
 function toggleProfileMenu() {
     // Find the closest profile menu to the clicked element
     const authorMenu = document.getElementById('profileMenu');
