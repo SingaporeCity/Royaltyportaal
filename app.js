@@ -1262,34 +1262,9 @@ async function deleteVacancy(id) {
 // EVENTS & BLOG POSTS FUNCTIONS
 // ============================================
 
-// Load upcoming events (max 3, only future events)
+// Load upcoming events — always use hardcoded content for demo
 async function loadEvents() {
-    if (!supabaseClient) {
-        renderEvents([]);
-        return;
-    }
-
-    try {
-        const now = new Date().toISOString();
-        const { data: events, error } = await supabaseClient
-            .from('events')
-            .select('*')
-            .eq('is_active', true)
-            .gte('event_date', now)
-            .order('event_date', { ascending: true })
-            .limit(3);
-
-        if (error) {
-            console.error('Error fetching events:', error);
-            renderEvents([]);
-            return;
-        }
-
-        renderEvents(events || []);
-    } catch (err) {
-        console.error('Load events exception:', err);
-        renderEvents([]);
-    }
+    renderEvents([]);
 }
 
 function renderEvents(events) {
@@ -1352,32 +1327,9 @@ function renderEvents(events) {
     }).join('');
 }
 
-// Load latest blog posts (max 3, only published)
+// Load latest blog posts — always use hardcoded content for demo
 async function loadBlogPosts() {
-    if (!supabaseClient) {
-        renderBlogPosts([]);
-        return;
-    }
-
-    try {
-        const { data: posts, error } = await supabaseClient
-            .from('blog_posts')
-            .select('*')
-            .eq('is_published', true)
-            .order('published_at', { ascending: false })
-            .limit(3);
-
-        if (error) {
-            console.error('Error fetching blog posts:', error);
-            renderBlogPosts([]);
-            return;
-        }
-
-        renderBlogPosts(posts || []);
-    } catch (err) {
-        console.error('Load blog posts exception:', err);
-        renderBlogPosts([]);
-    }
+    renderBlogPosts([]);
 }
 
 function renderBlogPosts(posts) {
