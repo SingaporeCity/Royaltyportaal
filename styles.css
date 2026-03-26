@@ -3549,7 +3549,7 @@ body.dashboard-active .lang-toggle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.125rem 1.25rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     background: linear-gradient(180deg, #fafbfc 0%, var(--color-white) 100%);
 }
@@ -3557,8 +3557,8 @@ body.dashboard-active .lang-toggle {
 .changes-panel-header h3 {
     margin: 0;
     font-family: var(--font-heading);
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .author-search {
@@ -3657,101 +3657,93 @@ body.dashboard-active .lang-toggle {
 
 .changes-filter-tabs {
     display: flex;
-    gap: 0.4rem;
-    padding: 0.75rem 1rem;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
     background: #f8fafc;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .changes-filter-btn {
-    flex: 1;
-    padding: 0.5rem 0.75rem;
+    padding: 0.35rem 0.75rem;
     font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: var(--color-white);
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: transparent;
     color: var(--color-text-light);
-    border: 1.5px solid var(--color-border);
-    border-radius: 8px;
+    border: none;
+    border-radius: 100px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    transition: all 0.15s ease;
 }
 
 .changes-filter-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--color-text);
 }
 
 .changes-filter-btn.active {
-    background: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
-    color: var(--color-white);
-    border-color: var(--color-primary);
-    box-shadow: 0 2px 6px rgba(27, 94, 59, 0.25);
+    background: var(--color-primary);
+    color: white;
 }
 
 .changes-filter-btn[data-filter="approved"].active {
-    background: linear-gradient(145deg, var(--color-success), #1ba34e);
-    border-color: var(--color-success);
-    box-shadow: 0 2px 6px rgba(34, 197, 94, 0.25);
+    background: var(--color-success);
 }
 
 .changes-filter-btn[data-filter="rejected"].active {
-    background: linear-gradient(145deg, var(--color-danger), #dc2626);
-    border-color: var(--color-danger);
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+    background: var(--color-danger);
 }
 
 .change-actions {
     display: flex;
-    gap: 0.5rem;
-    margin-top: 0.875rem;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex-shrink: 0;
+    align-self: center;
 }
 
 .change-actions button {
-    flex: 1;
-    padding: 0.6rem;
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 600;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 }
 
 .btn-approve {
-    background: linear-gradient(145deg, var(--color-success), #1ba34e);
-    color: white;
-    box-shadow: 0 2px 6px rgba(34, 197, 94, 0.2);
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
 }
 
 .btn-approve:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
+    background: var(--color-success);
+    color: white;
 }
 
 .btn-reject {
-    background: linear-gradient(145deg, var(--color-danger), #dc2626);
-    color: white;
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--color-danger);
 }
 
 .btn-reject:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+    background: var(--color-danger);
+    color: white;
 }
 
 .change-status-badge {
     display: inline-block;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.65rem;
-    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.6rem;
+    font-weight: 600;
     border-radius: var(--radius-pill);
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
 }
 
 .change-status-badge.pending {
@@ -3773,42 +3765,51 @@ body.dashboard-active .lang-toggle {
 }
 
 .change-rejection-reason {
-    margin-top: 0.625rem;
-    padding: 0.625rem 0.75rem;
-    background: linear-gradient(135deg, #fef2f2 0%, #fee8e8 100%);
-    border-radius: 8px;
-    font-size: 0.8rem;
+    margin-top: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    background: #fef2f2;
+    border-radius: 5px;
+    font-size: 0.72rem;
     color: #991b1b;
-    border-left: 3px solid var(--color-danger);
+    border-left: 2px solid var(--color-danger);
 }
 
 .change-processed-date {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--color-text-light);
-    margin-top: 0.35rem;
+    margin-top: 0.15rem;
 }
 
 #allChangesList {
-    max-height: calc(100vh - 350px);
+    max-height: calc(100vh - 300px);
     overflow-y: auto;
-    padding: 0.5rem 0;
+    padding: 0;
 }
 
 .all-change-item {
-    padding: 1rem 1.25rem;
+    padding: 0.7rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: background 0.15s ease;
 }
 
 .all-change-item:hover {
-    background: rgba(27, 94, 59, 0.04);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.all-change-item-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .author-link {
     color: var(--color-primary);
     cursor: pointer;
     font-weight: 600;
-    transition: color 0.2s ease;
+    font-size: 0.82rem;
+    transition: color 0.15s ease;
 }
 
 .author-link:hover {
@@ -3817,29 +3818,27 @@ body.dashboard-active .lang-toggle {
 }
 
 .all-change-author {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--color-text);
-    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.15rem;
 }
 
 .all-change-field {
-    font-size: 0.85rem;
-    color: var(--color-primary);
-    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--color-text);
     font-weight: 500;
 }
 
 .all-change-values {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--color-text-light);
 }
 
 .all-change-date {
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     color: var(--color-text-light);
-    margin-top: 0.35rem;
+    margin-top: 0.1rem;
 }
 
 .author-item {

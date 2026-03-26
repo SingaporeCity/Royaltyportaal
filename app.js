@@ -4622,23 +4622,24 @@ function renderAllChanges(filter = currentChangesFilter) {
 
     listEl.innerHTML = allChanges.map(change => `
         <div class="all-change-item">
-            <div class="all-change-author">
-                <span class="author-link" onclick="selectAuthorFromChange('${change.email}')">${change.authorName}</span>
-                <span class="change-status-badge ${change.status}">${statusLabels[change.status]}</span>
+            <div class="all-change-item-content">
+                <div class="all-change-author">
+                    <span class="author-link" onclick="selectAuthorFromChange('${change.email}')">${change.authorName}</span>
+                    <span class="change-status-badge ${change.status}">${statusLabels[change.status]}</span>
+                </div>
+                <div class="all-change-field">${change.field}: <span class="all-change-values"><span style="color:var(--color-danger)">${change.old || '-'}</span> → <span style="color:var(--color-success)">${change.new}</span></span></div>
+                <div class="all-change-date">${formatDateTime(new Date(change.date))}</div>
+                ${change.processedDate ? `<div class="change-processed-date">Verwerkt: ${formatDateTime(new Date(change.processedDate))}</div>` : ''}
+                ${change.rejectionReason ? `<div class="change-rejection-reason">${change.rejectionReason}</div>` : ''}
             </div>
-            <div class="all-change-field">${change.field}</div>
-            <div class="all-change-values">
-                <span style="color:var(--color-danger)">was: ${change.old || '-'}</span>
-                <span> → </span>
-                <span style="color:var(--color-success)">nieuw: ${change.new}</span>
-            </div>
-            <div class="all-change-date">Aangevraagd: ${formatDateTime(new Date(change.date))}</div>
-            ${change.processedDate ? `<div class="change-processed-date">Verwerkt: ${formatDateTime(new Date(change.processedDate))}</div>` : ''}
-            ${change.rejectionReason ? `<div class="change-rejection-reason">Reden: ${change.rejectionReason}</div>` : ''}
             ${change.status === 'pending' ? `
                 <div class="change-actions">
-                    <button class="btn-approve" onclick="approveChange('${change.email}', '${change.id}')">Goedkeuren</button>
-                    <button class="btn-reject" onclick="openRejectModal('${change.email}', '${change.id}')">Afwijzen</button>
+                    <button class="btn-approve" onclick="approveChange('${change.email}', '${change.id}')" title="Goedkeuren">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <button class="btn-reject" onclick="openRejectModal('${change.email}', '${change.id}')" title="Afwijzen">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
                 </div>
             ` : ''}
         </div>
