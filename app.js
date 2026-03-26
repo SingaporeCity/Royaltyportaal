@@ -5528,17 +5528,15 @@ function renderAuthorDetail() {
                 <div class="detail-section">
                     <h4>Recente wijzigingen</h4>
                     ${author.infoChanges.length > 0 ? `
-                        <div class="changes-list">
+                        <div class="changes-log">
                             ${author.infoChanges.slice(-10).reverse().map(c => `
-                                <div class="change-entry">
-                                    <div class="change-date">${formatDateTime(new Date(c.date))}</div>
-                                    <div class="change-field">${c.field}</div>
-                                    <div class="change-values">
-                                        <span class="change-old">was: ${c.old || '-'}</span>
-                                        <span class="change-arrow">→</span>
-                                        <span class="change-new">is nu: ${c.new}</span>
-                                    </div>
-                                    <span class="change-status-badge ${c.status || 'pending'}">${c.status === 'approved' ? 'Goedgekeurd' : c.status === 'rejected' ? 'Afgewezen' : 'In afwachting'}</span>
+                                <div class="change-log-row">
+                                    <span class="change-log-dot ${c.status || 'pending'}"></span>
+                                    <span class="change-log-date">${formatDateTime(new Date(c.date))}</span>
+                                    <span class="change-log-field">${c.field}</span>
+                                    <span class="change-log-val">${c.old || '-'}</span>
+                                    <span class="change-log-arrow">→</span>
+                                    <span class="change-log-val">${c.new}</span>
                                 </div>
                             `).join('')}
                         </div>
