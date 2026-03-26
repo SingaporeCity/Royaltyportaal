@@ -1103,6 +1103,13 @@ function filterVacancies(segment) {
 // VACANCIES — Admin CRUD
 // ============================================
 
+// Demo data arrays (persist during session, support add/edit)
+let _demoVacancies = [
+    { id: 'v1', title: 'Auteur Wiskunde — Moderne Wiskunde', subject: 'Wiskunde', segment: 'vo', type: 'auteur' },
+    { id: 'v2', title: 'Auteur Nederlands — Nieuw Nederlands', subject: 'Nederlands', segment: 'vo', type: 'auteur' },
+    { id: 'v3', title: 'Reviewer Biologie', subject: 'Biologie', segment: 'vo', type: 'reviewer' }
+];
+
 function openVacancyManager() {
     document.getElementById('vacancyManagerModal').classList.add('active');
     loadVacanciesForAdmin();
@@ -1112,36 +1119,26 @@ function closeVacancyManager() {
     document.getElementById('vacancyManagerModal').classList.remove('active');
 }
 
-async function loadVacanciesForAdmin() {
+function loadVacanciesForAdmin() {
     const container = document.getElementById('vacancyManagerList');
-
-    const renderVacanciesList = (vacancies) => {
-        if (!vacancies || vacancies.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen vacatures</p>';
-            return;
-        }
-        container.innerHTML = vacancies.map(v => `
-            <div class="manager-item">
-                <div class="manager-item-info">
-                    <div class="manager-item-title">${v.title}</div>
-                    <div class="manager-item-meta">${v.subject || ''} ${v.segment ? '• ' + v.segment.toUpperCase() : ''} ${v.type ? '• ' + v.type : ''}</div>
-                </div>
-                <div class="manager-item-actions">
-                    <button class="btn-small" onclick="openVacancyEditor('${v.id || ''}')">Bewerken</button>
-                </div>
+    if (!_demoVacancies.length) {
+        container.innerHTML = '<p class="empty-state">Geen vacatures</p>';
+        return;
+    }
+    container.innerHTML = _demoVacancies.map(v => `
+        <div class="manager-item">
+            <div class="manager-item-info">
+                <div class="manager-item-title">${v.title}</div>
+                <div class="manager-item-meta">${v.subject || ''} ${v.segment ? '• ' + v.segment.toUpperCase() : ''} ${v.type ? '• ' + v.type : ''}</div>
             </div>
-        `).join('');
-    };
-
-    // Always use demo data for consistent demo experience
-    renderVacanciesList([
-        { title: 'Auteur Wiskunde — Moderne Wiskunde', subject: 'Wiskunde', segment: 'vo', type: 'auteur' },
-        { title: 'Auteur Nederlands — Nieuw Nederlands', subject: 'Nederlands', segment: 'vo', type: 'auteur' },
-        { title: 'Reviewer Biologie', subject: 'Biologie', segment: 'vo', type: 'reviewer' }
-    ]);
+            <div class="manager-item-actions">
+                <button class="btn-small" onclick="openVacancyEditor('${v.id}')">Bewerken</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-async function openVacancyEditor(vacancyId = null) {
+function openVacancyEditor(vacancyId = null) {
     document.getElementById('vacancyEditorModal').classList.add('active');
     document.getElementById('editVacancyId').value = vacancyId || '';
     document.getElementById('vacancyEditorTitle').textContent = vacancyId ? 'Vacature bewerken' : 'Nieuwe vacature';
@@ -1155,26 +1152,16 @@ async function openVacancyEditor(vacancyId = null) {
     document.getElementById('editVacancyDescription').value = '';
     document.getElementById('editVacancyActive').checked = true;
 
-    if (vacancyId && supabaseClient) {
-        try {
-            const { data: vacancy, error } = await supabaseClient
-                .from('vacancies')
-                .select('*')
-                .eq('id', vacancyId)
-                .single();
-
-            if (error) throw error;
-
-            document.getElementById('editVacancyTitle').value = vacancy.title || '';
-            document.getElementById('editVacancySegment').value = vacancy.segment || 'vo';
-            document.getElementById('editVacancySubject').value = vacancy.subject || '';
-            document.getElementById('editVacancyType').value = vacancy.type || 'auteur';
-            document.getElementById('editVacancyHours').value = vacancy.hours || '';
-            document.getElementById('editVacancyDescription').value = vacancy.description || '';
-            document.getElementById('editVacancyActive').checked = vacancy.is_active;
-        } catch (err) {
-            console.error('Error loading vacancy:', err);
-            alert('Fout bij laden vacature: ' + err.message);
+    // Load from local demo array
+    if (vacancyId) {
+        const v = _demoVacancies.find(x => x.id === vacancyId);
+        if (v) {
+            document.getElementById('editVacancyTitle').value = v.title || '';
+            document.getElementById('editVacancySegment').value = v.segment || 'vo';
+            document.getElementById('editVacancySubject').value = v.subject || '';
+            document.getElementById('editVacancyType').value = v.type || 'auteur';
+            document.getElementById('editVacancyHours').value = v.hours || '';
+            document.getElementById('editVacancyDescription').value = v.description || '';
         }
     }
 }
@@ -1183,7 +1170,8 @@ function closeVacancyEditor() {
     document.getElementById('vacancyEditorModal').classList.remove('active');
 }
 
-async function saveVacancy() {
+function saveVacancy() {
+    const vacancyId = document.getElementById('editVacancyId').value;
     const title = document.getElementById('editVacancyTitle').value.trim();
     const subject = document.getElementById('editVacancySubject').value.trim();
 
@@ -1192,26 +1180,30 @@ async function saveVacancy() {
         return;
     }
 
-    // Demo: simulate success
+    const data = {
+        title, subject,
+        segment: document.getElementById('editVacancySegment').value,
+        type: document.getElementById('editVacancyType').value,
+        hours: document.getElementById('editVacancyHours').value.trim() || null,
+        description: document.getElementById('editVacancyDescription').value.trim() || null
+    };
+
+    if (vacancyId) {
+        const idx = _demoVacancies.findIndex(x => x.id === vacancyId);
+        if (idx >= 0) _demoVacancies[idx] = { ...data, id: vacancyId };
+    } else {
+        data.id = 'v' + Date.now();
+        _demoVacancies.push(data);
+    }
+
     closeVacancyEditor();
     loadVacanciesForAdmin();
 }
 
-async function deleteVacancy(id) {
+function deleteVacancy(id) {
     if (!confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) return;
-    if (!supabaseClient) return;
-
-    try {
-        const { error } = await supabaseClient
-            .from('vacancies')
-            .delete()
-            .eq('id', id);
-        if (error) throw error;
-        loadVacanciesForAdmin();
-    } catch (err) {
-        console.error('Error deleting vacancy:', err);
-        alert('Fout bij verwijderen: ' + err.message);
-    }
+    _demoVacancies = _demoVacancies.filter(v => v.id !== id);
+    loadVacanciesForAdmin();
 }
 
 // ============================================
@@ -1374,45 +1366,36 @@ function closeEventsManager() {
     document.getElementById('eventsManagerModal').classList.remove('active');
 }
 
-async function loadEventsForAdmin() {
+let _demoEvents = [
+    { id: 'e1', title: 'Noordhoff 190 jaar — Jubileumfeest', dateStr: '21 jun 2026', location: 'Martiniplaza, Groningen' },
+    { id: 'e2', title: 'Auteursbijeenkomst: Nieuwe kerndoelen', dateStr: '10 apr 2026', location: 'Noordhoff, Groningen & online' },
+    { id: 'e3', title: 'Workshop: Schrijven voor Learnbeat', dateStr: '15 mei 2026', location: 'Noordhoff Academy, Groningen' }
+];
+
+function loadEventsForAdmin() {
     const container = document.getElementById('eventsManagerList');
-
-    const renderEventsList = (events) => {
-        if (!events || events.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen evenementen</p>';
-            return;
-        }
-        container.innerHTML = events.map(event => {
-            const dateStr = event.dateStr || new Date(event.event_date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
-            const isPast = event.event_date ? new Date(event.event_date) < new Date() : false;
-            return `
-                <div class="manager-item ${isPast ? 'past' : ''}">
-                    <div class="manager-item-info">
-                        <div class="manager-item-title">${event.title}</div>
-                        <div class="manager-item-meta">${dateStr} ${event.location ? '• ' + event.location : ''}</div>
-                    </div>
-                    <div class="manager-item-actions">
-                        <button class="btn-small" onclick="openEventEditor('${event.id || ''}')">Bewerken</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    };
-
-    // Always use demo data for consistent demo experience
-    renderEventsList([
-        { title: 'Noordhoff 190 jaar — Jubileumfeest', dateStr: '21 jun 2026', location: 'Martiniplaza, Groningen' },
-        { title: 'Auteursbijeenkomst: Nieuwe kerndoelen', dateStr: '10 apr 2026', location: 'Noordhoff, Groningen & online' },
-        { title: 'Workshop: Schrijven voor Learnbeat', dateStr: '15 mei 2026', location: 'Noordhoff Academy, Groningen' }
-    ]);
+    if (!_demoEvents.length) {
+        container.innerHTML = '<p class="empty-state">Geen evenementen</p>';
+        return;
+    }
+    container.innerHTML = _demoEvents.map(event => `
+        <div class="manager-item">
+            <div class="manager-item-info">
+                <div class="manager-item-title">${event.title}</div>
+                <div class="manager-item-meta">${event.dateStr} ${event.location ? '• ' + event.location : ''}</div>
+            </div>
+            <div class="manager-item-actions">
+                <button class="btn-small" onclick="openEventEditor('${event.id}')">Bewerken</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-async function openEventEditor(eventId = null) {
+function openEventEditor(eventId = null) {
     document.getElementById('eventEditorModal').classList.add('active');
     document.getElementById('editEventId').value = eventId || '';
     document.getElementById('eventEditorTitle').textContent = eventId ? 'Evenement bewerken' : 'Nieuw evenement';
 
-    // Clear form
     document.getElementById('editEventTitle').value = '';
     document.getElementById('editEventDescription').value = '';
     document.getElementById('editEventDate').value = '';
@@ -1421,27 +1404,12 @@ async function openEventEditor(eventId = null) {
     document.getElementById('editEventLink').value = '';
     document.getElementById('editEventActive').checked = true;
 
-    if (eventId && supabaseClient) {
-        try {
-            const { data: event, error } = await supabaseClient
-                .from('events')
-                .select('*')
-                .eq('id', eventId)
-                .single();
-
-            if (error) throw error;
-
-            const eventDate = new Date(event.event_date);
-            document.getElementById('editEventTitle').value = event.title || '';
-            document.getElementById('editEventDescription').value = event.description || '';
-            document.getElementById('editEventDate').value = eventDate.toISOString().split('T')[0];
-            document.getElementById('editEventTime').value = eventDate.toTimeString().slice(0, 5);
-            document.getElementById('editEventLocation').value = event.location || '';
-            document.getElementById('editEventLink').value = event.link || '';
-            document.getElementById('editEventActive').checked = event.is_active;
-        } catch (err) {
-            console.error('Error loading event:', err);
-            alert('Fout bij laden evenement: ' + err.message);
+    if (eventId) {
+        const ev = _demoEvents.find(x => x.id === eventId);
+        if (ev) {
+            document.getElementById('editEventTitle').value = ev.title || '';
+            document.getElementById('editEventDescription').value = ev.description || '';
+            document.getElementById('editEventLocation').value = ev.location || '';
         }
     }
 }
@@ -1450,36 +1418,39 @@ function closeEventEditor() {
     document.getElementById('eventEditorModal').classList.remove('active');
 }
 
-async function saveEvent() {
+function saveEvent() {
+    const eventId = document.getElementById('editEventId').value;
     const title = document.getElementById('editEventTitle').value.trim();
     const dateStr = document.getElementById('editEventDate').value;
 
-    if (!title || !dateStr) {
-        alert('Vul minimaal een titel en datum in');
+    if (!title) {
+        alert('Vul minimaal een titel in');
         return;
     }
 
-    // Demo: simulate success
+    const data = {
+        title,
+        description: document.getElementById('editEventDescription').value.trim() || '',
+        location: document.getElementById('editEventLocation').value.trim() || '',
+        dateStr: dateStr ? new Date(dateStr).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
+    };
+
+    if (eventId) {
+        const idx = _demoEvents.findIndex(x => x.id === eventId);
+        if (idx >= 0) _demoEvents[idx] = { ...data, id: eventId };
+    } else {
+        data.id = 'e' + Date.now();
+        _demoEvents.push(data);
+    }
+
     closeEventEditor();
     loadEventsForAdmin();
 }
 
-async function deleteEvent(eventId) {
+function deleteEvent(eventId) {
     if (!confirm('Weet je zeker dat je dit evenement wilt verwijderen?')) return;
-    if (!supabaseClient) return;
-
-    try {
-        const { error } = await supabaseClient
-            .from('events')
-            .delete()
-            .eq('id', eventId);
-
-        if (error) throw error;
-        loadEventsForAdmin();
-    } catch (err) {
-        console.error('Error deleting event:', err);
-        alert('Fout bij verwijderen: ' + err.message);
-    }
+    _demoEvents = _demoEvents.filter(e => e.id !== eventId);
+    loadEventsForAdmin();
 }
 
 // ============================================
@@ -1495,68 +1466,48 @@ function closeBlogManager() {
     document.getElementById('blogManagerModal').classList.remove('active');
 }
 
-async function loadBlogPostsForAdmin() {
+let _demoNews = [
+    { id: 'n1', title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', dateStr: '12 maart 2026', summary: 'De grootste onderwijsvernieuwing in 20 jaar gaat in per 1 augustus 2026.', content: 'Moderne Wiskunde 14e editie, Nieuw Nederlands en Getal & Ruimte zijn volledig herzien.' },
+    { id: 'n2', title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', dateStr: '19 februari 2026', summary: 'Noordhoff\'s adaptieve leerplatform groeit door.', content: 'Studenten waarderen Studiemeister met een 7,9.' },
+    { id: 'n3', title: 'Noordhoff viert 190-jarig bestaan in 2026', dateStr: '15 januari 2026', summary: 'Van P. Noordhoff in 1836 tot de grootste educatieve uitgever.', content: 'Op 21 juni vieren we dit met alle auteurs in Groningen.' }
+];
+
+function loadBlogPostsForAdmin() {
     const container = document.getElementById('blogManagerList');
-
-    const renderPostsList = (posts) => {
-        if (!posts || posts.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
-            return;
-        }
-        container.innerHTML = posts.map(post => {
-            const dateStr = post.dateStr || new Date(post.created_at).toLocaleDateString('nl-NL');
-            return `
-                <div class="manager-item">
-                    <div class="manager-item-info">
-                        <div class="manager-item-title">${post.title}</div>
-                        <div class="manager-item-meta">${dateStr}</div>
-                    </div>
-                    <div class="manager-item-actions">
-                        <button class="btn-small" onclick="openBlogEditor('${post.id || ''}')">Bewerken</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    };
-
-    // Always use demo data for consistent demo experience
-    renderPostsList([
-        { title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', dateStr: '12 maart 2026' },
-        { title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', dateStr: '19 februari 2026' },
-        { title: 'Noordhoff viert 190-jarig bestaan in 2026', dateStr: '15 januari 2026' }
-    ]);
+    if (!_demoNews.length) {
+        container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
+        return;
+    }
+    container.innerHTML = _demoNews.map(post => `
+        <div class="manager-item">
+            <div class="manager-item-info">
+                <div class="manager-item-title">${post.title}</div>
+                <div class="manager-item-meta">${post.dateStr}</div>
+            </div>
+            <div class="manager-item-actions">
+                <button class="btn-small" onclick="openBlogEditor('${post.id}')">Bewerken</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-async function openBlogEditor(postId = null) {
+function openBlogEditor(postId = null) {
     document.getElementById('blogEditorModal').classList.add('active');
     document.getElementById('editBlogId').value = postId || '';
     document.getElementById('blogEditorTitle').textContent = postId ? 'Bericht bewerken' : 'Nieuw nieuwsbericht';
 
-    // Clear form
     document.getElementById('editBlogTitle').value = '';
     document.getElementById('editBlogSummary').value = '';
     document.getElementById('editBlogContent').value = '';
     document.getElementById('editBlogImageUrl').value = '';
     document.getElementById('editBlogPublished').checked = false;
 
-    if (postId && supabaseClient) {
-        try {
-            const { data: post, error } = await supabaseClient
-                .from('blog_posts')
-                .select('*')
-                .eq('id', postId)
-                .single();
-
-            if (error) throw error;
-
-            document.getElementById('editBlogTitle').value = post.title || '';
-            document.getElementById('editBlogSummary').value = post.summary || '';
-            document.getElementById('editBlogContent').value = post.content || '';
-            document.getElementById('editBlogImageUrl').value = post.image_url || '';
-            document.getElementById('editBlogPublished').checked = post.is_published;
-        } catch (err) {
-            console.error('Error loading blog post:', err);
-            alert('Fout bij laden bericht: ' + err.message);
+    if (postId) {
+        const p = _demoNews.find(x => x.id === postId);
+        if (p) {
+            document.getElementById('editBlogTitle').value = p.title || '';
+            document.getElementById('editBlogSummary').value = p.summary || '';
+            document.getElementById('editBlogContent').value = p.content || '';
         }
     }
 }
@@ -1565,7 +1516,8 @@ function closeBlogEditor() {
     document.getElementById('blogEditorModal').classList.remove('active');
 }
 
-async function saveBlogPost() {
+function saveBlogPost() {
+    const postId = document.getElementById('editBlogId').value;
     const title = document.getElementById('editBlogTitle').value.trim();
     const content = document.getElementById('editBlogContent').value.trim();
 
@@ -1574,27 +1526,28 @@ async function saveBlogPost() {
         return;
     }
 
-    // Demo: simulate success
+    const data = {
+        title, content,
+        summary: document.getElementById('editBlogSummary').value.trim() || '',
+        dateStr: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })
+    };
+
+    if (postId) {
+        const idx = _demoNews.findIndex(x => x.id === postId);
+        if (idx >= 0) _demoNews[idx] = { ...data, id: postId, dateStr: _demoNews[idx].dateStr };
+    } else {
+        data.id = 'n' + Date.now();
+        _demoNews.push(data);
+    }
+
     closeBlogEditor();
     loadBlogPostsForAdmin();
 }
 
-async function deleteBlogPost(postId) {
+function deleteBlogPost(postId) {
     if (!confirm('Weet je zeker dat je dit bericht wilt verwijderen?')) return;
-    if (!supabaseClient) return;
-
-    try {
-        const { error } = await supabaseClient
-            .from('blog_posts')
-            .delete()
-            .eq('id', postId);
-
-        if (error) throw error;
-        loadBlogPostsForAdmin();
-    } catch (err) {
-        console.error('Error deleting blog post:', err);
-        alert('Fout bij verwijderen: ' + err.message);
-    }
+    _demoNews = _demoNews.filter(p => p.id !== postId);
+    loadBlogPostsForAdmin();
 }
 
 // ============================================
