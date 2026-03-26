@@ -2093,7 +2093,7 @@ const DATA = {
                 { year: 2023, amount: 15420.00 }
             ],
             payments: [
-                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 17641.50, filename: 'royalty-2024.pdf' },
+                { year: 2024, type: 'royalty', title: { nl: 'Royalty-afrekening 2024', en: 'Royalty Statement 2024' }, date: { nl: '15 maart 2025', en: 'March 15, 2025' }, sortDate: '2025-03-15', amount: 17641.50, filename: 'royalty-2024.pdf', localPdf: 'Section for Recipient O.A. Leppink- 2024.pdf' },
                 { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 1764.15, filename: 'nevenrechten-2024.pdf' },
                 { year: 2024, type: 'foreign', title: { nl: 'Foreign Rights 2024', en: 'Foreign Rights 2024' }, date: { nl: '15 juli 2025', en: 'July 15, 2025' }, sortDate: '2025-07-15', amount: 705.66, filename: 'foreign-rights-2024.pdf' },
                 { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 15420.00, filename: 'royalty-2023.pdf' },
@@ -3909,18 +3909,26 @@ function renderPayments(filterYear) {
         yearlyTotals[p.year][p.type] = p.amount;
     });
 
+    // Local PDF mapping for annual statements (demo)
+    const annualLocalPdfs = {};
+    if (author.info.email === 'patrick@noordhoff.nl') {
+        annualLocalPdfs[2024] = 'Jaaropgaven 2025 C.Philips.pdf';
+    }
+
     const annualStatements = [];
     Object.keys(yearlyTotals).forEach(year => {
         const totals = yearlyTotals[year];
         const totalAmount = totals.royalty + totals.subsidiary + totals.foreign;
         if (totalAmount > 0) {
-            annualStatements.push({
+            const stmt = {
                 year: parseInt(year), type: 'annual',
                 title: { nl: `Jaaropgave ${year}`, en: `Annual Statement ${year}` },
                 date: { nl: `Totaaloverzicht ${year}`, en: `Total Overview ${year}` },
                 sortDate: `${parseInt(year) + 1}-12-31`, amount: totalAmount,
                 filename: `jaaropgave-${year}.pdf`, breakdown: totals
-            });
+            };
+            if (annualLocalPdfs[parseInt(year)]) stmt.localPdf = annualLocalPdfs[parseInt(year)];
+            annualStatements.push(stmt);
         }
     });
 
@@ -4229,18 +4237,26 @@ function resolvePayment(paymentIndex, filterYear) {
         if (!yearlyTotals[p.year]) yearlyTotals[p.year] = { royalty: 0, subsidiary: 0, foreign: 0 };
         yearlyTotals[p.year][p.type] = p.amount;
     });
+    // Local PDF mapping for annual statements (demo)
+    const annualLocalPdfs = {};
+    if (author.info.email === 'patrick@noordhoff.nl') {
+        annualLocalPdfs[2024] = 'Jaaropgaven 2025 C.Philips.pdf';
+    }
+
     const annualStatements = [];
     Object.keys(yearlyTotals).forEach(year => {
         const totals = yearlyTotals[year];
         const totalAmount = totals.royalty + totals.subsidiary + totals.foreign;
         if (totalAmount > 0) {
-            annualStatements.push({
+            const stmt = {
                 year: parseInt(year), type: 'annual',
                 title: { nl: `Jaaropgave ${year}`, en: `Annual Statement ${year}` },
                 date: { nl: `Totaaloverzicht ${year}`, en: `Total Overview ${year}` },
                 sortDate: `${parseInt(year) + 1}-12-31`, amount: totalAmount,
                 filename: `jaaropgave-${year}.pdf`, breakdown: totals
-            });
+            };
+            if (annualLocalPdfs[parseInt(year)]) stmt.localPdf = annualLocalPdfs[parseInt(year)];
+            annualStatements.push(stmt);
         }
     });
 
@@ -4368,7 +4384,11 @@ async function previewPaymentPDF(paymentIndex, filterYear) {
     let pdfUrl = '';
     let downloadFilename = payment.filename || 'document.pdf';
 
-    if (payment.filePath && supabaseClient) {
+    if (payment.localPdf) {
+        // Local PDF file (demo)
+        pdfUrl = encodeURI(payment.localPdf);
+        downloadFilename = payment.localPdf;
+    } else if (payment.filePath && supabaseClient) {
         // Real PDF from Storage
         try {
             const { data, error } = await supabaseClient.storage
@@ -4442,6 +4462,17 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
     const result = resolvePayment(paymentIndex, filterYear);
     if (!result) return;
     const { payment, author } = result;
+
+    if (payment.localPdf) {
+        // Local PDF file (demo)
+        const a = document.createElement('a');
+        a.href = encodeURI(payment.localPdf);
+        a.download = payment.localPdf;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+    }
 
     if (payment.filePath && supabaseClient) {
         try {
