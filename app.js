@@ -2078,8 +2078,8 @@ const DATA = {
                 initials: 'PJ'
             },
             contracts: [
-                { number: 'CC_14000', name: 'Moderne Wiskunde 13-14 BB', contractPdf: 'CC_14000_contract.pdf' },
-                { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf' }
+                { number: 'CC_14000', name: 'Moderne Wiskunde 13-14 BB', contractPdf: 'CC_14000_contract.pdf', localPdf: 'MW Methodeovereenkomst 12e-13e ed. releases 12.1&13.1_Boom, J. van den.pdf' },
+                { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf', localPdf: 'MW Methodeovereenkomst 12e-13e ed. releases 12.1&13.1_Boom, J. van den.pdf' }
             ],
             infoChanges: [
                 { id: 'test1_ph', date: '2025-01-15T10:30:00.000Z', field: 'Telefoonnummer', old: '+31 6 12345678', new: '+31 6 98765432', status: 'pending' },
@@ -3593,6 +3593,15 @@ function downloadAuthorContractPDF(index) {
     const author = getCurrentAuthor();
     if (!author || !author.contracts) return;
     const contract = author.contracts[index];
+    if (contract.localPdf) {
+        const a = document.createElement('a');
+        a.href = encodeURI(contract.localPdf);
+        a.download = contract.localPdf;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+    }
     if (contract.contractPdf) {
         const doc = generateContractPDFDoc(contract, author);
         doc.save(`contract-${contract.number}.pdf`);
@@ -3603,11 +3612,16 @@ function previewContractPDF(index) {
     const author = getCurrentAuthor();
     if (!author || !author.contracts) return;
     const contract = author.contracts[index];
-    if (!contract.contractPdf) return;
+    if (!contract.contractPdf && !contract.localPdf) return;
 
-    const doc = generateContractPDFDoc(contract, author);
-    const blob = doc.output('blob');
-    const pdfUrl = URL.createObjectURL(blob);
+    let pdfUrl;
+    if (contract.localPdf) {
+        pdfUrl = encodeURI(contract.localPdf);
+    } else {
+        const doc = generateContractPDFDoc(contract, author);
+        const blob = doc.output('blob');
+        pdfUrl = URL.createObjectURL(blob);
+    }
 
     const modal = document.getElementById('pdfPreviewModal');
     const frame = document.getElementById('pdfPreviewFrame');
