@@ -503,10 +503,10 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 
 | Rol | Email | Wachtwoord |
 |-----|-------|------------|
-| Admin | `admin@noordhoff.nl` | `Admin123` |
-| Auteur | `patrick@noordhoff.nl` | `Patrick123` |
-| Auteur | `suzanna@noordhoff.nl` | `Suzanna123` |
-| Auteur | `anita@noordhoff.nl` | `Anita123` |
+| Admin | `admin@noordhoff.nl` | `Admin12345` |
+| Auteur | `patrick@noordhoff.nl` | `Patrick12345` |
+| Auteur | `suzanna@noordhoff.nl` | `Suzanna12345` |
+| Auteur | `anita@noordhoff.nl` | `Anita12345` |
 
 Werken altijd als fallback wanneer Supabase niet bereikbaar is. Login probeert eerst Supabase, daarna lokale DATA.
 

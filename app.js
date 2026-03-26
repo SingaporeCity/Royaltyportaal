@@ -2055,10 +2055,10 @@ async function refreshCurrentAuthorData() {
 // DATA STORE (FALLBACK FOR LOCAL TESTING)
 // ============================================
 const DATA = {
-    admin: { email: 'admin@noordhoff.nl', password: 'Admin123' },
+    admin: { email: 'admin@noordhoff.nl', password: 'Admin12345' },
     authors: {
         'patrick@noordhoff.nl': {
-            password: 'Patrick123',
+            password: 'Patrick12345',
             info: {
                 vendorNumber: 'V0024123',
                 alliantNumber: '2512345',
@@ -2102,7 +2102,7 @@ const DATA = {
             ]
         },
         'suzanna@noordhoff.nl': {
-            password: 'Suzanna123',
+            password: 'Suzanna12345',
             info: {
                 vendorNumber: 'V0018756',
                 alliantNumber: '2534892',
@@ -2142,7 +2142,7 @@ const DATA = {
             ]
         },
         'anita@noordhoff.nl': {
-            password: 'Anita123',
+            password: 'Anita12345',
             info: {
                 vendorNumber: 'V0031247',
                 alliantNumber: '2567034',
