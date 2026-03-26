@@ -5580,11 +5580,13 @@ function renderAuthorDetail() {
             <!-- Forecast Tab -->
             <div class="admin-detail-tab-content ${currentAdminTab === 'forecast' ? 'active' : ''}" id="admin-tab-forecast">
                 <div class="detail-section">
-                    <h4>Prognose <button class="edit-btn-small" onclick="openEditPredictionModal()">Bewerken</button></h4>
-                    <div class="info-grid">
-                        <div class="info-card"><div class="info-card-label">Minimum</div><div class="info-card-value">${formatCurrency(author.prediction.min)}</div></div>
-                        <div class="info-card"><div class="info-card-label">Maximum</div><div class="info-card-value">${formatCurrency(author.prediction.max)}</div></div>
-                        <div class="info-card"><div class="info-card-label">Verwacht</div><div class="info-card-value">${formatCurrency(Math.round((author.prediction.min + author.prediction.max) / 2))}</div></div>
+                    <h4>Prognose 2025 <button class="edit-btn-small" onclick="openEditPredictionModal()">Bewerken</button></h4>
+                    <div class="admin-forecast-row">
+                        <div class="admin-forecast-item"><span class="admin-forecast-label">Min</span><span class="admin-forecast-value">${formatCurrency(author.prediction.min)}</span></div>
+                        <span class="admin-forecast-sep">—</span>
+                        <div class="admin-forecast-item"><span class="admin-forecast-label">Max</span><span class="admin-forecast-value">${formatCurrency(author.prediction.max)}</span></div>
+                        <span class="admin-forecast-sep">=</span>
+                        <div class="admin-forecast-item"><span class="admin-forecast-label">Verwacht</span><span class="admin-forecast-value admin-forecast-primary">${formatCurrency(Math.round((author.prediction.min + author.prediction.max) / 2))}</span></div>
                     </div>
                 </div>
             </div>
