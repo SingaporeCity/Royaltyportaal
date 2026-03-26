@@ -4808,6 +4808,50 @@ body.dashboard-active .lang-toggle {
     box-shadow: var(--shadow-soft);
 }
 
+.event-featured {
+    background: linear-gradient(135deg, #f0faf7 0%, #e6f5f0 100%);
+    border: 1.5px solid var(--color-primary);
+    position: relative;
+}
+
+.event-featured:hover {
+    box-shadow: 0 4px 16px rgba(0, 116, 96, 0.12);
+}
+
+.event-date-featured {
+    background: linear-gradient(135deg, #007460 0%, #005a49 100%);
+    min-width: 66px;
+    padding: 0.6rem;
+    box-shadow: 0 3px 8px rgba(0, 116, 96, 0.25);
+}
+
+.event-date-featured .event-day {
+    font-size: 1.7rem;
+}
+
+.event-badge-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    background: rgba(0, 116, 96, 0.1);
+    padding: 0.15rem 0.55rem;
+    border-radius: 100px;
+    margin-bottom: 0.35rem;
+}
+
+[data-theme="dark"] .event-featured {
+    background: linear-gradient(135deg, rgba(0, 116, 96, 0.12) 0%, rgba(0, 116, 96, 0.06) 100%);
+    border-color: rgba(0, 116, 96, 0.4);
+}
+
+[data-theme="dark"] .event-badge-label {
+    background: rgba(0, 116, 96, 0.2);
+    color: #4fd1b5;
+}
+
 .event-date-badge {
     display: flex;
     flex-direction: column;
@@ -6274,6 +6318,25 @@ body.dashboard-active .lang-toggle {
     font-variation-settings: 'wght' 500;
     margin-bottom: 0.5rem;
     display: block;
+}
+
+.public-event-featured {
+    background: linear-gradient(135deg, #f0faf7 0%, #e6f5f0 100%);
+    border: 1.5px solid var(--color-primary);
+}
+
+.public-event-featured:hover {
+    box-shadow: 0 4px 16px rgba(0, 116, 96, 0.15);
+}
+
+.public-event-featured h4 {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+[data-theme="dark"] .public-event-featured {
+    background: linear-gradient(135deg, rgba(0, 116, 96, 0.12) 0%, rgba(0, 116, 96, 0.06) 100%);
+    border-color: rgba(0, 116, 96, 0.4);
 }
 
 .public-event-card .event-location {

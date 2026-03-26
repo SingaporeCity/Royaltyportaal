@@ -1298,28 +1298,29 @@ function renderEvents(events) {
 
     if (!events || events.length === 0) {
         container.innerHTML = `
-            <div class="event-card">
-                <div class="event-date-badge"><span class="event-day">21</span><span class="event-month">jun</span></div>
+            <div class="event-card event-featured">
+                <div class="event-date-badge event-date-featured"><span class="event-day">21</span><span class="event-month">jun</span></div>
                 <div class="event-details">
+                    <span class="event-badge-label">Uitnodiging</span>
                     <h4 class="event-title">Noordhoff 190 jaar — Jubileumfeest</h4>
-                    <p class="event-description">Alle auteurs, redacteuren en partners zijn uitgenodigd voor een feestelijke middag en avond.</p>
-                    <div class="event-meta"><span class="event-location">Martiniplaza, Groningen</span></div>
+                    <p class="event-description">Vier mee! Alle auteurs, redacteuren en partners zijn van harte uitgenodigd voor een feestelijke middag en avond ter ere van 190 jaar Noordhoff.</p>
+                    <div class="event-meta"><span class="event-location">📍 Martiniplaza, Groningen</span><span class="event-time">14:00 – 22:00</span></div>
                 </div>
             </div>
             <div class="event-card">
-                <div class="event-date-badge"><span class="event-day">15</span><span class="event-month">mrt</span></div>
+                <div class="event-date-badge"><span class="event-day">10</span><span class="event-month">apr</span></div>
                 <div class="event-details">
-                    <h4 class="event-title">Auteursinspraak: Kerndoelen & Curriculum</h4>
-                    <p class="event-description">Interactieve sessie over hoe de herziene kerndoelen doorwerken in onze methodes.</p>
-                    <div class="event-meta"><span class="event-location">Noordhoff, Groningen & online</span></div>
+                    <h4 class="event-title">Auteursbijeenkomst: Nieuwe kerndoelen in de praktijk</h4>
+                    <p class="event-description">Interactieve sessie over de implementatie van de herziene kerndoelen in methodes als Getal & Ruimte en Nieuw Nederlands.</p>
+                    <div class="event-meta"><span class="event-location">📍 Noordhoff, Groningen & online</span></div>
                 </div>
             </div>
             <div class="event-card">
-                <div class="event-date-badge"><span class="event-day">12</span><span class="event-month">apr</span></div>
+                <div class="event-date-badge"><span class="event-day">15</span><span class="event-month">mei</span></div>
                 <div class="event-details">
-                    <h4 class="event-title">Workshop: Schrijven voor digitaal onderwijs</h4>
-                    <p class="event-description">Hands-on sessie over content maken voor digitale en adaptieve leeromgevingen.</p>
-                    <div class="event-meta"><span class="event-location">Noordhoff Academy, Groningen</span></div>
+                    <h4 class="event-title">Workshop: Schrijven voor Learnbeat & adaptief leren</h4>
+                    <p class="event-description">Hands-on sessie over content ontwikkelen voor Noordhoff's digitale leerplatform, gebruikt door 40.000+ mbo-studenten.</p>
+                    <div class="event-meta"><span class="event-location">📍 Noordhoff Academy, Groningen</span></div>
                 </div>
             </div>`;
         return;
@@ -1387,23 +1388,23 @@ function renderBlogPosts(posts) {
         container.innerHTML = `
             <div class="blog-card">
                 <div class="blog-content">
-                    <h4 class="blog-title">Kabinet-Schoof presenteert nieuwe onderwijsagenda</h4>
-                    <p class="blog-summary">Extra investeringen in basisvaardigheden, kleinere klassen en meer ruimte voor vakdocenten.</p>
-                    <div class="blog-meta"><span class="blog-date">6 februari 2026</span></div>
+                    <h4 class="blog-title">Klaar voor de nieuwe kerndoelen met Noordhoff</h4>
+                    <p class="blog-summary">De grootste onderwijsvernieuwing in 20 jaar gaat in per 1 augustus 2026. Moderne Wiskunde 14e editie, Nieuw Nederlands en Getal & Ruimte zijn volledig herzien.</p>
+                    <div class="blog-meta"><span class="blog-date">12 maart 2026</span></div>
                 </div>
             </div>
             <div class="blog-card">
                 <div class="blog-content">
-                    <h4 class="blog-title">Herziene kerndoelen: wat verandert er voor auteurs?</h4>
-                    <p class="blog-summary">Scholen krijgen tot 2028 om de overgang te maken. Voor auteurs betekent dit het actualiseren van methodes.</p>
-                    <div class="blog-meta"><span class="blog-date">23 januari 2026</span></div>
+                    <h4 class="blog-title">Learnbeat bereikt 40.000 dagelijkse mbo-studenten</h4>
+                    <p class="blog-summary">Noordhoff's adaptieve leerplatform groeit door. Studenten waarderen Studiemeister met een 7,9 — auteurs kunnen bijdragen aan interactieve content.</p>
+                    <div class="blog-meta"><span class="blog-date">19 februari 2026</span></div>
                 </div>
             </div>
             <div class="blog-card">
                 <div class="blog-content">
-                    <h4 class="blog-title">Noordhoff investeert in adaptief leren</h4>
-                    <p class="blog-summary">Grote stappen in gepersonaliseerd leren. Auteurs kunnen bijdragen aan interactieve content.</p>
-                    <div class="blog-meta"><span class="blog-date">10 januari 2026</span></div>
+                    <h4 class="blog-title">Noordhoff viert 190-jarig bestaan in 2026</h4>
+                    <p class="blog-summary">Van P. Noordhoff in 1836 tot de grootste educatieve uitgever van Nederland. Op 21 juni vieren we dit met alle auteurs in Groningen.</p>
+                    <div class="blog-meta"><span class="blog-date">15 januari 2026</span></div>
                 </div>
             </div>`;
         return;
