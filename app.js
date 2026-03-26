@@ -1892,12 +1892,12 @@ const DATA = {
                 alliantNumber: '2534892',
                 firstName: 'Suzanna',
                 lastName: 'van den Berg',
-                voorletters: 'S.',
+                voorletters: 'S.M.',
                 bsn: '987654321',
                 email: 'suzanna@noordhoff.nl',
-                street: 'Keizersgracht',
-                houseNumber: '456',
-                postcode: '1016 GD',
+                street: 'Grote Markt',
+                houseNumber: '12',
+                postcode: '9712 HN',
                 country: 'Nederland',
                 birthDate: '22-07-1985',
                 phone: '+31 6 23456789',
@@ -1906,14 +1906,18 @@ const DATA = {
                 initials: 'SB'
             },
             contracts: [
-                { number: 'CC_14000', name: 'Moderne Wiskunde 13-14 BB', contractPdf: 'CC_14000_contract.pdf' },
-                { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf' }
+                { number: 'CC_18200', name: 'Nieuw Nederlands 7e ed.', contractPdf: 'CC_18200_contract.pdf' },
+                { number: 'CC_18201', name: 'Nieuw Nederlands Digitaal', contractPdf: 'CC_18201_contract.pdf' },
+                { number: 'CC_18205', name: 'Taaldomein VMBO', contractPdf: 'CC_18205_contract.pdf' }
             ],
-            infoChanges: [],
+            infoChanges: [
+                { id: 'sz1', date: '2026-02-10T09:15:00.000Z', field: 'IBAN', old: 'NL45 INGB 0001 2345 67', new: 'NL82 INGB 0009 8765 43', status: 'approved', processedDate: '2026-02-11T14:00:00.000Z' }
+            ],
             loginHistory: [
                 '2026-03-25T10:00:00.000Z',
                 '2026-03-22T13:15:00.000Z',
-                '2026-03-15T09:30:00.000Z'
+                '2026-03-15T09:30:00.000Z',
+                '2026-03-10T08:45:00.000Z'
             ],
             prediction: { min: 8000, max: 12000 },
             historicalRoyalties: [
@@ -1925,36 +1929,38 @@ const DATA = {
                 { year: 2024, type: 'subsidiary', title: { nl: 'Nevenrechten 2024', en: 'Reader Rights 2024' }, date: { nl: '15 juni 2025', en: 'June 15, 2025' }, sortDate: '2025-06-15', amount: 985.00, filename: 'nevenrechten-2024.pdf' },
                 { year: 2024, type: 'foreign', title: { nl: 'Foreign Rights 2024', en: 'Foreign Rights 2024' }, date: { nl: '15 juli 2025', en: 'July 15, 2025' }, sortDate: '2025-07-15', amount: 394.00, filename: 'foreign-rights-2024.pdf' },
                 { year: 2023, type: 'royalty', title: { nl: 'Royalty-afrekening 2023', en: 'Royalty Statement 2023' }, date: { nl: '15 maart 2024', en: 'March 15, 2024' }, sortDate: '2024-03-15', amount: 8720.50, filename: 'royalty-2023.pdf' },
-                { year: 2023, type: 'subsidiary', title: { nl: 'Nevenrechten 2023', en: 'Reader Rights 2023' }, date: { nl: '15 juni 2024', en: 'June 15, 2024' }, sortDate: '2024-06-15', amount: 872.05, filename: 'nevenrechten-2023.pdf' },
-                { year: 2023, type: 'foreign', title: { nl: 'Foreign Rights 2023', en: 'Foreign Rights 2023' }, date: { nl: '15 juli 2024', en: 'July 15, 2024' }, sortDate: '2024-07-15', amount: 348.82, filename: 'foreign-rights-2023.pdf' }
+                { year: 2023, type: 'subsidiary', title: { nl: 'Nevenrechten 2023', en: 'Reader Rights 2023' }, date: { nl: '15 juni 2024', en: 'June 15, 2024' }, sortDate: '2024-06-15', amount: 872.05, filename: 'nevenrechten-2023.pdf' }
             ]
         },
-        'anita@noordhoff.nl': {
-            password: 'Anita12345',
+        'marc@noordhoff.nl': {
+            password: 'Marc12345',
             info: {
                 vendorNumber: 'V0031247',
                 alliantNumber: '2567034',
-                firstName: 'Anita',
-                lastName: 'de Vries',
-                voorletters: 'A.',
+                firstName: 'Marc',
+                lastName: 'Hendriks',
+                voorletters: 'M.J.',
                 bsn: '456789123',
-                email: 'anita@noordhoff.nl',
-                street: 'Prinsengracht',
-                houseNumber: '789',
-                postcode: '1017 KL',
+                email: 'marc@noordhoff.nl',
+                street: 'Oosterstraat',
+                houseNumber: '45',
+                postcode: '9711 NR',
                 country: 'Nederland',
                 birthDate: '08-11-1972',
                 phone: '+31 6 34567890',
                 bankAccount: 'NL82 RABO 0123 9876 54',
                 bic: 'RABONL2U',
-                initials: 'AV'
+                initials: 'MH'
             },
             contracts: [
-                { number: 'CC_14000', name: 'Moderne Wiskunde 13-14 BB', contractPdf: 'CC_14000_contract.pdf' },
-                { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf' }
+                { number: 'CC_21500', name: 'Getal & Ruimte 13e ed.', contractPdf: 'CC_21500_contract.pdf' },
+                { number: 'CC_21501', name: 'Getal & Ruimte HAVO/VWO', contractPdf: 'CC_21501_contract.pdf' }
             ],
-            infoChanges: [],
+            infoChanges: [
+                { id: 'mh1', date: '2026-03-18T14:30:00.000Z', field: 'Telefoonnummer', old: '+31 6 34567890', new: '+31 6 55512345', status: 'pending' }
+            ],
             loginHistory: [
+                '2026-03-26T09:30:00.000Z',
                 '2026-03-23T11:45:00.000Z',
                 '2026-03-19T08:30:00.000Z'
             ],
