@@ -5149,32 +5149,102 @@ body.dashboard-active .lang-toggle {
    ============================================ */
 
 /* Admin two-column layout */
-.admin-two-col {
+/* ── Admin three-column layout ── */
+.admin-three-col {
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
     margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 }
 
-.admin-two-col-main {
+.admin-section-card {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
+    padding: 1.25rem;
+}
+
+.admin-section-card-header {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
 }
 
-.admin-two-col-main .admin-content-section,
-.admin-two-col-main .email-settings-section {
-    margin-bottom: 0;
+.admin-section-card-header h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
 }
 
-.admin-two-col-side {
+.admin-section-card-header svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+/* ── Admin import section ── */
+.admin-import-section {
+    margin-top: 1.5rem;
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
+    padding: 1rem 1.25rem;
+}
+
+.admin-import-header {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-light);
+    margin-bottom: 0.75rem;
+}
+
+.admin-import-header svg {
+    color: var(--color-text-light);
+}
+
+.admin-import-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.admin-import-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.admin-import-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 116, 96, 0.2);
+}
+
+.admin-import-btn svg {
+    flex-shrink: 0;
 }
 
 @media (max-width: 1024px) {
-    .admin-two-col { grid-template-columns: 1fr; }
+    .admin-three-col { grid-template-columns: 1fr; }
+    .admin-import-actions { flex-direction: column; }
 }
 
 /* Activity Feed */
@@ -9358,6 +9428,21 @@ body.dashboard-active .lang-toggle {
 
 [data-theme="dark"] .admin-content-btn:hover {
     background: rgba(0, 116, 96, 0.1);
+}
+
+[data-theme="dark"] .admin-section-card {
+    background: var(--color-white);
+}
+
+[data-theme="dark"] .admin-import-section {
+    background: var(--color-white);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-import-btn {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 /* Annual statement */
