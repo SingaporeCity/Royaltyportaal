@@ -147,7 +147,7 @@ Tweetalig (NL/EN) via `TRANSLATIONS` object in `app.js`. Alle vertaalbare elemen
 - Gebruikt voor: royalty chart, evenementen, nieuws
 - `.dash-tile-header` met `.dash-tile-title` (icoon + h3)
 - KPI cards hebben gekleurde top-borders per type: blauw (#3b82f6), teal (#14b8a6), paars (#a855f7) via `:has()` selector
-- **Academy banner** (`.academy-banner`): compacte link met teal icoon-cirkel, twee-regelige tekst, groene linker border, "Bezoek site" badge met external-link icoon
+- **Academy tile** (`.academy-tile-v2`): Noordhoff logo + ACADEMY label, groene linkerrand, tags (Workshops/Didactiek/Digitaal), link naar noordhoffacademy.nl
 - **Achtergrond**: dashboard body en tab-content gebruiken `var(--color-bg-alt)` (#F7F8FA), kaarten zijn wit — creëert diepte
 - Alle hardcoded `background: white` vervangen door `var(--color-white)` voor consistente theming
 
@@ -499,27 +499,124 @@ Als Supabase niet beschikbaar is, worden deze items getoond:
 | Duplicate payment preventie | Ontbreekt | Zelfde auteur/jaar/type kan meerdere keren aangemaakt worden |
 | Admin email instellingen | Cosmetisch | Toggles zijn UI-only, geen echte emails worden verstuurd |
 
-## Demo Accounts (lokaal, zonder Supabase)
+## Demo Accounts
 
 | Rol | Email | Wachtwoord |
 |-----|-------|------------|
 | Admin | `admin@noordhoff.nl` | `Admin12345` |
 | Auteur | `patrick@noordhoff.nl` | `Patrick12345` |
 | Auteur | `suzanna@noordhoff.nl` | `Suzanna12345` |
-| Auteur | `anita@noordhoff.nl` | `Anita12345` |
+| Auteur | `marc@noordhoff.nl` | `Marc12345` |
 
-Werken altijd als fallback wanneer Supabase niet bereikbaar is. Login probeert eerst Supabase, daarna lokale DATA.
+Alle accounts werken altijd — login probeert Supabase, dan lokale DATA.
+
+### Demo Auteurs (9 totaal, zichtbaar in admin)
+
+| Auteur | Methode(s) | Segment | Royalties 2024 |
+|--------|-----------|---------|----------------|
+| Patrick Jeeninga | Moderne Wiskunde 13-14 BB/OB | VO | €17.641 |
+| Suzanna van den Berg | Nieuw Nederlands 7e ed., NN Digitaal, Taaldomein VMBO | VO | €9.850 |
+| Marc Hendriks | Getal & Ruimte 13e ed., G&R HAVO/VWO | VO | €24.500 |
+| Jan de Groot | Nectar Biologie 5e ed., Nectar Digitaal | VO | €16.420 |
+| Fatima El Amrani | Stepping Stones 7e ed. | VO | €8.340 |
+| Robert Dijkstra | Fundament Economie 4e ed., FE Opgaven | VO | €33.150 |
+| Linda Bos | BuiteNLand Aardrijkskunde 5e ed. | VO | €7.450 |
+| Thomas Visser | Memo Geschiedenis 4e ed., Memo Digitaal | VO | €12.780 |
+| Mirjam Konings | Pluspunt Rekenen groep 6/7, Pluspunt Digitaal | BAO | €14.920 |
+
+Alle auteurs hebben Groningse adressen, unieke Vendor/Alliant IDs, login-history en gevarieerde royalty-bedragen.
+
+## Demo Modus — Supabase Bypass
+De hele applicatie draait in demo-modus voor de CEO-presentatie:
+- **Auteurs**: altijd lokale DATA (9 auteurs), Supabase wordt overgeslagen via `getAuthorsData()`
+- **Evenementen**: hardcoded Noordhoff events (190 jaar Jubileumfeest, Kerndoelen, Learnbeat)
+- **Nieuws**: hardcoded Noordhoff nieuwsberichten (Kerndoelen, Learnbeat, 190-jarig bestaan)
+- **Vacatures**: hardcoded demo-vacatures (Wiskunde, Nederlands, Biologie)
+- **Admin CRUD**: events/news/vacatures bewerkbaar via in-memory arrays (`_demoEvents`, `_demoNews`, `_demoVacancies`)
+- **Declaraties**: localStorage (2 demo-items geseed bij eerste bezoek)
+- **PDFs**: Patrick's Jaaropgave 2024, Royalty-afrekening 2024 en contracten linken naar echte PDF-bestanden
+
+## Admin Dashboard — Layout & Design
+
+### Header
+- Logo + "AUTEURSPORTAAL" + zoekbalk (Cmd+K) + profielmenu (naam + avatar → dropdown met dark mode + uitloggen)
+- Zelfde stijl als auteur-header (geen losse dark mode toggle)
+
+### Stats + Import rij
+- **Links**: 3 stat-pills (Actieve Auteurs, Ingelogd vandaag, Wijzigingen goed te keuren)
+- **Rechts**: 2 import-knoppen (Auteurs importeren, PDF's importeren)
+- Alle items dezelfde stijl: witte achtergrond, border, 10px radius
+
+### Auteurs sectie (hoofdsectie)
+- Links: auteurslijst (300px) met zoekbalk, compacte items (34px avatar)
+- Rechts: detail panel met tabs (Persoonlijk, Wijzigingen & Login, Contracten, Prognose, Afrekeningen)
+- Eerste auteur wordt automatisch geselecteerd bij laden
+- **Info-cards in admin**: dense label/value layout (geen card-borders, transparant, dunne bottom-line)
+- **BSN**: gemaskeerd als •••••6789 (consistent met auteur-portaal)
+- **Wijzigingen**: clean log-rijen met status-dot (groen/rood/amber) + inline goedkeuren/afwijzen knoppen (24px icons)
+- **Prognose**: inline rij (Min — Max = Verwacht)
+- **Login-historie**: laatste 5, nieuwste eerst
+
+### Beheer sectie (3 kolommen)
+- Content beheer: verticale knoppen (Evenementen/Nieuws/Vacatures)
+- E-mail notificaties: 3 toggles
+- Activiteiten: live feed met login + wijzigingsverzoek events
 
 ## Auteur Import Flow (Admin)
-1. **CSV importeren**: Admin dashboard → "Auteurs importeren" → upload CSV met kolommen: `email` (verplicht), `first_name`, `last_name`, `vendor_id`, `internal_id`, `voorletters`, `phone`, `street`, `house_number`, `postcode`, `country`, `iban`, `bic`, `bsn`, `birth_date`. NL-alternatieven (`straat`, `huisnummer`, `telefoon`, `geboortedatum`, `land`) worden ook herkend.
-2. **Accounts aanmaken**: Admin dashboard → "Accounts aanmaken" → selecteer geïmporteerde auteurs → Edge Function maakt auth-accounts + stuurt recovery-emails.
-3. **Auteur ontvangt email** → stelt wachtwoord in → kan inloggen en ziet alleen eigen data (RLS).
+1. **CSV importeren**: Admin dashboard → "Auteurs importeren" → upload CSV
+2. **Auteur ontvangt email** → stelt wachtwoord in → kan inloggen (RLS enforced)
 
-Geen SQL nodig — alles via de admin UI.
+## Echte PDF-bestanden (demo)
+| Bestand | Gekoppeld aan |
+|---------|--------------|
+| `Jaaropgaven 2025 C.Philips.pdf` | Patrick → Jaaropgave 2024 |
+| `Section for Recipient O.A. Leppink- 2024.pdf` | Patrick → Royalty-afrekening 2024 |
+| `MW Methodeovereenkomst 12e-13e ed. releases 12.1&13.1_Boom, J. van den.pdf` | Patrick → beide contracten |
+
+## Nieuws & Evenementen (hardcoded)
+
+**Evenementen** (dashboard + publieke site):
+- Noordhoff 190 jaar — Jubileumfeest (21 jun, Martiniplaza Groningen) — featured stijl
+- Auteursbijeenkomst: Nieuwe kerndoelen (10 apr)
+- Workshop: Schrijven voor Learnbeat (15 mei)
+- Compact row-design met klikbare detail-popup (spring-animatie)
+
+**Nieuws**:
+- Klaar voor de nieuwe kerndoelen met Noordhoff (12 mrt)
+- Learnbeat bereikt 40.000 dagelijkse mbo-studenten (19 feb)
+- Noordhoff viert 190-jarig bestaan in 2026 (15 jan)
+- Compact row-design met klikbare detail-popup
+
+## Academy Tile
+- Logo header: Noordhoff logo + divider + "ACADEMY" label
+- Beschrijving van noordhoffacademy.nl
+- Tags: Workshops, Didactiek, Digitaal
+- Groene linkerrand, subtiel gradient achtergrond (visueel anders dan events/nieuws tiles)
+- Link naar https://noordhoffacademy.nl/
+
+## Payment Icons
+- Gradient achtergronden (135deg, donkerder naar onder)
+- Glass-effect highlight overlay (::after pseudo-element)
+- Royalties: open boek, Nevenrechten: beeldscherm, Foreign: globe met latitudes, Jaaropgave: document
+
+## Afrekeningen
+- Default filter: "Alle" (niet "2024")
+- Preview + download knoppen naast elk item
+- `localPdf` property voor echte PDF-bestanden in demo
+
+## Profiel Tab
+- BSN gemaskeerd als •••••6789 met oog-icoon toggle (`toggleBsnVisibility()`)
+
+## FAQ Tab
+- Intro tekst: "Antwoorden op de meest gestelde vragen over royalties, contracten en het portaal." (NL/EN)
+
+## Declaraties Tab
+- 2 demo-declaraties geseed bij eerste bezoek (Reiskosten €87,50 pending, Drukproeven €42,00 approved)
 
 ## Demo Tips
-- **Google Wachtwoordmanager popup**: Chrome toont een waarschuwing dat het demo-wachtwoord in een datalek voorkomt. Dit is een browser-feature, niet te fixen in code. Oplossing: Chrome → Instellingen → Google Wachtwoordmanager → Instellingen → "Waarschuwing over gelekte wachtwoorden" uitzetten. Of: log vooraf in zodat sessie-persistentie het loginscherm overslaat.
+- **Wachtwoorden**: alle demo-wachtwoorden zijn `*12345` format (voorkomt Google breach-waarschuwing)
 - **Cache**: Na een push altijd Cmd+Shift+R (hard refresh) om de nieuwste versie te zien op GitHub Pages.
+- **Admin login**: admin@noordhoff.nl logt in via Supabase maar gebruikt lokale DATA voor alle content
 
 ## Deployment stappen (na code push)
 1. **Supabase SQL Editor**: Run `database/add-file-path.sql`
