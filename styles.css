@@ -3450,7 +3450,6 @@ body.dashboard-active .lang-toggle {
 .admin-stats {
     display: flex;
     gap: 0.875rem;
-    margin-bottom: 1.5rem;
     justify-content: flex-start;
 }
 .stat-card {
@@ -5186,34 +5185,18 @@ body.dashboard-active .lang-toggle {
     flex-shrink: 0;
 }
 
-/* ── Admin import section ── */
-.admin-import-section {
-    margin-top: 1.5rem;
-    background: var(--color-white);
-    border-radius: var(--radius-md);
-    border: 1px dashed var(--color-border);
-    padding: 1rem 1.25rem;
-}
-
-.admin-import-header {
+/* ── Admin stats row (stats + import buttons) ── */
+.admin-stats-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-light);
-    margin-bottom: 0.75rem;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.admin-import-header svg {
-    color: var(--color-text-light);
-}
-
-.admin-import-actions {
+.admin-import-group {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .admin-import-btn {
@@ -5244,7 +5227,10 @@ body.dashboard-active .lang-toggle {
 
 @media (max-width: 1024px) {
     .admin-three-col { grid-template-columns: 1fr; }
-    .admin-import-actions { flex-direction: column; }
+    .admin-stats-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 /* Activity Feed */
@@ -9432,11 +9418,6 @@ body.dashboard-active .lang-toggle {
 
 [data-theme="dark"] .admin-section-card {
     background: var(--color-white);
-}
-
-[data-theme="dark"] .admin-import-section {
-    background: var(--color-white);
-    border-color: var(--color-border);
 }
 
 [data-theme="dark"] .admin-import-btn {

@@ -2058,7 +2058,13 @@ const DATA = {
                 { id: 'test2_pc', date: '2025-01-10T14:20:00.000Z', field: 'Postcode', old: '1015 BH', new: '1016 AB', status: 'approved', processedDate: '2025-01-11T09:00:00.000Z' },
                 { id: 'test3_ib', date: '2025-01-05T11:45:00.000Z', field: 'IBAN', old: 'NL91 ABNA 0123 4567 01', new: 'NL00 FAKE 9999 9999 99', status: 'rejected', processedDate: '2025-01-06T16:30:00.000Z', rejectionReason: 'IBAN verificatie mislukt - neem contact op met support.' }
             ],
-            loginHistory: [],
+            loginHistory: [
+                '2026-03-26T08:15:00.000Z',
+                '2026-03-25T14:30:00.000Z',
+                '2026-03-24T09:45:00.000Z',
+                '2026-03-20T11:20:00.000Z',
+                '2026-03-18T16:00:00.000Z'
+            ],
             prediction: { min: 20000, max: 28000 },
             historicalRoyalties: [
                 { year: 2024, amount: 17641.50 },
@@ -2098,7 +2104,11 @@ const DATA = {
                 { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf' }
             ],
             infoChanges: [],
-            loginHistory: [],
+            loginHistory: [
+                '2026-03-25T10:00:00.000Z',
+                '2026-03-22T13:15:00.000Z',
+                '2026-03-15T09:30:00.000Z'
+            ],
             prediction: { min: 8000, max: 12000 },
             historicalRoyalties: [
                 { year: 2024, amount: 9850.00 },
@@ -2138,7 +2148,10 @@ const DATA = {
                 { number: 'CC_14001', name: 'Moderne Wiskunde 13-14 OB', contractPdf: 'CC_14001_contract.pdf' }
             ],
             infoChanges: [],
-            loginHistory: [],
+            loginHistory: [
+                '2026-03-23T11:45:00.000Z',
+                '2026-03-19T08:30:00.000Z'
+            ],
             prediction: { min: 22000, max: 28000 },
             historicalRoyalties: [
                 { year: 2024, amount: 24500.00 },
@@ -4533,6 +4546,12 @@ async function initAdminDashboard() {
     renderActivityFeed();
     restoreEmailSettings();
 
+    // Auto-select first author for immediate visual content
+    const authorEmails = Object.keys(getAuthorsData());
+    if (authorEmails.length > 0 && !selectedAuthor) {
+        selectAuthor(authorEmails[0]);
+    }
+
     // Auto-refresh elke 30 seconden om data up-to-date te houden
     if (adminRefreshInterval) clearInterval(adminRefreshInterval);
     adminRefreshInterval = setInterval(async () => {
@@ -5487,7 +5506,7 @@ function renderAuthorDetail() {
                         <div class="info-card"><div class="info-card-label">Voornaam</div><div class="info-card-value">${author.info.firstName}</div></div>
                         <div class="info-card"><div class="info-card-label">Voorletters</div><div class="info-card-value">${author.info.voorletters || '-'}</div></div>
                         <div class="info-card"><div class="info-card-label">Achternaam</div><div class="info-card-value">${author.info.lastName}</div></div>
-                        <div class="info-card"><div class="info-card-label">BSN</div><div class="info-card-value">${author.info.bsn ? '••••••' + author.info.bsn.slice(-3) : '-'}</div></div>
+                        <div class="info-card"><div class="info-card-label">BSN</div><div class="info-card-value">${author.info.bsn ? '•••••' + author.info.bsn.slice(-4) : '-'}</div></div>
                         <div class="info-card"><div class="info-card-label">E-mail</div><div class="info-card-value">${author.info.email}</div></div>
                         <div class="info-card"><div class="info-card-label">Telefoon</div><div class="info-card-value">${author.info.phone || '-'}</div></div>
                         <div class="info-card full-width"><div class="info-card-label">Adres</div><div class="info-card-value">${author.info.street} ${author.info.houseNumber}, ${author.info.postcode}, ${author.info.country}</div></div>
