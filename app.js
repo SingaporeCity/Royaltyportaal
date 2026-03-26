@@ -1682,11 +1682,7 @@ async function loadAllAuthorsForAdmin() {
 
 // Helper function to get authors data (Supabase or local)
 function getAuthorsData() {
-    if (isSupabaseMode && Object.keys(adminAuthorsData).length > 0) {
-        console.log('📦 Data source: SUPABASE (' + Object.keys(adminAuthorsData).length + ' auteurs)');
-        return adminAuthorsData;
-    }
-    console.log('📦 Data source: LOCAL DATA (' + Object.keys(DATA.authors).length + ' auteurs)');
+    // Always use local DATA for consistent demo with all 3 authors
     return DATA.authors;
 }
 
