@@ -5538,7 +5538,9 @@ function renderAuthorDetail() {
                     <h4>Recente wijzigingen</h4>
                     ${author.infoChanges.length > 0 ? `
                         <div class="changes-log">
-                            ${author.infoChanges.slice(-10).reverse().map(c => `
+                            ${author.infoChanges.slice(-10).reverse().map(c => {
+                                const isPending = !c.status || c.status === 'pending';
+                                return `
                                 <div class="change-log-row">
                                     <span class="change-log-dot ${c.status || 'pending'}"></span>
                                     <span class="change-log-date">${formatDateTime(new Date(c.date))}</span>
@@ -5546,8 +5548,9 @@ function renderAuthorDetail() {
                                     <span class="change-log-val">${c.old || '-'}</span>
                                     <span class="change-log-arrow">→</span>
                                     <span class="change-log-val">${c.new}</span>
-                                </div>
-                            `).join('')}
+                                    ${isPending ? `<span class="change-log-actions"><button class="change-log-approve" onclick="approveChange('${selectedAuthor}', '${c.id}')" title="Goedkeuren"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></button><button class="change-log-reject" onclick="openRejectModal('${selectedAuthor}', '${c.id}')" title="Afwijzen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>` : ''}
+                                </div>`;
+                            }).join('')}
                         </div>
                     ` : '<div class="empty-state">Geen wijzigingen</div>'}
                 </div>
@@ -5555,7 +5558,7 @@ function renderAuthorDetail() {
                     <h4>Login geschiedenis</h4>
                     <div class="login-history">
                         ${author.loginHistory.length > 0 ?
-                            author.loginHistory.slice(-10).reverse().map(date => `<div class="login-entry"><span>Ingelogd</span><span>${formatDateTime(new Date(date))}</span></div>`).join('') :
+                            [...author.loginHistory].sort((a, b) => new Date(b) - new Date(a)).slice(0, 5).map(date => `<div class="login-entry"><span>Ingelogd</span><span>${formatDateTime(new Date(date))}</span></div>`).join('') :
                             '<div class="login-entry"><span>Nog niet ingelogd</span></div>'
                         }
                     </div>
