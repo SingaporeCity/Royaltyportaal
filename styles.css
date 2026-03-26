@@ -3520,7 +3520,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .right-panel {
-    min-height: 500px;
+    min-height: 350px;
 }
 
 .panel-view {
@@ -3562,16 +3562,16 @@ body.dashboard-active .lang-toggle {
 }
 
 .author-search {
-    padding: 0.875rem 1.125rem;
+    padding: 0.6rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     background: #fafbfc;
 }
 .author-search input {
     width: 100%;
-    padding: 0.625rem 1rem;
+    padding: 0.5rem 0.85rem;
     border: 1.5px solid var(--color-border);
-    border-radius: 10px;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
     background: var(--color-white);
     transition: all 0.2s ease;
 }
@@ -3593,10 +3593,11 @@ body.dashboard-active .lang-toggle {
 }
 
 .author-list-header {
-    padding: 1.25rem;
+    padding: 0.875rem 1.125rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     font-family: var(--font-heading);
     font-weight: 500;
+    font-size: 0.9rem;
     color: var(--color-text);
     background: linear-gradient(180deg, #fafbfc 0%, var(--color-white) 100%);
 }
@@ -3842,13 +3843,13 @@ body.dashboard-active .lang-toggle {
 }
 
 .author-item {
-    padding: 1rem 1.25rem;
+    padding: 0.65rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .author-item:last-child { border-bottom: none; }
@@ -3864,8 +3865,8 @@ body.dashboard-active .lang-toggle {
 }
 
 .author-item-avatar {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     background: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
     border-radius: 50%;
     display: flex;
@@ -3874,7 +3875,7 @@ body.dashboard-active .lang-toggle {
     color: white;
     font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     flex-shrink: 0;
     box-shadow: 0 2px 6px rgba(27, 94, 59, 0.2);
 }
@@ -3915,7 +3916,7 @@ body.dashboard-active .lang-toggle {
 }
 
 .author-detail-header {
-    padding: 1.5rem 1.75rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
     justify-content: space-between;
@@ -3932,7 +3933,7 @@ body.dashboard-active .lang-toggle {
 
 .author-detail-title h3 {
     font-family: var(--font-heading);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: -0.01em;
 }
@@ -3944,10 +3945,10 @@ body.dashboard-active .lang-toggle {
     box-shadow: 0 2px 6px rgba(34, 197, 94, 0.25);
 }
 
-.author-detail-body { padding: 1.75rem; }
+.author-detail-body { padding: 1.25rem 1.5rem; }
 
 .detail-section {
-    margin-bottom: 2.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .detail-section:last-child { margin-bottom: 0; }
