@@ -3455,36 +3455,35 @@ body.dashboard-active .lang-toggle {
 .stat-card {
     background: var(--color-white);
     padding: 0.5rem 1rem;
-    border-radius: 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 0.625rem;
     border: 1px solid var(--color-border);
 }
-.stat-card-amber { background: linear-gradient(135deg, #fff4d6 0%, #fff 100%); }
-.stat-card-green { background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%); }
-.stat-card-blue { background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%); }
-.stat-card-purple { background: linear-gradient(135deg, #f3e5f5 0%, #fff 100%); }
+.stat-card-amber,
+.stat-card-green,
+.stat-card-blue,
+.stat-card-purple {
+    background: var(--color-white);
+}
 
 .stat-card.clickable {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 }
 .stat-card.clickable:hover {
-    box-shadow: 0 4px 15px rgba(27, 94, 59, 0.1);
-    transform: translateY(-2px);
-    border-color: rgba(27, 94, 59, 0.15);
+    border-color: var(--color-primary);
 }
 .stat-value {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--color-primary);
     letter-spacing: -0.02em;
 }
 .stat-label {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--color-text-light);
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -5314,22 +5313,22 @@ body.dashboard-active .lang-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    background: var(--color-bg-alt);
+    padding: 0.5rem 1rem;
+    background: var(--color-white);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--color-text);
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-light);
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
 .admin-import-btn:hover {
-    background: var(--color-primary);
-    color: white;
     border-color: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(0, 116, 96, 0.2);
+    color: var(--color-primary);
 }
 
 .admin-import-btn svg {
