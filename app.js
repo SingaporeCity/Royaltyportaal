@@ -2547,7 +2547,7 @@ const TRANSLATIONS = {
         kpi_forecast: 'Prognose 2025',
         kpi_forecast_sub: 'verwacht',
         kpi_chart_title: 'Royalties per jaar',
-        kpi_academy_sub: 'Cursussen en trainingen voor auteurs',
+        kpi_academy_sub: 'Eén platform voor leren, ontwikkelen en groeien. Trainingen, workshops en didactische verdieping voor auteurs.',
         kpi_events_title: 'Aankomende Evenementen',
         kpi_news_title: 'Laatste Nieuws',
         // Onboarding
@@ -2935,7 +2935,7 @@ const TRANSLATIONS = {
         kpi_forecast: 'Forecast 2025',
         kpi_forecast_sub: 'expected',
         kpi_chart_title: 'Royalties per year',
-        kpi_academy_sub: 'Courses and training for authors',
+        kpi_academy_sub: 'One platform for learning, developing and growing. Trainings, workshops and didactic deepening for authors.',
         kpi_events_title: 'Upcoming Events',
         kpi_news_title: 'Latest News',
         // Onboarding
