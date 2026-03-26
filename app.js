@@ -1114,8 +1114,31 @@ function closeVacancyManager() {
 
 async function loadVacanciesForAdmin() {
     const container = document.getElementById('vacancyManagerList');
+
+    const renderVacanciesList = (vacancies) => {
+        if (!vacancies || vacancies.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen vacatures</p>';
+            return;
+        }
+        container.innerHTML = vacancies.map(v => `
+            <div class="manager-item">
+                <div class="manager-item-info">
+                    <div class="manager-item-title">${v.title}</div>
+                    <div class="manager-item-meta">${v.subject || ''} ${v.segment ? '• ' + v.segment.toUpperCase() : ''} ${v.type ? '• ' + v.type : ''}</div>
+                </div>
+                <div class="manager-item-actions">
+                    <button class="btn-small" onclick="openVacancyEditor('${v.id || ''}')">Bewerken</button>
+                </div>
+            </div>
+        `).join('');
+    };
+
     if (!supabaseClient) {
-        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        renderVacanciesList([
+            { title: 'Auteur Wiskunde — Moderne Wiskunde', subject: 'Wiskunde', segment: 'vo', type: 'auteur' },
+            { title: 'Auteur Nederlands — Nieuw Nederlands', subject: 'Nederlands', segment: 'vo', type: 'auteur' },
+            { title: 'Reviewer Biologie', subject: 'Biologie', segment: 'vo', type: 'reviewer' }
+        ]);
         return;
     }
 
@@ -1124,27 +1147,8 @@ async function loadVacanciesForAdmin() {
             .from('vacancies')
             .select('*')
             .order('created_at', { ascending: false });
-
         if (error) throw error;
-
-        if (!vacancies || vacancies.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen vacatures</p>';
-            return;
-        }
-
-        container.innerHTML = vacancies.map(v => `
-            <div class="manager-item ${!v.is_active ? 'inactive' : ''}">
-                <div class="manager-item-info">
-                    <div class="manager-item-title">${v.title}</div>
-                    <div class="manager-item-meta">${v.subject} • ${v.segment.toUpperCase()} • ${v.type}</div>
-                    <div class="manager-item-status">${v.is_active ? 'Actief' : 'Inactief'}</div>
-                </div>
-                <div class="manager-item-actions">
-                    <button class="btn-small" onclick="openVacancyEditor('${v.id}')">Bewerken</button>
-                    <button class="btn-small btn-danger" onclick="deleteVacancy('${v.id}')">Verwijderen</button>
-                </div>
-            </div>
-        `).join('');
+        renderVacanciesList(vacancies);
     } catch (err) {
         console.error('Error loading vacancies for admin:', err);
         container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
@@ -1420,8 +1424,35 @@ function closeEventsManager() {
 
 async function loadEventsForAdmin() {
     const container = document.getElementById('eventsManagerList');
+
+    const renderEventsList = (events) => {
+        if (!events || events.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen evenementen</p>';
+            return;
+        }
+        container.innerHTML = events.map(event => {
+            const dateStr = event.dateStr || new Date(event.event_date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+            const isPast = event.event_date ? new Date(event.event_date) < new Date() : false;
+            return `
+                <div class="manager-item ${isPast ? 'past' : ''}">
+                    <div class="manager-item-info">
+                        <div class="manager-item-title">${event.title}</div>
+                        <div class="manager-item-meta">${dateStr} ${event.location ? '• ' + event.location : ''}</div>
+                    </div>
+                    <div class="manager-item-actions">
+                        <button class="btn-small" onclick="openEventEditor('${event.id || ''}')">Bewerken</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    };
+
     if (!supabaseClient) {
-        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        renderEventsList([
+            { title: 'Noordhoff 190 jaar — Jubileumfeest', dateStr: '21 jun 2026', location: 'Martiniplaza, Groningen' },
+            { title: 'Auteursbijeenkomst: Nieuwe kerndoelen', dateStr: '10 apr 2026', location: 'Noordhoff, Groningen & online' },
+            { title: 'Workshop: Schrijven voor Learnbeat', dateStr: '15 mei 2026', location: 'Noordhoff Academy, Groningen' }
+        ]);
         return;
     }
 
@@ -1430,33 +1461,8 @@ async function loadEventsForAdmin() {
             .from('events')
             .select('*')
             .order('event_date', { ascending: false });
-
         if (error) throw error;
-
-        if (!events || events.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen evenementen</p>';
-            return;
-        }
-
-        container.innerHTML = events.map(event => {
-            const eventDate = new Date(event.event_date);
-            const dateStr = eventDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
-            const isPast = eventDate < new Date();
-
-            return `
-                <div class="manager-item ${!event.is_active ? 'inactive' : ''} ${isPast ? 'past' : ''}">
-                    <div class="manager-item-info">
-                        <div class="manager-item-title">${event.title}</div>
-                        <div class="manager-item-meta">${dateStr} ${event.location ? '• ' + event.location : ''}</div>
-                        <div class="manager-item-status">${event.is_active ? 'Actief' : 'Inactief'} ${isPast ? '(verlopen)' : ''}</div>
-                    </div>
-                    <div class="manager-item-actions">
-                        <button class="btn-small" onclick="openEventEditor('${event.id}')">Bewerken</button>
-                        <button class="btn-small btn-danger" onclick="deleteEvent('${event.id}')">Verwijderen</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
+        renderEventsList(events);
     } catch (err) {
         console.error('Error loading events for admin:', err);
         container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
@@ -1588,8 +1594,34 @@ function closeBlogManager() {
 
 async function loadBlogPostsForAdmin() {
     const container = document.getElementById('blogManagerList');
+
+    const renderPostsList = (posts) => {
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
+            return;
+        }
+        container.innerHTML = posts.map(post => {
+            const dateStr = post.dateStr || new Date(post.created_at).toLocaleDateString('nl-NL');
+            return `
+                <div class="manager-item">
+                    <div class="manager-item-info">
+                        <div class="manager-item-title">${post.title}</div>
+                        <div class="manager-item-meta">${dateStr}</div>
+                    </div>
+                    <div class="manager-item-actions">
+                        <button class="btn-small" onclick="openBlogEditor('${post.id || ''}')">Bewerken</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    };
+
     if (!supabaseClient) {
-        container.innerHTML = '<p class="empty-state">Supabase niet beschikbaar</p>';
+        renderPostsList([
+            { title: 'Klaar voor de nieuwe kerndoelen met Noordhoff', dateStr: '12 maart 2026' },
+            { title: 'Learnbeat bereikt 40.000 dagelijkse mbo-studenten', dateStr: '19 februari 2026' },
+            { title: 'Noordhoff viert 190-jarig bestaan in 2026', dateStr: '15 januari 2026' }
+        ]);
         return;
     }
 
@@ -1598,31 +1630,8 @@ async function loadBlogPostsForAdmin() {
             .from('blog_posts')
             .select('*')
             .order('created_at', { ascending: false });
-
         if (error) throw error;
-
-        if (!posts || posts.length === 0) {
-            container.innerHTML = '<p class="empty-state">Geen nieuwsberichten</p>';
-            return;
-        }
-
-        container.innerHTML = posts.map(post => {
-            const createdDate = new Date(post.created_at).toLocaleDateString('nl-NL');
-
-            return `
-                <div class="manager-item ${!post.is_published ? 'inactive' : ''}">
-                    <div class="manager-item-info">
-                        <div class="manager-item-title">${post.title}</div>
-                        <div class="manager-item-meta">Aangemaakt: ${createdDate}</div>
-                        <div class="manager-item-status">${post.is_published ? 'Gepubliceerd' : 'Concept'}</div>
-                    </div>
-                    <div class="manager-item-actions">
-                        <button class="btn-small" onclick="openBlogEditor('${post.id}')">Bewerken</button>
-                        <button class="btn-small btn-danger" onclick="deleteBlogPost('${post.id}')">Verwijderen</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
+        renderPostsList(posts);
     } catch (err) {
         console.error('Error loading blog posts for admin:', err);
         container.innerHTML = '<p class="empty-state">Fout bij laden: ' + err.message + '</p>';
