@@ -4434,11 +4434,7 @@ async function downloadPaymentPDF(paymentIndex, filterYear) {
 let adminRefreshInterval = null;
 
 async function initAdminDashboard() {
-    // Load data from Supabase if in Supabase mode
-    if (isSupabaseMode && supabaseClient) {
-        await loadAllAuthorsForAdmin();
-    }
-
+    // Always use local DATA for demo (skip Supabase)
     renderAuthorList();
     renderAllChanges();
     updateAdminStats();
@@ -4451,12 +4447,9 @@ async function initAdminDashboard() {
         selectAuthor(authorEmails[0]);
     }
 
-    // Auto-refresh elke 30 seconden om data up-to-date te houden
+    // Auto-refresh elke 30 seconden
     if (adminRefreshInterval) clearInterval(adminRefreshInterval);
-    adminRefreshInterval = setInterval(async () => {
-        if (isSupabaseMode && supabaseClient) {
-            await loadAllAuthorsForAdmin();
-        }
+    adminRefreshInterval = setInterval(() => {
         if (selectedAuthor) {
             renderAuthorDetail();
         }
