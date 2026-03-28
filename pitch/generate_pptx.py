@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Generate Auteursportaal CEO pitch — Noordhoff template design system."""
+"""Generate Auteursportaal CEO pitch — Noordhoff template design system.
+
+Design rules (from deep template inspection):
+- Decorative squares are #FEFFFF (near-white), placed near/overlapping images
+- NO teal squares as decoration
+- One orange #FF7043 accent square used sparingly
+- Font: Roboto Light everywhere, Caveat for handwriting annotations
+- Titles ~48pt black, Subtitles ~16pt #323232 ABOVE titles, Body ~20pt #292929
+- Stats: 2.2"x2.2" rounded rectangles, white fill, large centered number + small label
+- Marker bullets: small teal rounded squares (0.12")
+- Noordhoff logo placed subtly
+"""
 
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
@@ -10,6 +21,7 @@ import os
 
 TPL = '/Users/patrickjeeninga/Coding/Royaltyportaal/pitch/Template richtlijnen - 2026.pptx'
 SHOTS = '/Users/patrickjeeninga/Coding/Royaltyportaal/pitch/screenshots'
+LOGO = '/Users/patrickjeeninga/Coding/Royaltyportaal/noordhoff-logo.png'
 
 # ── Load template ──
 prs = Presentation(TPL)
@@ -33,11 +45,12 @@ TEAL = RGBColor(0, 122, 94)         # #007A5E — primary brand
 BLACK = RGBColor(0, 0, 0)           # titles
 BODY = RGBColor(41, 41, 41)         # #292929 — body text
 SUBTITLE_CLR = RGBColor(50, 50, 50) # #323232 — subtitles
-ORANGE = RGBColor(255, 112, 67)     # #FF7043 — accent/negative
+ORANGE = RGBColor(255, 112, 67)     # #FF7043 — accent/negative (sparingly)
 WHITE = RGBColor(255, 255, 255)
-WHITE_SHAPE = RGBColor(254, 255, 255)  # #FEFFFF from template
+WHITE_DECOR = RGBColor(254, 255, 255)  # #FEFFFF — decorative squares
 LIGHT_GREY = RGBColor(180, 180, 180)
 BORDER_CLR = RGBColor(220, 220, 220)
+STAT_BG = RGBColor(248, 249, 250)     # subtle stat block fill
 
 # Layout references
 LY_TITLE = prs.slide_layouts[0]       # Title Slide
@@ -75,28 +88,25 @@ def add_text(slide, l, t, w, h, text, sz=14, color=BODY, align=PP_ALIGN.LEFT,
     return box
 
 
-def add_title(slide, text, t=Inches(0.5)):
-    """Slide title — black, ~40pt, left-aligned at x=0.9"."""
-    add_text(slide, Inches(0.9), t, Inches(11), Inches(0.8),
-             text, sz=40, color=BLACK, font=FONT)
+def add_slide_title(slide, subtitle, title, sub_t=Inches(1.4), title_t=Inches(2.0),
+                    x=Inches(0.9), w=Inches(11)):
+    """Template-style subtitle (above, small grey) + title (large black)."""
+    add_text(slide, x, sub_t, w, Inches(0.3),
+             subtitle.upper(), sz=16, color=SUBTITLE_CLR, font=FONT)
+    add_text(slide, x, title_t, w, Inches(0.8),
+             title, sz=48, color=BLACK, font=FONT)
 
 
-def add_subtitle_label(slide, text, t=Inches(0.3)):
-    """Small category label above title — teal, uppercase, 11pt."""
-    add_text(slide, Inches(0.9), t, Inches(6), Inches(0.3),
-             text.upper(), sz=11, color=TEAL, font=FONT)
+def add_content_subtitle(slide, subtitle, x=Inches(0.9), t=Inches(0.3)):
+    """Small category label — teal, uppercase, 11pt."""
+    add_text(slide, x, t, Inches(6), Inches(0.3),
+             subtitle.upper(), sz=11, color=TEAL, font=FONT)
 
 
-def add_teal_square(slide, l, t, size, opacity_adjust=0):
-    """Decorative teal rounded square — visual anchor."""
-    sq = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, l, t,
-                                 Inches(size), Inches(size))
-    sq.fill.solid()
-    sq.fill.fore_color.rgb = TEAL
-    sq.line.fill.background()
-    # Gentle rounding
-    sq.adjustments[0] = 0.08
-    return sq
+def add_content_title(slide, title, x=Inches(0.9), t=Inches(0.55)):
+    """Slide title — black, ~40pt."""
+    add_text(slide, x, t, Inches(11), Inches(0.8),
+             title, sz=40, color=BLACK, font=FONT)
 
 
 def add_marker_dot(slide, l, t, color=TEAL, size=0.12):
@@ -110,6 +120,17 @@ def add_marker_dot(slide, l, t, color=TEAL, size=0.12):
     return m
 
 
+def add_white_square(slide, l, t, size):
+    """Decorative #FEFFFF near-white square — placed near/overlapping images."""
+    sq = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, l, t,
+                                 Inches(size), Inches(size))
+    sq.fill.solid()
+    sq.fill.fore_color.rgb = WHITE_DECOR
+    sq.line.fill.background()
+    sq.adjustments[0] = 0.08
+    return sq
+
+
 def add_thin_line(slide, l, t, w, color=BORDER_CLR):
     """Thin horizontal separator line."""
     ln = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, l, t, w, Pt(1))
@@ -118,65 +139,92 @@ def add_thin_line(slide, l, t, w, color=BORDER_CLR):
     ln.line.fill.background()
 
 
-def add_screenshot(slide, filename, l, t, w, label=None):
-    """Add a screenshot image with optional label above it."""
+def add_stat_block(slide, l, t, value, label, size=2.2, value_sz=36, label_sz=11):
+    """Template-style stat block: 2.2"x2.2" rounded rect with number + label."""
+    block = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, l, t,
+                                    Inches(size), Inches(size))
+    block.fill.solid()
+    block.fill.fore_color.rgb = WHITE
+    block.line.color.rgb = RGBColor(235, 235, 235)
+    block.line.width = Pt(0.5)
+    block.adjustments[0] = 0.06
+
+    # Large number centered
+    add_text(slide, l + Inches(0.15), t + Inches(size * 0.2), Inches(size - 0.3), Inches(0.7),
+             value, sz=value_sz, color=TEAL, font=FONT, align=PP_ALIGN.CENTER)
+    # Small label below
+    add_text(slide, l + Inches(0.15), t + Inches(size * 0.55), Inches(size - 0.3), Inches(0.6),
+             label, sz=label_sz, color=LIGHT_GREY, align=PP_ALIGN.CENTER, spacing=3)
+    return block
+
+
+def add_logo(slide, l=Inches(11.3), t=Inches(6.6), w=Inches(1.5)):
+    """Add Noordhoff logo subtly."""
+    if os.path.exists(LOGO):
+        slide.shapes.add_picture(LOGO, l, t, w)
+
+
+def add_screenshot_with_accents(slide, filename, img_l, img_t, img_w,
+                                 accents=None):
+    """Add screenshot + white #FEFFFF decorative squares overlapping edges."""
     path = os.path.join(SHOTS, filename)
-    if label:
-        add_text(slide, l, t - Inches(0.25), Inches(3), Inches(0.25),
-                 label, sz=9, color=TEAL, font=FONT)
     if os.path.exists(path):
-        # Add subtle border/shadow effect via a background rectangle
-        border_rect = slide.shapes.add_shape(
-            MSO_SHAPE.RECTANGLE, l - Inches(0.02), t - Inches(0.02),
-            w + Inches(0.04), Inches(0.04)  # placeholder height, will be covered
-        )
-        border_rect.fill.solid()
-        border_rect.fill.fore_color.rgb = BORDER_CLR
-        border_rect.line.fill.background()
-        # Remove the border rect — we don't actually need it as picture has own bounds
-        # Just add the picture directly
-        slide.shapes.add_picture(path, l, t, w)
+        pic = slide.shapes.add_picture(path, img_l, img_t, img_w)
+        # Add white accent squares
+        if accents:
+            for (al, at, asize) in accents:
+                add_white_square(slide, al, at, asize)
+        return pic
+    return None
 
 
 # ══════════════════════════════════════════════
-# SLIDE 1 — TITLE (split: screenshot left, green right)
+# SLIDE 1 — TITLE (split: screenshot left, teal right)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-# Left half: screenshot as teaser (faded)
+# Left: dashboard screenshot as hero image
 path = os.path.join(SHOTS, '02_start.png')
 if os.path.exists(path):
     s.shapes.add_picture(path, Inches(-0.5), Inches(-0.2), Inches(8.0))
 
-# Right half: teal block
+# White decorative squares overlapping screenshot edge
+add_white_square(s, Inches(6.2), Inches(0.3), 0.9)
+add_white_square(s, Inches(5.5), Inches(5.5), 1.8)
+
+# Right: teal block
 teal_block = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
     Inches(6.8), Inches(0), Inches(6.6), H)
-teal_block.fill.solid(); teal_block.fill.fore_color.rgb = TEAL
+teal_block.fill.solid()
+teal_block.fill.fore_color.rgb = TEAL
 teal_block.line.fill.background()
 
-# Decorative white pills on teal
+# White pill decorations on teal
 for (pl, pt, pw, ph) in [
     (Inches(7.2), Inches(0.5), Inches(2.0), Inches(0.25)),
     (Inches(11.0), Inches(6.6), Inches(2.0), Inches(0.3)),
 ]:
     pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
-    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
-    pill.line.fill.background(); pill.adjustments[0] = 0.5
+    pill.fill.solid()
+    pill.fill.fore_color.rgb = WHITE_DECOR
+    pill.line.fill.background()
+    pill.adjustments[0] = 0.5
 
 # Title text on teal
 add_text(s, Inches(7.3), Inches(2.0), Inches(5.5), Inches(1.2),
          'Auteurs-\nportaal', sz=52, color=WHITE, font=FONT)
 
-# Subtitle
+# Subtitle on teal
 add_text(s, Inches(7.3), Inches(3.8), Inches(5.0), Inches(0.8),
          'Het digitale platform voor\nroyalty-afrekeningen, contracten\nen prognoses',
          sz=15, color=RGBColor(200, 235, 225), spacing=6)
 
-# Divider
+# Divider line
 div = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
     Inches(7.3), Inches(5.1), Inches(2.0), Pt(1.5))
-div.fill.solid(); div.fill.fore_color.rgb = RGBColor(0, 150, 120)
+div.fill.solid()
+div.fill.fore_color.rgb = RGBColor(0, 150, 120)
 div.line.fill.background()
 
 add_text(s, Inches(7.3), Inches(5.3), Inches(5), Inches(0.4),
@@ -185,6 +233,10 @@ add_text(s, Inches(7.3), Inches(5.3), Inches(5), Inches(0.4),
 add_text(s, Inches(7.3), Inches(6.2), Inches(5), Inches(0.3),
          'Patrick Jeeninga  —  Maart 2026', sz=10, color=RGBColor(120, 185, 165))
 
+# Noordhoff logo bottom-right
+if os.path.exists(LOGO):
+    s.shapes.add_picture(LOGO, Inches(10.5), Inches(6.65), Inches(1.8))
+
 
 # ══════════════════════════════════════════════
 # SLIDE 2 — CONTEXT: WAAROM NU?
@@ -192,12 +244,8 @@ add_text(s, Inches(7.3), Inches(6.2), Inches(5), Inches(0.3),
 
 s = prs.slides.add_slide(LY_BLANK)
 
-# Decorative teal squares
-add_teal_square(s, Inches(-0.5), Inches(-0.5), 1.0)
-add_teal_square(s, Inches(12.2), Inches(6.0), 1.8)
-
-add_subtitle_label(s, 'Context')
-add_title(s, 'Waarom nu?', t=Inches(0.55))
+add_content_subtitle(s, 'Context')
+add_content_title(s, 'Waarom nu?', t=Inches(0.55))
 
 items = [
     ('Aandeelhouders',
@@ -215,41 +263,44 @@ for i, (title, desc) in enumerate(items):
     l = Inches(0.9 + col * 6.0)
     t = Inches(1.7 + row * 2.6)
 
-    # Marker dot — consistent teal
     add_marker_dot(s, l, t + Inches(0.07), color=TEAL)
 
-    # Title
     add_text(s, l + Inches(0.3), t, Inches(5.2), Inches(0.35),
              title, sz=18, color=BLACK, font=FONT)
-
-    # Description
     add_text(s, l + Inches(0.3), t + Inches(0.5), Inches(5.2), Inches(1.5),
              desc, sz=13, color=BODY, spacing=5)
 
-    # Separator line under each item
     if row == 0:
         add_thin_line(s, l + Inches(0.3), t + Inches(2.1), Inches(5.0))
 
+# Subtle logo bottom-right
+add_logo(s)
+
 
 # ══════════════════════════════════════════════
-# SLIDE 3 — PROBLEM: AUTEUR EXPERIENCE
+# SLIDE 3 — PROBLEM: AUTEUR EXPERIENCE (Outlook email mock)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.0), Inches(-0.4), 1.2)
-
-add_subtitle_label(s, 'Het probleem')
-add_title(s, 'Hoe ervaart de auteur het nu?', t=Inches(0.55))
+add_content_subtitle(s, 'Het probleem')
+add_content_title(s, 'Hoe ervaart de auteur het nu?', t=Inches(0.55))
 
 # Outlook-style email mock
-email_bg = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.5), Inches(1.5), Inches(10.3), Inches(2.6))
-email_bg.fill.solid(); email_bg.fill.fore_color.rgb = WHITE
-email_bg.line.color.rgb = BORDER_CLR; email_bg.line.width = Pt(1); email_bg.adjustments[0] = 0.02
+email_bg = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    Inches(1.5), Inches(1.5), Inches(10.3), Inches(2.6))
+email_bg.fill.solid()
+email_bg.fill.fore_color.rgb = WHITE
+email_bg.line.color.rgb = BORDER_CLR
+email_bg.line.width = Pt(1)
+email_bg.adjustments[0] = 0.02
 
 # Email toolbar bar
-toolbar = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(1.5), Inches(1.5), Inches(10.3), Inches(0.35))
-toolbar.fill.solid(); toolbar.fill.fore_color.rgb = RGBColor(243, 243, 243); toolbar.line.fill.background()
+toolbar = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
+    Inches(1.5), Inches(1.5), Inches(10.3), Inches(0.35))
+toolbar.fill.solid()
+toolbar.fill.fore_color.rgb = RGBColor(243, 243, 243)
+toolbar.line.fill.background()
 
 add_text(s, Inches(1.8), Inches(1.53), Inches(3), Inches(0.3),
          'Beantwoorden    Doorsturen    Verwijderen', sz=8, color=LIGHT_GREY)
@@ -276,13 +327,13 @@ add_text(s, Inches(1.8), Inches(2.8), Inches(9.5), Inches(1),
          'Met vriendelijke groet,\nM. Hendriks',
          sz=10, color=BODY, spacing=2)
 
-# Annotation
+# Handwritten annotation
 add_text(s, Inches(8.5), Inches(1.2), Inches(4), Inches(0.4),
          '1 van 250 per jaar', sz=20, color=BODY, font=FONT_HAND)
 
 add_thin_line(s, Inches(0.9), Inches(4.4), Inches(11.5))
 
-# Three pain points
+# Three pain points below
 pains = [
     ('1 brief per jaar',
      'De enige communicatie over royalties is een\njaarlijkse brief in maart. De rest van het jaar: stilte.'),
@@ -294,7 +345,6 @@ pains = [
 
 for i, (title, desc) in enumerate(pains):
     l = Inches(0.9 + i * 4.0)
-
     add_marker_dot(s, l, Inches(4.97), color=TEAL)
     add_text(s, l + Inches(0.3), Inches(4.9), Inches(3.3), Inches(0.35),
              title, sz=16, color=BLACK, font=FONT)
@@ -303,36 +353,29 @@ for i, (title, desc) in enumerate(pains):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 4 — PROBLEM: COSTS
+# SLIDE 4 — PROBLEM: COSTS (stats in 2.2" rounded squares)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(5.8), 1.5)
+add_content_subtitle(s, 'Het probleem')
+add_content_title(s, 'Wat kost het Noordhoff nu?', t=Inches(0.55))
 
-add_subtitle_label(s, 'Het probleem')
-add_title(s, 'Wat kost het Noordhoff nu?', t=Inches(0.55))
-
-# Four stat blocks — clean, no card backgrounds
+# Four stat blocks in template "cijfers" style
 stats = [
-    ('\u20AC10.000', 'Postkosten per jaar\n(3 organisaties)'),
-    ('32 uur', 'Brieven inpakken\n(2 man \u00D7 2 dagen)'),
-    ('250', 'Auteurs met vragen\nper jaar'),
+    ('\u20AC10.000', 'Postkosten\nper jaar'),
+    ('32 uur', 'Brieven\ninpakken'),
+    ('250', 'Auteurs met\nvragen per jaar'),
     ('0', 'Digitaal inzicht\nvoor auteurs'),
 ]
 for i, (value, label) in enumerate(stats):
-    l = Inches(0.9 + i * 3.05)
-    # Large value
-    add_text(s, l, Inches(1.7), Inches(2.7), Inches(0.7),
-             value, sz=36, color=TEAL, font=FONT, align=PP_ALIGN.LEFT)
-    # Label below
-    add_text(s, l, Inches(2.4), Inches(2.7), Inches(0.6),
-             label, sz=11, color=LIGHT_GREY, spacing=3)
+    l = Inches(0.7 + i * 2.9)
+    add_stat_block(s, l, Inches(1.5), value, label, size=2.2)
 
-add_thin_line(s, Inches(0.9), Inches(3.3), Inches(11.5))
+add_thin_line(s, Inches(0.9), Inches(4.0), Inches(11.5))
 
-# Hidden costs list
-add_text(s, Inches(0.9), Inches(3.6), Inches(11), Inches(0.35),
+# Hidden costs list with orange markers
+add_text(s, Inches(0.9), Inches(4.3), Inches(11), Inches(0.35),
          'Verborgen kosten die niet op de factuur staan:', sz=14, color=BLACK, font=FONT)
 
 hidden = [
@@ -342,8 +385,7 @@ hidden = [
     ('Auteursverlies', 'Frustratie leidt tot overstap naar concurrent', '\u2014'),
 ]
 for i, (item, detail, cost) in enumerate(hidden):
-    top = Inches(4.2 + i * 0.55)
-
+    top = Inches(4.9 + i * 0.5)
     add_marker_dot(s, Inches(1.0), top + Inches(0.08), color=ORANGE, size=0.1)
     add_text(s, Inches(1.3), top, Inches(3.2), Inches(0.4),
              item, sz=12, color=BLACK, font=FONT)
@@ -361,21 +403,21 @@ add_text(s, Inches(10.5), Inches(6.6), Inches(1.8), Inches(0.3),
 
 
 # ══════════════════════════════════════════════
-# SLIDE 5 — TRANSFORMATION: OLD VS NEW
+# SLIDE 5 — OLD VS NEW
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(-0.5), 1.0)
+add_content_subtitle(s, 'De transformatie')
+add_content_title(s, 'Van papier naar portaal', t=Inches(0.55))
 
-add_subtitle_label(s, 'De transformatie')
-add_title(s, 'Van papier naar portaal', t=Inches(0.55))
-
-# LEFT — OUD label block
+# LEFT — OUD label (orange)
 old_label = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
     Inches(0.9), Inches(1.6), Inches(1.0), Inches(0.35))
-old_label.fill.solid(); old_label.fill.fore_color.rgb = ORANGE
-old_label.line.fill.background(); old_label.adjustments[0] = 0.4
+old_label.fill.solid()
+old_label.fill.fore_color.rgb = ORANGE
+old_label.line.fill.background()
+old_label.adjustments[0] = 0.4
 add_text(s, Inches(0.9), Inches(1.62), Inches(1.0), Inches(0.3),
          'OUD', sz=10, color=WHITE, align=PP_ALIGN.CENTER)
 
@@ -383,7 +425,7 @@ add_text(s, Inches(2.1), Inches(1.6), Inches(4), Inches(0.35),
          'Fysieke post', sz=18, color=BODY, font=FONT)
 
 old_items = [
-    '1× per jaar een royalty-brief',
+    '1\u00D7 per jaar een royalty-brief',
     'Geen tussentijds inzicht',
     'Vragen via email en telefoon',
     'Contracten in archiefkast',
@@ -394,19 +436,31 @@ old_items = [
 ]
 for j, item in enumerate(old_items):
     add_text(s, Inches(1.2), Inches(2.3 + j * 0.45), Inches(4.8), Inches(0.35),
-             f'×   {item}', sz=12, color=LIGHT_GREY)
+             f'\u00D7   {item}', sz=12, color=LIGHT_GREY)
 
-# Central arrow
-arrow = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(6.1), Inches(3.5), Inches(1.1), Inches(1.1))
-arrow.fill.solid(); arrow.fill.fore_color.rgb = TEAL; arrow.line.fill.background()
+# Central teal circle arrow
+arrow = s.shapes.add_shape(MSO_SHAPE.OVAL,
+    Inches(6.1), Inches(3.5), Inches(1.1), Inches(1.1))
+arrow.fill.solid()
+arrow.fill.fore_color.rgb = TEAL
+arrow.line.fill.background()
 add_text(s, Inches(6.1), Inches(3.6), Inches(1.1), Inches(0.9),
-         '→', sz=32, color=WHITE, align=PP_ALIGN.CENTER)
+         '\u2192', sz=32, color=WHITE, align=PP_ALIGN.CENTER)
 
-# RIGHT — NIEUW label block
+# Vertical separator
+sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
+    Inches(6.65), Inches(1.5), Pt(1), Inches(5.0))
+sep.fill.solid()
+sep.fill.fore_color.rgb = BORDER_CLR
+sep.line.fill.background()
+
+# RIGHT — NIEUW label (teal)
 new_label = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
     Inches(7.5), Inches(1.6), Inches(1.2), Inches(0.35))
-new_label.fill.solid(); new_label.fill.fore_color.rgb = TEAL
-new_label.line.fill.background(); new_label.adjustments[0] = 0.4
+new_label.fill.solid()
+new_label.fill.fore_color.rgb = TEAL
+new_label.line.fill.background()
+new_label.adjustments[0] = 0.4
 add_text(s, Inches(7.5), Inches(1.62), Inches(1.2), Inches(0.3),
          'NIEUW', sz=10, color=WHITE, align=PP_ALIGN.CENTER)
 
@@ -428,13 +482,6 @@ for j, item in enumerate(new_items):
     add_text(s, Inches(8.05), Inches(2.3 + j * 0.45), Inches(4.3), Inches(0.35),
              item, sz=12, color=BODY)
 
-# Vertical separator line
-sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                          Inches(6.65), Inches(1.5), Pt(1), Inches(5.0))
-sep.fill.solid()
-sep.fill.fore_color.rgb = BORDER_CLR
-sep.line.fill.background()
-
 
 # ══════════════════════════════════════════════
 # SLIDE 6 — SOLUTION: TWO DASHBOARDS
@@ -442,13 +489,10 @@ sep.line.fill.background()
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(-0.5), Inches(-0.5), 1.0)
-add_teal_square(s, Inches(12.5), Inches(6.2), 1.2)
+add_content_subtitle(s, 'De oplossing')
+add_content_title(s, 'E\u00E9n portaal, twee dashboards', t=Inches(0.55))
 
-add_subtitle_label(s, 'De oplossing')
-add_title(s, 'E\u00E9n portaal, twee dashboards', t=Inches(0.55))
-
-# LEFT — Auteur dashboard
+# LEFT — Auteur dashboard (teal label)
 add_marker_dot(s, Inches(0.9), Inches(1.77), color=TEAL, size=0.14)
 add_text(s, Inches(1.2), Inches(1.7), Inches(4.5), Inches(0.35),
          'Auteursdashboard', sz=18, color=TEAL, font=FONT)
@@ -464,12 +508,13 @@ auteur_features = [
     'FAQ, guided tour, command palette (\u2318K)',
 ]
 for j, f in enumerate(auteur_features):
-    add_text(s, Inches(1.2), Inches(2.3 + j * 0.45), Inches(5), Inches(0.35),
-             f'\u00B7   {f}', sz=12, color=BODY)
+    add_marker_dot(s, Inches(1.2), Inches(2.37 + j * 0.45), color=TEAL, size=0.08)
+    add_text(s, Inches(1.45), Inches(2.3 + j * 0.45), Inches(4.8), Inches(0.35),
+             f, sz=12, color=BODY)
 
 # Vertical separator
 sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                          Inches(6.5), Inches(1.7), Pt(1), Inches(5.0))
+    Inches(6.5), Inches(1.7), Pt(1), Inches(5.0))
 sep.fill.solid()
 sep.fill.fore_color.rgb = BORDER_CLR
 sep.line.fill.background()
@@ -490,39 +535,44 @@ admin_features = [
     'E-mail notificatie instellingen',
 ]
 for j, f in enumerate(admin_features):
-    add_text(s, Inches(7.3), Inches(2.3 + j * 0.45), Inches(5), Inches(0.35),
-             f'\u00B7   {f}', sz=12, color=BODY)
+    add_marker_dot(s, Inches(7.3), Inches(2.37 + j * 0.45), color=TEAL, size=0.08)
+    add_text(s, Inches(7.55), Inches(2.3 + j * 0.45), Inches(4.8), Inches(0.35),
+             f, sz=12, color=BODY)
 
 
 # ══════════════════════════════════════════════
-# SLIDE 7 — SCREENSHOT: AUTEUR DASHBOARD
+# SLIDE 7 — SCREENSHOT: AUTEUR (02_start.png left, features right)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(-0.4), 1.0)
+add_content_subtitle(s, 'Het portaal')
+add_content_title(s, 'Wat de auteur ziet', t=Inches(0.55))
 
-add_subtitle_label(s, 'Het portaal')
-add_title(s, 'Wat de auteur ziet', t=Inches(0.55))
-
-# Screenshot left (large)
+# Screenshot left (large) with shadow
 path = os.path.join(SHOTS, '02_start.png')
 if os.path.exists(path):
-    # Subtle shadow rectangle behind screenshot
     shadow = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
         Inches(0.85), Inches(1.65), Inches(7.6), Inches(5.2))
-    shadow.fill.solid(); shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
-    shadow.line.fill.background(); shadow.adjustments[0] = 0.015
+    shadow.fill.solid()
+    shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
+    shadow.line.fill.background()
+    shadow.adjustments[0] = 0.015
     s.shapes.add_picture(path, Inches(0.9), Inches(1.7), Inches(7.5))
 
-# Explanation text right
+# White #FEFFFF decorative squares overlapping screenshot edges
+add_white_square(s, Inches(7.6), Inches(1.2), 0.9)    # small top-right overlap
+add_white_square(s, Inches(0.0), Inches(5.5), 1.8)    # large bottom-left overlap
+add_white_square(s, Inches(7.8), Inches(5.8), 0.9)    # small bottom-right overlap
+
+# Feature list right side
 add_text(s, Inches(8.8), Inches(1.7), Inches(3.8), Inches(0.35),
          'Persoonlijk dashboard', sz=16, color=BLACK, font=FONT)
 
 add_thin_line(s, Inches(8.8), Inches(2.2), Inches(3.5), color=TEAL)
 
 features = [
-    ('Jaaroverzicht', 'Totaal uitgekeerd, laatste betaling\nen verwachte royalties in één kaart.'),
+    ('Jaaroverzicht', 'Totaal uitgekeerd, laatste betaling\nen verwachte royalties in \u00E9\u00E9n kaart.'),
     ('Royalty-grafiek', 'Interactieve grafiek per jaar met\nuitsplitsing per type (royalties,\nnevenrechten, foreign rights).'),
     ('Afrekeningen', 'Zoeken, filteren, PDF preview\nen download. CSV-export.'),
     ('Contracten', 'Alle contracten inzien met\nPDF preview en download.'),
@@ -538,26 +588,31 @@ for i, (title, desc) in enumerate(features):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 8 — SCREENSHOT: ADMIN DASHBOARD
+# SLIDE 8 — SCREENSHOT: ADMIN (10_admin.png right, features left)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(-0.5), Inches(-0.4), 1.0)
+add_content_subtitle(s, 'Het portaal')
+add_content_title(s, 'Wat de beheerder ziet', t=Inches(0.55))
 
-add_subtitle_label(s, 'Het portaal')
-add_title(s, 'Wat de beheerder ziet', t=Inches(0.55))
-
-# Screenshot right (large)
+# Screenshot right (large) with shadow
 path = os.path.join(SHOTS, '10_admin.png')
 if os.path.exists(path):
     shadow = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
         Inches(4.85), Inches(1.65), Inches(7.6), Inches(5.2))
-    shadow.fill.solid(); shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
-    shadow.line.fill.background(); shadow.adjustments[0] = 0.015
+    shadow.fill.solid()
+    shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
+    shadow.line.fill.background()
+    shadow.adjustments[0] = 0.015
     s.shapes.add_picture(path, Inches(4.9), Inches(1.7), Inches(7.5))
 
-# Explanation text left
+# White #FEFFFF decorative squares overlapping screenshot edges (mirror of slide 7)
+add_white_square(s, Inches(4.2), Inches(1.2), 0.9)    # small top-left overlap
+add_white_square(s, Inches(11.5), Inches(5.5), 1.8)   # large bottom-right overlap
+add_white_square(s, Inches(4.0), Inches(5.8), 0.9)    # small bottom-left overlap
+
+# Feature list left side
 add_text(s, Inches(0.9), Inches(1.7), Inches(3.6), Inches(0.35),
          'Admin dashboard', sz=16, color=BLACK, font=FONT)
 
@@ -580,43 +635,57 @@ for i, (title, desc) in enumerate(admin_feats):
 
 
 # ══════════════════════════════════════════════
-# (Demo slide moved to after Pricing/Timeline)
-
-
-# ══════════════════════════════════════════════
-# SLIDE 10 — SCALABILITY
+# SLIDE 9 — SCALABILITY (stat blocks in template grid)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(-0.5), 1.0)
+add_content_subtitle(s, 'Schaalbaarheid')
+add_content_title(s, 'E\u00E9n platform, drie organisaties', t=Inches(0.55))
 
-add_subtitle_label(s, 'Schaalbaarheid')
-add_title(s, 'E\u00E9n platform, drie organisaties', t=Inches(0.55))
-
+# 3 stat blocks in template grid style
 orgs = [
-    ('Noordhoff', '2.500 auteurs', 'Primair, voortgezet onderwijs\nen mbo/hbo in Nederland'),
-    ('Liber', '~1.500 auteurs', 'Educatieve uitgeverij\nin Zweden'),
-    ('Plantyn', '~1.000 auteurs', 'Educatieve uitgeverij\nin Belgi\u00EB'),
+    ('Noordhoff', '2.500', 'auteurs'),
+    ('Liber', '~1.500', 'auteurs'),
+    ('Plantyn', '~1.000', 'auteurs'),
 ]
-for i, (name, count, desc) in enumerate(orgs):
-    l = Inches(0.9 + i * 4.0)
+for i, (name, count, label) in enumerate(orgs):
+    l = Inches(0.9 + i * 3.8)
+    # Stat block
+    block = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, l, Inches(1.5),
+                                Inches(3.2), Inches(2.2))
+    block.fill.solid()
+    block.fill.fore_color.rgb = WHITE
+    block.line.color.rgb = RGBColor(235, 235, 235)
+    block.line.width = Pt(0.5)
+    block.adjustments[0] = 0.06
 
-    # Marker (first one is highlighted)
-    add_marker_dot(s, l, Inches(1.82), color=TEAL, size=0.14)
-    add_text(s, l + Inches(0.3), Inches(1.75), Inches(3.2), Inches(0.35),
-             name, sz=20, color=BLACK if i == 0 else BODY, font=FONT)
-    add_text(s, l + Inches(0.3), Inches(2.2), Inches(3.2), Inches(0.3),
-             count, sz=14, color=TEAL, font=FONT)
-    add_text(s, l + Inches(0.3), Inches(2.6), Inches(3.2), Inches(1.0),
-             desc, sz=12, color=LIGHT_GREY, spacing=5)
+    # Organization name
+    add_text(s, l + Inches(0.2), Inches(1.7), Inches(2.8), Inches(0.35),
+             name, sz=20, color=TEAL if i == 0 else BODY, font=FONT,
+             align=PP_ALIGN.CENTER)
+    # Large number
+    add_text(s, l + Inches(0.2), Inches(2.2), Inches(2.8), Inches(0.6),
+             count, sz=40, color=TEAL, font=FONT, align=PP_ALIGN.CENTER)
+    # Label
+    add_text(s, l + Inches(0.2), Inches(2.9), Inches(2.8), Inches(0.3),
+             label, sz=12, color=LIGHT_GREY, align=PP_ALIGN.CENTER)
 
-add_thin_line(s, Inches(0.9), Inches(4.1), Inches(11.5))
+    # Sub-description below block
+    descs = [
+        'Primair, voortgezet onderwijs\nen mbo/hbo in Nederland',
+        'Educatieve uitgeverij\nin Zweden',
+        'Educatieve uitgeverij\nin Belgi\u00EB',
+    ]
+    add_text(s, l + Inches(0.2), Inches(3.9), Inches(2.8), Inches(0.8),
+             descs[i], sz=12, color=LIGHT_GREY, spacing=5, align=PP_ALIGN.CENTER)
+
+add_thin_line(s, Inches(0.9), Inches(5.0), Inches(11.5))
 
 # White-label section
-add_text(s, Inches(0.9), Inches(4.4), Inches(11), Inches(0.35),
+add_text(s, Inches(0.9), Inches(5.3), Inches(11), Inches(0.35),
          'White-label ready', sz=18, color=TEAL, font=FONT)
-add_text(s, Inches(0.9), Inches(4.9), Inches(11.3), Inches(1.5),
+add_text(s, Inches(0.9), Inches(5.8), Inches(11.3), Inches(1.5),
          'Elke organisatie krijgt een eigen huisstijl (logo, kleuren), eigen auteurs-database en eigen admin.\n'
          'De onderliggende technologie is identiek \u2014 updates worden \u00E9\u00E9n keer gebouwd en rollen uit naar alle drie.\n'
          'Geen extra ontwikkelkosten per organisatie, alleen configuratie en data-migratie.',
@@ -624,17 +693,15 @@ add_text(s, Inches(0.9), Inches(4.9), Inches(11.3), Inches(1.5),
 
 
 # ══════════════════════════════════════════════
-# SLIDE 11 — ROI
+# SLIDE 10 — ROI (stats in 2.2" squares + table)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.0), Inches(-0.5), 1.2)
+add_content_subtitle(s, 'Businesscase')
+add_content_title(s, 'Return on Investment', t=Inches(0.55))
 
-add_subtitle_label(s, 'Businesscase')
-add_title(s, 'Return on Investment', t=Inches(0.55))
-
-# Stats row — clean numbers
+# Stats row in 2.2" rounded squares
 roi_stats = [
     ('\u20AC10.000', 'Postkosten\nbespaard'),
     ('\u20AC5.000', 'Minder\nauteursvragen'),
@@ -642,21 +709,24 @@ roi_stats = [
     ('\u20AC17.500', 'Totale besparing\nper jaar'),
 ]
 for i, (value, label) in enumerate(roi_stats):
-    l = Inches(0.9 + i * 3.05)
-    clr = TEAL
-    add_text(s, l, Inches(1.6), Inches(2.7), Inches(0.6),
-             value, sz=32, color=clr, font=FONT, align=PP_ALIGN.LEFT)
-    add_text(s, l, Inches(2.2), Inches(2.7), Inches(0.5),
-             label, sz=10, color=LIGHT_GREY, spacing=3)
+    l = Inches(0.5 + i * 3.1)
+    add_stat_block(s, l, Inches(1.4), value, label, size=2.2,
+                   value_sz=30, label_sz=10)
 
-# Highlight the total with an underline
-add_thin_line(s, Inches(10.05), Inches(2.1), Inches(2.2), color=TEAL)
+# Highlight total block with teal border
+total_block = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    Inches(0.5 + 3 * 3.1), Inches(1.4), Inches(2.2), Inches(2.2))
+total_block.fill.solid()
+total_block.fill.fore_color.rgb = WHITE
+total_block.line.color.rgb = TEAL
+total_block.line.width = Pt(2)
+total_block.adjustments[0] = 0.06
 
-add_thin_line(s, Inches(0.9), Inches(3.0), Inches(11.5))
+add_thin_line(s, Inches(0.9), Inches(3.9), Inches(11.5))
 
-# ROI Table
-tbl_shape = s.shapes.add_table(6, 3, Inches(0.9), Inches(3.3),
-                                Inches(11.5), Inches(2.8))
+# ROI comparison table
+tbl_shape = s.shapes.add_table(6, 3, Inches(0.9), Inches(4.1),
+                                Inches(11.5), Inches(2.0))
 tbl = tbl_shape.table
 tbl.columns[0].width = Inches(5.5)
 tbl.columns[1].width = Inches(3)
@@ -675,17 +745,15 @@ for ri, row in enumerate(rows):
         cell = tbl.cell(ri, ci)
         cell.text = val
         p = cell.text_frame.paragraphs[0]
-        p.font.size = Pt(12)
+        p.font.size = Pt(11)
         p.font.name = FONT
         p.font.bold = False
 
         if ri == 0:
-            # Header row — teal background, white text
             cell.fill.solid()
             cell.fill.fore_color.rgb = TEAL
             p.font.color.rgb = WHITE
         elif ri == len(rows) - 1:
-            # Total row
             cell.fill.solid()
             cell.fill.fore_color.rgb = WHITE
             p.font.color.rgb = TEAL
@@ -702,29 +770,29 @@ for ri, row in enumerate(rows):
         if ci > 0:
             p.alignment = PP_ALIGN.CENTER
 
-# Break-even visual — prominent
+# Break-even bar at bottom
 be_bg = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-    Inches(0.9), Inches(6.2), Inches(11.5), Inches(0.8))
-be_bg.fill.solid(); be_bg.fill.fore_color.rgb = TEAL
-be_bg.line.fill.background(); be_bg.adjustments[0] = 0.15
+    Inches(0.9), Inches(6.3), Inches(11.5), Inches(0.7))
+be_bg.fill.solid()
+be_bg.fill.fore_color.rgb = TEAL
+be_bg.line.fill.background()
+be_bg.adjustments[0] = 0.15
 
-add_text(s, Inches(1.3), Inches(6.3), Inches(3.5), Inches(0.5),
+add_text(s, Inches(1.3), Inches(6.38), Inches(3.5), Inches(0.5),
          'Break-even: jaar 2', sz=18, color=WHITE, font=FONT)
-add_text(s, Inches(5.0), Inches(6.35), Inches(7), Inches(0.5),
+add_text(s, Inches(5.0), Inches(6.43), Inches(7), Inches(0.5),
          'Vanaf jaar 2 bespaart het portaal meer dan het kost  (\u20AC17.500 besparing vs \u20AC15.000 licentie = +\u20AC2.500/jaar)',
          sz=11, color=RGBColor(200, 235, 225))
 
 
 # ══════════════════════════════════════════════
-# SLIDE 12 — PRICING
+# SLIDE 11 — PRICING (split: development left, license right)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(-0.5), Inches(-0.5), 1.0)
-
-add_subtitle_label(s, 'Investering')
-add_title(s, 'Wat kost het?', t=Inches(0.55))
+add_content_subtitle(s, 'Investering')
+add_content_title(s, 'Wat kost het?', t=Inches(0.55))
 
 # LEFT — Development cost
 add_text(s, Inches(0.9), Inches(1.7), Inches(5.2), Inches(0.35),
@@ -745,12 +813,13 @@ dev_items = [
     'Documentatie & overdracht',
 ]
 for j, item in enumerate(dev_items):
-    add_text(s, Inches(0.9), Inches(3.4 + j * 0.4), Inches(4.6), Inches(0.3),
-             f'\u00B7   {item}', sz=11, color=BODY)
+    add_marker_dot(s, Inches(0.9), Inches(3.47 + j * 0.4), color=TEAL, size=0.08)
+    add_text(s, Inches(1.15), Inches(3.4 + j * 0.4), Inches(4.6), Inches(0.3),
+             item, sz=11, color=BODY)
 
 # Vertical separator
 sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                          Inches(6.4), Inches(1.7), Pt(1), Inches(4.5))
+    Inches(6.4), Inches(1.7), Pt(1), Inches(4.5))
 sep.fill.solid()
 sep.fill.fore_color.rgb = BORDER_CLR
 sep.line.fill.background()
@@ -774,10 +843,11 @@ license_items = [
     'Nieuwe features op aanvraag',
 ]
 for j, item in enumerate(license_items):
-    add_text(s, Inches(6.9), Inches(3.4 + j * 0.4), Inches(4.6), Inches(0.3),
-             f'\u00B7   {item}', sz=11, color=BODY)
+    add_marker_dot(s, Inches(6.9), Inches(3.47 + j * 0.4), color=TEAL, size=0.08)
+    add_text(s, Inches(7.15), Inches(3.4 + j * 0.4), Inches(4.6), Inches(0.3),
+             item, sz=11, color=BODY)
 
-# Bottom summary
+# Bottom summary bar
 add_thin_line(s, Inches(0.9), Inches(6.2), Inches(11.5), color=TEAL)
 add_text(s, Inches(0.9), Inches(6.35), Inches(11.5), Inches(0.35),
          'Jaar 1: \u20AC34.000  \u00B7  Besparing: \u20AC17.500  \u00B7  Netto: \u20AC16.500  |  '
@@ -786,15 +856,13 @@ add_text(s, Inches(0.9), Inches(6.35), Inches(11.5), Inches(0.35),
 
 
 # ══════════════════════════════════════════════
-# SLIDE 13 — TIMELINE
+# SLIDE 12 — TIMELINE (numbered circles with connecting lines)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(5.8), 1.8)
-
-add_subtitle_label(s, 'Implementatie')
-add_title(s, 'Tijdlijn naar productie', t=Inches(0.55))
+add_content_subtitle(s, 'Implementatie')
+add_content_title(s, 'Tijdlijn naar productie', t=Inches(0.55))
 
 phases = [
     ('Week 1\u20132', 'Setup', 'Contract, toegang,\ndata-inventarisatie'),
@@ -823,8 +891,7 @@ for i, (week, phase, desc) in enumerate(phases):
     # Connecting line between circles
     if i < 3:
         conn = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                                   l + Inches(0.45), Inches(1.98),
-                                   Inches(2.55), Pt(2))
+            l + Inches(0.45), Inches(1.98), Inches(2.55), Pt(2))
         conn.fill.solid()
         conn.fill.fore_color.rgb = BORDER_CLR
         conn.line.fill.background()
@@ -847,32 +914,35 @@ add_text(s, Inches(0.9), Inches(5.1), Inches(11.3), Inches(1.0),
          'Bij akkoord kan het portaal binnen 7 weken live zijn voor alle 2.500 auteurs.',
          sz=14, color=BODY, spacing=6)
 
-# Handwritten note
+# Caveat handwritten annotation
 add_text(s, Inches(7.5), Inches(6.0), Inches(5), Inches(0.5),
          'klaar om te lanceren!', sz=22, color=BODY, font=FONT_HAND)
 
 
 # ══════════════════════════════════════════════
-# SLIDE 14 — DEMO (Green background, after business slides)
+# SLIDE 13 — DEMO (green background)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK_GREEN)
 
+# White pill decorations
 for (pl, pt, pw, ph) in [
     (Inches(0.5), Inches(0.4), Inches(2.0), Inches(0.3)),
     (Inches(10.5), Inches(6.6), Inches(2.5), Inches(0.4)),
     (Inches(11.8), Inches(0.3), Inches(1.2), Inches(0.2)),
 ]:
     pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
-    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
-    pill.line.fill.background(); pill.adjustments[0] = 0.5
+    pill.fill.solid()
+    pill.fill.fore_color.rgb = WHITE_DECOR
+    pill.line.fill.background()
+    pill.adjustments[0] = 0.5
 
 add_text(s, Inches(0), Inches(2.8), W, Inches(1.2),
          'Demo', sz=72, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
 
 
 # ══════════════════════════════════════════════
-# SLIDE 15 — CTA with concrete next step
+# SLIDE 14 — CTA (green background, 5 numbered actions)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK_GREEN)
@@ -885,7 +955,7 @@ add_text(s, Inches(2.5), Inches(2.6), Inches(8.3), Inches(0.6),
          'Het portaal is gebouwd en klaar voor productie.',
          sz=17, color=RGBColor(200, 235, 225), align=PP_ALIGN.CENTER)
 
-# Concrete next steps
+# 5 numbered concrete actions
 steps = [
     ('1', 'Akkoord op ontwikkelbudget'),
     ('2', 'Toegang tot auteursdata en systemen'),
@@ -896,8 +966,11 @@ steps = [
 for i, (num, step) in enumerate(steps):
     y = Inches(3.5 + i * 0.5)
     # Number circle
-    circ = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(4.2), y, Inches(0.3), Inches(0.3))
-    circ.fill.solid(); circ.fill.fore_color.rgb = WHITE_SHAPE; circ.line.fill.background()
+    circ = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(4.2), y,
+                               Inches(0.3), Inches(0.3))
+    circ.fill.solid()
+    circ.fill.fore_color.rgb = WHITE_DECOR
+    circ.line.fill.background()
     add_text(s, Inches(4.2), y + Inches(0.02), Inches(0.3), Inches(0.26),
              num, sz=11, color=TEAL, align=PP_ALIGN.CENTER)
     add_text(s, Inches(4.7), y + Inches(0.02), Inches(5), Inches(0.3),
@@ -909,18 +982,16 @@ add_text(s, Inches(0), Inches(6.3), W, Inches(0.3),
 
 
 # ══════════════════════════════════════════════
-# SLIDE 16 — APPENDIX: SECURITY
+# SLIDE 15 — APPENDIX: SECURITY
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(12.2), Inches(-0.5), 1.0)
-
 add_text(s, Inches(0.9), Inches(0.3), Inches(3), Inches(0.25),
          'APPENDIX', sz=9, color=LIGHT_GREY, font=FONT)
-add_title(s, 'Databeveiliging', t=Inches(0.5))
+add_content_title(s, 'Databeveiliging', t=Inches(0.5))
 
-# Security layers — left side
+# Security layers — left side with markers
 layers = [
     ('Authenticatie', 'Inloggen via versleutelde wachtwoorden (bcrypt).\nSessie-tokens verlopen automatisch.'),
     ('Row Level Security', 'Database dwingt af dat elke auteur alleen eigen\ndata ziet. Zelfs bij directe API-toegang.'),
@@ -937,7 +1008,6 @@ for i, (lbl, desc) in enumerate(layers):
              desc, sz=11, color=BODY, spacing=3)
 
 # Right side — comparison
-# Risks of physical mail (with orange markers)
 add_text(s, Inches(8.0), Inches(1.6), Inches(4), Inches(0.3),
          "Risico's fysieke post", sz=13, color=ORANGE, font=FONT)
 
@@ -954,7 +1024,6 @@ for j, r in enumerate(risks):
 
 add_thin_line(s, Inches(8.0), Inches(3.8), Inches(4.3))
 
-# Guarantees of portal (with teal markers)
 add_text(s, Inches(8.0), Inches(4.1), Inches(4), Inches(0.3),
          'Waarborgen portaal', sz=13, color=TEAL, font=FONT)
 
@@ -972,16 +1041,14 @@ for j, r in enumerate(guarantees):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 17 — APPENDIX: AVG COMPLIANCE
+# SLIDE 16 — APPENDIX: AVG (3-column with separators)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(-0.5), Inches(5.8), 1.2)
-
 add_text(s, Inches(0.9), Inches(0.3), Inches(3), Inches(0.25),
          'APPENDIX', sz=9, color=LIGHT_GREY, font=FONT)
-add_title(s, 'AVG-compliance', t=Inches(0.5))
+add_content_title(s, 'AVG-compliance', t=Inches(0.5))
 
 avg = [
     ('Recht op inzage (Art. 15)',
@@ -1011,18 +1078,26 @@ add_text(s, Inches(8.5), Inches(1.3), Inches(3.5), Inches(0.3),
 
 add_thin_line(s, Inches(0.9), Inches(1.6), Inches(11.5))
 
+# Vertical separators between columns
+for sep_x in [Inches(4.0), Inches(8.3)]:
+    sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
+        sep_x, Inches(1.3), Pt(1), Inches(5.5))
+    sep.fill.solid()
+    sep.fill.fore_color.rgb = BORDER_CLR
+    sep.line.fill.background()
+
 for i, (principle, how, note) in enumerate(avg):
     t = Inches(1.8 + i * 1.0)
 
     add_marker_dot(s, Inches(0.9), t + Inches(0.06), color=TEAL, size=0.1)
-    add_text(s, Inches(1.15), t, Inches(2.8), Inches(0.65),
+    add_text(s, Inches(1.15), t, Inches(2.6), Inches(0.65),
              principle, sz=11, color=BLACK, font=FONT)
     add_text(s, Inches(4.2), t, Inches(3.8), Inches(0.65),
              how, sz=10, color=BODY, spacing=3)
     add_text(s, Inches(8.5), t, Inches(3.8), Inches(0.65),
              note, sz=10, color=LIGHT_GREY, spacing=3)
 
-    # Separator between rows
+    # Row separator
     if i < len(avg) - 1:
         add_thin_line(s, Inches(0.9), t + Inches(0.82), Inches(11.5))
 
@@ -1034,14 +1109,14 @@ add_text(s, Inches(0.9), Inches(6.85), Inches(11.5), Inches(0.3),
 
 
 # ══════════════════════════════════════════════
-# APPENDIX 3 — WORK LOG (moved from main deck)
+# SLIDE 17 — APPENDIX: WORK LOG (hours + progress bars)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
 add_text(s, Inches(0.9), Inches(0.3), Inches(3), Inches(0.25),
          'APPENDIX', sz=9, color=LIGHT_GREY, font=FONT)
-add_title(s, 'Urenverantwoording \u2014 200 uur', t=Inches(0.5))
+add_content_title(s, 'Urenverantwoording \u2014 200 uur', t=Inches(0.5))
 
 log = [
     ('UX research & wireframes', 16),
@@ -1069,8 +1144,10 @@ for i, (task, hours) in enumerate(log):
     bar_width = Inches(5.2 * hours / max_hours)
     bar = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
                               l, t + Inches(0.35), bar_width, Pt(3))
-    bar.fill.solid(); bar.fill.fore_color.rgb = TEAL
-    bar.line.fill.background(); bar.adjustments[0] = 0.5
+    bar.fill.solid()
+    bar.fill.fore_color.rgb = TEAL
+    bar.line.fill.background()
+    bar.adjustments[0] = 0.5
 
 add_thin_line(s, Inches(0.9), Inches(6.1), Inches(11.5), color=TEAL)
 add_text(s, Inches(0.9), Inches(6.2), Inches(5), Inches(0.35),
