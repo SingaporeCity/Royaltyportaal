@@ -254,20 +254,75 @@ for j, item in enumerate(admin_features):
 
 
 # ════════════════════════════════════════════
-# SLIDE 7: LIVE DEMO
+# SLIDE 7: AUTEURSDASHBOARD — Screenshots
+# ════════════════════════════════════════════
+SHOTS = '/Users/patrickjeeninga/Coding/Royaltyportaal/pitch/screenshots'
+
+s = prs.slides.add_slide(prs.slide_layouts[6])
+solid_bg(s, BG)
+eyebrow(s, Inches(0.8), 'HET PORTAAL')
+title(s, Inches(1.15), 'Auteursdashboard')
+
+# Login + Start side by side
+card(s, Inches(1.0), Inches(2.3), Inches(5.5), Inches(3.2), fill=WHITE, border=BORDER)
+txt(s, Inches(1.2), Inches(2.4), Inches(3), Inches(0.3), 'Inloggen', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/01_login.png', Inches(1.15), Inches(2.75), Inches(5.2))
+
+card(s, Inches(6.8), Inches(2.3), Inches(5.5), Inches(3.2), fill=WHITE, border=BORDER)
+txt(s, Inches(7.0), Inches(2.4), Inches(3), Inches(0.3), 'Start — Jaaroverzicht', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/02_start.png', Inches(6.95), Inches(2.75), Inches(5.2))
+
+# Chart + Afrekeningen
+card(s, Inches(1.0), Inches(5.7), Inches(5.5), Inches(1.5), fill=WHITE, border=BORDER)
+txt(s, Inches(1.2), Inches(5.15), Inches(3), Inches(0.3), 'Royalty-grafiek per jaar', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/03_chart.png', Inches(1.15), Inches(5.5), Inches(5.2))
+
+card(s, Inches(6.8), Inches(5.7), Inches(5.5), Inches(1.5), fill=WHITE, border=BORDER)
+txt(s, Inches(7.0), Inches(5.15), Inches(3), Inches(0.3), 'Afrekeningen', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/05_afrekeningen.png', Inches(6.95), Inches(5.5), Inches(5.2))
+
+
+# ════════════════════════════════════════════
+# SLIDE 8: MEER SCREENSHOTS
+# ════════════════════════════════════════════
+s = prs.slides.add_slide(prs.slide_layouts[6])
+solid_bg(s, BG)
+eyebrow(s, Inches(0.8), 'HET PORTAAL')
+title(s, Inches(1.15), 'Contracten, Prognose & Admin')
+
+# Contracten + Prognose
+card(s, Inches(1.0), Inches(2.3), Inches(5.5), Inches(2.3), fill=WHITE, border=BORDER)
+txt(s, Inches(1.2), Inches(2.4), Inches(3), Inches(0.3), 'Contracten', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/06_contracten.png', Inches(1.15), Inches(2.75), Inches(5.2))
+
+card(s, Inches(6.8), Inches(2.3), Inches(5.5), Inches(2.3), fill=WHITE, border=BORDER)
+txt(s, Inches(7.0), Inches(2.4), Inches(3), Inches(0.3), 'Prognose', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/07_prognose.png', Inches(6.95), Inches(2.75), Inches(5.2))
+
+# Admin
+card(s, Inches(1.0), Inches(4.8), Inches(5.5), Inches(2.5), fill=WHITE, border=BORDER)
+txt(s, Inches(1.2), Inches(4.9), Inches(3), Inches(0.3), 'Admin Dashboard', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/10_admin.png', Inches(1.15), Inches(5.25), Inches(5.2))
+
+card(s, Inches(6.8), Inches(4.8), Inches(5.5), Inches(2.5), fill=WHITE, border=BORDER)
+txt(s, Inches(7.0), Inches(4.9), Inches(3), Inches(0.3), 'Admin — Beheer', sz=10, bold=True, color=TEAL)
+s.shapes.add_picture(f'{SHOTS}/11_admin_beheer.png', Inches(6.95), Inches(5.25), Inches(5.2))
+
+
+# ════════════════════════════════════════════
+# SLIDE 9: LIVE DEMO
 # ════════════════════════════════════════════
 s = prs.slides.add_slide(prs.slide_layouts[6])
 gradient_bg(s)
 txt(s, 0, Inches(2.5), W, Inches(1), 'Live Demo', sz=48, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
 txt(s, Inches(2.5), Inches(3.7), Inches(8.3), Inches(0.8), 'Laat me u tonen hoe het portaal eruitziet\nvoor auteur Patrick Jeeninga', sz=18, color=RGBColor(190, 225, 218), align=PP_ALIGN.CENTER, spacing=6)
-# Demo steps
 steps = ['Inloggen als auteur', 'Jaaroverzicht & royalty-grafiek', 'Afrekening openen (echte PDF)', 'Contract bekijken', 'Prognose & declaraties']
 for i, step in enumerate(steps):
     txt(s, Inches(4.5), Inches(4.8 + i * 0.4), Inches(5), Inches(0.35), f'{i+1}.  {step}', sz=14, color=RGBColor(180, 220, 210))
 
 
 # ════════════════════════════════════════════
-# SLIDE 8: SCHAALBAARHEID
+# SLIDE 10: SCHAALBAARHEID
 # ════════════════════════════════════════════
 s = prs.slides.add_slide(prs.slide_layouts[6])
 solid_bg(s)
