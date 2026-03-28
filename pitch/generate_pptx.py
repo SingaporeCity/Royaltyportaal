@@ -139,38 +139,51 @@ def add_screenshot(slide, filename, l, t, w, label=None):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 1 — TITLE (green background, white text)
+# SLIDE 1 — TITLE (split: screenshot left, green right)
 # ══════════════════════════════════════════════
 
-s = prs.slides.add_slide(LY_BLANK_GREEN)
+s = prs.slides.add_slide(LY_BLANK)
 
-# Large decorative white pill shapes
+# Left half: screenshot as teaser (faded)
+path = os.path.join(SHOTS, '02_start.png')
+if os.path.exists(path):
+    s.shapes.add_picture(path, Inches(-0.5), Inches(-0.2), Inches(8.0))
+
+# Right half: teal block
+teal_block = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
+    Inches(6.8), Inches(0), Inches(6.6), H)
+teal_block.fill.solid(); teal_block.fill.fore_color.rgb = TEAL
+teal_block.line.fill.background()
+
+# Decorative white pills on teal
 for (pl, pt, pw, ph) in [
-    (Inches(0.8), Inches(0.6), Inches(2.5), Inches(0.35)),
-    (Inches(10.0), Inches(6.5), Inches(3.0), Inches(0.4)),
-    (Inches(11.5), Inches(0.4), Inches(1.5), Inches(0.25)),
+    (Inches(7.2), Inches(0.5), Inches(2.0), Inches(0.25)),
+    (Inches(11.0), Inches(6.6), Inches(2.0), Inches(0.3)),
 ]:
     pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
     pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
     pill.line.fill.background(); pill.adjustments[0] = 0.5
 
-add_text(s, Inches(0), Inches(2.0), W, Inches(1.2),
-         'Auteursportaal', sz=60, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
-add_text(s, Inches(2.5), Inches(3.4), Inches(8.3), Inches(0.9),
-         'Het digitale platform voor royalty-afrekeningen,\ncontracten en prognoses',
-         sz=18, color=RGBColor(210, 240, 232), align=PP_ALIGN.CENTER, spacing=8)
+# Title text on teal
+add_text(s, Inches(7.3), Inches(2.0), Inches(5.5), Inches(1.2),
+         'Auteurs-\nportaal', sz=52, color=WHITE, font=FONT)
+
+# Subtitle
+add_text(s, Inches(7.3), Inches(3.8), Inches(5.0), Inches(0.8),
+         'Het digitale platform voor\nroyalty-afrekeningen, contracten\nen prognoses',
+         sz=15, color=RGBColor(200, 235, 225), spacing=6)
 
 # Divider
-div = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(5.7), Inches(4.6), Inches(1.9), Pt(1.5))
-div.fill.solid(); div.fill.fore_color.rgb = RGBColor(0, 150, 120); div.line.fill.background()
+div = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
+    Inches(7.3), Inches(5.1), Inches(2.0), Pt(1.5))
+div.fill.solid(); div.fill.fore_color.rgb = RGBColor(0, 150, 120)
+div.line.fill.background()
 
-add_text(s, Inches(0), Inches(4.9), W, Inches(0.5),
-         'Noordhoff  ·  Liber  ·  Plantyn', sz=15, color=RGBColor(160, 215, 200),
-         align=PP_ALIGN.CENTER, font=FONT)
+add_text(s, Inches(7.3), Inches(5.3), Inches(5), Inches(0.4),
+         'Noordhoff  ·  Liber  ·  Plantyn', sz=13, color=RGBColor(160, 215, 200))
 
-add_text(s, Inches(0), Inches(6.2), W, Inches(0.3),
-         'Patrick Jeeninga  —  Maart 2026', sz=11, color=RGBColor(120, 185, 165),
-         align=PP_ALIGN.CENTER)
+add_text(s, Inches(7.3), Inches(6.2), Inches(5), Inches(0.3),
+         'Patrick Jeeninga  —  Maart 2026', sz=10, color=RGBColor(120, 185, 165))
 
 
 # ══════════════════════════════════════════════
@@ -244,9 +257,9 @@ add_text(s, Inches(1.8), Inches(1.53), Inches(3), Inches(0.3),
 # Email headers
 header_y = Inches(2.0)
 for label, value in [
-    ('Van:', 'J. de Boer <j.deboer@gmail.com>'),
+    ('Van:', 'M. Hendriks <m.hendriks@gmail.com>'),
     ('Aan:', 'rights@noordhoff.nl'),
-    ('Onderwerp:', 'Vraag over royalty-afrekening 2024'),
+    ('Onderwerp:', 'Vraag over afrekening Getal & Ruimte 2024'),
 ]:
     add_text(s, Inches(1.8), header_y, Inches(1.2), Inches(0.22),
              label, sz=9, color=LIGHT_GREY)
@@ -257,9 +270,10 @@ for label, value in [
 # Email body
 add_text(s, Inches(1.8), Inches(2.8), Inches(9.5), Inches(1),
          'Beste Noordhoff,\n\n'
-         'Ik heb in maart een brief ontvangen maar ik begrijp de berekening niet.\n'
-         'Kan iemand mij bellen? Ik wil ook graag weten of mijn contract nog loopt.\n\n'
-         'Met vriendelijke groet,\nJ. de Boer',
+         'Ik heb in maart een brief ontvangen over Getal & Ruimte maar ik begrijp\n'
+         'de berekening niet. Kan iemand mij bellen? Ik wil ook graag weten of\n'
+         'mijn contract nog loopt en wat de prognose is voor volgend jaar.\n\n'
+         'Met vriendelijke groet,\nM. Hendriks',
          sz=10, color=BODY, spacing=2)
 
 # Annotation
@@ -566,23 +580,7 @@ for i, (title, desc) in enumerate(admin_feats):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 9 — LIVE DEMO (Green background)
-# ══════════════════════════════════════════════
-
-s = prs.slides.add_slide(LY_BLANK_GREEN)
-
-# Decorative white pills
-for (pl, pt, pw, ph) in [
-    (Inches(0.5), Inches(0.4), Inches(2.0), Inches(0.3)),
-    (Inches(10.5), Inches(6.6), Inches(2.5), Inches(0.4)),
-    (Inches(11.8), Inches(0.3), Inches(1.2), Inches(0.2)),
-]:
-    pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
-    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
-    pill.line.fill.background(); pill.adjustments[0] = 0.5
-
-add_text(s, Inches(0), Inches(2.8), W, Inches(1.2),
-         'Demo', sz=72, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
+# (Demo slide moved to after Pricing/Timeline)
 
 
 # ══════════════════════════════════════════════
@@ -704,10 +702,17 @@ for ri, row in enumerate(rows):
         if ci > 0:
             p.alignment = PP_ALIGN.CENTER
 
-# Summary line below table
-add_text(s, Inches(0.9), Inches(6.4), Inches(11.5), Inches(0.3),
-         'Terugverdientijd: < 2 jaar  |  Vanaf jaar 2: netto positief (\u20AC2.500/jaar)',
-         sz=12, color=TEAL, align=PP_ALIGN.CENTER, font=FONT)
+# Break-even visual — prominent
+be_bg = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    Inches(0.9), Inches(6.2), Inches(11.5), Inches(0.8))
+be_bg.fill.solid(); be_bg.fill.fore_color.rgb = TEAL
+be_bg.line.fill.background(); be_bg.adjustments[0] = 0.15
+
+add_text(s, Inches(1.3), Inches(6.3), Inches(3.5), Inches(0.5),
+         'Break-even: jaar 2', sz=18, color=WHITE, font=FONT)
+add_text(s, Inches(5.0), Inches(6.35), Inches(7), Inches(0.5),
+         'Vanaf jaar 2 bespaart het portaal meer dan het kost  (\u20AC17.500 besparing vs \u20AC15.000 licentie = +\u20AC2.500/jaar)',
+         sz=11, color=RGBColor(200, 235, 225))
 
 
 # ══════════════════════════════════════════════
@@ -848,96 +853,57 @@ add_text(s, Inches(7.5), Inches(6.0), Inches(5), Inches(0.5),
 
 
 # ══════════════════════════════════════════════
-# SLIDE 14 — WORK LOG
-# ══════════════════════════════════════════════
-
-s = prs.slides.add_slide(LY_BLANK)
-
-add_teal_square(s, Inches(-0.5), Inches(-0.5), 1.0)
-
-add_subtitle_label(s, 'Ontwikkeling')
-add_title(s, 'Urenverantwoording \u2014 200 uur', t=Inches(0.55))
-
-log = [
-    ('UX research & wireframes', 16),
-    ('Huisstijl & design system', 12),
-    ('Login & authenticatie', 10),
-    ('Dashboard framework & routing', 14),
-    ('7 auteur-tabbladen bouwen', 28),
-    ('PDF preview & generatie', 10),
-    ('Admin dashboard & CRUD', 22),
-    ('Supabase backend & RLS', 18),
-    ('Bulk import tools (CSV + PDF)', 12),
-    ('Responsive design (mobile/tablet)', 14),
-    ('i18n, dark mode, guided tour', 12),
-    ("Publieke website (5 pagina's)", 16),
-    ('Testing, QA & optimalisatie', 16),
-]
-
-max_hours = max(h for _, h in log)
-
-for i, (task, hours) in enumerate(log):
-    col, row = i % 2, i // 2
-    l = Inches(0.9 + col * 6.1)
-    t = Inches(1.7 + row * 0.6)
-
-    # Task name
-    add_text(s, l, t, Inches(4.0), Inches(0.35),
-             task, sz=11, color=BODY)
-
-    # Hours
-    add_text(s, l + Inches(4.0), t, Inches(1.5), Inches(0.35),
-             f'{hours} uur', sz=11, color=TEAL, align=PP_ALIGN.RIGHT, font=FONT)
-
-    # Progress bar
-    bar_width = Inches(5.2 * hours / max_hours)
-    bar = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                              l, t + Inches(0.35), bar_width, Pt(3))
-    bar.fill.solid()
-    bar.fill.fore_color.rgb = TEAL
-    bar.line.fill.background()
-    bar.adjustments[0] = 0.5
-
-# Total line
-add_thin_line(s, Inches(0.9), Inches(6.1), Inches(11.5), color=TEAL)
-add_text(s, Inches(0.9), Inches(6.2), Inches(5), Inches(0.35),
-         'TOTAAL', sz=14, color=TEAL, font=FONT)
-add_text(s, Inches(10.2), Inches(6.2), Inches(2.1), Inches(0.35),
-         '200 uur', sz=14, color=TEAL, align=PP_ALIGN.RIGHT, font=FONT)
-
-
-# ══════════════════════════════════════════════
-# SLIDE 15 — CTA (Green background)
+# SLIDE 14 — DEMO (Green background, after business slides)
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK_GREEN)
 
-add_text(s, Inches(0), Inches(1.6), W, Inches(1.0),
-         'Klaar om te starten', sz=48, color=WHITE,
+for (pl, pt, pw, ph) in [
+    (Inches(0.5), Inches(0.4), Inches(2.0), Inches(0.3)),
+    (Inches(10.5), Inches(6.6), Inches(2.5), Inches(0.4)),
+    (Inches(11.8), Inches(0.3), Inches(1.2), Inches(0.2)),
+]:
+    pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
+    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
+    pill.line.fill.background(); pill.adjustments[0] = 0.5
+
+add_text(s, Inches(0), Inches(2.8), W, Inches(1.2),
+         'Demo', sz=72, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
+
+
+# ══════════════════════════════════════════════
+# SLIDE 15 — CTA with concrete next step
+# ══════════════════════════════════════════════
+
+s = prs.slides.add_slide(LY_BLANK_GREEN)
+
+add_text(s, Inches(0), Inches(1.4), W, Inches(1.0),
+         'Volgende stap', sz=48, color=WHITE,
          align=PP_ALIGN.CENTER, font=FONT)
 
-add_text(s, Inches(2.5), Inches(2.8), Inches(8.3), Inches(0.8),
-         'Het portaal is gebouwd, getest en klaar voor productie.\n'
-         'De volgende stap is een akkoord en data-migratie.',
-         sz=17, color=RGBColor(200, 235, 225), align=PP_ALIGN.CENTER, spacing=6)
+add_text(s, Inches(2.5), Inches(2.6), Inches(8.3), Inches(0.6),
+         'Het portaal is gebouwd en klaar voor productie.',
+         sz=17, color=RGBColor(200, 235, 225), align=PP_ALIGN.CENTER)
 
-# Key stats
-cta_stats = [
-    ('200 uur', 'Ontwikkeld'),
-    ('5.000', 'Auteurs'),
-    ('3', 'Organisaties'),
-    ('7 weken', 'Naar go-live'),
-    ('< 2 jaar', 'Terugverdientijd'),
+# Concrete next steps
+steps = [
+    ('1', 'Akkoord op ontwikkelbudget'),
+    ('2', 'Toegang tot auteursdata en systemen'),
+    ('3', 'Data-migratie en configuratie (5 weken)'),
+    ('4', 'Pilot met 10 auteurs (1 week)'),
+    ('5', 'Go-live: alle 2.500 auteurs ontvangen een login'),
 ]
-for i, (val, label) in enumerate(cta_stats):
-    l = Inches(0.9 + i * 2.45)
-    add_text(s, l, Inches(4.3), Inches(2.2), Inches(0.6),
-             val, sz=28, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
-    add_text(s, l, Inches(5.0), Inches(2.2), Inches(0.3),
-             label, sz=11, color=RGBColor(160, 210, 195), align=PP_ALIGN.CENTER)
+for i, (num, step) in enumerate(steps):
+    y = Inches(3.5 + i * 0.5)
+    # Number circle
+    circ = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(4.2), y, Inches(0.3), Inches(0.3))
+    circ.fill.solid(); circ.fill.fore_color.rgb = WHITE_SHAPE; circ.line.fill.background()
+    add_text(s, Inches(4.2), y + Inches(0.02), Inches(0.3), Inches(0.26),
+             num, sz=11, color=TEAL, align=PP_ALIGN.CENTER)
+    add_text(s, Inches(4.7), y + Inches(0.02), Inches(5), Inches(0.3),
+             step, sz=14, color=WHITE)
 
-# Contact
-add_text(s, Inches(0), Inches(6.2), W, Inches(0.3),
+add_text(s, Inches(0), Inches(6.3), W, Inches(0.3),
          'Patrick Jeeninga  \u00B7  patrick@noordhoff.nl',
          sz=12, color=RGBColor(140, 195, 180), align=PP_ALIGN.CENTER)
 
@@ -1065,6 +1031,52 @@ add_text(s, Inches(0.9), Inches(6.85), Inches(11.5), Inches(0.3),
          'Het portaal vervangt fysieke brieven \u2014 dit vermindert het risico op '
          'datalekken en verbetert de compliance-positie.',
          sz=12, color=TEAL, align=PP_ALIGN.CENTER, font=FONT)
+
+
+# ══════════════════════════════════════════════
+# APPENDIX 3 — WORK LOG (moved from main deck)
+# ══════════════════════════════════════════════
+
+s = prs.slides.add_slide(LY_BLANK)
+
+add_text(s, Inches(0.9), Inches(0.3), Inches(3), Inches(0.25),
+         'APPENDIX', sz=9, color=LIGHT_GREY, font=FONT)
+add_title(s, 'Urenverantwoording \u2014 200 uur', t=Inches(0.5))
+
+log = [
+    ('UX research & wireframes', 16),
+    ('Huisstijl & design system', 12),
+    ('Login & authenticatie', 10),
+    ('Dashboard framework & routing', 14),
+    ('7 auteur-tabbladen bouwen', 28),
+    ('PDF preview & generatie', 10),
+    ('Admin dashboard & CRUD', 22),
+    ('Supabase backend & RLS', 18),
+    ('Bulk import tools (CSV + PDF)', 12),
+    ('Responsive design (mobile/tablet)', 14),
+    ('i18n, dark mode, guided tour', 12),
+    ("Publieke website (5 pagina's)", 16),
+    ('Testing, QA & optimalisatie', 16),
+]
+max_hours = max(h for _, h in log)
+for i, (task, hours) in enumerate(log):
+    col, row = i % 2, i // 2
+    l = Inches(0.9 + col * 6.1)
+    t = Inches(1.7 + row * 0.6)
+    add_text(s, l, t, Inches(4.0), Inches(0.35), task, sz=11, color=BODY)
+    add_text(s, l + Inches(4.0), t, Inches(1.5), Inches(0.35),
+             f'{hours} uur', sz=11, color=TEAL, align=PP_ALIGN.RIGHT, font=FONT)
+    bar_width = Inches(5.2 * hours / max_hours)
+    bar = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+                              l, t + Inches(0.35), bar_width, Pt(3))
+    bar.fill.solid(); bar.fill.fore_color.rgb = TEAL
+    bar.line.fill.background(); bar.adjustments[0] = 0.5
+
+add_thin_line(s, Inches(0.9), Inches(6.1), Inches(11.5), color=TEAL)
+add_text(s, Inches(0.9), Inches(6.2), Inches(5), Inches(0.35),
+         'TOTAAL', sz=14, color=TEAL, font=FONT)
+add_text(s, Inches(10.2), Inches(6.2), Inches(2.1), Inches(0.35),
+         '200 uur', sz=14, color=TEAL, align=PP_ALIGN.RIGHT, font=FONT)
 
 
 # ══════════════════════════════════════════════
