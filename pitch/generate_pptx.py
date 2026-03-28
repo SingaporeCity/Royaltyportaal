@@ -139,30 +139,38 @@ def add_screenshot(slide, filename, l, t, w, label=None):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 1 — TITLE
+# SLIDE 1 — TITLE (green background, white text)
 # ══════════════════════════════════════════════
 
-s = prs.slides.add_slide(LY_TITLE)
+s = prs.slides.add_slide(LY_BLANK_GREEN)
 
-# Use layout placeholders for title
-ph_title = s.placeholders[0]
-ph_title.text = 'Auteursportaal'
-p = ph_title.text_frame.paragraphs[0]
-p.font.name = FONT
-p.font.size = Pt(52)
-p.font.color.rgb = BLACK
+# Large decorative white pill shapes
+for (pl, pt, pw, ph) in [
+    (Inches(0.8), Inches(0.6), Inches(2.5), Inches(0.35)),
+    (Inches(10.0), Inches(6.5), Inches(3.0), Inches(0.4)),
+    (Inches(11.5), Inches(0.4), Inches(1.5), Inches(0.25)),
+]:
+    pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
+    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
+    pill.line.fill.background(); pill.adjustments[0] = 0.5
 
-ph_sub = s.placeholders[1]
-ph_sub.text = 'Het digitale platform voor royalty-afrekeningen,\ncontracten en prognoses'
-for para in ph_sub.text_frame.paragraphs:
-    para.font.name = FONT
-    para.font.size = Pt(16)
-    para.font.color.rgb = SUBTITLE_CLR
+add_text(s, Inches(0), Inches(2.0), W, Inches(1.2),
+         'Auteursportaal', sz=60, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
+add_text(s, Inches(2.5), Inches(3.4), Inches(8.3), Inches(0.9),
+         'Het digitale platform voor royalty-afrekeningen,\ncontracten en prognoses',
+         sz=18, color=RGBColor(210, 240, 232), align=PP_ALIGN.CENTER, spacing=8)
 
-# Handwritten annotation
-add_text(s, Inches(4.5), Inches(5.8), Inches(5), Inches(0.5),
-         'Noordhoff  ·  Liber  ·  Plantyn', sz=22, color=BODY,
-         font=FONT_HAND, align=PP_ALIGN.LEFT)
+# Divider
+div = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(5.7), Inches(4.6), Inches(1.9), Pt(1.5))
+div.fill.solid(); div.fill.fore_color.rgb = RGBColor(0, 150, 120); div.line.fill.background()
+
+add_text(s, Inches(0), Inches(4.9), W, Inches(0.5),
+         'Noordhoff  ·  Liber  ·  Plantyn', sz=15, color=RGBColor(160, 215, 200),
+         align=PP_ALIGN.CENTER, font=FONT)
+
+add_text(s, Inches(0), Inches(6.2), W, Inches(0.3),
+         'Patrick Jeeninga  —  Maart 2026', sz=11, color=RGBColor(120, 185, 165),
+         align=PP_ALIGN.CENTER)
 
 
 # ══════════════════════════════════════════════
@@ -194,9 +202,8 @@ for i, (title, desc) in enumerate(items):
     l = Inches(0.9 + col * 6.0)
     t = Inches(1.7 + row * 2.6)
 
-    # Marker dot
-    marker_color = ORANGE if i == 2 else TEAL
-    add_marker_dot(s, l, t + Inches(0.07), color=marker_color)
+    # Marker dot — consistent teal
+    add_marker_dot(s, l, t + Inches(0.07), color=TEAL)
 
     # Title
     add_text(s, l + Inches(0.3), t, Inches(5.2), Inches(0.35),
@@ -222,18 +229,44 @@ add_teal_square(s, Inches(12.0), Inches(-0.4), 1.2)
 add_subtitle_label(s, 'Het probleem')
 add_title(s, 'Hoe ervaart de auteur het nu?', t=Inches(0.55))
 
-# Quote block — just text with large quotation mark, no colored background
-add_text(s, Inches(0.9), Inches(1.6), Inches(0.6), Inches(0.8),
-         '\u201C', sz=60, color=TEAL, font=FONT)
-add_text(s, Inches(1.5), Inches(1.9), Inches(10.5), Inches(0.9),
-         'Ik heb in maart een brief ontvangen, maar ik begrijp de berekening niet.\n'
-         'Kan iemand mij bellen? Ik wil ook graag weten of mijn contract nog loopt.',
-         sz=15, color=BODY, spacing=6)
-add_text(s, Inches(1.5), Inches(3.0), Inches(10), Inches(0.25),
-         '\u2014 Typische auteursvraag (1 van 250 per jaar)',
-         sz=10, color=LIGHT_GREY)
+# Outlook-style email mock
+email_bg = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.5), Inches(1.5), Inches(10.3), Inches(2.6))
+email_bg.fill.solid(); email_bg.fill.fore_color.rgb = WHITE
+email_bg.line.color.rgb = BORDER_CLR; email_bg.line.width = Pt(1); email_bg.adjustments[0] = 0.02
 
-add_thin_line(s, Inches(0.9), Inches(3.6), Inches(11.5))
+# Email toolbar bar
+toolbar = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(1.5), Inches(1.5), Inches(10.3), Inches(0.35))
+toolbar.fill.solid(); toolbar.fill.fore_color.rgb = RGBColor(243, 243, 243); toolbar.line.fill.background()
+
+add_text(s, Inches(1.8), Inches(1.53), Inches(3), Inches(0.3),
+         'Beantwoorden    Doorsturen    Verwijderen', sz=8, color=LIGHT_GREY)
+
+# Email headers
+header_y = Inches(2.0)
+for label, value in [
+    ('Van:', 'J. de Boer <j.deboer@gmail.com>'),
+    ('Aan:', 'rights@noordhoff.nl'),
+    ('Onderwerp:', 'Vraag over royalty-afrekening 2024'),
+]:
+    add_text(s, Inches(1.8), header_y, Inches(1.2), Inches(0.22),
+             label, sz=9, color=LIGHT_GREY)
+    add_text(s, Inches(2.9), header_y, Inches(8), Inches(0.22),
+             value, sz=9, color=BODY)
+    header_y += Inches(0.22)
+
+# Email body
+add_text(s, Inches(1.8), Inches(2.8), Inches(9.5), Inches(1),
+         'Beste Noordhoff,\n\n'
+         'Ik heb in maart een brief ontvangen maar ik begrijp de berekening niet.\n'
+         'Kan iemand mij bellen? Ik wil ook graag weten of mijn contract nog loopt.\n\n'
+         'Met vriendelijke groet,\nJ. de Boer',
+         sz=10, color=BODY, spacing=2)
+
+# Annotation
+add_text(s, Inches(8.5), Inches(1.2), Inches(4), Inches(0.4),
+         '1 van 250 per jaar', sz=20, color=BODY, font=FONT_HAND)
+
+add_thin_line(s, Inches(0.9), Inches(4.4), Inches(11.5))
 
 # Three pain points
 pains = [
@@ -248,10 +281,10 @@ pains = [
 for i, (title, desc) in enumerate(pains):
     l = Inches(0.9 + i * 4.0)
 
-    add_marker_dot(s, l, Inches(4.17), color=ORANGE)
-    add_text(s, l + Inches(0.3), Inches(4.1), Inches(3.3), Inches(0.35),
+    add_marker_dot(s, l, Inches(4.97), color=TEAL)
+    add_text(s, l + Inches(0.3), Inches(4.9), Inches(3.3), Inches(0.35),
              title, sz=16, color=BLACK, font=FONT)
-    add_text(s, l + Inches(0.3), Inches(4.6), Inches(3.3), Inches(1.5),
+    add_text(s, l + Inches(0.3), Inches(5.4), Inches(3.3), Inches(1.5),
              desc, sz=12, color=BODY, spacing=5)
 
 
@@ -261,7 +294,7 @@ for i, (title, desc) in enumerate(pains):
 
 s = prs.slides.add_slide(LY_BLANK)
 
-add_teal_square(s, Inches(-0.6), Inches(5.8), 1.8)
+add_teal_square(s, Inches(12.2), Inches(5.8), 1.5)
 
 add_subtitle_label(s, 'Het probleem')
 add_title(s, 'Wat kost het Noordhoff nu?', t=Inches(0.55))
@@ -324,13 +357,19 @@ add_teal_square(s, Inches(12.2), Inches(-0.5), 1.0)
 add_subtitle_label(s, 'De transformatie')
 add_title(s, 'Van papier naar portaal', t=Inches(0.55))
 
-# LEFT column — Current situation (with orange marker)
-add_marker_dot(s, Inches(0.9), Inches(1.77), color=ORANGE)
-add_text(s, Inches(1.2), Inches(1.7), Inches(4.5), Inches(0.4),
-         'Nu: fysieke post', sz=18, color=ORANGE, font=FONT)
+# LEFT — OUD label block
+old_label = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    Inches(0.9), Inches(1.6), Inches(1.0), Inches(0.35))
+old_label.fill.solid(); old_label.fill.fore_color.rgb = ORANGE
+old_label.line.fill.background(); old_label.adjustments[0] = 0.4
+add_text(s, Inches(0.9), Inches(1.62), Inches(1.0), Inches(0.3),
+         'OUD', sz=10, color=WHITE, align=PP_ALIGN.CENTER)
+
+add_text(s, Inches(2.1), Inches(1.6), Inches(4), Inches(0.35),
+         'Fysieke post', sz=18, color=BODY, font=FONT)
 
 old_items = [
-    '1\u00D7 per jaar een royalty-brief',
+    '1× per jaar een royalty-brief',
     'Geen tussentijds inzicht',
     'Vragen via email en telefoon',
     'Contracten in archiefkast',
@@ -340,17 +379,25 @@ old_items = [
     'Geen inzicht in auteuractiviteit',
 ]
 for j, item in enumerate(old_items):
-    add_text(s, Inches(1.2), Inches(2.4 + j * 0.45), Inches(4.8), Inches(0.35),
-             f'\u00D7   {item}', sz=12, color=LIGHT_GREY)
+    add_text(s, Inches(1.2), Inches(2.3 + j * 0.45), Inches(4.8), Inches(0.35),
+             f'×   {item}', sz=12, color=LIGHT_GREY)
 
-# Arrow in the middle
-add_text(s, Inches(5.9), Inches(3.8), Inches(1.0), Inches(0.6),
-         '\u2192', sz=36, color=TEAL, align=PP_ALIGN.CENTER, font=FONT)
+# Central arrow
+arrow = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(6.1), Inches(3.5), Inches(1.1), Inches(1.1))
+arrow.fill.solid(); arrow.fill.fore_color.rgb = TEAL; arrow.line.fill.background()
+add_text(s, Inches(6.1), Inches(3.6), Inches(1.1), Inches(0.9),
+         '→', sz=32, color=WHITE, align=PP_ALIGN.CENTER)
 
-# RIGHT column — New situation (with teal marker)
-add_marker_dot(s, Inches(7.0), Inches(1.77), color=TEAL)
-add_text(s, Inches(7.3), Inches(1.7), Inches(5), Inches(0.4),
-         'Straks: het Auteursportaal', sz=18, color=TEAL, font=FONT)
+# RIGHT — NIEUW label block
+new_label = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    Inches(7.5), Inches(1.6), Inches(1.2), Inches(0.35))
+new_label.fill.solid(); new_label.fill.fore_color.rgb = TEAL
+new_label.line.fill.background(); new_label.adjustments[0] = 0.4
+add_text(s, Inches(7.5), Inches(1.62), Inches(1.2), Inches(0.3),
+         'NIEUW', sz=10, color=WHITE, align=PP_ALIGN.CENTER)
+
+add_text(s, Inches(8.9), Inches(1.6), Inches(4), Inches(0.35),
+         'Het Auteursportaal', sz=18, color=TEAL, font=FONT)
 
 new_items = [
     '24/7 inzicht in afrekeningen',
@@ -363,12 +410,13 @@ new_items = [
     'Activiteiten feed voor admin',
 ]
 for j, item in enumerate(new_items):
-    add_text(s, Inches(7.3), Inches(2.4 + j * 0.45), Inches(5), Inches(0.35),
-             f'\u2713   {item}', sz=12, color=BODY)
+    add_marker_dot(s, Inches(7.8), Inches(2.37 + j * 0.45), color=TEAL, size=0.08)
+    add_text(s, Inches(8.05), Inches(2.3 + j * 0.45), Inches(4.3), Inches(0.35),
+             item, sz=12, color=BODY)
 
 # Vertical separator line
 sep = s.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                          Inches(6.35), Inches(1.7), Pt(1), Inches(4.5))
+                          Inches(6.65), Inches(1.5), Pt(1), Inches(5.0))
 sep.fill.solid()
 sep.fill.fore_color.rgb = BORDER_CLR
 sep.line.fill.background()
@@ -433,78 +481,88 @@ for j, f in enumerate(admin_features):
 
 
 # ══════════════════════════════════════════════
-# SLIDE 7 — SCREENSHOTS: AUTEUR DASHBOARD
+# SLIDE 7 — SCREENSHOT: AUTEUR DASHBOARD
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
+add_teal_square(s, Inches(12.2), Inches(-0.4), 1.0)
+
 add_subtitle_label(s, 'Het portaal')
-add_title(s, 'Auteursdashboard', t=Inches(0.55))
+add_title(s, 'Wat de auteur ziet', t=Inches(0.55))
 
-# 2x2 grid of screenshots
-shots_auteur = [
-    ('01_login.png', 'Inloggen'),
-    ('02_start.png', 'Dashboard \u2014 Jaaroverzicht'),
-    ('05_afrekeningen.png', 'Afrekeningen'),
-    ('07_prognose.png', 'Prognose'),
+# Screenshot left (large)
+path = os.path.join(SHOTS, '02_start.png')
+if os.path.exists(path):
+    # Subtle shadow rectangle behind screenshot
+    shadow = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(0.85), Inches(1.65), Inches(7.6), Inches(5.2))
+    shadow.fill.solid(); shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
+    shadow.line.fill.background(); shadow.adjustments[0] = 0.015
+    s.shapes.add_picture(path, Inches(0.9), Inches(1.7), Inches(7.5))
+
+# Explanation text right
+add_text(s, Inches(8.8), Inches(1.7), Inches(3.8), Inches(0.35),
+         'Persoonlijk dashboard', sz=16, color=BLACK, font=FONT)
+
+add_thin_line(s, Inches(8.8), Inches(2.2), Inches(3.5), color=TEAL)
+
+features = [
+    ('Jaaroverzicht', 'Totaal uitgekeerd, laatste betaling\nen verwachte royalties in één kaart.'),
+    ('Royalty-grafiek', 'Interactieve grafiek per jaar met\nuitsplitsing per type (royalties,\nnevenrechten, foreign rights).'),
+    ('Afrekeningen', 'Zoeken, filteren, PDF preview\nen download. CSV-export.'),
+    ('Contracten', 'Alle contracten inzien met\nPDF preview en download.'),
+    ('Prognose', 'Verwachte royalties komend jaar\nmet min/max range.'),
 ]
-for i, (fn, lbl) in enumerate(shots_auteur):
-    col, row = i % 2, i // 2
-    l = Inches(0.7 + col * 6.2)
-    t = Inches(1.9 + row * 2.7)
-    img_w = Inches(5.8)
-
-    # Label
-    add_text(s, l + Inches(0.15), t, Inches(3), Inches(0.25),
-             lbl, sz=9, color=TEAL, font=FONT)
-
-    # Screenshot
-    path = os.path.join(SHOTS, fn)
-    if os.path.exists(path):
-        s.shapes.add_picture(path, l + Inches(0.1), t + Inches(0.3), img_w - Inches(0.2))
+for i, (title, desc) in enumerate(features):
+    y = Inches(2.5 + i * 0.9)
+    add_marker_dot(s, Inches(8.8), y + Inches(0.05), color=TEAL, size=0.08)
+    add_text(s, Inches(9.05), y, Inches(3.5), Inches(0.25),
+             title, sz=11, color=BLACK)
+    add_text(s, Inches(9.05), y + Inches(0.28), Inches(3.5), Inches(0.6),
+             desc, sz=9, color=LIGHT_GREY, spacing=2)
 
 
 # ══════════════════════════════════════════════
-# SLIDE 8 — SCREENSHOTS: MORE + ADMIN
+# SLIDE 8 — SCREENSHOT: ADMIN DASHBOARD
 # ══════════════════════════════════════════════
 
 s = prs.slides.add_slide(LY_BLANK)
 
+add_teal_square(s, Inches(-0.5), Inches(-0.4), 1.0)
+
 add_subtitle_label(s, 'Het portaal')
-add_title(s, 'Contracten, Profiel & Admin', t=Inches(0.55))
+add_title(s, 'Wat de beheerder ziet', t=Inches(0.55))
 
-# Top row: 3 screenshots
-shots_top = [
-    ('06_contracten.png', 'Contracten'),
-    ('09_profiel.png', 'Profiel'),
-    ('04_events.png', 'Evenementen & Nieuws'),
+# Screenshot right (large)
+path = os.path.join(SHOTS, '10_admin.png')
+if os.path.exists(path):
+    shadow = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(4.85), Inches(1.65), Inches(7.6), Inches(5.2))
+    shadow.fill.solid(); shadow.fill.fore_color.rgb = RGBColor(235, 235, 235)
+    shadow.line.fill.background(); shadow.adjustments[0] = 0.015
+    s.shapes.add_picture(path, Inches(4.9), Inches(1.7), Inches(7.5))
+
+# Explanation text left
+add_text(s, Inches(0.9), Inches(1.7), Inches(3.6), Inches(0.35),
+         'Admin dashboard', sz=16, color=BLACK, font=FONT)
+
+add_thin_line(s, Inches(0.9), Inches(2.2), Inches(3.3), color=TEAL)
+
+admin_feats = [
+    ('Auteursbeheer', '9 auteurs met zoekfunctie.\nPer auteur: gegevens, contracten,\nafrekeningen, prognose.'),
+    ('Wijzigingen', 'Verzoeken van auteurs goedkeuren\nof afwijzen. Volledige audit trail.'),
+    ('Bulk import', 'CSV-import voor auteurs.\nPDF-upload voor afrekeningen.'),
+    ('Content', 'Evenementen, nieuws en vacatures\nbeheren vanuit het dashboard.'),
+    ('Activiteiten', 'Live feed van logins en\nwijzigingsverzoeken.'),
 ]
-for i, (fn, lbl) in enumerate(shots_top):
-    l = Inches(0.7 + i * 4.1)
-    img_w = Inches(3.7)
-
-    add_text(s, l + Inches(0.1), Inches(1.6), Inches(3), Inches(0.25),
-             lbl, sz=9, color=TEAL, font=FONT)
-
-    path = os.path.join(SHOTS, fn)
-    if os.path.exists(path):
-        s.shapes.add_picture(path, l + Inches(0.05), Inches(1.9), img_w - Inches(0.1))
-
-# Bottom row: 2 wider screenshots
-shots_bottom = [
-    ('10_admin.png', 'Admin Dashboard'),
-    ('11_admin_beheer.png', 'Admin \u2014 Content & Activiteiten'),
-]
-for i, (fn, lbl) in enumerate(shots_bottom):
-    l = Inches(0.7 + i * 6.2)
-    img_w = Inches(5.8)
-
-    add_text(s, l + Inches(0.15), Inches(4.3), Inches(3), Inches(0.25),
-             lbl, sz=9, color=TEAL, font=FONT)
-
-    path = os.path.join(SHOTS, fn)
-    if os.path.exists(path):
-        s.shapes.add_picture(path, l + Inches(0.1), Inches(4.6), img_w - Inches(0.2))
+for i, (title, desc) in enumerate(admin_feats):
+    y = Inches(2.5 + i * 0.9)
+    add_marker_dot(s, Inches(0.9), y + Inches(0.05), color=TEAL, size=0.08)
+    add_text(s, Inches(1.15), y, Inches(3.3), Inches(0.25),
+             title, sz=11, color=BLACK)
+    add_text(s, Inches(1.15), y + Inches(0.28), Inches(3.3), Inches(0.6),
+             desc, sz=9, color=LIGHT_GREY, spacing=2)
 
 
 # ══════════════════════════════════════════════
@@ -513,39 +571,18 @@ for i, (fn, lbl) in enumerate(shots_bottom):
 
 s = prs.slides.add_slide(LY_BLANK_GREEN)
 
-# White pill shapes as decorative elements on green
-pill1 = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                            Inches(1.0), Inches(0.5), Inches(2.0), Inches(0.4))
-pill1.fill.solid()
-pill1.fill.fore_color.rgb = WHITE_SHAPE
-pill1.line.fill.background()
-pill1.adjustments[0] = 0.5
-pill1.fill.fore_color.brightness = 0.0
+# Decorative white pills
+for (pl, pt, pw, ph) in [
+    (Inches(0.5), Inches(0.4), Inches(2.0), Inches(0.3)),
+    (Inches(10.5), Inches(6.6), Inches(2.5), Inches(0.4)),
+    (Inches(11.8), Inches(0.3), Inches(1.2), Inches(0.2)),
+]:
+    pill = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, pl, pt, pw, ph)
+    pill.fill.solid(); pill.fill.fore_color.rgb = WHITE_SHAPE
+    pill.line.fill.background(); pill.adjustments[0] = 0.5
 
-pill2 = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                            Inches(10.5), Inches(6.5), Inches(2.5), Inches(0.5))
-pill2.fill.solid()
-pill2.fill.fore_color.rgb = WHITE_SHAPE
-pill2.line.fill.background()
-pill2.adjustments[0] = 0.5
-
-add_text(s, Inches(0), Inches(2.0), W, Inches(1.0),
-         'Live Demo', sz=48, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
-
-add_text(s, Inches(2.5), Inches(3.2), Inches(8.3), Inches(0.8),
-         'Laat me u tonen hoe het portaal eruitziet\nvoor auteur Patrick Jeeninga',
-         sz=17, color=RGBColor(200, 235, 225), align=PP_ALIGN.CENTER, spacing=6)
-
-demo_steps = [
-    'Inloggen als auteur',
-    'Jaaroverzicht & royalty-grafiek',
-    'Afrekening openen (echte PDF)',
-    'Contract bekijken',
-    'Prognose & declaraties',
-]
-for i, step in enumerate(demo_steps):
-    add_text(s, Inches(4.8), Inches(4.5 + i * 0.42), Inches(5), Inches(0.35),
-             f'{i+1}.  {step}', sz=14, color=RGBColor(180, 225, 210))
+add_text(s, Inches(0), Inches(2.8), W, Inches(1.2),
+         'Demo', sz=72, color=WHITE, align=PP_ALIGN.CENTER, font=FONT)
 
 
 # ══════════════════════════════════════════════
@@ -555,7 +592,6 @@ for i, step in enumerate(demo_steps):
 s = prs.slides.add_slide(LY_BLANK)
 
 add_teal_square(s, Inches(12.2), Inches(-0.5), 1.0)
-add_teal_square(s, Inches(-0.7), Inches(5.5), 1.8)
 
 add_subtitle_label(s, 'Schaalbaarheid')
 add_title(s, 'E\u00E9n platform, drie organisaties', t=Inches(0.55))
