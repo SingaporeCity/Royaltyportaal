@@ -514,6 +514,89 @@ for i, (val, label) in enumerate(stats_cta):
 txt(s, 0, Inches(6.5), W, Inches(0.3), 'Patrick Jeeninga  ·  patrick@noordhoff.nl', sz=12, color=RGBColor(120, 170, 155), align=PP_ALIGN.CENTER)
 
 
+# ════════════════════════════════════════════
+# APPENDIX 1: DATA SECURITY
+# ════════════════════════════════════════════
+s = prs.slides.add_slide(prs.slide_layouts[6])
+solid_bg(s)
+txt(s, Inches(1.2), Inches(0.7), Inches(3), Inches(0.3), 'APPENDIX', sz=10, bold=True, color=TEXT_LIGHT)
+title(s, Inches(1.15), 'Databeveiliging & Architectuur', sz=28)
+
+# Left column: Security layers
+txt(s, Inches(1.2), Inches(2.2), Inches(5), Inches(0.35), 'Beveiligingslagen', sz=14, bold=True, color=TEAL)
+
+layers = [
+    ('Authenticatie', 'Inloggen via Supabase Auth met versleutelde wachtwoorden (bcrypt).\nSessie-tokens verlopen automatisch. Wachtwoord-reset via beveiligde email.'),
+    ('Row Level Security', 'De database dwingt af dat elke auteur alleen eigen data ziet.\nDit is niet afhankelijk van de frontend — zelfs bij directe API-toegang\nwordt alleen eigen data teruggegeven.'),
+    ('Versleutelde verbinding', 'Alle communicatie verloopt via HTTPS/TLS.\nData in transit is altijd versleuteld.'),
+    ('Opslag-beveiliging', 'PDF-afrekeningen staan in een privé bucket.\nDownload alleen mogelijk via tijdelijke signed URLs (verlopen na 5 min).\nAuteurs kunnen enkel bestanden uit hun eigen map openen.'),
+    ('BSN-maskering', 'Burgerservicenummers worden gemaskeerd weergegeven (•••••6789).\nPas zichtbaar na expliciete actie van de auteur.'),
+]
+for i, (lbl, desc) in enumerate(layers):
+    top = Inches(2.65 + i * 0.9)
+    dot(s, Inches(1.4), top + Inches(0.08), color=TEAL, size=Inches(0.1))
+    txt(s, Inches(1.7), top, Inches(1.8), Inches(0.3), lbl, sz=12, bold=True, color=TEXT)
+    txt(s, Inches(3.6), top, Inches(3), Inches(0.8), desc, sz=10, color=TEXT_LIGHT, spacing=2)
+
+# Right column: comparison
+txt(s, Inches(7.2), Inches(2.2), Inches(5), Inches(0.35), 'Fysieke post vs. Portaal', sz=14, bold=True, color=TEAL)
+
+card(s, Inches(7.2), Inches(2.65), Inches(5), Inches(2.0), fill=RED_BG)
+txt(s, Inches(7.5), Inches(2.75), Inches(4.5), Inches(0.3), 'Risico\'s fysieke post', sz=12, bold=True, color=CORAL)
+post_risks = [
+    'Brieven met financiële data kunnen zoekraken',
+    'Geen controle wie de brief opent',
+    'Geen audit trail van toegang',
+    'Kopieën blijven liggen op bureaus',
+]
+for j, risk in enumerate(post_risks):
+    txt(s, Inches(7.5), Inches(3.15 + j * 0.35), Inches(4.4), Inches(0.3), f'✗  {risk}', sz=11, color=TEXT_LIGHT)
+
+card(s, Inches(7.2), Inches(4.9), Inches(5), Inches(2.3), fill=GREEN_BG)
+txt(s, Inches(7.5), Inches(5.0), Inches(4.5), Inches(0.3), 'Waarborgen portaal', sz=12, bold=True, color=TEAL)
+portal_safe = [
+    'Toegang alleen na inloggen met eigen wachtwoord',
+    'Auteur ziet uitsluitend eigen gegevens (RLS)',
+    'Elke login wordt gelogd (audit trail)',
+    'Admin kan verdachte activiteit monitoren',
+    'Geen fysieke documenten die zoekraken',
+]
+for j, item in enumerate(portal_safe):
+    txt(s, Inches(7.5), Inches(5.4 + j * 0.35), Inches(4.4), Inches(0.3), f'✓  {item}', sz=11, color=TEXT)
+
+
+# ════════════════════════════════════════════
+# APPENDIX 2: AVG / PRIVACY
+# ════════════════════════════════════════════
+s = prs.slides.add_slide(prs.slide_layouts[6])
+solid_bg(s)
+txt(s, Inches(1.2), Inches(0.7), Inches(3), Inches(0.3), 'APPENDIX', sz=10, bold=True, color=TEXT_LIGHT)
+title(s, Inches(1.15), 'AVG-compliance & Privacy', sz=28)
+
+# AVG principles mapped to portal
+txt(s, Inches(1.2), Inches(2.2), Inches(10), Inches(0.5), 'Hoe het portaal voldoet aan de AVG-uitgangspunten:', sz=14, bold=True, color=TEXT)
+
+avg_items = [
+    ('Recht op inzage (Art. 15)', 'Auteurs kunnen op elk moment hun eigen persoonsgegevens,\ncontracten en afrekeningen inzien via het portaal.', 'Het portaal maakt dit mogelijk zonder\neen formeel verzoek te hoeven indienen.'),
+    ('Recht op rectificatie (Art. 16)', 'Auteurs kunnen via het portaal een wijzigingsverzoek\nindienen voor hun gegevens (adres, telefoon, IBAN).', 'Admin keurt goed of wijst af —\nvolledig traceerbaar.'),
+    ('Dataminimalisatie (Art. 5)', 'Het portaal toont alleen relevante gegevens.\nBSN is standaard gemaskeerd.', 'Geen onnodige data-opslag\nof -verspreiding.'),
+    ('Beveiliging (Art. 32)', 'Versleutelde verbindingen, gehashte wachtwoorden,\nRow Level Security, signed URLs voor downloads.', 'Technische en organisatorische\nmaatregelen zijn ingebouwd.'),
+    ('Logging & verantwoording (Art. 5)', 'Alle logins worden geregistreerd. Wijzigingsverzoeken\nhebben een volledige audit trail met timestamps.', 'Bij een audit is exact\ntraceerbaar wie wat heeft gedaan.'),
+]
+
+for i, (principle, how, note) in enumerate(avg_items):
+    top = Inches(2.8 + i * 0.88)
+    card(s, Inches(1.2), top, Inches(11), Inches(0.78), fill=TEAL_LIGHT if i % 2 == 0 else WHITE, border=BORDER)
+    txt(s, Inches(1.5), top + Inches(0.1), Inches(2.8), Inches(0.3), principle, sz=11, bold=True, color=TEAL)
+    txt(s, Inches(4.5), top + Inches(0.1), Inches(3.8), Inches(0.6), how, sz=10, color=TEXT, spacing=2)
+    txt(s, Inches(8.5), top + Inches(0.1), Inches(3.3), Inches(0.6), note, sz=10, color=TEXT_LIGHT, spacing=2)
+
+# Footer
+txt(s, Inches(1.2), Inches(7.1), Inches(11), Inches(0.3),
+    'Het portaal vervangt fysieke brieven — dit vermindert het risico op datalekken en verbetert de compliance-positie.',
+    sz=11, bold=True, color=TEAL, align=PP_ALIGN.CENTER)
+
+
 # ── Save ──
 out = '/Users/patrickjeeninga/Coding/Royaltyportaal/pitch/Auteursportaal_Pitch.pptx'
 prs.save(out)
